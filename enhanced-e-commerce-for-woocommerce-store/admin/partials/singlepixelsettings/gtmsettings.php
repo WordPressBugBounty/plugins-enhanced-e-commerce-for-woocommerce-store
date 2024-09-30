@@ -431,12 +431,12 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
       if (want_to_use_your_gtm == 1 && use_your_gtm_id == "") {
         jQuery('#use_your_gtm_id').addClass("conv-border-danger");
         jQuery(".conv-btn-connect").addClass("conv-btn-connect-disabled");
-        jQuery(".conv-btn-connect").removeClass("conv-btn-connect-enabled-google");
+        jQuery(".conv-btn-connect").removeClass("conv-btn-connect-enabled-google abc");
         jQuery(".conv-btn-connect").text('Save');
       } else {
         jQuery('#use_your_gtm_id').removeClass("conv-border-danger");
         jQuery(".conv-btn-connect").removeClass("conv-btn-connect-disabled");
-        jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled-google");
+        jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled-google abc");
         jQuery(".conv-btn-connect").text('Save');
       }
 
@@ -473,7 +473,7 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
         url: tvc_ajax_url,
         data: {
           action: "conv_save_pixel_data",
-          pix_sav_nonce: "<?php echo esc_html(wp_create_nonce('pix_sav_nonce_val')); ?>",
+          pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
           conv_options_data: {
             want_to_use_your_gtm: want_to_use_your_gtm,
             use_your_gtm_id: use_your_gtm_id,

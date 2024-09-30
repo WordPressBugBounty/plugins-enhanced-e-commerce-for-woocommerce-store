@@ -59,7 +59,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 		{
 			?>
 				<!--- Promotion box start -->
-				<div id="conversioshead_notice" class="promobandtop">
+				<!-- <div id="conversioshead_notice" class="promobandtop">
 
 					<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
 						<div class="promoleft">
@@ -78,7 +78,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 						</div>
 					</div>
 
-				</div>
+				</div> -->
 				<!--- Promotion box end -->
 			<?php
 			echo esc_attr($this->call_tvc_site_verified_and_domain_claim());
@@ -128,7 +128,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 			/* add active tab class */
 			protected function is_active_menu($page = "")
 			{
-				if ($page !== "" && isset($_GET['page']) === TRUE && sanitize_text_field($_GET['page']) === $page) {
+				if ($page !== "" && isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === $page) {
 					return "dark";
 				}
 

@@ -825,7 +825,7 @@ class TVC_Pricings
                                                             <div class="card">
                                                                 <div class="card-body">
                                                                     <div class="card-icon">
-                                                                        <img src="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/assets/convo-images/pricing/privacy.png"
+                                                                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL); ?>/admin/images/pricing-privacy.png"
                                                                             alt="" class="img-fluid">
                                                                     </div>
                                                                     <h5 class="card-title">100% No Risk <br>

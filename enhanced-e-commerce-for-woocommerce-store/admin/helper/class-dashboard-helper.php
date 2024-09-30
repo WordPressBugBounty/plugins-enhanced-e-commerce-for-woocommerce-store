@@ -39,18 +39,18 @@ if (!class_exists('Conversios_Dashboard_Helper')) {
 
 		public function get_google_analytics_reports_dashboard()
 		{
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
 				// $post_data = (object)$_POST;
-				$subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field($_POST['subscription_id']) : "";
-				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				$subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
 				if ($start_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
 				$start_date == (false !== strtotime($start_date)) ? gmdate('Y-m-d', strtotime($start_date)) : gmdate('Y-m-d', strtotime('-1 month'));
 
-				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : "");
 				if ($end_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');

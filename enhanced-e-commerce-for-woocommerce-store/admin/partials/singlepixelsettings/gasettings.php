@@ -98,7 +98,7 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
 <script>
 // get list of google analytics account
 function list_analytics_account(tvc_data, selelement, currele, page = 1) {
-    var conversios_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conversios_onboarding_nonce')); ?>";
+    var conversios_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
     jQuery.ajax({
         type: "POST",
         dataType: "json",
@@ -114,6 +114,9 @@ function list_analytics_account(tvc_data, selelement, currele, page = 1) {
             if (response && response.error == false) {
                 var error_msg = 'null';
                 if (response?.data?.items.length > 0) {
+                    <?php if( isset($_GET['subscription_id']) ) : ?>
+                    jQuery('#ga4_analytic_account_id').html('<option value="">Select GA4 Account ID</option>');
+                    <?php endif; ?>
                     var AccOptions = '';
                     var selected = '';
                     response?.data?.items.forEach(function(item) {
@@ -175,7 +178,7 @@ function list_analytics_account(tvc_data, selelement, currele, page = 1) {
 // get list properties dropdown options
 function list_analytics_web_properties(type, tvc_data, account_id, thisselid) {
     jQuery("#ga4_property_id").prop("disabled", true);
-    var conversios_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conversios_onboarding_nonce')); ?>";
+    var conversios_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
     jQuery.ajax({
         type: "POST",
         dataType: "json",
@@ -309,10 +312,11 @@ jQuery(function() {
     });
 
     <?php
-        if ($cust_g_email != "") {
-            if ($ga4_analytic_account_id == "") {
+        if ($cust_g_email != "" || isset($_GET['subscription_id']) ) {
+            if ($ga4_analytic_account_id == "" || isset($_GET['subscription_id'])) {
         ?>
     load_ga_accounts(tvc_data);
+    jQuery('#ga4_property_id').html('<option value="">Select Measurement ID</option>');
     <?php
             }
         }
@@ -394,7 +398,7 @@ jQuery(function() {
                 url: tvc_ajax_url,
                 data: {
                     action: "conv_save_pixel_data",
-                    pix_sav_nonce: "<?php echo esc_html(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                    pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
                     conv_options_data: selected_vals,
                     conv_options_type: ["eeoptions", "eeapidata", "middleware"],
                     conv_tvc_data: tvc_data,

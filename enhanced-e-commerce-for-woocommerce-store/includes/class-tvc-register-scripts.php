@@ -14,7 +14,7 @@ if ( ! class_exists( 'TVC_Register_Scripts' ) ) :
   class TVC_Register_Scripts {
     public function __construct() {    
         // only load the next hooks when on the Settings page
-      if ( isset($_GET['page']) && strpos(sanitize_text_field($_GET['page']), 'conversios') !== false) {
+      if ( isset($_GET['page']) && strpos(sanitize_text_field(wp_unslash($_GET['page'])), 'conversios') !== false) {
         add_action( 'admin_enqueue_scripts', array( $this, 'tvc_register_required_options_page_scripts' ) );
       }
     } 

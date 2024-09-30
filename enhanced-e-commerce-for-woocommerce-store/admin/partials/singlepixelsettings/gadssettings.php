@@ -38,8 +38,9 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
             <!-- Google Ads  -->
             <?php
             $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_ads_id != "") ? $googleDetail->google_ads_id : "";
-            $countries = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json"));
-            $credit = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/country_reward.json"));
+            global $wp_filesystem;
+            $countries = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json"));
+            $credit = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/country_reward.json"));
             $off_country = "";
             $off_credit_amt = "";
             if (is_array($countries) || is_object($countries)) {
@@ -93,20 +94,34 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                         </h6>
 
                         <div class="d-flex conv_create_gads_new_card rounded px-3 py-3">
-
                             <?php if ($off_credit_amt != "") { ?>
                                 <div class="div">
                                     <h4 class="text-white">
-                                        <?php esc_html_e("Redeem upto " . $off_credit_amt, "enhanced-e-commerce-for-woocommerce-store") ?>
+                                    <?php
+                                    /*
+                                    * translators: %s is the amount of credit that can be redeemed.
+                                    */
+                                    printf(esc_html__('Redeem upto %s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($off_credit_amt));
+                                    ?>
                                     </h4>
                                     <span class="text-white">
-                                        <?php esc_html_e("Create your first Google Ads account with us and redeem upto " . esc_attr($off_credit_amt) . " on the spend you make in the next 60 days.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        <?php
+                                        /*
+                                        * translators: %s is the amount of credit that can be redeemed.
+                                        */
+                                        printf(esc_html__('Create your first Google Ads account with us and redeem upto %s on the spend you make in the next 60 days.', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($off_credit_amt));
+                                        ?>
                                     </span>
                                 </div>
                             <?php } else { ?>
                                 <div class="d-flex">
                                     <span class="text-white d-flex align-items-center">
-                                        <?php esc_html_e("Create your first Google Ads account with us and receive a credit of up to " . esc_attr($off_credit_amt) . " on your spending in the next 60 days.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        <?php
+                                        /*
+                                        * translators: %s is the amount of credit that can be redeemed.
+                                        */
+                                        printf(esc_html__('Create your first Google Ads account with us and receive a credit of up to %s on your spending in the next 60 days.', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($off_credit_amt));
+                                        ?>
                                     </span>
                                 </div>
                             <?php } ?>
@@ -288,7 +303,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
 
         <input type="hidden" id="merchant_id" name="merchant_id" value="<?php echo esc_html($googleDetail->merchant_id) ?>">
         <input type="hidden" id="google_merchant_id" name="google_merchant_id" value="<?php echo esc_html($googleDetail->google_merchant_id) ?>">
-        <input type="hidden" id="feedType" name="feedType" value="<?php echo isset($_GET['feedType']) && $_GET['feedType'] != '' ? esc_attr(sanitize_text_field($_GET['feedType'])) : '' ?>" />
+        <input type="hidden" id="feedType" name="feedType" value="<?php echo isset($_GET['feedType']) && $_GET['feedType'] != '' ? esc_attr(sanitize_text_field(wp_unslash($_GET['feedType']))) : '' ?>" />
 
 
     </form>
@@ -519,6 +534,9 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                         add_message("warning", "There are no Google ads accounts associated with email.");
                     } else {
                         if (response.data.length > 0) {
+                            <?php if( isset($_GET['subscription_id']) ) : ?>
+                            jQuery('#google_ads_id').html('<option value="">Select Account</option>');
+                            <?php endif; ?>
                             var AccOptions = '';
                             var selected = '';
                             if (new_ads_id != "" && new_ads_id != undefined) {
@@ -769,7 +787,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
         <?php } ?>
 
 
-        <?php if (isset($_GET['subscription_id']) && sanitize_text_field($_GET['subscription_id'])) { ?>
+        <?php if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) { ?>
             list_google_ads_account(tvc_data);
             jQuery(".conv-enable-selection").addClass("d-none");
         <?php } ?>
@@ -816,6 +834,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
             selectedoptions["subscription_id"] = "<?php echo esc_js($tvc_data['subscription_id']) ?>";
             selectedoptions['merchant_id'] = jQuery("#merchant_id").val();
             selectedoptions['google_merchant_id'] = jQuery("#google_merchant_id").val();
+            selectedoptions['ga_GMC'] = ga_GMC;
 
 
             jQuery('#checkboxes_box input[type="checkbox"]').each(function() {
@@ -1065,7 +1084,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                     action: "conv_checkMcc",
                     ads_accountId: selectedAcc,
                     subscription_id: "<?php echo esc_attr($subscriptionId); ?>",
-                    CONVNonce: "<?php echo esc_html(wp_create_nonce('conv_checkMcc-nonce')); ?>"
+                    CONVNonce: "<?php echo esc_js(wp_create_nonce('conv_checkMcc-nonce')); ?>"
                 };
                 jQuery.ajax({
                     type: "POST",

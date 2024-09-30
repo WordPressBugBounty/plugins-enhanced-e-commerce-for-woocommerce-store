@@ -48,26 +48,26 @@ if(!class_exists('Conversios_PMax_Helper')){
 			}
 		}
 		public function get_pmax_campaign_list(){
-			$nonce = (isset($_POST['conversios_nonce']))?sanitize_text_field($_POST['conversios_nonce']):"";
+			$nonce = (isset($_POST['conversios_nonce']))?sanitize_text_field(wp_unslash($_POST['conversios_nonce'])):"";
 			$return = array();
 			if($this->admin_safe_ajax_call($nonce, 'conversios_nonce')){
-				/*$start_date = str_replace(' ', '',(isset($_POST['start_date']))?sanitize_text_field($_POST['start_date']):"");
+				/*$start_date = str_replace(' ', '',(isset($_POST['start_date']))?sanitize_text_field(wp_unslash($_POST['start_date'])):"");
 				if($start_date != ""){
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
 
-				$end_date = str_replace(' ', '',(isset($_POST['end_date']))?sanitize_text_field($_POST['end_date']):"");
+				$end_date = str_replace(' ', '',(isset($_POST['end_date']))?sanitize_text_field(wp_unslash($_POST['end_date'])):"");
 				if($end_date != ""){
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');
 				}
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);*/
-				$customer_id =(isset($_POST['google_ads_id']))?sanitize_text_field($_POST['google_ads_id']):"";
-				$page_size =(isset($_POST['page_size']))?sanitize_text_field($_POST['page_size']):"10";
-				$page_token =(isset($_POST['page_token']))?sanitize_text_field($_POST['page_token']):"";
-				$page =(isset($_POST['page']))?sanitize_text_field($_POST['page']):"";
+				$customer_id =(isset($_POST['google_ads_id']))?sanitize_text_field(wp_unslash($_POST['google_ads_id'])):"";
+				$page_size =(isset($_POST['page_size']))?sanitize_text_field(wp_unslash($_POST['page_size'])):"10";
+				$page_token =(isset($_POST['page_token']))?sanitize_text_field(wp_unslash($_POST['page_token'])):"";
+				$page =(isset($_POST['page']))?sanitize_text_field(wp_unslash($_POST['page'])):"";
 				if($customer_id != ""){
 					$api_rs = $this->campaign_pmax_list($customer_id, $page_size, $page_token, $page);
 					if (isset($api_rs->error) && $api_rs->error == '') {
@@ -86,10 +86,10 @@ if(!class_exists('Conversios_PMax_Helper')){
 			wp_die();
 		}
 		public function create_pmax_campaign(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			$return = array();
 			if($this->admin_safe_ajax_call($nonce, 'conversios_nonce')){
-				$data = isset($_POST['tvc_data']) ? sanitize_text_field(urldecode($_POST['tvc_data'])) : "";
+				$data = isset($_POST['tvc_data']) ? sanitize_text_field(urldecode(wp_unslash($_POST['tvc_data']))) : "";
 
 				// $site_key = isset($_POST['site_key'])?$_POST['site_key']:"";
 				// $site_url = isset($_POST['site_url'])?$_POST['site_url']:"";
@@ -103,7 +103,7 @@ if(!class_exists('Conversios_PMax_Helper')){
 				// }
 				//print_r($site_key);
 				//print_r($site_url);
-		    parse_str($data, $form_array);    
+		    wp_parse_str($data, $form_array);    
 		    if(!empty($form_array)){
 		      foreach ($form_array as $key => $value) {
 		        $form_array[$key] = sanitize_text_field($value);
@@ -155,10 +155,10 @@ if(!class_exists('Conversios_PMax_Helper')){
 			wp_die();
 		}
 		public function edit_pmax_campaign(){
-			$nonce = (isset($_POST['conversios_nonce']))?sanitize_text_field($_POST['conversios_nonce']):"";
+			$nonce = (isset($_POST['conversios_nonce']))?sanitize_text_field(wp_unslash($_POST['conversios_nonce'])):"";
 			$return = array();
 			if($this->admin_safe_ajax_call($nonce, 'conversios_nonce')){
-				$data = isset($_POST['tvc_data']) ? sanitize_text_field(urldecode($_POST['tvc_data'])) : "";
+				$data = isset($_POST['tvc_data']) ? sanitize_text_field(urldecode(wp_unslash($_POST['tvc_data']))) : "";
 				// $site_key = isset($_POST['site_key'])?$_POST['site_key']:"";
 				// $site_url = isset($_POST['site_url'])?$_POST['site_url']:"";
 				// $urls = array();
@@ -171,7 +171,7 @@ if(!class_exists('Conversios_PMax_Helper')){
 				// }
 				//print_r($site_key);
 				//print_r($site_url);
-		    parse_str($data, $form_array);    
+		    wp_parse_str($data, $form_array);    
 		    if(!empty($form_array)){
 		      foreach ($form_array as $key => $value) {
 		        $form_array[$key] = sanitize_text_field($value);
@@ -312,6 +312,14 @@ if(!class_exists('Conversios_PMax_Helper')){
           'method' => 'POST',
           'body' => wp_json_encode($data)
         );
+
+        $return = new \stdClass();
+        if( empty($data['customer_id']) || empty($data['access_token']) ) {
+          $return->error = true;
+          $return->data = "";
+          return $return;
+        }
+
         $request = wp_remote_post(esc_url($url), $args);
 
         // Retrieve information

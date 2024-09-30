@@ -42,7 +42,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 			if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', '%'.$wpdb->esc_like($tablename).'%')) === $tablename) {
 				$result = $wpdb->get_row($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_sync_profile WHERE FIELD = %s", "update_date"));
 				if ($result->Type == 'date') {
-					$wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_sync_profile Modify `update_date` DATETIME NULL", array()));
+					$wpdb->query($wpdb->prepare("ALTER TABLE %i Modify `update_date` DATETIME NULL", $tablename));
 				}
 			} else {
 				$sql_create = "CREATE TABLE `$tablename` ( `id` BIGINT(20) NOT NULL AUTO_INCREMENT , `profile_title` VARCHAR(100) NULL , `g_cat_id` INT(10) NULL , `g_attribute_mapping` LONGTEXT NOT NULL , `update_date` DATETIME NULL , `status` INT(1) NOT NULL DEFAULT '1', PRIMARY KEY (`id`) );";
@@ -54,12 +54,12 @@ if (!class_exists('TVCProductSyncHelper')) {
 			if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', '%'.$wpdb->esc_like($tablename).'%')) === $tablename) {
 				$result = $wpdb->get_row($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_prouct_pre_sync_data WHERE FIELD = %s", "update_date"));
 				if ($result->Type == 'date') {
-					$wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_prouct_pre_sync_data Modify `update_date` DATETIME NULL", array()));
+					$wpdb->query($wpdb->prepare("ALTER TABLE %i Modify `update_date` DATETIME NULL", $tablename));
 				}
 				
 				$pre_sync_result = $wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_prouct_pre_sync_data LIKE %s", '%'.$wpdb->esc_like('feedId').'%'));
 				if ($pre_sync_result == '') {
-					$wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_prouct_pre_sync_data ADD `feedId` int(11) NULL  AFTER `status`", array()));
+					$wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `feedId` int(11) NULL  AFTER `status`", $tablename));
 				}
 
 			} else {
@@ -462,7 +462,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 				}
 				$CustomApi = new CustomApi();
 				$tablename = esc_sql($wpdb->prefix . "ee_prouct_pre_sync_data");
-				$product_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) as a from {$wpdb->prefix}ee_prouct_pre_sync_data where status = 0", array()));
+				$product_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) as a from %i where status = 0", $tablename));
 				if ($product_count > 0) {
 					$product_batch_size = (isset($ee_additional_data['product_sync_batch_size']) && $ee_additional_data['product_sync_batch_size']) ? $ee_additional_data['product_sync_batch_size'] : 100;
 					$tvc_currency = sanitize_text_field($this->TVC_Admin_Helper->get_woo_currency());
@@ -478,7 +478,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 						//Delete the variant product which does not have children
 						if (!empty($p_map_attribute) && isset($p_map_attribute['deleted_products']) && !empty($p_map_attribute['deleted_products'])) {
 							$dids = esc_sql(implode(', ', $p_map_attribute['deleted_products']));
-							$wpdb->query($wpdb->prepare("DELETE from {$wpdb->prefix}ee_prouct_pre_sync_data where `w_product_id` in ($dids)", array()));
+							$wpdb->query($wpdb->prepare("DELETE from %i where `w_product_id` in ($dids)", $tablename));
 						}
 						$TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
 						$TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db_batch_wise($p_map_attribute['valid_products'], '1'); //Add data in sync product database
@@ -587,8 +587,9 @@ if (!class_exists('TVCProductSyncHelper')) {
 
 						//Delete the variant product which does not have children
 						if (!empty($p_map_attribute) && isset($p_map_attribute['deleted_products']) && !empty($p_map_attribute['deleted_products'])) {
+							$tablename = esc_sql($wpdb->prefix . "ee_prouct_pre_sync_data");
 							$dids = esc_sql(implode(', ', $p_map_attribute['deleted_products']));
-							$wpdb->query($wpdb->prepare("DELETE from {$wpdb->prefix}ee_prouct_pre_sync_data where `w_product_id` in ($dids)", array()));
+							$wpdb->query($wpdb->prepare("DELETE from %i where `w_product_id` in ($dids)", $tablename));
 						}
 						$TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
 						$TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db_batch_wise($p_map_attribute['valid_products'], $feedId); //Add data in sync product database

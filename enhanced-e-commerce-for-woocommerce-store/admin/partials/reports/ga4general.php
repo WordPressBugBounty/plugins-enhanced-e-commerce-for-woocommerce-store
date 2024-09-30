@@ -430,7 +430,7 @@
                 url: tvc_ajax_url,
                 data: {
                     action: "conv_save_pixel_data",
-                    pix_sav_nonce: "<?php echo wp_create_nonce('pix_sav_nonce_val'); ?>",
+                    pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
                     conv_options_data: selected_vals,
                     conv_options_type: ["eeoptions"]
                 },
@@ -1119,8 +1119,8 @@
                 subscription_id: '<?php echo esc_attr($ee_options["subscription_id"]); ?>',
                 start_date: jQuery.trim(start_date.replace(/\//g, "-")),
                 end_date: jQuery.trim(end_date.replace(/\//g, "-")),
-                conversios_nonce: '<?php echo wp_create_nonce('conversios_nonce'); ?>',
-                domain: '<?php echo get_site_url(); ?>'
+                conversios_nonce: '<?php echo esc_js(wp_create_nonce('conversios_nonce')); ?>',
+                domain: '<?php echo esc_js(get_site_url()); ?>'
             };
             jQuery(".noresultimg").remove();
             jQuery("#conv_checkoutfunnel_chart").removeClass("d-none");

@@ -59,11 +59,11 @@ if (!class_exists('Conversios_Reports_Helper')) {
 
 		public function set_email_configurationGA4()
 		{
-			$nonce = isset($_POST['conversios_nonce']) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = isset($_POST['conversios_nonce']) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
-				$is_disabled = isset($_POST['is_disabled']) ? sanitize_text_field($_POST['is_disabled']) : "";
-				$custom_email = isset($_POST['custom_email']) ? sanitize_text_field($_POST['custom_email']) : "";
-				$email_frequency = isset($_POST['email_frequency']) ? sanitize_text_field($_POST['email_frequency']) : "";
+				$is_disabled = isset($_POST['is_disabled']) ? sanitize_text_field(wp_unslash($_POST['is_disabled'])) : "";
+				$custom_email = isset($_POST['custom_email']) ? sanitize_text_field(wp_unslash($_POST['custom_email'])) : "";
+				$email_frequency = isset($_POST['email_frequency']) ? sanitize_text_field(wp_unslash($_POST['email_frequency'])) : "";
 				
 				if ($is_disabled != "" && $custom_email != "" && $email_frequency != "") {
 					$api_rs = $this->ShoppingApi->set_email_configurationGA4($is_disabled, $custom_email, $email_frequency);
@@ -78,22 +78,22 @@ if (!class_exists('Conversios_Reports_Helper')) {
 		}
 
 		public function get_daily_visitors_report(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
-				$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
-				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				$domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : "";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
 				if ($start_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
-				$start_date == (false !== strtotime($start_date)) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d', strtotime('-1 month'));
+				$start_date == (false !== strtotime($start_date)) ? gmdate('Y-m-d', strtotime($start_date)) : gmdate('Y-m-d', strtotime('-1 month'));
 
-				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : "");
 				if ($end_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');
 				}
-				$end_date == (false !== strtotime($end_date)) ? date('Y-m-d', strtotime($end_date)) : date('Y-m-d', strtotime('now'));
+				$end_date == (false !== strtotime($end_date)) ? gmdate('Y-m-d', strtotime($end_date)) : gmdate('Y-m-d', strtotime('now'));
 								
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
@@ -109,26 +109,26 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
 			}
-			echo json_encode($return);
+			echo wp_json_encode($return);
 			wp_die();
 		}
 		public function get_general_audience_report(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
-				$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
-				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				$domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : "";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
 				if ($start_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
-				$start_date == (false !== strtotime($start_date)) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d', strtotime('-1 month'));
+				$start_date == (false !== strtotime($start_date)) ? gmdate('Y-m-d', strtotime($start_date)) : gmdate('Y-m-d', strtotime('-1 month'));
 
-				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : "");
 				if ($end_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');
 				}
-				$end_date == (false !== strtotime($end_date)) ? date('Y-m-d', strtotime($end_date)) : date('Y-m-d', strtotime('now'));
+				$end_date == (false !== strtotime($end_date)) ? gmdate('Y-m-d', strtotime($end_date)) : gmdate('Y-m-d', strtotime('now'));
 								
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
@@ -144,32 +144,32 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
 			}
-			echo json_encode($return);
+			echo wp_json_encode($return);
 			wp_die();
 		}
 		public function get_ga4_general_grid_reports(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
-				$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
-				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				$domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : "";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
 				if ($start_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
-				$start_date == (false !== strtotime($start_date)) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d', strtotime('-1 month'));
+				$start_date == (false !== strtotime($start_date)) ? gmdate('Y-m-d', strtotime($start_date)) : gmdate('Y-m-d', strtotime('-1 month'));
 
-				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : "");
 				if ($end_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');
 				}
-				$end_date == (false !== strtotime($end_date)) ? date('Y-m-d', strtotime($end_date)) : date('Y-m-d', strtotime('now'));
+				$end_date == (false !== strtotime($end_date)) ? gmdate('Y-m-d', strtotime($end_date)) : gmdate('Y-m-d', strtotime('now'));
 								
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
-				$datediff = isset($_POST['datediff'])?$_POST['datediff']:"44";
-				$old_end_date = sanitize_text_field(date("Y-m-d", strtotime("-1 days", strtotime($start_date))));
-				$old_start_date = sanitize_text_field(date("Y-m-d",strtotime("-".$datediff." days", strtotime($old_end_date))));
+				$datediff = isset($_POST['datediff']) ? intval(wp_unslash($_POST['datediff'])) : "44";
+				$old_end_date = sanitize_text_field(gmdate("Y-m-d", strtotime("-1 days", strtotime($start_date))));
+				$old_start_date = sanitize_text_field(gmdate("Y-m-d",strtotime("-".$datediff." days", strtotime($old_end_date))));
 				
 				$api_rs_present = $this->ShoppingApi->ga4_general_grid_report($start_date, $end_date, $domain);
 				
@@ -193,13 +193,13 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
 			}
-			echo json_encode($return);
+			echo wp_json_encode($return);
 			wp_die();
 	
 		}
 		public function get_realtime_report(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
-			$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
+			$domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce') && $domain != "") {
 				$api_rs = $this->ShoppingApi->ga4_realtime_report($domain);
 				if (isset($api_rs->error) && $api_rs->error == '') {
@@ -212,30 +212,30 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
 			}
-			echo json_encode($return);
+			echo wp_json_encode($return);
 			wp_die();
 		}
 		public function get_demographic_ga4_reports(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
-				$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
-				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				$domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : "";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
 				if ($start_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
-				$start_date == (false !== strtotime($start_date)) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d', strtotime('-1 month'));
+				$start_date == (false !== strtotime($start_date)) ? gmdate('Y-m-d', strtotime($start_date)) : gmdate('Y-m-d', strtotime('-1 month'));
 
-				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : "");
 				if ($end_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');
 				}
-				$end_date == (false !== strtotime($end_date)) ? date('Y-m-d', strtotime($end_date)) : date('Y-m-d', strtotime('now'));
+				$end_date == (false !== strtotime($end_date)) ? gmdate('Y-m-d', strtotime($end_date)) : gmdate('Y-m-d', strtotime('now'));
 								
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
-				$report_name = isset($_POST['report_name']) ? sanitize_text_field($_POST['report_name']) : "";
+				$report_name = isset($_POST['report_name']) ? sanitize_text_field(wp_unslash($_POST['report_name'])) : "";
 				$api_rs = $this->ShoppingApi->ga4_demographics_report($start_date, $end_date, $domain,$report_name);
 				
 				if (isset($api_rs->error) && $api_rs->error == '') {
@@ -248,30 +248,30 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
 			}
-			echo json_encode($return);
+			echo wp_json_encode($return);
 			wp_die();
 		}
 		public function get_general_donut_reports(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
-				$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
-				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				$domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : "";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
 				if ($start_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
-				$start_date == (false !== strtotime($start_date)) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d', strtotime('-1 month'));
+				$start_date == (false !== strtotime($start_date)) ? gmdate('Y-m-d', strtotime($start_date)) : gmdate('Y-m-d', strtotime('-1 month'));
 
-				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : "");
 				if ($end_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');
 				}
-				$end_date == (false !== strtotime($end_date)) ? date('Y-m-d', strtotime($end_date)) : date('Y-m-d', strtotime('now'));
+				$end_date == (false !== strtotime($end_date)) ? gmdate('Y-m-d', strtotime($end_date)) : gmdate('Y-m-d', strtotime('now'));
 								
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
-				$report_name = isset($_POST['report_name']) ? sanitize_text_field($_POST['report_name']) : "";
+				$report_name = isset($_POST['report_name']) ? sanitize_text_field(wp_unslash($_POST['report_name'])) : "";
 				$api_rs = $this->ShoppingApi->ga4_general_donut_report($start_date, $end_date, $domain,$report_name);
 				
 				if (isset($api_rs->error) && $api_rs->error == '') {
@@ -284,27 +284,27 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
 			}
-			echo json_encode($return);
+			echo wp_json_encode($return);
 			wp_die();
 		}
 		public function get_ga4_page_report(){
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
-				$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
-				$limit = isset($_POST['limit']) ? sanitize_text_field($_POST['limit']) : "10000";
-				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				$domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : "";
+				$limit = isset($_POST['limit']) ? sanitize_text_field(wp_unslash($_POST['limit'])) : "10000";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
 				if ($start_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $start_date);
 					$start_date = $date->format('Y-m-d');
 				}
-				$start_date == (false !== strtotime($start_date)) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d', strtotime('-1 month'));
+				$start_date == (false !== strtotime($start_date)) ? gmdate('Y-m-d', strtotime($start_date)) : gmdate('Y-m-d', strtotime('-1 month'));
 
-				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : "");
 				if ($end_date != "") {
 					$date = DateTime::createFromFormat('d-m-Y', $end_date);
 					$end_date = $date->format('Y-m-d');
 				}
-				$end_date == (false !== strtotime($end_date)) ? date('Y-m-d', strtotime($end_date)) : date('Y-m-d', strtotime('now'));
+				$end_date == (false !== strtotime($end_date)) ? gmdate('Y-m-d', strtotime($end_date)) : gmdate('Y-m-d', strtotime('now'));
 								
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
@@ -322,7 +322,7 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
 			}
-			echo json_encode($return);
+			echo wp_json_encode($return);
 			wp_die();
 		}
 	}

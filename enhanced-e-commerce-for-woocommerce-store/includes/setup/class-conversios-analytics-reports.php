@@ -10,7 +10,7 @@ $last_fetched_prompt_date = isset($ee_options['last_fetched_prompt_date']) && $e
 $ecom_reports_ga_currency = isset($ee_options['ecom_reports_ga_currency']) ? sanitize_text_field($ee_options['ecom_reports_ga_currency']) : '';
 $ecom_reports_gads_currency = isset($ee_options['ecom_reports_gads_currency']) ? sanitize_text_field($ee_options['ecom_reports_gads_currency']) : '';
 
-$subpage = (isset($_GET["subpage"]) && $_GET["subpage"] != "") ? sanitize_text_field($_GET["subpage"]) : "ga4general";
+$subpage = (isset($_GET["subpage"]) && $_GET["subpage"] != "") ? sanitize_text_field(wp_unslash($_GET['subpage'])) : "ga4general";
 
 
 $report_settings_arr = array("ga4ecommerce", "gads", "ga4general");
@@ -54,15 +54,15 @@ if ($subpage == "ga4ecommerce") {
 
             <div class="conv_pageheading">
                 <a href="admin.php?page=conversios-analytics-reports"
-                    class="btn <?php echo $ga4general_cls; ?> bg-white me-3">
+                    class="btn <?php echo esc_attr($ga4general_cls); ?> bg-white me-3">
                     <?php esc_html_e("General Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </a>
                 <a href="admin.php?page=conversios-analytics-reports&subpage=ga4ecommerce"
-                    class="btn <?php echo $ga4page_cls; ?> bg-white me-3">
+                    class="btn <?php echo esc_attr($ga4page_cls); ?> bg-white me-3">
                     <?php esc_html_e("Ecommerce Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </a>
                 <a href="admin.php?page=conversios-analytics-reports&subpage=gads"
-                    class="btn <?php echo $gadspage_cls; ?> bg-white me-3">
+                    class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white me-3">
                     <?php esc_html_e("Google Ads Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </a>
             </div>
@@ -278,7 +278,7 @@ function save_local_data(email_toggle_check, custom_email, email_frequency) {
         url: tvc_ajax_url,
         data: {
             action: "conv_save_pixel_data",
-            pix_sav_nonce: "<?php echo wp_create_nonce('pix_sav_nonce_val'); ?>",
+            pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
             conv_options_data: selected_vals,
             conv_options_type: ["eeoptions"]
         },

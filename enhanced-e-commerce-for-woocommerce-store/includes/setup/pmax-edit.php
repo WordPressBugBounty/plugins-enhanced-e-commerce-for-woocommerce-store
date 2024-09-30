@@ -27,7 +27,7 @@ class TVC_PMaxEdit {
     if(isset($this->subscription_data->google_ads_id) && $this->subscription_data->google_ads_id != ""){
       $this->google_ads_id = $this->subscription_data->google_ads_id;
     }
-    $this->campaign_id = (isset($_GET['id']))?sanitize_text_field($_GET['id']):"";    
+    $this->campaign_id = (isset($_GET['id']))?sanitize_text_field(wp_unslash($_GET['id'])):"";    
     if($this->campaign_id && $this->google_ads_id){
       $rs = $this->PMax_Helper->campaign_pmax_detail($this->google_ads_id, $this->campaign_id);   
       if(isset($rs->data->campaign)){
@@ -58,11 +58,11 @@ class TVC_PMaxEdit {
 
   public function load_html(){
     if( isset($_GET['page']) && $_GET['page'] != "" )
-      do_action('conversios_start_html_'.sanitize_text_field($_GET['page']));
+      do_action('conversios_start_html_'.sanitize_text_field(wp_unslash($_GET['page'])));
     $this->current_html();
     $this->current_js();
     if( isset($_GET['page']) && $_GET['page'] != "" )
-      do_action('conversios_end_html_'.sanitize_text_field($_GET['page']));
+      do_action('conversios_end_html_'.sanitize_text_field(wp_unslash($_GET['page'])));
   }
 
   public function object_value($obj, $key){
@@ -73,8 +73,8 @@ class TVC_PMaxEdit {
 
   public function country_dropdown($selected_code = '', $is_disabled = false) {
     //$getCountris = file_get_contents(__DIR__ . "/json/countries.json");
-    $filesystem = new WP_Filesystem_Direct( true );
-    $getCountris = $filesystem->get_contents(__DIR__ . "/json/countries.json");
+    global $wp_filesystem;
+    $getCountris = $wp_filesystem->get_contents(__DIR__ . "/json/countries.json");
     $contData = json_decode($getCountris);
     if($selected_code ==""){
       $selected_code = $this->TVC_Admin_Helper->get_woo_country();

@@ -6,7 +6,7 @@ require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 $customApiObj = new CustomApi();
 if(isset($_GET['g_mail']) && isset($_GET['wizard_channel']) && $_GET['wizard_channel'] == 'gmcsetting') {
-    update_option('ee_customer_gmail', sanitize_email($_GET['g_mail']));
+    update_option('ee_customer_gmail', sanitize_email(wp_unslash($_GET['g_mail'])));
     $TVC_Admin_Helper->update_subscription_details_api_to_db();
 }
 $ee_options = unserialize(get_option("ee_options"));
@@ -22,7 +22,7 @@ $category_wrapper_obj = new Tatvic_Category_Wrapper();
 $tvc_data = $TVC_Admin_Helper->get_store_data();
 $g_mail = get_option('ee_customer_gmail');
 if(isset($_GET['g_mail']) && isset($_GET['wizard_channel']) && $_GET['wizard_channel'] == 'gmcsetting') {
-    $g_mail = sanitize_email($_GET['g_mail']);
+    $g_mail = sanitize_email(wp_unslash($_GET['g_mail']));
 }
 $tvc_data['g_mail'] = "";
 if ($g_mail) {
@@ -45,17 +45,17 @@ $tiktok_business_id = isset($ee_options['tiktok_setting']['tiktok_business_id'])
 $tiktok_business_name = isset($ee_options['tiktok_setting']['tiktok_business_name']) === TRUE ? esc_html($ee_options['tiktok_setting']['tiktok_business_name']) : '';
 $fb_business_id = isset($ee_options['facebook_setting']['fb_business_id']) === TRUE ? esc_html($ee_options['facebook_setting']['fb_business_id']) : '';
 if (isset($_GET['tiktok_mail']) == TRUE) {
-    $tiktok_mail = sanitize_email($_GET['tiktok_mail']);
+    $tiktok_mail = sanitize_email(wp_unslash($_GET['tiktok_mail']));
     $is_tiktok_connected = true;
 }
 if (isset($_GET['tiktok_user_id']) == TRUE) {
-    $tiktok_user_id = sanitize_text_field($_GET['tiktok_user_id']);
+    $tiktok_user_id = sanitize_text_field(wp_unslash($_GET['tiktok_user_id']));
 }
 $connect_gmc_url = $TVC_Admin_Helper->get_custom_connect_url(admin_url() . 'admin.php?page=conversios&wizard=productFeedOdd_gmcsetting');
 //$getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
-$filesystem = new WP_Filesystem_Direct( true );
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+global $wp_filesystem;
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
 $site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
@@ -508,7 +508,7 @@ img {
                             $fb_mail = isset($ee_options['facebook_setting']['fb_mail']) ? $ee_options['facebook_setting']['fb_mail'] : '';
                             
                             if (isset($_GET['g_mail']) == TRUE && isset($_GET['wizard_channel']) &&  $_GET['wizard_channel'] == 'fbsetting') {
-                                $fb_mail = sanitize_email($_GET['g_mail']);
+                                $fb_mail = sanitize_email(wp_unslash($_GET['g_mail']));
                             }
                             $store_country = get_option('woocommerce_default_country');
                             $store_country = explode(":",$store_country);
@@ -1061,8 +1061,8 @@ img {
 </div>
 <!-- End --------------->
 <?php
-$filesystem = new WP_Filesystem_Direct( true );
-$str = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/category.json');
+global $wp_filesystem;
+$str = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/category.json');
 $str = json_decode($str);;
 ?>
 <script>
@@ -1076,7 +1076,7 @@ jQuery(function() {
     jQuery('.selectfour').select2();
     jQuery('.selectfive').select2();
 
-    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>
+    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>;
     var arr = Object.keys(tempArr).map(function(key) {
         return key;
     });

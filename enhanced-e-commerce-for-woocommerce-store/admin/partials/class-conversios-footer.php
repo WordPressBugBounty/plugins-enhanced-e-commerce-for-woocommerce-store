@@ -45,7 +45,7 @@ if (!class_exists('Conversios_Footer')) {
                                             <span class="fw-bold">
                                                 <?php
                                                 printf(
-                                                    esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'),
+                                                    '%s',
                                                     esc_html($key)
                                                 );
                                                 ?>
@@ -53,7 +53,7 @@ if (!class_exists('Conversios_Footer')) {
                                             <span class="ps-2">
                                                 <?php
                                                 printf(
-                                                    esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'),
+                                                    '%s',
                                                     esc_html($value)
                                                 );
                                                 ?>
@@ -199,7 +199,7 @@ if (!class_exists('Conversios_Footer')) {
             </script>
             <script type="text/javascript">
                 jQuery(document).ready(function() {
-                    var screen_name = '<?php echo isset($_GET['page']) ? esc_js(sanitize_text_field($_GET['page'])) : ''; ?>';
+                    var screen_name = '<?php echo isset($_GET['page']) ? esc_js(sanitize_text_field(wp_unslash($_GET['page']))) : ''; ?>';
                     var error_msg = 'null';
                     jQuery('.navinfotopnav ul li a').click(function() {
                         cons
@@ -286,6 +286,10 @@ if (!class_exists('Conversios_Footer')) {
                     });
                 }
             </script>
+
+            <?php
+            $is_wizard = isset($_GET['wizard']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) : "";
+            ?>
             <script>
                 window.fwSettings = {
                     'widget_id': 81000001743

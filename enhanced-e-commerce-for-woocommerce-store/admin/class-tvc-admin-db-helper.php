@@ -70,7 +70,7 @@ if ( ! class_exists( 'TVC_Admin_DB_Helper' ) ) {
 						return $wpdb->get_col($sql);
 					}else{
 						$fields = esc_sql( implode('`,`', $fields) );
-						$sql = $wpdb->prepare("select `$fields` from `$tablename` where {$key} IN {$val}", array());
+						$sql = $wpdb->prepare("select `$fields` from %i where {$key} IN {$val}", $tablename);
 						return $wpdb->get_results($sql, ARRAY_A);
 					}
 				}else { // when $operator is '='
@@ -80,7 +80,7 @@ if ( ! class_exists( 'TVC_Admin_DB_Helper' ) ) {
 						return $wpdb->get_col($sql);
 					}else{
 						$fields = esc_sql( implode('`,`', $fields) );
-						$sql = $wpdb->prepare("select `$fields` from `$tablename` where {$key} = $val", []);
+						$sql = $wpdb->prepare("select `$fields` from `$tablename` where {$key} = %s", $val);
 						return $wpdb->get_results($sql, ARRAY_A);
 					}	
 				}	
@@ -113,7 +113,7 @@ if ( ! class_exists( 'TVC_Admin_DB_Helper' ) ) {
 				return;
 			}else {
 				$tablename = esc_sql($wpdb->prefix .$table);				
-				$sql = $wpdb->prepare("select * from `$tablename`", array());
+				$sql = $wpdb->prepare("select * from %i", $tablename);
 				return $wpdb->get_results($sql);										
 			}
 		}
@@ -124,10 +124,10 @@ if ( ! class_exists( 'TVC_Admin_DB_Helper' ) ) {
 			}else{
 				global $wpdb;
 				$tablename = esc_sql($wpdb->prefix .$table);
-				$sql = $wpdb->prepare("select * from `$tablename` ORDER BY id DESC LIMIT 1", array());
+				$sql = $wpdb->prepare("select * from %i ORDER BY id DESC LIMIT 1", $tablename);
 				if($fields){
 					$fields = implode('`,`', $fields);
-					$sql = $wpdb->prepare("select `$fields` from `$tablename` ORDER BY id DESC LIMIT 1",array());
+					$sql = $wpdb->prepare("select `$fields` from %i ORDER BY id DESC LIMIT 1", $tablename);
 				}
 				return $wpdb->get_row($sql,ARRAY_A);
 			}
@@ -139,7 +139,7 @@ if ( ! class_exists( 'TVC_Admin_DB_Helper' ) ) {
 				return;
 			}else{
 				$tablename = esc_sql($wpdb->prefix .$table);
-				$sql = $wpdb->prepare("select`$fields_by`, count(*) as count from `$tablename` GROUP BY `$fields_by` ORDER BY count DESC ", array());
+				$sql = $wpdb->prepare("select`$fields_by`, count(*) as count from %i GROUP BY `$fields_by` ORDER BY count DESC ", $tablename);
 				return $wpdb->get_results($sql, ARRAY_A);
 			}
 		}	

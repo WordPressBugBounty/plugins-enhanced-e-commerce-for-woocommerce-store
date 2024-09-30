@@ -105,7 +105,7 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
     if ( isset($_POST['form_action']) && $_POST['form_action'] == "wpforms_submit" ) {      
       $data_layer['cov_form_name'] = 'Submited by WpForm plugin';
       $data_layer['cov_form_type'] = 'WpForm plugin';
-      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field($_POST['form_id']) : '' ;
+      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field(wp_unslash($_POST['form_id'])) : '' ;
 
       $form = wpforms()->form->get($data_layer['cov_form_id']);
       if ( $form ) {
@@ -118,7 +118,7 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
     if ( isset($_POST['form_action']) && $_POST['form_action'] == "frm_entries_create" ) {      
       $data_layer['cov_form_name'] = 'Submited by Formidable plugin';
       $data_layer['cov_form_type'] = 'Formidable plugin';
-      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field($_POST['form_id']) : '' ;
+      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field(wp_unslash($_POST['form_id'])) : '' ;
 
       if (class_exists('FrmForm')) {
         $form = FrmForm::getOne($data_layer['cov_form_id']);
@@ -766,7 +766,7 @@ class Con_GTM_WP_Tracking extends Con_Settings
         ) { ?>
 
           /*
-           * Global - jQuery event handler that is triggered when an AJAX request completes successfully.
+           * Global - jjQuery event handler that is triggered when an AJAX request completes successfully.
            */
           jQuery(document).ajaxSuccess(function(event, xhr, settings) {
 

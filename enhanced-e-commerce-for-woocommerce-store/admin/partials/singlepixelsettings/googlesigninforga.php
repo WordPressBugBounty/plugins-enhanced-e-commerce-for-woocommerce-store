@@ -1,4 +1,5 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
 <!-- Google signin -->
 <div class="pp-modal onbrd-popupwrp" id="tvc_google_signin_ga" tabindex="-1" role="dialog">
     <div class="onbrdppmain" role="document">
@@ -8,8 +9,7 @@
                 </div>
             </div>
             <div class="onbrdpp-body">
-                <p>-- We recommend to use Chrome browser to configure the plugin if you face any issues during setup. --
-                </p>
+                <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
                 <div class="google_signin_sec_left">
                     <?php if (!isset($tvc_data['g_mail']) || $tvc_data['g_mail'] == "" || $subscriptionId == "") { ?>
                         <div class="google_connect_url_ga google-btn">
@@ -40,9 +40,9 @@
                     </p>
                 </div>
                 <div class="google_signin_sec_right">
-                    <h5>
+                    <h6>
                         <?php esc_html_e("Why do I need to sign in with google?", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h5>
+                    </h6>
                     <p>
                         <?php esc_html_e("When you sign in with Google, we ask for limited programmatic access for your accounts in order to automate below features for you:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
@@ -63,15 +63,6 @@
                     </p>
 
                 </div>
-                <!--badge consent & toggle -->
-                <!-- <div style="margin-top: 10px;">
-                    <label id="badge_label_check" for="conv_show_badge_onboardingCheck" class="switch <?php echo empty($ee_options['conv_show_badge']) || esc_attr($ee_options['conv_show_badge']) == "no" ? "conv_default_cls_disabled" : "conv_default_cls_enabled"; ?>">
-                        <input id="conv_show_badge_onboardingCheck" type="checkbox" <?php echo empty($ee_options['conv_show_badge']) || esc_attr($ee_options['conv_show_badge']) == "no" ? "class ='conv_default_cls_disabled'" : "class ='conv_default_cls_enabled' checked"; ?> />
-                        <div></div>
-                    </label>
-                    <span style="font-weight: 600; padding: 10px;">Influence visitor's perceptions and actions on your
-                        website via trusted partner Badge</span>
-                </div> -->
             </div>
         </div>
     </div>
@@ -137,7 +128,7 @@
             const systemZoom = width / window.screen.availWidth;
             const left = (width - w) / 2 / systemZoom + dualScreenLeft;
             const top = (height - h) / 2 / systemZoom + dualScreenTop;
-            
+
             let urlforga = '<?php echo esc_url($connect_url_gagads); ?>';
 
             var selected_tabb = jQuery(".pawizard_tab_but.active").attr("id");

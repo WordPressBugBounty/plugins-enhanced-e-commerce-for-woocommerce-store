@@ -16,7 +16,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.1.6
+ * Version:           7.1.7
  * Author:            Conversios
  * Author URI:        conversios.io
  * License:           GPLv3
@@ -33,11 +33,44 @@
 if (!defined('WPINC')) {
     die;
 }
+
+// Check if ABSPATH is defined and not null
+if (defined('ABSPATH') && ABSPATH !== null) {
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    WP_Filesystem();
+} else {
+    trigger_error('ABSPATH is not defined or is null', E_USER_ERROR);
+}
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
+
+
+
+// Add custom column to Orders list table
+add_filter('manage_edit-shop_order_columns', 'autofresh_add_custom_order_meta_column');
+function autofresh_add_custom_order_meta_column($columns) {
+    $columns['poster_conv_tracked'] = 'Purchase Tracked';
+    return $columns;
+}
+add_action('manage_shop_order_posts_custom_column', 'autofresh_show_custom_order_meta_column');
+function autofresh_show_custom_order_meta_column($column) {
+    global $post;
+
+    if ($column == 'poster_conv_tracked') {
+        // Get the custom meta value
+        $order = new WC_Order($post->ID);
+        $custom_meta_value = $order->get_meta('_tracked');
+        if ($custom_meta_value) {
+            echo "Yes";
+        } else {
+            echo 'No';
+        }
+    }
+}
 
 function is_EeAioPro_active()
 {
@@ -110,7 +143,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.1.6');
+define('PLUGIN_TVC_VERSION', '7.1.7');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 

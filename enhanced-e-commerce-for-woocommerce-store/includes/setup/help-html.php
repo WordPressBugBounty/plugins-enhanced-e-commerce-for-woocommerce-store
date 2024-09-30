@@ -33,7 +33,7 @@ function get_google_shopping_tabs_html($site_url, $google_merchant_center_id){
     if(isset($google_merchant_center_id) && $google_merchant_center_id == ''){
         $site_url_p_target = 'data-toggle="modal" data-target="#tvc_google_connect"';
     }
-    $tab = (isset($_GET['tab']) && sanitize_text_field($_GET['tab']))?sanitize_text_field($_GET['tab']):"";
+    $tab = (isset($_GET['tab']) && sanitize_text_field(wp_unslash($_GET['tab'])))?sanitize_text_field(wp_unslash($_GET['tab'])):"";
     $TVC_Admin_Helper = new TVC_Admin_Helper();
     ob_start();
     ?><ul class="nav nav-tabs nav-justified edit-tabs" id="myTab" role="tablist">

@@ -74,14 +74,13 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
             $conv_onboarding_done_step = isset($this->ee_options['conv_onboarding_done_step']) ? $this->ee_options['conv_onboarding_done_step'] : "";
             $conv_onboarding_done = isset($this->ee_options['conv_onboarding_done']) ? $this->ee_options['conv_onboarding_done'] : "";
 
-            //echo '<pre>'; print_r($this->ee_options); echo '</pre>';
 
             // Redirect to report
             if (version_compare(PLUGIN_TVC_VERSION, "7.1.2", ">") && ($gm_id != "" || $google_ads_id != "" || $google_merchant_id != "")) {
-                if (empty($conv_onboarding_done_step) || $conv_onboarding_done_step == "5") {
+                if (empty($conv_onboarding_done_step) || $conv_onboarding_done_step == "6") {
                     if (!empty($conv_onboarding_done) || ($gm_id != "" || $google_ads_id != "" || $google_merchant_id != "")) {
                         $conv_oldredi = admin_url('admin.php?page=conversios-analytics-reports');
-                        echo "<script> location.href='" . $conv_oldredi . "'; </script>";
+                        echo "<script> location.href='" . esc_js($conv_oldredi) . "'; </script>";
                         exit();
                         //add_action('wp_loaded', array($this, 'conv_redirect_olduser'));
                     }
@@ -110,11 +109,11 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
         public function load_html()
         {
             if (isset($_GET['page']) && $_GET['page'] != "")
-                do_action('conversios_start_html_' . sanitize_text_field($_GET['page']));
+                do_action('conversios_start_html_' . sanitize_text_field(wp_unslash($_GET['page'])));
             $this->current_html();
             $this->current_js_licence_active();
             if (isset($_GET['page']) && $_GET['page'] != "")
-                do_action('conversios_end_html_' . sanitize_text_field($_GET['page']));
+                do_action('conversios_end_html_' . sanitize_text_field(wp_unslash($_GET['page'])));
         }
 
 
@@ -185,6 +184,7 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
         public function current_html()
         {
         ?>
+
             <section style="max-width: 1200px; margin:auto;">
                 <div class="dash-conv">
                     <div class="container">
@@ -194,54 +194,96 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
                                 <!-- licence key html call-->
                                 <?php //$this->dashboard_licencebox_html(); 
                                 ?>
-                                <h2 class="text-center">
-                                    <?php esc_html_e("Welcome To Conversios Plugin", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <h2 class="text-center mb-0">
+                                    <?php esc_html_e("Conversios All In One Plugin", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </h2>
-                                <h4 class="text-center conv-link-blue">
-                                    <?php esc_html_e("Choose your platform to unlock powerful analytics and engagement tools tailored for you.", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
+                                <h4 class="text-center">
+                                Start instantly with no coding - our <b>ready-to-use GTM</b> setup handles everything for you.
+                                </h4>
                             </div>
-                            <div class="d-flex justify-content-center py-4">
-                                <div class="col-4 dshboardwelcome_box m-3 p-3 d-flex flex-column">
-                                    <h5 class="d-inline">
-                                        <span class="conv-link-blue">
-                                            <?php esc_html_e("For WooCommerce Users:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </span>
-                                    </h5>
-                                    </span>
-                                    </h5>
-                                    <ul class="px-4 pb-4">
-                                        <li><b>Understand Customer Behavior:</b> Get insights into how customers shop on your site.</li>
-                                        <li><b>Track Ads Across Platforms</b>: See how your ads perform on different platforms.</li>
-                                        <li><b>Improve Google Ads:</b> Make your Google ads more effective.</li>
-                                        <li><b>Manage Product feeds Easily</b>: Simplify the process of adding products to ad platforms.</li>
-                                        <li><b>Get Detailed Reports:</b> Make better decisions with detailed reports on your store's performance.</li>
-                                    </ul>
-                                    <a href="<?php echo esc_url('admin.php?page=conversios&wizard=pixelandanalytics'); ?>" class="btn btn-primary w-100 p-2 mt-auto">
-                                        Start Optimizing Now
-                                    </a>
+
+                            <div class="convhori-step-text convhori-step-list py-3 my-2 mt-3">
+                                <h5 class="ps-4">Key Features</h5>
+                                <ul class="conv-green-checklist list-unstyled ms-5">
+                                    <li>GA4 <b>e-commerce</b> and <b>lead generation</b> tracking</li>
+                                    <li>Google Ads <b>purchase</b> and <b>lead</b> conversion tracking</li>
+                                    <li>Facebook and other ad platform pixel integration</li>
+                                    <li>Google Ads <b>Performance Max campaign</b> setup</li>
+                                    <li><b>Real-time</b> product feed sync with Google Merchant Center <br> Facebook, and TikTok</li>
+                                </ul>
+                            </div>
+
+                            <div class="d-flex justify-content-center pt-2">
+                                <div class="convhori-step-container">
+                                    <!-- Step 1 -->
+                                    <div class="convhori-step-box">
+                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
+                                    </div>
+                                    <div class="convhori-step-line"></div>
+
+                                    <!-- Step 2 -->
+                                    <div class="convhori-step-box">
+                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>" />
+                                    </div>
+                                    <div class="convhori-step-line"></div>
+
+                                    <!-- Step 3 -->
+                                    <div class="convhori-step-box">
+                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gmc_logo.png'); ?>" />
+                                    </div>
+                                    <div class="convhori-step-line"></div>
+
+                                    <!-- Step 4 -->
+                                    <div class="convhori-step-box">
+                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
+                                    </div>
+                                    <div class="convhori-step-line"></div>
+
+                                    <!-- Step 5 -->
+                                    <div class="convhori-step-box">
+                                        <img style="width: 42px;" class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/mix_logos.png'); ?>" />
+                                    </div>
                                 </div>
-                                <div class="col-4 dshboardwelcome_box m-3 p-3 d-flex flex-column">
-                                    <h5 class="d-inline">
-                                        <span class="conv-link-blue">
-                                            <?php esc_html_e("For WordPress Users:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </span>
-                                    </h5>
-                                    <ul class="px-4 pb-4">
-                                        <li><b>Understand Customer Behavior:</b> Get insights into how customers shop on your site.</li>
-                                        <li><b>Track Form Submissions:</b> Understand how visitors interact with your forms.</li>
-                                        <li><b>Track Email Clicks:</b> Discover which email CTAs are most effective.</li>
-                                        <li><b>Track Phone Clicks:</b> Monitor how often users click on phone numbers on your site.</li>
-                                        <li><b>General Reports:</b>Make data-driven decisions with comprehensive insights.</li>
-                                    </ul>
-                                    <a href="<?php echo esc_url('admin.php?page=conversios&wizard=pixelandanalytics'); ?>" class="btn btn-primary w-100 p-2 mt-auto">
-                                        Begin Setup
-                                    </a>
+
+                            </div>
+
+                            <div class="d-flex justify-content-center convhori-step-text">
+                                <div>
+                                    1. Setup Google <br> Analytics 4
+                                </div>
+
+                                <div>
+                                    2. Setup Google <br> Ads Conversion
+                                </div>
+
+                                <div>
+                                    3. Setup Google <br> Merchant Center
+                                </div>
+
+                                <div>
+                                    4. Setup Meta <br> (Facebook) Pixel
+                                </div>
+
+                                <div>
+                                    5. Setup <br> Other Pixels
                                 </div>
                             </div>
 
-
+                            <div class="d-flex justify-content-center convhori-step-text pt-5">
+                                <a href="admin.php?page=conversios&amp;wizard=pixelandanalytics" class="btn btn-primary p-2 px-3 mt-auto d-flex align-items-center">
+                                    Start Your Setup Now
+                                    <span class="dashicons dashicons-arrow-right-alt ms-2"></span>
+                                </a>
+                            </div>
                         </div>
+
+                        <!-- <div class="row bg-white rounded py-4 mt-4">
+                           
+                        </div> -->
+
                     </div>
+
+
 
                 </div>
                 </div>

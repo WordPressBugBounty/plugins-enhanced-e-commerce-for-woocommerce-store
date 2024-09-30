@@ -47,12 +47,12 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
       if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', '%'.$wpdb->esc_like( $tablename).'%' ) ) === $tablename ) {
         $result = $wpdb->get_row($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_sync_data WHERE FIELD = %s", "update_date"));
         if ( isset($result->Type) && $result->Type == 'date') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_sync_data Modify `update_date`  DATETIME NULL", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i Modify `update_date`  DATETIME NULL", $tablename));
         }
 
         $sync_result = $wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_sync_data LIKE %s", '%'.$wpdb->esc_like('feedId').'%' ));
         if ($sync_result == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_sync_data ADD `feedId` int(11) NULL  AFTER `status`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `feedId` int(11) NULL  AFTER `status`", $tablename));
         }
       }else{     
         $sql_create = "CREATE TABLE `$tablename` ( `id` BIGINT(20) NOT NULL AUTO_INCREMENT , `w_product_id` BIGINT(20) NOT NULL , `w_cat_id` INT(10) NOT NULL , `g_cat_id` INT(10) NOT NULL , `g_attribute_mapping` LONGTEXT NOT NULL , `update_date` DATE NOT NULL , `status` INT(1) NOT NULL DEFAULT '1', `feedId` int(11) NULL, PRIMARY KEY (`id`) );";
@@ -72,7 +72,7 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
       if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', '%'.$wpdb->esc_like( $tablename).'%' ) ) === $tablename ) { 
         $result = $wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_products_sync_list LIKE %s", '%'.$wpdb->esc_like('feedId').'%'));
         if ($result == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_products_sync_list ADD `feedId` int(11) NULL  AFTER `issues`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `feedId` int(11) NULL  AFTER `issues`", $tablename));
         }         
       }else{  
         $sql_create = "CREATE TABLE `$tablename` ( `id` BIGINT(20) NOT NULL AUTO_INCREMENT , `gmc_id` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `product_id` VARCHAR(100) NOT NULL , `google_status` VARCHAR(50) NOT NULL , `image_link` VARCHAR(200) NOT NULL, `issues` LONGTEXT NOT NULL, `feedId` int(11) NULL, PRIMARY KEY (`id`) );";       
@@ -101,36 +101,36 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
         $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%'.$wpdb->esc_like('is_default').'%');
         $result = $wpdb->get_var($query);
         if ($result == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_feed ADD `is_default` int(11) NOT NULL DEFAULT '0' AFTER `is_delete`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `is_default` int(11) NOT NULL DEFAULT '0' AFTER `is_delete`", $tablename));
         }
 
         $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%'.$wpdb->esc_like('target_country').'%');
         $result = $wpdb->get_var($query);
         if ($result == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_feed ADD `target_country` varchar(50) DEFAULT NULL  AFTER `is_default`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `target_country` varchar(50) DEFAULT NULL  AFTER `is_default`", $tablename));
         }
 
         $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%'.$wpdb->esc_like('is_super_feed').'%');
         $result = $wpdb->get_var($query);
         if ($result == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_feed ADD `is_super_feed` int(11) NOT NULL DEFAULT '0'  AFTER `target_country`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `is_super_feed` int(11) NOT NULL DEFAULT '0'  AFTER `target_country`", $tablename));
         } 
         $checkTiktokCat = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%'.$wpdb->esc_like('tiktok_catalog_id').'%');
         $resultTiktokCat = $wpdb->get_var($checkTiktokCat);
         if ($resultTiktokCat == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_feed ADD `tiktok_catalog_id` varchar(100) DEFAULT NULL  AFTER `target_country`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `tiktok_catalog_id` varchar(100) DEFAULT NULL  AFTER `target_country`", $tablename));
         }
 
         $querytiktok = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%'.$wpdb->esc_like('tiktok_status').'%');
         $resulttiktok = $wpdb->get_var($querytiktok);
         if ($resulttiktok == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_feed ADD `tiktok_status` varchar(200) NULL  AFTER `tiktok_catalog_id`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `tiktok_status` varchar(200) NULL  AFTER `tiktok_catalog_id`", $tablename));
         }
 
         $queryfb = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%'.$wpdb->esc_like('fb_status').'%');
         $resultfb = $wpdb->get_var($queryfb);
         if ($resultfb == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE {$wpdb->prefix}ee_product_feed ADD `fb_status` varchar(200) NULL  AFTER `tiktok_status`", array()));
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `fb_status` varchar(200) NULL  AFTER `tiktok_status`", $tablename));
         }
       } else {
         $sql_create = "CREATE TABLE `$tablename` (  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -168,7 +168,7 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
       }
       /*************Check Default feed exists *****************************/
       $tablenamesync = $wpdb->prefix ."ee_product_sync_data";
-      $query = $wpdb->prepare("SELECT count(*) as count FROM {$wpdb->prefix}ee_product_sync_data where feedId is NULL", array());      
+      $query = $wpdb->prepare("SELECT count(*) as count FROM %i where feedId is NULL", $tablenamesync);      
       $result = $wpdb->get_row($query);
       if ( isset($result->count) && $result->count > 0) {
         
@@ -327,8 +327,9 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
           $product_ids = implode(',', array_column($products, 'w_product_id'));  
           $where ='`feedId` in ('.$feedId.') AND `w_product_id` in ('.$product_ids.')';
           // $pids = $TVC_Admin_DB_Helper->tvc_get_results_in_array('ee_product_sync_data', $where, array('w_product_id'), true, 'IN'); 
+          $tablenamesync = $wpdb->prefix ."ee_product_sync_data";
           $fields = implode(',\'_\',', array('w_product_id'));
-					$sql = $wpdb->prepare("select CONCAT($fields) as p_c_id from `{$wpdb->prefix}ee_product_sync_data` where $where", array());
+					$sql = $wpdb->prepare("select CONCAT($fields) as p_c_id from %i where $where", $tablenamesync);
 					$pids = $wpdb->get_col($sql);
           foreach($products as $key => $product) {
             $t_data = array(
@@ -731,6 +732,9 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
     }
 
     public function generateAccessToken($access_token, $refresh_token) {
+      if( empty($access_token) || $access_token == "" ) {
+        return;
+      }
       $url = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=".$access_token;
       $request =  wp_remote_get(esc_url_raw($url), array('timeout' => 120));
       $response_code = wp_remote_retrieve_response_code($request);
@@ -740,8 +744,8 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
       
       if (isset($result->error) && $result->error) {
 
-          $filesystem = new WP_Filesystem_Direct( true );
-          $credentials = json_decode($filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
+          global $wp_filesystem;
+          $credentials = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
 
 
           $url = 'https://www.googleapis.com/oauth2/v4/token';

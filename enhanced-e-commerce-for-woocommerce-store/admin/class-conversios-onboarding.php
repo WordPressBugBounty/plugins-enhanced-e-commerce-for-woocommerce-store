@@ -65,8 +65,8 @@ if (!class_exists('Conversios_Onboarding')) {
 
 		public function get_countries($user_country)
 		{
-			$filesystem = new WP_Filesystem_Direct(true);
-			$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+			global $wp_filesystem;
+			$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 			$contData = json_decode($getCountris);
 			if (!empty($user_country)) {

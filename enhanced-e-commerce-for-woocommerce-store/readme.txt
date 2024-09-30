@@ -5,10 +5,10 @@ Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-st
 Tags: google analytics 4, google ads, meta pixel, google tag manager, tiktok pixel, facebook pixel, GA4 tracking, GTM, Pixel tracking, Snapchat,FCAPI,GMC Google Merchant Center, Microsoft Bing Ads, Ads tracking, ecommerce tracking ,lead Generation tracking , campaign creation , audience building.
 Author: Conversios
 Requires at least: 4.6
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Requires PHP: 5.6
-Stable tag: 7.1.6
-Version: 7.1.6
+Stable tag: 7.1.7
+Version: 7.1.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,47 +18,47 @@ An all-in-one plugin that offers accurate tracking, insightful reporting, and op
 
 Conversios is an easy-to-use, all-in-one plugin that offers accurate tracking, insightful reporting, and optimized marketing strategies. It easily integrates with Google Analytics 4, Google Tag Manager, and top ad platforms, including Google Ads, Meta Pixel (Facebook), Snapchat, Pinterest, TikTok, Microsoft Ads, and Twitter. Automate product feeds, access E-commerce Reporting and Google Ads Reporting with AI-powered insights, and manage campaigns directly from your WordPress dashboard.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/EAP7tem09jU?si=uJ-kMNpQfHbibJzY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://youtu.be/EAP7tem09jU
 
-**KEY FEATURES**
+###KEY FEATURES
 
-###GA4 E-Commerce Tracking
+### &#9989; GA4 E-Commerce Tracking
 Conversios provides precise and accurate tracking for Google Analytics 4 (GA4). It monitors all eCommerce events such as page_view, purchase, view_item_list, view_item, select_item, add_to_cart, remove_from_cart, view_cart, begin_checkout, add_payment_info, and add_shipping_info.
 
-###Lead Generation Tracking
+### &#9989; Lead Generation Tracking
 Measure the effectiveness of your website forms and optimize for higher conversions. Capture data beyond purchases, like form submissions, phone clicks, email clicks, and address clicks.
 
-###Setup Google Ads and Optimize
+### &#9989; Setup Google Ads and Optimize
 You can set up and optimize your Google Ad Campaigns and Google Merchant Centre with **Target KPIs** optimized by **Google Smart Bidding**.
 
-###Google Ads Tracking
+### &#9989; Google Ads Tracking
 Effectively track your campaign performance for **Google Ads Conversion and Enhanced Conversion Tracking**. Enable Google Ads Dynamic Remarketing Tracking to create **remarketing and dynamic remarketing** audience lists.
 
-###Facebook Pixel and Conversion API
+### &#9989; Facebook Pixel and Conversion API
 Track e-commerce and lead generation events in meta-pixel with **conversion tracking**. Track key ad interactions like PageView, ViewContent, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase, and Lead tracking for optimized Facebook ad campaigns.
 
-###TikTok Pixel and Events API Tracking
+### &#9989; TikTok Pixel and Events API Tracking
 Gain valuable insights into TikTok ad performance with conversion tracking for key **purchase events**.(ecommerce and lead generation event tracking.)
 
-###Snapchat Pixel and Conversion API
+### &#9989; Snapchat Pixel and Conversion API
 Measure the effectiveness of your Snapchat ads with purchase event tracking.
 
-###Pinterest Pixel Tracking
+### &#9989; Pinterest Pixel Tracking
 Optimize your Pinterest ad strategy with conversion tracking for crucial purchase events.
 
-###Microsoft (Bing) Pixel and Conversion Tracking
+### &#9989; Microsoft (Bing) Pixel and Conversion Tracking
 Track ad performance across various stages of the purchase funnel with Microsoft(Bing) Ads integration.
 
-###Twitter Pixel Tracking
+### &#9989; Twitter Pixel Tracking
 Gain valuable insights into Twitter ad performance with conversion tracking.
 
-###Heatmap and Screen Recording
+### &#9989; Heatmap and Screen Recording
 Gain a visual understanding of user behavior with integrations for Microsoft Clarity, Hotjar, and Crazy Egg.
 
-###E-commerce & Google Ads Reporting
+### &#9989; E-commerce & Google Ads Reporting
 Make data-driven decisions with comprehensive e-commerce reporting like GA4 general insights, Order performance, Product performance, Source/medium reports, and Google Ads Conversion reports.
 
-###Product Feed Manager###
+### &#9989; Product Feed Manager###
 * **API-based real-time product feeds for Google Merchant Center (GMC), Meta (Facebook) Catalog, and TikTok Catalog**.
 * **Multiple feed management with channels**.
 * **Schedule automatic updates** to keep your product feeds fresh and accurately updated.
@@ -142,6 +142,10 @@ Conversios works seamlessly with popular GDPR compliance plugins like CookieYes 
 3. Complete the onboarding once activated the plugin.
 
 == Changelog ==
+= 7.1.7 - 27/09/2024 =
+* Improved UI for easier management of Google Ads campaigns via Campaign Management.
+* Added Google Ads Reporting and Insights for better campaign performance tracking.
+
 = 7.1.3 - 26/07/2024 =
 * Easy setup for the Google Analytics, Google Ads, Google merchant center and Meta Facebook Pixel.
 * Google Analytics report dashboard.

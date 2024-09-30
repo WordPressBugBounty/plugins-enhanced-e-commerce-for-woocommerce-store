@@ -18,7 +18,7 @@ $timezone = get_option('timezone_string');
 $confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=metasettings";
 $fb_mail = isset($ee_options['facebook_setting']['fb_mail']) === TRUE ? esc_html($ee_options['facebook_setting']['fb_mail']) : '';
 if (isset($_GET['g_mail']) == TRUE) {
-    $fb_mail = sanitize_email($_GET['g_mail']);
+    $fb_mail = sanitize_email(wp_unslash($_GET['g_mail']));
 }
 // $error = '';
 // if(isset($_GET['error'])) {
@@ -27,8 +27,8 @@ if (isset($_GET['g_mail']) == TRUE) {
 $fb_business_id = isset($ee_options['facebook_setting']['fb_business_id']) === TRUE ? esc_html($ee_options['facebook_setting']['fb_business_id']) : '';
 $fb_catalog_id = isset($ee_options['facebook_setting']['fb_catalog_id']) === TRUE ? esc_html($ee_options['facebook_setting']['fb_catalog_id']) : '';
 $conv_data = $TVC_Admin_Helper->get_store_data();
-$filesystem = new WP_Filesystem_Direct(true);
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+global $wp_filesystem;
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 $contData = json_decode($getCountris);
 ?>
 <style>
@@ -61,7 +61,7 @@ $contData = json_decode($getCountris);
             </div>
             <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
                 <div class="">
-                    <?php printf(esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
+                    <?php printf('%s', esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@ $contData = json_decode($getCountris);
             <span>
                 <?php echo esc_html($fb_mail);                
                     $businessId = '';
-                    $subId = isset($_GET['subscription_id']) ? esc_html($_GET['subscription_id']) : esc_html($subscriptionId);
+                    $subId = isset($_GET['subscription_id']) ? sanitize_text_field(wp_unslash($_GET['subscription_id'])) : sanitize_text_field($subscriptionId);
                     $facebook_auth_url = TVC_API_CALL_URL_TEMP . '/auth/facebook?domain='.esc_url_raw(get_site_url()).'&app_id='.$app_id.'&country='.$country.'&user_currency='.$woo_currency.'&subscription_id='.$subId.'&confirm_url='.admin_url().$confirm_url.'&timezone='.$timezone.'&scope=productFeed' ;
                     
                     if(isset($_GET['subscription_id']) || $fb_business_id !== ''){
@@ -89,7 +89,7 @@ $contData = json_decode($getCountris);
                     }
                 ?>
                 <span class="conv-link-blue ps-2 facebookLogin" id="facebookLogin">
-                    <a onclick="window.open('<?php echo $facebook_auth_url ?>','MyWindow','width=800,height=700,left=300, top=150'); return false;" href="#">
+                    <a onclick="window.open('<?php echo esc_url($facebook_auth_url); ?>','MyWindow','width=800,height=700,left=300, top=150'); return false;" href="#">
                         <?php if(isset($ee_options['facebook_setting']['fb_business_id']) || isset($_GET['subscription_id'])) {
                           echo 'Change'  ;
                         }else{
@@ -716,7 +716,7 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
         }
         /*************************************Get saved catalog id by country code start **************************************************/
     function getCatalogId($countryCode) {
-        var conv_country_nonce = "<?php echo esc_html(wp_create_nonce('conv_country_nonce')); ?>";
+        var conv_country_nonce = "<?php echo esc_js(wp_create_nonce('conv_country_nonce')); ?>";
         var data = {
             action: "ee_getCatalogId",
             countryCode: $countryCode,

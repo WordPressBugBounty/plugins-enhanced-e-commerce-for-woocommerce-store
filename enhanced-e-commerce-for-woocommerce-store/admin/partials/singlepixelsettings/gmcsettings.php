@@ -35,8 +35,8 @@ $TVC_Admin_Helper = new TVC_Admin_Helper();
 $conv_data = $TVC_Admin_Helper->get_store_data();
 //$getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
-$filesystem = new WP_Filesystem_Direct(true);
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+global $wp_filesystem;
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
 ?>
@@ -70,7 +70,7 @@ $contData = json_decode($getCountris);
             </div>
             <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
                 <div class="">
-                    <?php printf(esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
+                    <?php printf('%s', esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
                 </div>
             </div>
         </div>
@@ -157,7 +157,7 @@ $contData = json_decode($getCountris);
     <input type="hidden" id="valtoshow_inpopup" value="Google Merchant Center Account:" />
     <input type="hidden" id="ads-account" value="<?php echo esc_attr($google_ads_id); ?>" />
     <input type="hidden" id="conversios_onboarding_nonce" value="<?php echo esc_attr(wp_create_nonce('conversios_onboarding_nonce')); ?>" />
-    <input type="hidden" id="feedType" name="feedType" value="<?php echo isset($_GET['feedType']) && $_GET['feedType'] != '' ? esc_attr(sanitize_text_field($_GET['feedType'])) : '' ?>" />
+    <input type="hidden" id="feedType" name="feedType" value="<?php echo isset($_GET['feedType']) && $_GET['feedType'] != '' ? esc_attr(sanitize_text_field(wp_unslash($_GET['feedType']))) : '' ?>" />
 
 </div>
 
@@ -218,8 +218,8 @@ $contData = json_decode($getCountris);
                                             <option value="">Select Country</option>
                                             <?php
                                             //$getCountris = file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
-                                            $filesystem = new WP_Filesystem_Direct(true);
-                                            $getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+                                            global $wp_filesystem;
+                                            $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
                                             $contData = json_decode($getCountris);
                                             foreach ($contData as $key => $value) {
@@ -518,13 +518,13 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php //printf( esc_html__( '%s', 'enhanced-e-commerce-for-woocommerce-store' ), esc_html( $googleDetail->google_merchant_center_id ) );
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php //printf( '%s', esc_html( $googleDetail->google_merchant_center_id ) );
                                                                                                                     ?>" id="gmc_id" name="gmc_id" checked>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("Google Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <label class="col-form-label fs-14 pt-0 fw-400 modal_google_merchant_center_id">
-                                <?php // printf( esc_html__( '%s', 'enhanced-e-commerce-for-woocommerce-store' ), esc_html( $googleDetail->google_merchant_center_id ) );
+                                <?php // printf( '%s', esc_html( $googleDetail->google_merchant_center_id ) );
                                 ?>
                             </label>
                         </div>
@@ -633,7 +633,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
 </div>
 <!--------------------------------super_feed_modal End -------------------------------------->
 <script>
-    var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field($_GET['subscription_id'])) : '' ?>";
+    var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field(wp_unslash($_GET['subscription_id']))) : '' ?>";
     var gmc_id = "<?php echo esc_html($google_merchant_center_id) ?>";
     /**
      * Get Google Merchant Center List
@@ -642,7 +642,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         conv_change_loadingbar("show");
         jQuery(".conv-enable-selection").addClass('hidden');
         var selectedValue = '0';
-        var conversios_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conversios_onboarding_nonce')); ?>";
+        var conversios_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
         jQuery.ajax({
             type: "POST",
             dataType: "json",
@@ -784,7 +784,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         jQuery("#wpbody").css("pointer-events", "none");
         jQuery.post(tvc_ajax_url, {
             action: "tvc_call_site_verified",
-            SiteVerifiedNonce: "<?php echo esc_html(wp_create_nonce('tvc_call_site_verified-nonce')); ?>"
+            SiteVerifiedNonce: "<?php echo esc_js(wp_create_nonce('tvc_call_site_verified-nonce')); ?>"
         }, function(response) {
             conv_change_loadingbar("hide");
             jQuery("#wpbody").css("pointer-events", "auto");
@@ -808,7 +808,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         jQuery("#wpbody").css("pointer-events", "none");
         jQuery.post(tvc_ajax_url, {
             action: "tvc_call_domain_claim",
-            apiDomainClaimNonce: "<?php echo esc_html(wp_create_nonce('tvc_call_domain_claim-nonce')); ?>"
+            apiDomainClaimNonce: "<?php echo esc_js(wp_create_nonce('tvc_call_domain_claim-nonce')); ?>"
         }, function(response) {
             conv_change_loadingbar("hide");
             jQuery("#wpbody").css("pointer-events", "auto");
@@ -892,7 +892,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         <?php } ?>
 
 
-        <?php if ((isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field($_GET['subscription_id'])) !== '') || (empty($google_merchant_center_id) && !empty($cust_g_email))) { ?>
+        <?php if ((isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field(wp_unslash($_GET['subscription_id']))) !== '') || (empty($google_merchant_center_id) && !empty($cust_g_email))) { ?>
             list_google_merchant_account(tvc_data);
         <?php } ?>
 
@@ -923,7 +923,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 url: tvc_ajax_url,
                 data: {
                     action: "conv_save_pixel_data",
-                    pix_sav_nonce: "<?php echo esc_html(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                    pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
                     conv_options_data: selected_vals,
                     conv_options_type: ["eeoptions", "eeapidata", "middleware"],
                 },
@@ -1005,7 +1005,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                     customer_id: "<?php echo esc_html($googleDetail->customer_id); ?>",
                     adult_content: adult_content,
                     tvc_data: tvc_data,
-                    conversios_onboarding_nonce: "<?php echo esc_html(wp_create_nonce('conversios_onboarding_nonce')); ?>"
+                    conversios_onboarding_nonce: "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>"
                 };
                 jQuery.ajax({
                     type: "POST",
@@ -1122,7 +1122,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
     });
     /*************************************Save Feed Data Start*************************************************************************/
     function save_feed_data() {
-        var conv_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conv_onboarding_nonce')); ?>"
+        var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
         let edit = jQuery('#edit').val()
         var planid = "<?php echo esc_attr($plan_id); ?>";
         var data = {
@@ -1199,7 +1199,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             url: tvc_ajax_url,
             data: {
                 action: "ee_super_AI_feed",
-                create_superFeed_nonce: "<?php echo esc_html(wp_create_nonce('create_superFeed_nonce_val')); ?>",
+                create_superFeed_nonce: "<?php echo esc_js(wp_create_nonce('create_superFeed_nonce_val')); ?>",
                 type: 'GMC',
             },
             success: function(response) {
@@ -1303,7 +1303,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
     /********************Modal POP up validation on click remove end **********************************/
     /*************************************Get saved catalog id by country code start **************************************************/
     function getCatalogId($countryCode) {
-        var conv_country_nonce = "<?php echo esc_html(wp_create_nonce('conv_country_nonce')); ?>";
+        var conv_country_nonce = "<?php echo esc_js(wp_create_nonce('conv_country_nonce')); ?>";
         var data = {
             action: "ee_getCatalogId",
             countryCode: $countryCode,

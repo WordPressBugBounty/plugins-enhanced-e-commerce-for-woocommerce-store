@@ -277,7 +277,7 @@ class Con_Settings
     }
     public function tvc_get_order_with_url_order_key()
     {
-        $_get = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
+        $_get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (isset($_get['key'])) {
             $order_key = $_get['key'];
             return wc_get_order(wc_get_order_id_by_order_key($order_key));
@@ -307,17 +307,17 @@ class Con_Settings
     {
         $ipaddress = '';
         if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-            $ipaddress = sanitize_text_field($_SERVER['HTTP_CLIENT_IP']);
+            $ipaddress = sanitize_text_field(wp_unslash($_SERVER['HTTP_CLIENT_IP']));
         } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipaddress = sanitize_text_field($_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ipaddress = sanitize_text_field(wp_unslash($_SERVER['HTTP_X_FORWARDED_FOR']));
         } else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
-            $ipaddress = sanitize_text_field($_SERVER['HTTP_X_FORWARDED']);
+            $ipaddress = sanitize_text_field(wp_unslash($_SERVER['HTTP_X_FORWARDED']));
         } else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-            $ipaddress = sanitize_text_field($_SERVER['HTTP_FORWARDED_FOR']);
+            $ipaddress = sanitize_text_field(wp_unslash($_SERVER['HTTP_FORWARDED_FOR']));
         } else if (isset($_SERVER['HTTP_FORWARDED'])) {
-            $ipaddress = sanitize_text_field($_SERVER['HTTP_FORWARDED']);
+            $ipaddress = sanitize_text_field(wp_unslash($_SERVER['HTTP_FORWARDED']));
         } else if (isset($_SERVER['REMOTE_ADDR'])) {
-            $ipaddress = sanitize_text_field($_SERVER['REMOTE_ADDR']);
+            $ipaddress = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR']));
         } else {
             $ipaddress = 'UNKNOWN';
         }
@@ -344,7 +344,7 @@ class Con_Settings
     {
         $user_data = array(
             "client_ip_address" => $this->get_client_ip(),
-            "client_user_agent" => isset($_SERVER['HTTP_USER_AGENT']) && !empty($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field($_SERVER['HTTP_USER_AGENT']) : '', /*,
+            "client_user_agent" => isset($_SERVER['HTTP_USER_AGENT']) && !empty($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '', /*,
         "fbc" => "",
         "fbp" => ""*/
         );

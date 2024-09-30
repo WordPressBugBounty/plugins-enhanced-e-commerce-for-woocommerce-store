@@ -882,6 +882,10 @@ class CustomApi
   public function generateAccessToken($access_token, $refresh_token)
   {
 
+    if( empty($access_token) || $access_token == "" ) {
+      return false;
+    }
+
     if ($this->check_if_basesixtyfour($access_token) == true) {
       $access_token = base64_decode($access_token);
     }
@@ -900,8 +904,8 @@ class CustomApi
     if (isset($result->error) && $result->error) {
       //$credentials = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
 
-      $filesystem = new WP_Filesystem_Direct(true);
-      $credentials = json_decode($filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
+      global $wp_filesystem;
+      $credentials = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
 
       $url = 'https://www.googleapis.com/oauth2/v4/token';
       $header = array("Content-Type" => "application/json");
@@ -963,7 +967,7 @@ class CustomApi
       );
       $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
       $return = new \stdClass();
-      if ($result->status == 200) {
+      if (isset($result->status) && $result->status == 200) {
         $return->status = $result->status;
         $return->data = $result->data;
         $return->error = false;
@@ -981,8 +985,8 @@ class CustomApi
         } else {
           $return->errors = $result->errors;
         }
-        $return->data = $result->data;
-        $return->status = $result->status;
+        $return->data = (isset($result->data) ? $result->data : null);
+        $return->status = (isset($result->status) ? $result->status : null);
         return $return;
       }
     } catch (Exception $e) {

@@ -6,19 +6,110 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
 $gtm_account_id = isset($ee_options['gtm_settings']['gtm_account_id']) ? $ee_options['gtm_settings']['gtm_account_id'] : "";
 $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee_options['gtm_settings']['gtm_container_id'] : "";
 $is_gtm_automatic_process = isset($ee_options['gtm_settings']['is_gtm_automatic_process']) ? $ee_options['gtm_settings']['is_gtm_automatic_process'] : false;
+
+$disabledsection = "disabledsection";
+$tracking_method = (isset($ee_options['tracking_method']) && $ee_options['tracking_method'] != "") ? $ee_options['tracking_method'] : "";
+$want_to_use_your_gtm = "";
+if ($tracking_method == "gtm") {
+    $want_to_use_your_gtm = (isset($ee_options['want_to_use_your_gtm']) && $ee_options['want_to_use_your_gtm'] != "") ? $ee_options['want_to_use_your_gtm'] : "0";
+}
+if ((isset($_GET['wizard_channel']) && sanitize_text_field($_GET['wizard_channel']) == "gtmsettings")) {
+    $want_to_use_your_gtm = "1";
+}
+$use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your_gtm_id'] : "";
+
 ?>
 
 <div class="mt-3">
-    <div class="convwizard_pixtitle mt-0 mb-3">
-        <div class="d-flex flex-row align-items-center">
-            <h5 class="m-0 text-bold h5">
-                <?php esc_html_e("Google Analytics 4", "enhanced-e-commerce-for-woocommerce-store"); ?>
-            </h5>
-        </div>
-        <div class="mt-1">
-            <?php esc_html_e("Easily set up tracking in 2 simple steps given below", "enhanced-e-commerce-for-woocommerce-store"); ?>
+    <div class="alert alert-primary mb-5 d-flex" role="alert">
+        <img class="me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gtm_logo.png'); ?>" />
+        <div class="text-dark">
+            <h4 class="m-0"><?php esc_html_e("🎉 Great News! ", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
+            <ul class="list-styled ps-3">
+                <li class="m-0">
+                    <?php esc_html_e("Our Ready-to-Use GTM Configuration includes tags, triggers, and variables for GA4, Google Ads, Facebook, and other ad platforms. ", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </li>
+                <li class="m-0">
+                    <?php esc_html_e("Just connect each platform, and we'll handle the rest—no more GTM worries! 🚀", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </li>
+            </ul>
         </div>
     </div>
+    <div class="convwiz_pixtitle mt-0 mb-3 d-flex justify-content-between align-items-center py-0">
+        <div class="col-7">
+            <div class="convwizlogotitle">
+                <div class="d-flex flex-row align-items-center">
+                    <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
+                    <div>
+                        <h5 class="m-0 text-bold h5">
+                            <?php esc_html_e("Google Analytics 4", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="conv-green-checklis list-unstyled mt-3">
+                <li class="d-flex">
+                    <span class="material-symbols-outlined text-success md-18">
+                        check_circle
+                    </span>
+                    <?php esc_html_e("All the e-commerce event tracking including Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="page_view, purchase, view_item_list, view_item, select_item, add_to_cart, remove_from_cart, view_cart, begin_checkout, add_payment_info, and add_shipping_info.">
+                        info
+                    </span>
+                </li>
+                <li class="d-flex">
+                    <span class="material-symbols-outlined text-success md-18">
+                        check_circle
+                    </span>
+                    <?php esc_html_e("All the lead generation event tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="lead_form_submit. email_click, phone_click, address_click">
+                        info
+                    </span>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="col convgauthcol">
+
+            <!-- Google SignIn -->
+            <div class="convpixsetting-inner-box ">
+                <?php
+                $g_email = (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : "";
+                ?>
+                <?php if ($g_email != "") { ?>
+                    <div class="convgauthsigned ps-3">
+                        <h5 class="fw-normal mb-1">
+                            <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </h5>
+                        <span>
+                            <?php echo (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : ""; ?>
+                            <span class="conv-link-blue ps-2 tvc_google_signinbtn_ga">
+                                <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </span>
+                        </span>
+                    </div>
+
+                <?php } else { ?>
+
+                    <div class="tvc_google_signinbtn_box " style="width: 185px;">
+                        <div class="tvc_google_signinbtn_ga google-btn">
+                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
+                        </div>
+                    </div>
+                    <div class="ps-1">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
+                <?php } ?>
+            </div>
+            <!-- Google SignIn End -->
+        </div>
+
+
+
+    </div>
+
+
+
 
 
     <form id="gasettings_form" class="convgawiz_form convpixsetting-inner-box mt-0 pb-3 pt-0" datachannel="GA">
@@ -26,33 +117,7 @@ $is_gtm_automatic_process = isset($ee_options['gtm_settings']['is_gtm_automatic_
             <div class="progress-wholebox">
                 <div class="card-body p-0">
                     <ul class="progress-steps-list p-0">
-                        <li class="gmc_mail_step">
-                            <!-- Google SignIn -->
-                            <div class="convpixsetting-inner-box">
-                                <?php
-                                $g_email = (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : "";
-                                ?>
-                                <?php if ($g_email != "") { ?>
-                                    <h5 class="fw-normal mb-1">
-                                        <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </h5>
-                                    <span>
-                                        <?php echo (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : ""; ?>
-                                        <span class="conv-link-blue ps-2 tvc_google_signinbtn_ga">
-                                            <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </span>
-                                    </span>
-                                <?php } else { ?>
 
-                                    <div class="tvc_google_signinbtn_box" style="width: 185px;">
-                                        <div class="tvc_google_signinbtn_ga google-btn">
-                                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                            <!-- Google SignIn End -->
-                        </li>
                         <li class="gmc_account_id_step pt-3">
                             <!-- GA4 account ID Selection -->
                             <?php
@@ -64,8 +129,10 @@ $is_gtm_automatic_process = isset($ee_options['gtm_settings']['is_gtm_automatic_
                             ?>
                             <div id="analytics_box_GA4" class="py-1">
                                 <div class="row pt-1">
-                                    <div class="col d-flex">
-                                        <img class="conv_channel_logo me-4 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
+                                    <div class="col-6">
+                                        <h5 class="d-flex fw-normal mb-1 text-dark">
+                                            <b><?php esc_html_e("GA4 Account", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                        </h5>
                                         <select id="ga4_analytic_account_id" name="ga4_analytic_account_id" acctype="GA4" class="form-select form-select-lg mb-3 ga_analytic_account_id ga_analytic_account_id_ga4 selecttwo_search" style="width: 100%" <?php echo esc_attr($is_sel_disable_ga); ?>>
                                             <?php if (!empty($ga4_analytic_account_id)) { ?>
                                                 <option selected><?php echo esc_attr($ga4_analytic_account_id); ?></option>
@@ -74,7 +141,10 @@ $is_gtm_automatic_process = isset($ee_options['gtm_settings']['is_gtm_automatic_
                                         </select>
                                     </div>
 
-                                    <div class="col">
+                                    <div class="col-6">
+                                        <h5 class="d-flex fw-normal mb-1 text-dark">
+                                            <b><?php esc_html_e("GA4 Measurement ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                        </h5>
                                         <select id="ga4_property_id" name="measurement_id" class="form-select form-select-lg mb-3 selecttwo_search pixvalinput_gahot" style="width: 100%" <?php echo esc_attr($is_sel_disable_ga); ?>>
                                             <option value="">Select Measurement ID</option>
                                             <?php if (!empty($measurement_id)) { ?>
@@ -87,22 +157,6 @@ $is_gtm_automatic_process = isset($ee_options['gtm_settings']['is_gtm_automatic_
                             </div>
                             <!-- GA4 account ID Selection End -->
 
-                            <div id="ga4apisecret_box" class="py-3 ps-4">
-                                <div class="row pt-2 ps-4">
-                                    <div class="col-12">
-                                        <h5 class="d-flex fw-normal mb-1 text-dark">
-                                            <?php esc_html_e("GA4 API Secret (To track refund order)", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            <span class="align-middle conv-link-blue fw-bold-500 upgradetopro_badge" popupopener="ga4apisecret_box">&nbsp;
-                                                <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
-                                                <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            </span>
-                                        </h5>
-                                        <input readonly="" type="text" name="ga4_api_secret" id="ga4_api_secret" class="form-control disabled" value="" placeholder="e.g. CnTrpcbsStWFU5-TmSuhuS">
-                                    </div>
-
-                                </div>
-                            </div>
-
                         </li>
                     </ul>
                 </div>
@@ -113,11 +167,8 @@ $is_gtm_automatic_process = isset($ee_options['gtm_settings']['is_gtm_automatic_
     </form>
 
     <!-- Tab bottom buttons -->
-    <div class="tab_bottom_buttons d-flex align-items-center pt-4">
+    <div class="tab_bottom_buttons d-flex align-items-center pt-2">
         <div class="ms-auto d-flex align-items-center">
-            <button class="btn btn-outline-primary" style="width:184px" onclick="changeTabBox('gtmbox-tab')">
-                <?php esc_html_e('Go Back', "enhanced-e-commerce-for-woocommerce-store"); ?>
-            </button>
             <?php
             $isgsdisabled = "";
             if (empty($measurement_id)) {
@@ -409,6 +460,41 @@ $is_gtm_automatic_process = isset($ee_options['gtm_settings']['is_gtm_automatic_
                 }
             });
         });
+
+        // Set GTM on page load. 
+        let tracking_method = "<?php echo esc_js($tracking_method) ?>";
+        if (tracking_method != 'gtm' && tracking_method == '') {
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: tvc_ajax_url,
+                data: {
+                    action: "conv_save_pixel_data",
+                    pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                    conv_options_data: {
+                        want_to_use_your_gtm: 0,
+                        tracking_method: 'gtm',
+                        conv_onboarding_done_step: <?php echo esc_js("1"); ?>
+                    },
+                    conv_options_type: ["eeoptions", "eeapidata"],
+                },
+                success: function(response) {
+                    jQuery('.gtm-badge').removeClass('conv-badge-yellow').addClass('conv-badge-green');
+                    jQuery('.gtm-badge').text('Connected')
+                    jQuery('.conv-pixel-list-item').removeClass('conv-gtm-not-connected').addClass(
+                        'conv-gtm-connected')
+                    jQuery('.gtm-lable').html('Container ID: <b> GTM-K7X94DG (Conversios Default Container)</b>')
+                },
+                error: function(error) {
+                    // console.log('error', error)
+                    jQuery('.gtm-badge').removeClass('conv-badge-green').addClass('conv-badge-yellow');
+                    jQuery('.gtm-badge').text('Mandatory')
+                    jQuery('.conv-pixel-list-item').removeClass('conv-gtm-connected').addClass(
+                        'conv-gtm-not-connected')
+                }
+            });
+        }
+
 
     });
 </script>

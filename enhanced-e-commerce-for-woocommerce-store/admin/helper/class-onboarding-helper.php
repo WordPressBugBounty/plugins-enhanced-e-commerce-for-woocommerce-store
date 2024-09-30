@@ -95,14 +95,14 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function get_analytics_web_properties()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         $form_data = array(
-          "type" => isset($_POST['type']) ? sanitize_text_field($_POST['type']) : '',
-          "account_id" => isset($_POST['account_id']) ? sanitize_text_field($_POST['account_id']) : ''
+          "type" => isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '',
+          "account_id" => isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : ''
         );
         echo wp_json_encode($api_obj->getAnalyticsWebProperties($form_data));
         wp_die();
@@ -117,12 +117,12 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function get_analytics_account_list()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
-        $from_data = array("page" => isset($_POST['page']) ? sanitize_text_field($_POST['page']) : '');
+        $from_data = array("page" => isset($_POST['page']) ? sanitize_text_field(wp_unslash($_POST['page'])) : '');
         echo wp_json_encode($api_obj->getAnalyticsAccountList($from_data));
         wp_die();
       } else {
@@ -137,25 +137,25 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function save_analytics_data()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         $form_data = array(
-          'subscription_id' => sanitize_text_field((isset($_POST['subscription_id'])) ? $_POST['subscription_id'] : ''),
-          'tracking_option' => sanitize_text_field((isset($_POST['tracking_option'])) ? $_POST['tracking_option'] : ''),
-          'web_measurement_id' => sanitize_text_field((isset($_POST['web_measurement_id'])) ? $_POST['web_measurement_id'] : ''),
-          'ga4_account_id' => sanitize_text_field((isset($_POST['ga4_account_id'])) ? $_POST['ga4_account_id'] : ''),
-          'web_property_id' => sanitize_text_field((isset($_POST['web_property_id'])) ? $_POST['web_property_id'] : ''),
-          'ua_account_id' => sanitize_text_field((isset($_POST['ua_account_id'])) ? $_POST['ua_account_id'] : ''),
+          'subscription_id' => sanitize_text_field((isset($_POST['subscription_id'])) ?  wp_unslash($_POST['subscription_id']) : ''),
+          'tracking_option' => sanitize_text_field((isset($_POST['tracking_option'])) ? wp_unslash($_POST['tracking_option']) : ''),
+          'web_measurement_id' => sanitize_text_field((isset($_POST['web_measurement_id'])) ? wp_unslash($_POST['web_measurement_id']) : ''),
+          'ga4_account_id' => sanitize_text_field((isset($_POST['ga4_account_id'])) ? wp_unslash($_POST['ga4_account_id']) : ''),
+          'web_property_id' => sanitize_text_field((isset($_POST['web_property_id'])) ? wp_unslash($_POST['web_property_id']) : ''),
+          'ua_account_id' => sanitize_text_field((isset($_POST['ua_account_id'])) ? wp_unslash($_POST['ua_account_id']) : ''),
           'enhanced_e_commerce_tracking' => sanitize_text_field((isset($_POST['enhanced_e_commerce_tracking']) && $_POST['enhanced_e_commerce_tracking'] == 'true') ? 1 : 0),
           'user_time_tracking' => sanitize_text_field((isset($_POST['user_time_tracking']) && $_POST['user_time_tracking'] == 'true') ? 1 : 0),
           'add_gtag_snippet' => sanitize_text_field((isset($_POST['add_gtag_snippet']) && $_POST['add_gtag_snippet'] == 'true') ? 1 : 0),
           'client_id_tracking' => sanitize_text_field((isset($_POST['client_id_tracking']) && $_POST['client_id_tracking'] == 'true') ? 1 : 0),
           'exception_tracking' => sanitize_text_field((isset($_POST['exception_tracking']) && $_POST['exception_tracking'] == 'true') ? 1 : 0),
           'enhanced_link_attribution_tracking' => sanitize_text_field((isset($_POST['enhanced_link_attribution_tracking']) && $_POST['enhanced_link_attribution_tracking'] == 'true') ? 1 : 0),
-          'google_ads_id' => sanitize_text_field((isset($_POST['google_ads_id'])) ? $_POST['google_ads_id'] : ''),
+          'google_ads_id' => sanitize_text_field((isset($_POST['google_ads_id'])) ? wp_unslash($_POST['google_ads_id']) : ''),
           'remarketing_tags' => sanitize_text_field((isset($_POST['remarketing_tags']) && $_POST['remarketing_tags'] == 'true') ? 1 : 0),
           'dynamic_remarketing_tags' => sanitize_text_field((isset($_POST['dynamic_remarketing_tags']) && $_POST['dynamic_remarketing_tags'] == 'true') ? 1 : 0),
           'google_ads_conversion_tracking' => sanitize_text_field((isset($_POST['google_ads_conversion_tracking']) && $_POST['google_ads_conversion_tracking'] == 'true') ? 1 : 0),
@@ -175,9 +175,9 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function list_googl_ads_account()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $customApiObj = new CustomApi();
         $google_detail = $customApiObj->getGoogleAnalyticDetail($tvc_data->subscription_id);
@@ -196,9 +196,9 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function create_google_ads_account()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         $form_data = [
@@ -217,28 +217,28 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function link_analytic_to_ads_account()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
-        $postType = isset($_POST['type']) ? sanitize_text_field($_POST['type']) : '';
+        $postType = isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '';
         if ($postType == "UA") {
           $form_data = [
-            'type' => isset($_POST['type']) ? sanitize_text_field($_POST['type']) : '',
-            'ads_customer_id' => isset($_POST['ads_customer_id']) ? sanitize_text_field($_POST['ads_customer_id']) : '',
-            'analytics_id' => isset($_POST['analytics_id']) ? sanitize_text_field($_POST['analytics_id']) : '',
-            'web_property_id' => isset($_POST['web_property_id']) ? sanitize_text_field($_POST['web_property_id']) : '',
-            'profile_id' => isset($_POST['profile_id']) ? sanitize_text_field($_POST['profile_id']) : '',
+            'type' => isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '',
+            'ads_customer_id' => isset($_POST['ads_customer_id']) ? sanitize_text_field(wp_unslash($_POST['ads_customer_id'])) : '',
+            'analytics_id' => isset($_POST['analytics_id']) ? sanitize_text_field(wp_unslash($_POST['analytics_id'])) : '',
+            'web_property_id' => isset($_POST['web_property_id']) ? sanitize_text_field(wp_unslash($_POST['web_property_id'])) : '',
+            'profile_id' => isset($_POST['profile_id']) ? sanitize_text_field(wp_unslash($_POST['profile_id'])) : '',
           ];
         } else {
           $form_data = [
-            'type' => isset($_POST['type']) ? sanitize_text_field($_POST['type']) : '',
-            'ads_customer_id' => isset($_POST['ads_customer_id']) ? sanitize_text_field($_POST['ads_customer_id']) : '',
+            'type' => isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '',
+            'ads_customer_id' => isset($_POST['ads_customer_id']) ? sanitize_text_field(wp_unslash($_POST['ads_customer_id'])) : '',
             'analytics_id' => '',
-            'web_property_id' => isset($_POST['web_property_id']) ? sanitize_text_field($_POST['web_property_id']) : '',
+            'web_property_id' => isset($_POST['web_property_id']) ? sanitize_text_field(wp_unslash($_POST['web_property_id'])) : '',
             'profile_id' => '',
-            'web_property' => isset($_POST['web_property']) ? sanitize_text_field($_POST['web_property']) : '',
+            'web_property' => isset($_POST['web_property']) ? sanitize_text_field(wp_unslash($_POST['web_property'])) : '',
           ];
         }
         echo wp_json_encode($api_obj->linkAnalyticToAdsAccount($form_data));
@@ -254,9 +254,9 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function list_google_merchant_account()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $customApiObj = new CustomApi();
         $google_detail = $customApiObj->getGoogleAnalyticDetail($tvc_data->subscription_id);
@@ -275,9 +275,9 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function create_google_merchant_center_account()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $customApiObj = new CustomApi();
         $google_detail = $customApiObj->getGoogleAnalyticDetail($tvc_data->subscription_id);
@@ -285,12 +285,12 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
         $refresh_token = isset($google_detail->data->refresh_token) ? base64_encode($google_detail->data->refresh_token) : '';
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($access_token), sanitize_text_field($refresh_token));
         $from_data = array(
-          "store_name" => isset($_POST['store_name']) ? sanitize_text_field($_POST['store_name']) : '',
-          "website_url" => isset($_POST['website_url']) ? sanitize_text_field($_POST['website_url']) : '',
-          "customer_id" => isset($_POST['customer_id']) ? sanitize_text_field($_POST['customer_id']) : '',
-          "adult_content" => isset($_POST['adult_content']) ? sanitize_text_field($_POST['adult_content']) : '',
-          "country" => isset($_POST['country']) ? sanitize_text_field($_POST['country']) : '',
-          "email_address" => isset($_POST['email_address']) ? sanitize_text_field($_POST['email_address']) : ''
+          "store_name" => isset($_POST['store_name']) ? sanitize_text_field(wp_unslash($_POST['store_name'])) : '',
+          "website_url" => isset($_POST['website_url']) ? sanitize_text_field(wp_unslash($_POST['website_url'])) : '',
+          "customer_id" => isset($_POST['customer_id']) ? sanitize_text_field(wp_unslash($_POST['customer_id'])) : '',
+          "adult_content" => isset($_POST['adult_content']) ? sanitize_text_field(wp_unslash($_POST['adult_content'])) : '',
+          "country" => isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '',
+          "email_address" => isset($_POST['email_address']) ? sanitize_text_field(wp_unslash($_POST['email_address'])) : ''
         );
         echo wp_json_encode($api_obj->createMerchantAccount($from_data));
         wp_die();
@@ -305,17 +305,17 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function save_merchant_data()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
 
-        $merchant_id  = isset($_POST['merchant_id']) ? sanitize_text_field($_POST['merchant_id']) : '';
-        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field($_POST['subscription_id']) : '';
-        $google_merchant_center_id = isset($_POST['google_merchant_center_id']) ? sanitize_text_field($_POST['google_merchant_center_id']) : '';
-        $website_url = isset($_POST['website_url']) ? sanitize_text_field($_POST['website_url']) : '';
-        $customer_id = isset($_POST['customer_id']) ? sanitize_text_field($_POST['customer_id']) : '';
+        $merchant_id  = isset($_POST['merchant_id']) ? sanitize_text_field(wp_unslash($_POST['merchant_id'])) : '';
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : '';
+        $google_merchant_center_id = isset($_POST['google_merchant_center_id']) ? sanitize_text_field(wp_unslash($_POST['google_merchant_center_id'])) : '';
+        $website_url = isset($_POST['website_url']) ? sanitize_text_field(wp_unslash($_POST['website_url'])) : '';
+        $customer_id = isset($_POST['customer_id']) ? sanitize_text_field(wp_unslash($_POST['customer_id'])) : '';
 
         $save_data = array(
           "merchant_id" => $merchant_id,
@@ -326,13 +326,13 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
         );
         $result_merchant = $api_obj->saveMechantData($save_data);
         $result_linkAd = '';
-        $adwords_id = isset($_POST['adwords_id']) ? sanitize_text_field($_POST['adwords_id']) : '';
+        $adwords_id = isset($_POST['adwords_id']) ? sanitize_text_field(wp_unslash($_POST['adwords_id'])) : '';
         if ($adwords_id != '') {
-          $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+          $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
           $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
           $from_data = array(
             "merchant_id" => $merchant_id,
-            "account_id" => isset($_POST['account_id']) ? sanitize_text_field($_POST['account_id']) : '',
+            "account_id" => isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : '',
             "adwords_id" => $adwords_id,
             "subscription_id" => $subscription_id,
           );
@@ -350,9 +350,9 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function get_conversion_list()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         unset($_POST['tvc_data']);
@@ -375,15 +375,15 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function link_google_ads_to_merchant_center()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
-        $merchant_id = isset($_POST['merchant_id']) ?  sanitize_text_field($_POST['merchant_id']) : '';
-        $account_id = isset($_POST['account_id']) ? sanitize_text_field($_POST['account_id']) : '';
-        $adwords_id = isset($_POST['adwords_id']) ? sanitize_text_field($_POST['adwords_id']) : '';
-        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field($_POST['subscription_id']) : '';
+        $merchant_id = isset($_POST['merchant_id']) ?  sanitize_text_field(wp_unslash($_POST['merchant_id'])) : '';
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : '';
+        $adwords_id = isset($_POST['adwords_id']) ? sanitize_text_field(wp_unslash($_POST['adwords_id'])) : '';
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : '';
         $from_data = array(
           "merchant_id" => $merchant_id,
           "account_id" => $account_id,
@@ -402,12 +402,12 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function get_subscription_details()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
-        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field($_POST['subscription_id']) : '';
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : '';
         echo wp_json_encode($api_obj->getSubscriptionDetails($tvc_data, $subscription_id));
         wp_die();
       } else {
@@ -421,16 +421,16 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
      */
     public function update_setup_time_to_subscription()
     {
-      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field($_POST['conversios_onboarding_nonce']) : "";
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
       if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         $data_value = [];
         foreach ($_POST as $key => $value) {
           $data_value[$key] = sanitize_text_field($value);
         }
-        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field($_POST['subscription_id']) : '';
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : '';
 
         $form_data = array("subscription_id" => $subscription_id);
         $api_obj->updateSetupTimeToSubscription($form_data);
@@ -456,7 +456,7 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
       $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
       if (isset($ee_additional_data['temp_active_licence_key']) && $ee_additional_data['temp_active_licence_key'] != "") {
         $licence_key = $ee_additional_data['temp_active_licence_key'];
-        $subscription_id = isset($_GET['subscription_id']) ? sanitize_text_field($_GET['subscription_id']) : '';
+        $subscription_id = isset($_GET['subscription_id']) ? sanitize_text_field(wp_unslash($_GET['subscription_id'])) : '';
         $TVC_Admin_Helper->active_licence($licence_key, $subscription_id);
         unset($ee_additional_data['temp_active_licence_key']);
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
@@ -609,7 +609,7 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
             }
             global $wp_filesystem;
             if (!$wp_filesystem) {
-              $wp_filesystem = WP_Filesystem();
+              global $wp_filesystem;
             }
 
             $stringData = "google-site-verification: " . $siteVerificationToken->data->token;
@@ -666,8 +666,8 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
     protected $refresh_token;
     public function __construct($access_token, $refresh_token)
     {
-      $filesystem = new WP_Filesystem_Direct(true);
-      $merchantInfo = json_decode($filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/merchant-info.json'), true);
+      global $wp_filesystem;
+      $merchantInfo = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/merchant-info.json'), true);
 
       $this->refresh_token = $refresh_token;
       $access_token_value = $this->generateAccessToken(base64_decode($access_token ?? ''), base64_decode($this->refresh_token ?? ''));
@@ -904,7 +904,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
     public function createGoogleAdsAccount($postData)
     {
       try {
-        $data = isset($_POST['tvc_data']) ? sanitize_text_field($_POST['tvc_data']) : "";
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $url = $this->apiDomain . '/adwords/create-ads-account';
         $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
@@ -1327,8 +1327,8 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
       if (isset($result->error) && $result->error) {
         //$credentials = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
 
-        $filesystem = new WP_Filesystem_Direct(true);
-        $credentials = json_decode($filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
+        global $wp_filesystem;
+        $credentials = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
 
         $url = 'https://www.googleapis.com/oauth2/v4/token';
         $header = array("Content-Type" => "application/json");

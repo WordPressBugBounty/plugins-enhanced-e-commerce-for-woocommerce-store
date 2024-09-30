@@ -495,7 +495,7 @@ jQuery(function() {
             url: tvc_ajax_url,
             data: {
                 action: "conv_save_pixel_data",
-                pix_sav_nonce: "<?php echo esc_html(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
                 conv_options_data: selected_vals,
                 conv_options_type: ["eeoptions"],
             },

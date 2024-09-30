@@ -7,13 +7,13 @@ require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 $customApiObj = new CustomApi();
 if(isset($_GET['g_mail']) && isset($_GET['wizard_channel'])) {
-    update_option('ee_customer_gmail', sanitize_email($_GET['g_mail']));
+    update_option('ee_customer_gmail', sanitize_email(wp_unslash($_GET['g_mail'])));
 }
 $ee_options = unserialize(get_option("ee_options"));
 $tvc_data = $TVC_Admin_Helper->get_store_data();
 $g_mail = get_option('ee_customer_gmail');
 if(isset($_GET['g_mail'])) {
-    $g_mail = sanitize_email($_GET['g_mail']);
+    $g_mail = sanitize_email(wp_unslash($_GET['g_mail']));
 }
 $tvc_data['g_mail'] = "";
 if ($g_mail) {
@@ -40,8 +40,8 @@ if(isset($ee_options['google_merchant_center_id']) && $ee_options['google_mercha
 $connect_gmc_url = $TVC_Admin_Helper->get_custom_connect_url(admin_url() . 'admin.php?page=conversios&wizard=campaignManagement_gmcsetting');
 //$getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
-$filesystem = new WP_Filesystem_Direct( true );
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+global $wp_filesystem;
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
 $site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
@@ -322,11 +322,6 @@ input[type=date] {
     float: right;
     margin-top: 5px;
     margin-bottom: 5px;
-}
-
-.paginate_button.current {
-    background: #00cff6;
-    color: #fff;
 }
 
 .paginate_button {
@@ -744,9 +739,9 @@ input[type=date] {
                     </p>
                 </div>
                 <div class="google_signin_sec_right">
-                    <h5>
+                    <h6>
                         <?php esc_html_e("Why do I need to sign in with google?", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h5>
+                    </h6>
                     <p>
                         <?php esc_html_e("When you sign in with Google, we ask for limited programmatic access for your accounts in order to automate below features for you:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
@@ -1401,6 +1396,9 @@ function list_google_ads_account(tvc_data, new_ads_id = "") {
                 } else {
                     if (response.data.length > 0) {
                         jQuery('#google_ads_id').empty();
+                        <?php if( isset($_GET['subscription_id']) ) : ?>
+                        jQuery('#google_ads_id').html('<option value="">Select Account</option>');
+                        <?php endif; ?>
                         var AccOptions = '';
                         var selected = '';
                         if (new_ads_id != "" && new_ads_id != undefined) {
@@ -1446,7 +1444,7 @@ function managecreateFeedLoader(display = "show") {
 
 function checkProgressBar(channel = "") {
     var get =
-    "<?php echo isset($_GET['wizard_channel']) ? esc_js(sanitize_text_field($_GET['wizard_channel'])) : '' ?>";
+    "<?php echo isset($_GET['wizard_channel']) ? esc_js(sanitize_text_field(wp_unslash($_GET['wizard_channel']))) : '' ?>";
     var pixelprogressbarclass = 0;
     var is_channel_connected = false;
     var data = {

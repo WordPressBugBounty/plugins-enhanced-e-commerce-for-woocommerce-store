@@ -64,15 +64,15 @@ if ($google_merchant_center_id === '' && $tiktok_business_account === '' && $fac
 }
 
 //$getCountris = file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
-$filesystem = new WP_Filesystem_Direct( true );
+global $wp_filesystem;
 
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
 
 //$path = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/category.json';
 //$str = file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/category.json');
-$str = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/category.json');
+$str = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/category.json');
 $str = json_decode($str);
 
 
@@ -222,11 +222,6 @@ $conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->r
     margin-bottom: 5px;
 }
 
-.paginate_button.current {
-    background: #00cff6;
-    color: #fff;
-}
-
 .paginate_button {
     position: relative;
     /* display: block; */
@@ -245,7 +240,7 @@ $conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->r
     animation-iteration-count: 2;
 }
 </style>
-<div class="container-fluid conv-light-grey-bg pt-4 ps-4">
+<div class="container-fluid pt-4 ps-4">
     <div class="row ps-4 pe-4">
         <div class="m-0 p-0 col-6">
             <div class="m-0 p-0 col-12">
@@ -354,7 +349,7 @@ $conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->r
         </div>
     </div>
 </div>
-<div class="container-fluid conv-light-grey-bg p-4 pb-2">
+<div class="container-fluid p-4 pb-2">
     <div id="loadingbar_blue" class="progress-materializecss d-none ps-2 pe-2">
         <div class="indeterminate"></div>
     </div>
@@ -412,19 +407,19 @@ $conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->r
                                 checked value="syncAll">
                         </div>
                     </th>
-                    <th scope="col" class="text-dark text-start sorting_disabled">
+                    <th scope="col" class="text-start sorting_disabled">
                         <?php esc_html_e("PRODUCT INFORMATION", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
-                    <th scope="col" class="text-dark text-start sorting_disabled">
+                    <th scope="col" class="text-start sorting_disabled">
                         <?php esc_html_e("CATEGORY", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
-                    <th scope="col" class="text-dark text-start sorting_disabled">
+                    <th scope="col" class="text-start sorting_disabled">
                         <?php esc_html_e("AVAILABILITY", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
-                    <th scope="col" class="text-dark text-center sorting_disabled">
+                    <th scope="col" class="text-center sorting_disabled">
                         <?php esc_html_e("QUANTITY", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
-                    <th scope="col" class="text-dark text-center sorting_disabled">
+                    <th scope="col" class="text-center sorting_disabled">
                         <select class="selectStatus" id="selectStatus">
                             <?php if(in_array('1', $channel_id)){ ?> <option value="1"
                                 <?php echo isset($channel_id[0]) && $channel_id[0] == 1 ? 'selected' : '' ?>>GMC Status
@@ -438,7 +433,7 @@ $conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->r
                         </select>
 
                     </th>
-                    <th scope="col" class="text-dark text-center sorting_disabled" style="width:5%">
+                    <th scope="col" class="text-center sorting_disabled" style="width:5%">
                         <?php esc_html_e("ACTION", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
                 </tr>
@@ -827,7 +822,9 @@ $conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->r
                         <div class="col-12 row bg-white m-0 p-0 mb-3">
                             <div class="col-12 row  attributeDiv" style="overflow-y: scroll; max-height:450px;">
                                 <?php foreach ($gmcAttributes as $key => $attribute) { 
-                                    unset($tempAddAttr[$attribute["field"]]);
+                                    if (isset($tempAddAttr[$attribute["field"]])) {
+                                        unset($tempAddAttr[$attribute["field"]]);
+                                    }
                                     $sel_val = ""; ?>
                                 <div class="col-6 mt-2">
                                     <span class="ps-3 font-weight-400 text-color fs-12">
@@ -1185,7 +1182,7 @@ jQuery(document).ready(function() {
                     feed_id: jQuery('#feed_id').val(),
                     p_id: p_id,
                     prefix: "<?php echo esc_html($result[0]['product_id_prefix']) ?>",
-                    product_details_nonce: "<?php echo esc_html(wp_create_nonce('conv_product_details-nonce')); ?>"
+                    product_details_nonce: "<?php echo esc_js(wp_create_nonce('conv_product_details-nonce')); ?>"
                 });
             },
             dataType: 'JSON',
@@ -1386,7 +1383,7 @@ jQuery(document).ready(function() {
                 catalog_id: "<?php echo esc_html($facebook_catalog_id)?>",
                 tiktok_business_id: "<?php echo esc_html($tiktok_business_account) ?>",
                 tiktok_catalog_id: "<?php echo esc_html($result[0]['tiktok_catalog_id']) ?>",
-                conv_licence_nonce: "<?php echo esc_html(wp_create_nonce('conv_licence-nonce')); ?>"
+                conv_licence_nonce: "<?php echo esc_js(wp_create_nonce('conv_licence-nonce')); ?>"
             };
             jQuery.ajax({
                 type: "POST",
@@ -2045,7 +2042,7 @@ jQuery(document).ready(function() {
                 exclude: exclude,
                 include: include,
                 inculdeExtraProduct: prodId,
-                conv_syncprodcat_nonce: "<?php echo esc_html(wp_create_nonce('conv_syncprodcat')); ?>"
+                conv_syncprodcat_nonce: "<?php echo esc_js(wp_create_nonce('conv_syncprodcat')); ?>"
             };
             jQuery.ajax({
                 url: tvc_ajax_url,
@@ -2232,7 +2229,7 @@ function getConditionDropDown(val = '', condition = '') {
 /*************************************Get Condition Dropdown End**********************************************************************/
 /*************************************Save Feed Data Start*************************************************************************/
 function save_feed_data(google_merchant_center_id, catalog_id) {
-    var conv_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conv_onboarding_nonce')); ?>"
+    var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
     let edit = jQuery('#edit').val();
     var data = {
         action: "save_feed_data",
@@ -2299,7 +2296,7 @@ function save_feed_data(google_merchant_center_id, catalog_id) {
 function editFeed($id) {
     jQuery('#gmc_id').attr('disabled', false);
     jQuery('#target_country_feed').attr('disabled', false);
-    var conv_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conv_onboarding_nonce')); ?>"
+    var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
     var data = {
         action: "get_feed_data_by_id",
         id: $id,
@@ -2624,7 +2621,7 @@ function submitProductSyncUp(sync_progressive_data = null) {
             .serialize(),
         product_batch_size: jQuery("#product_batch_size").val(),
         product_id_prefix: jQuery("#product_id_prefix").val(),
-        conv_nonce: "<?php echo esc_html(wp_create_nonce('conv_ajax_product_sync_bantch_wise-nonce')); ?>",
+        conv_nonce: "<?php echo esc_js(wp_create_nonce('conv_ajax_product_sync_bantch_wise-nonce')); ?>",
         // Adding filters value to feed table
         feedId: <?php echo esc_attr(sanitize_text_field(filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT))) ?>,
         productData: jQuery("#strProData").val(),
@@ -2683,7 +2680,7 @@ function deleteProduct($id, $product_id = null) {
     var message =
         'Product in this feed will be deleted from the channels selected in the feed. Are you sure you want to delete it? ';
     if (confirm(message)) {
-        var conv_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conv_onboarding_nonce')); ?>"
+        var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
         var data = {
             action: "ee_delete_feed_gmc",
             feed_id: $id,
@@ -2772,7 +2769,7 @@ jQuery(document).on('click', '.toggleClose', function() {
 
 /*************************************Get saved catalog id by country code start **************************************************/
 function getCatalogId($countryCode) {
-    var conv_country_nonce = "<?php echo esc_html(wp_create_nonce('conv_country_nonce')); ?>";
+    var conv_country_nonce = "<?php echo esc_js(wp_create_nonce('conv_country_nonce')); ?>";
     var data = {
         action: "ee_getCatalogId",
         countryCode: $countryCode,
@@ -3009,7 +3006,7 @@ jQuery(document).on('change', '.additional_attr_value', function() {
 });
 
 jQuery(document).ready(function() {
-    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>
+    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>;
     var arr = Object.keys(tempArr).map(function(key) {
         return key;
     });
@@ -3233,7 +3230,7 @@ jQuery(document).on('change', '#selectStatus', function() {
             catalog_id: "<?php echo esc_html($facebook_catalog_id) ?>",
             tiktok_business_id: "<?php echo esc_html($tiktok_business_account) ?>",
             tiktok_catalog_id: "<?php echo esc_html($result[0]['tiktok_catalog_id']) ?>",
-            conv_licence_nonce: "<?php echo esc_html(wp_create_nonce('conv_licence-nonce')); ?>"
+            conv_licence_nonce: "<?php echo esc_js(wp_create_nonce('conv_licence-nonce')); ?>"
         };
         conv_change_loadingbar('show');
         jQuery.ajax({

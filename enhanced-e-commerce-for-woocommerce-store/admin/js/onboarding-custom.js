@@ -955,7 +955,7 @@ function user_tracking_data(event_name,error_msg,screen_name,event_label=''){
       url: tvc_ajax_url,
       data: {action: "update_user_tracking_data", event_name:event_name, error_msg:error_msg, screen_name:screen_name,
           event_label:event_label,
-          TVCNonce : "<?php echo wp_create_nonce('update_user_tracking_data-nonce'); ?>"
+          TVCNonce : "<?php echo esc_js(wp_create_nonce('update_user_tracking_data-nonce')); ?>"
       },
       success: function (response) {
            //console.log('user tracking');       

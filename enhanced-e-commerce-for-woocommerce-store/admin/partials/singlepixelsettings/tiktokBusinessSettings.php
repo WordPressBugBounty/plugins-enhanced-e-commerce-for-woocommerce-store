@@ -21,18 +21,18 @@ $tiktok_user_id = isset($ee_options['tiktok_setting']['tiktok_user_id']) === TRU
 $tiktok_business_id = isset($ee_options['tiktok_setting']['tiktok_business_id']) === TRUE ? $ee_options['tiktok_setting']['tiktok_business_id'] : '';
 $tiktok_business_name = isset($ee_options['tiktok_setting']['tiktok_business_name']) === TRUE ? $ee_options['tiktok_setting']['tiktok_business_name'] : '';
 if (isset($_GET['tiktok_mail']) == TRUE) {
-    $tiktok_mail = sanitize_email($_GET['tiktok_mail']);
+    $tiktok_mail = sanitize_email(wp_unslash($_GET['tiktok_mail']));
 }
 if (isset($_GET['tiktok_user_id']) == TRUE) {
-    $tiktok_user_id = sanitize_text_field($_GET['tiktok_user_id']);
+    $tiktok_user_id = sanitize_text_field(wp_unslash($_GET['tiktok_user_id']));
 }
 
 $site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 $plan_id = $TVC_Admin_Helper->get_plan_id();
 $conv_data = $TVC_Admin_Helper->get_store_data();
-$filesystem = new WP_Filesystem_Direct(true);
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+global $wp_filesystem;
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 $contData = json_decode($getCountris);
 ?>
 <style>
@@ -65,7 +65,7 @@ body {
         </div>
         <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
             <div class="">
-                <?php printf(esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
+                <?php printf('%s', esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
             </div>
         </div>
     </div>
@@ -75,9 +75,9 @@ body {
     /**************Tiktok Auth start ********************************************************/
     $confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings";
     $state = ['confirm_url' => admin_url() . $confirm_url, 'subscription_id' => $subscriptionId];
-    $tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://connect.tatvic.com/laravelapi/public/auth/tiktok/callback&rid=q6uerfg9osn&state=" . urlencode(json_encode($state));
+    $tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://connect.tatvic.com/laravelapi/public/auth/tiktok/callback&rid=q6uerfg9osn&state=" . urlencode(wp_json_encode($state));
     
-    //$tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://laravelapi.tatvic.com/laravelapi/public/auth/tiktok/callback&rid=tee9ehl4mwc&state=" . urlencode(json_encode($state));
+    //$tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://laravelapi.tatvic.com/laravelapi/public/auth/tiktok/callback&rid=tee9ehl4mwc&state=" . urlencode(wp_json_encode($state));
 
     if ($tiktok_mail === '' && $tiktok_user_id === '') { ?>
     <a onclick='window.open("<?php echo $tiktok_auth_url ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
@@ -624,7 +624,7 @@ jQuery(function() {
         list_tiktok_business_account();
     });
 
-    <?php if ((isset($_GET['subscription_id']) === TRUE && sanitize_text_field($_GET['subscription_id'])) || (isset($_GET['tiktok_mail']) === TRUE && !empty($_GET['tiktok_mail']))) { ?>
+    <?php if ((isset($_GET['subscription_id']) === TRUE && sanitize_text_field(wp_unslash($_GET['subscription_id']))) || (isset($_GET['tiktok_mail']) === TRUE && !empty($_GET['tiktok_mail']))) { ?>
     <?php if (isset($ee_options['tiktok_setting']['tiktok_mail']) && ($_GET['tiktok_mail'] !== $ee_options['tiktok_setting']['tiktok_mail'])) { ?>
     saveTiktokUser();
     <?php } ?>
@@ -809,7 +809,7 @@ jQuery(function() {
 });
 /*************************************Get saved catalog id by country code start **************************************************/
 function getCatalogId($countryCode) {
-    var conv_country_nonce = "<?php echo esc_html(wp_create_nonce('conv_country_nonce')); ?>";
+    var conv_country_nonce = "<?php echo esc_js(wp_create_nonce('conv_country_nonce')); ?>";
     var data = {
         action: "ee_getCatalogId",
         countryCode: $countryCode,
@@ -860,7 +860,7 @@ function conv_change_loadingbar_modal(state = 'show') {
 }
 /*************************************Save Feed Data Start*************************************************************************/
 function save_feed_data() {
-    var conv_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conv_onboarding_nonce')); ?>"
+    var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
     let edit = jQuery('#edit').val()
     var planid = "<?php echo esc_attr($plan_id); ?>";
     var data = {

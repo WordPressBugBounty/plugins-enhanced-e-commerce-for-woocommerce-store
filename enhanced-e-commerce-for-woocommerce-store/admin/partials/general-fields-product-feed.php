@@ -48,8 +48,8 @@ $channel_not_connected = array(
     "tiktok_bussiness_id" => (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? '' : 'tik-tok-not-connected',
     "fb_business_id" => (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') ? '' : 'facebook-not-connected',
 );
-$filesystem = new WP_Filesystem_Direct( true );
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+global $wp_filesystem;
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 // $getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR."includes/setup/json/countries.json");
 $contData = json_decode($getCountris);
 $site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
@@ -913,8 +913,8 @@ body {
 <!-- Main container End -->
 <?php
 $fpath = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/category.json';
-$filesystem = new WP_Filesystem_Direct( true );
-$str = $filesystem->get_contents($fpath);
+global $wp_filesystem;
+$str = $wp_filesystem->get_contents($fpath);
 $str = json_decode($str);
 ?>
 <script>
@@ -1022,7 +1022,7 @@ jQuery(document).on("click", "#attr_mapping_save", function() {
     var data = {
         action: "save_attribute_mapping",
         ee_data: ee_data,
-        auto_product_sync_setting: "<?php echo esc_html_e(wp_create_nonce('auto_product_sync_setting-nonce')); ?>"
+        auto_product_sync_setting: "<?php echo esc_js(wp_create_nonce('auto_product_sync_setting-nonce')); ?>"
     };
     jQuery.ajax({
         type: "POST",
@@ -1055,7 +1055,7 @@ jQuery(document).on("click", "#cat_mapping_save", function() {
     var data = {
         action: "save_category_mapping",
         ee_data: ee_data,
-        auto_product_sync_setting: "<?php echo esc_html_e(wp_create_nonce('auto_product_sync_setting-nonce')); ?>"
+        auto_product_sync_setting: "<?php echo esc_js(wp_create_nonce('auto_product_sync_setting-nonce')); ?>"
     };
     jQuery.ajax({
         type: "POST",
@@ -1186,7 +1186,7 @@ jQuery(document).on('click', '#submitFeed', function(e) {
 /**************************Submit Feed call end*******************************************************************************/
 /*************************************Save Feed Data Start*************************************************************************/
 function save_feed_data(google_merchant_center_id, catalog_id) {
-    var conv_onboarding_nonce = "<?php echo esc_html_e(wp_create_nonce('conv_onboarding_nonce')); ?>"
+    var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
     let edit = jQuery('#edit').val();
     var data = {
         action: "save_feed_data",
@@ -1465,7 +1465,7 @@ jQuery(document).on('change', '.additional_attr_value', function() {
 });
 
 jQuery(document).ready(function() {
-    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>
+    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>;
     var arr = Object.keys(tempArr).map(function(key) {
         return key;
     });

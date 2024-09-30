@@ -632,24 +632,24 @@ class TVC_Admin_Helper
   public function get_gmcAttributes()
   {
     $path = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/gmc_attrbutes.json';
-    $filesystem = new WP_Filesystem_Direct(true);
-    $str = $filesystem->get_contents($path);
+    global $wp_filesystem;
+    $str = $wp_filesystem->get_contents($path);
     $attributes = $str ? json_decode($str, true) : [];
     return $attributes;
   }
   public function get_gmc_countries_list()
   {
     $path = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/countries.json';
-    $filesystem = new WP_Filesystem_Direct(true);
-    $str = $filesystem->get_contents($path);
+    global $wp_filesystem;
+    $str = $wp_filesystem->get_contents($path);
     $attributes = $str ? json_decode($str, true) : [];
     return $attributes;
   }
   public function get_gmc_language_list()
   {
     $path = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/iso_lang.json';
-    $filesystem = new WP_Filesystem_Direct(true);
-    $str = $filesystem->get_contents($path);
+    global $wp_filesystem;
+    $str = $wp_filesystem->get_contents($path);
 
     $attributes = $str ? json_decode($str, true) : [];
     return $attributes;
@@ -789,9 +789,9 @@ class TVC_Admin_Helper
 
   public function is_current_tab_in($tabs)
   {
-    if (isset($_GET['tab']) && is_array($tabs) && in_array(sanitize_text_field($_GET['tab']), $tabs)) {
+    if (isset($_GET['tab']) && is_array($tabs) && in_array(sanitize_text_field(wp_unslash($_GET['tab'])), $tabs)) {
       return true;
-    } else if (isset($_GET['tab']) && sanitize_text_field($_GET['tab']) == $tabs) {
+    } else if (isset($_GET['tab']) && sanitize_text_field(wp_unslash($_GET['tab'])) == $tabs) {
       return true;
     }
     return false;
@@ -974,12 +974,10 @@ function call_domain_claim_both(first_message = null) {
           return array('error' => true, 'msg' => esc_attr($siteVerificationToken->errors));
         } else {
           $myFile = ABSPATH . $siteVerificationToken->data->token;
-          if (!file_exists($myFile)) {
-            $fh = fopen($myFile, 'w+');
-            chmod($myFile, 0777);
-            $stringData = "google-site-verification: " . $siteVerificationToken->data->token;
-            fwrite($fh, $stringData);
-            fclose($fh);
+          global $wp_filesystem;
+          if (!$wp_filesystem->exists($myFile)) {
+              $wp_filesystem->put_contents($myFile, "google-site-verification: " . $siteVerificationToken->data->token);
+              $wp_filesystem->chmod($myFile, 0777);
           }
           $postData['method'] = "file";
           $siteVerification = $this->customApiObj->siteVerification($postData);
@@ -1290,8 +1288,8 @@ var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
     ?>
 <div class="notice notice-info notice-dismiss_trigger is-dismissible"
     data-id='<?php echo esc_attr($con_display_admin_notice['key']); ?>'>
-    <?php $greeting_content = sprintf(esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($con_display_admin_notice['content'])); ?>
-    <?php $greeting_link_title = sprintf(esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($con_display_admin_notice['link_title'])); ?>
+    <?php $greeting_content = sprintf('%s', esc_html($con_display_admin_notice['content'])); ?>
+    <?php $greeting_link_title = sprintf('%s', esc_html($con_display_admin_notice['link_title'])); ?>
     <?php
             $conv_notice_html = '<p>' . $greeting_content . ' <a href="' . esc_url($con_display_admin_notice["link"]) . '" target="_blank" ><b><u>' . $greeting_link_title . '</u></b></a></p></div>';
             echo wp_kses($conv_notice_html, array(
@@ -1413,7 +1411,7 @@ var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
       //if user has linked google merchant center account and not synced any product.
       global $wpdb;
       $tablename = esc_sql($wpdb->prefix . 'ee_product_feed');
-      $sql = $wpdb->prepare("select * from `$tablename` ORDER BY id ASC LIMIT 1", array());
+      $sql = $wpdb->prepare("select * from %i ORDER BY id ASC LIMIT 1", $tablename);
       $result = $wpdb->get_results($sql);
       if ((isset($tvc_add_data_admin_notice['google_merchant_id']) && $tvc_add_data_admin_notice['google_merchant_id'] != '')
         && is_array($result) && isset(end($result)->feed_name) && end($result)->feed_name != 'Default Feed'
@@ -1557,27 +1555,27 @@ var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
   public function validate_pixels()
   {
     $errors = array();
-    if (isset($_POST["fb_pixel_id"]) && $_POST["fb_pixel_id"] != "" && !$this->is_facebook_pixel_id(sanitize_text_field($_POST["fb_pixel_id"]))) {
+    if (isset($_POST["fb_pixel_id"]) && $_POST["fb_pixel_id"] != "" && !$this->is_facebook_pixel_id(sanitize_text_field(wp_unslash($_POST["fb_pixel_id"])))) {
       unset($_POST["fb_pixel_id"]);
       $errors[] = array("error" => true, "message" => esc_html__("You entered wrong facebook pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
     }
-    if (isset($_POST["microsoft_ads_pixel_id"]) && $_POST["microsoft_ads_pixel_id"] != "" && !$this->is_bing_uet_tag_id(sanitize_text_field($_POST["microsoft_ads_pixel_id"]))) {
+    if (isset($_POST["microsoft_ads_pixel_id"]) && $_POST["microsoft_ads_pixel_id"] != "" && !$this->is_bing_uet_tag_id(sanitize_text_field(wp_unslash($_POST["microsoft_ads_pixel_id"])))) {
       unset($_POST["microsoft_ads_pixel_id"]);
       $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong microsoft ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
     }
-    if (isset($_POST["twitter_ads_pixel_id"]) && $_POST["twitter_ads_pixel_id"] != "" && !$this->is_twitter_pixel_id(sanitize_text_field($_POST["twitter_ads_pixel_id"]))) {
+    if (isset($_POST["twitter_ads_pixel_id"]) && $_POST["twitter_ads_pixel_id"] != "" && !$this->is_twitter_pixel_id(sanitize_text_field(wp_unslash($_POST["twitter_ads_pixel_id"])))) {
       unset($_POST["twitter_ads_pixel_id"]);
       $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong twitter ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
     }
-    if (isset($_POST["pinterest_ads_pixel_id"]) && $_POST["pinterest_ads_pixel_id"] != "" && !$this->is_pinterest_pixel_id(sanitize_text_field($_POST["pinterest_ads_pixel_id"]))) {
+    if (isset($_POST["pinterest_ads_pixel_id"]) && $_POST["pinterest_ads_pixel_id"] != "" && !$this->is_pinterest_pixel_id(sanitize_text_field(wp_unslash($_POST["pinterest_ads_pixel_id"])))) {
       unset($_POST["pinterest_ads_pixel_id"]);
       $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong pinterest ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
     }
-    if (isset($_POST["snapchat_ads_pixel_id"]) && $_POST["snapchat_ads_pixel_id"] != "" && !$this->is_snapchat_pixel_id(sanitize_text_field($_POST["snapchat_ads_pixel_id"]))) {
+    if (isset($_POST["snapchat_ads_pixel_id"]) && $_POST["snapchat_ads_pixel_id"] != "" && !$this->is_snapchat_pixel_id(sanitize_text_field(wp_unslash($_POST["snapchat_ads_pixel_id"])))) {
       unset($_POST["snapchat_ads_pixel_id"]);
       $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong napchat ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
     }
-    if (isset($_POST["tiKtok_ads_pixel_id"]) && $_POST["tiKtok_ads_pixel_id"] != "" && !$this->is_tiktok_pixel_id(sanitize_text_field($_POST["tiKtok_ads_pixel_id"]))) {
+    if (isset($_POST["tiKtok_ads_pixel_id"]) && $_POST["tiKtok_ads_pixel_id"] != "" && !$this->is_tiktok_pixel_id(sanitize_text_field(wp_unslash($_POST["tiKtok_ads_pixel_id"])))) {
       unset($_POST["tiKtok_ads_pixel_id"]);
       $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong tiKtok ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
     }
@@ -1655,7 +1653,7 @@ var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
 
     $conv_advance_plugin_link = esc_url($this->get_pro_plan_site() . "?utm_source=EE+Plugin+User+Interface&utm_medium=" . $conv_advanced_utm_arr[$advance_utm_medium] . "&utm_campaign=Upsell+at+Conversios");
     $conv_advance_plugin_link_return = "";
-    $upgradetopro_text = sprintf(esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($upgradetopro_text_param));
+    $upgradetopro_text = sprintf('%s', esc_html($upgradetopro_text_param));
     if ($advance_linktype == "anchor") {
       $conv_advance_plugin_link_return = "<a href='" . $conv_advance_plugin_link . "' target='_blank' class='" . $advance_linkclass . "'> " . $upgradetopro_text . "</a>";
     }
@@ -1669,7 +1667,7 @@ var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
   {
     $conv_advance_plugin_link = esc_url($this->get_pro_plan_site() . "?utm_source=woo_aiofree_plugin&utm_medium=" . $advance_utm_medium . "&utm_campaign=" . $advance_utm_campaign);
     $conv_advance_plugin_link_return = "";
-    $upgradetopro_text = sprintf(esc_html__('%s', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($upgradetopro_text_param));
+    $upgradetopro_text = sprintf('%s', esc_html($upgradetopro_text_param));
     if ($advance_linktype == "anchor") {
       $conv_advance_plugin_link_return = "<a href='" . $conv_advance_plugin_link . "' target='_blank' class='" . $advance_linkclass . "'> " . $upgradetopro_text . "</a>";
     }
@@ -1706,7 +1704,7 @@ var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
       return;
     } else {
       $tablename = esc_sql($wpdb->prefix . $table);
-      $sql = $wpdb->prepare("select * from `$tablename` order by id desc", array());
+      $sql = $wpdb->prepare("select * from %i order by id desc", $tablename);
       return $wpdb->get_results($sql);
     }
   }

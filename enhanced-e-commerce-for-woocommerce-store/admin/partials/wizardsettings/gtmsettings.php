@@ -17,7 +17,7 @@
             if ($tracking_method == "gtm") {
                 $want_to_use_your_gtm = (isset($ee_options['want_to_use_your_gtm']) && $ee_options['want_to_use_your_gtm'] != "") ? $ee_options['want_to_use_your_gtm'] : "0";
             }
-            if ((isset($_GET['wizard_channel']) && sanitize_text_field($_GET['wizard_channel']) == "gtmsettings")) {
+            if ((isset($_GET['wizard_channel']) && sanitize_text_field(wp_unslash($_GET['wizard_channel'])) == "gtmsettings")) {
                 $want_to_use_your_gtm = "1";
             }
             $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your_gtm_id'] : "";

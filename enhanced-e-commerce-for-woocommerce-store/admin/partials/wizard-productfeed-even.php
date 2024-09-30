@@ -6,7 +6,7 @@ require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 $customApiObj = new CustomApi();
 if (isset($_GET['g_mail']) && isset($_GET['wizard_channel']) && $_GET['wizard_channel'] == 'gmcsetting') {
-    update_option('ee_customer_gmail', sanitize_email($_GET['g_mail']));
+    update_option('ee_customer_gmail', sanitize_email(wp_unslash($_GET['g_mail'])));
     $TVC_Admin_Helper->update_subscription_details_api_to_db();
 }
 $ee_options = unserialize(get_option("ee_options"));
@@ -22,7 +22,7 @@ $wooCommerceAttributes = array_map("unserialize", array_unique(array_map("serial
 $tvc_data = $TVC_Admin_Helper->get_store_data();
 $g_mail = get_option('ee_customer_gmail');
 if (isset($_GET['g_mail']) && isset($_GET['wizard_channel']) && $_GET['wizard_channel'] == 'gmcsetting') {
-    $g_mail = sanitize_email($_GET['g_mail']);
+    $g_mail = sanitize_email(wp_unslash($_GET['g_mail']));
 }
 $tvc_data['g_mail'] = "";
 if ($g_mail) {
@@ -46,17 +46,17 @@ $tiktok_business_id = isset($ee_options['tiktok_setting']['tiktok_business_id'])
 $tiktok_business_name = isset($ee_options['tiktok_setting']['tiktok_business_name']) === TRUE ? $ee_options['tiktok_setting']['tiktok_business_name'] : '';
 //$fb_business_id = isset($ee_options['facebook_setting']['fb_business_id']) === TRUE ? $ee_options['facebook_setting']['fb_business_id'] : '';
 if (isset($_GET['tiktok_mail']) == TRUE) {
-    $tiktok_mail = sanitize_email($_GET['tiktok_mail']);
+    $tiktok_mail = sanitize_email(wp_unslash($_GET['tiktok_mail']));
     $is_tiktok_connected = true;
 }
 if (isset($_GET['tiktok_user_id']) == TRUE) {
-    $tiktok_user_id = sanitize_text_field($_GET['tiktok_user_id']);
+    $tiktok_user_id = sanitize_text_field(wp_unslash($_GET['tiktok_user_id']));
 }
 $connect_gmc_url = $TVC_Admin_Helper->get_custom_connect_url(admin_url() . 'admin.php?page=conversios&wizard=productFeedEven_gmcsetting');
 //$getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
-$filesystem = new WP_Filesystem_Direct(true);
-$getCountris = $filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+global $wp_filesystem;
+$getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
 $site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
@@ -693,7 +693,7 @@ img {
                 </div>
             </div>
             <div class="onbrdpp-body">
-                <p>-- We recommend to use Chrome browser to configure the plugin if you face any issues during setup. --
+            <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
                 </p>
                 <div class="google_signin_sec_left">
                     <?php if (!isset($tvc_data['g_mail']) || $tvc_data['g_mail'] == "" || $subscriptionId == "") { ?>
@@ -728,9 +728,9 @@ img {
                     </p>
                 </div>
                 <div class="google_signin_sec_right">
-                    <h5>
+                    <h6>
                         <?php esc_html_e("Why do I need to sign in with google?", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h5>
+                    </h6>
                     <p>
                         <?php esc_html_e("When you sign in with Google, we ask for limited programmatic access for your accounts in order to automate below features for you:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
@@ -891,7 +891,7 @@ jQuery(function() {
     jQuery('.selectfour').select2();
     jQuery('.selectfive').select2();
 
-    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>
+    var tempArr = <?php echo wp_json_encode($tempAddAttr) ?>;
     var arr = Object.keys(tempArr).map(function(key) {
         return key;
     });
@@ -1030,7 +1030,7 @@ jQuery(function() {
         var data = {
             action: "get_category_for_filter",
             type: "all_product",
-            get_category_for_filter: "<?php echo esc_html(wp_create_nonce('get_category_for_filter-nonce')); ?>"
+            get_category_for_filter: "<?php echo esc_js(wp_create_nonce('get_category_for_filter-nonce')); ?>"
         };
         jQuery.ajax({
             type: "POST",
@@ -1053,7 +1053,7 @@ jQuery(function() {
             var data = {
                 action: "get_category_for_filter",
                 type: "category",
-                get_category_for_filter: "<?php echo esc_html(wp_create_nonce('get_category_for_filter-nonce')); ?>"
+                get_category_for_filter: "<?php echo esc_js(wp_create_nonce('get_category_for_filter-nonce')); ?>"
             };
             jQuery.ajax({
                 type: "POST",
@@ -1260,7 +1260,7 @@ jQuery(function() {
         var data = {
             action: "save_attribute_mapping",
             ee_data: ee_data,
-            auto_product_sync_setting: "<?php echo esc_html(wp_create_nonce('auto_product_sync_setting-nonce')); ?>"
+            auto_product_sync_setting: "<?php echo esc_js(wp_create_nonce('auto_product_sync_setting-nonce')); ?>"
         };
         jQuery.ajax({
             type: "POST",
@@ -1657,7 +1657,7 @@ function getFilterCount() {
             productVal: productVal,
             conditionVal: conditionVal,
             valueVal: valueVal,
-            getFilterCount: "<?php echo esc_html(wp_create_nonce('getFilterCount-nonce')); ?>"
+            getFilterCount: "<?php echo esc_js(wp_create_nonce('getFilterCount-nonce')); ?>"
         };
         jQuery.ajax({
             type: "POST",
@@ -1679,7 +1679,7 @@ function getAllChannel() {
         action: "get_category_for_filter",
         type: "getAllChannel",
         target_country: target_country,
-        get_category_for_filter: "<?php echo esc_html(wp_create_nonce('get_category_for_filter-nonce')); ?>"
+        get_category_for_filter: "<?php echo esc_js(wp_create_nonce('get_category_for_filter-nonce')); ?>"
     };
     jQuery.ajax({
         type: "POST",
@@ -1720,7 +1720,7 @@ function getAllChannel() {
 }
 
 function getCatalogId($countryCode) {
-    var conv_country_nonce = "<?php echo esc_html(wp_create_nonce('conv_country_nonce')); ?>";
+    var conv_country_nonce = "<?php echo esc_js(wp_create_nonce('conv_country_nonce')); ?>";
     var data = {
         action: "ee_getCatalogId",
         countryCode: $countryCode,
@@ -1757,7 +1757,7 @@ function save_feed_data() {
     setTimeout(function() {
         jQuery('#feed_target_country').select2()
     }, 100);
-    var conv_onboarding_nonce = "<?php echo esc_html(wp_create_nonce('conv_onboarding_nonce')); ?>";
+    var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>";
     var product_selection = jQuery('input[name="product_selection"]:checked').val();
     var productVal = jQuery('#productVal').val();
     var conditionVal = jQuery('#conditionVal').val();
@@ -2023,11 +2023,11 @@ function getConditionDropDown(val = '', condition = '') {
 
     function checkProgressBar(channel = "") {
         var get =
-            "<?php echo isset($_GET['wizard_channel']) ? esc_js(sanitize_text_field($_GET['wizard_channel'])) : '' ?>";
+            "<?php echo isset($_GET['wizard_channel']) ? esc_js(sanitize_text_field(wp_unslash($_GET['wizard_channel']))) : '' ?>";
         var data = {
             action: "get_category_for_filter",
             type: "getProgressCount",
-            get_category_for_filter: "<?php echo esc_html(wp_create_nonce('get_category_for_filter-nonce')); ?>"
+            get_category_for_filter: "<?php echo esc_js(wp_create_nonce('get_category_for_filter-nonce')); ?>"
         };
         jQuery.ajax({
             type: "POST",

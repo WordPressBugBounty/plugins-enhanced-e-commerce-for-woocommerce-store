@@ -72,7 +72,7 @@ $pixel_settings_arr = array(
     ),
 );
 
-$subpage = (isset($_GET["subpage"]) && $_GET["subpage"] != "") ? esc_attr(sanitize_text_field($_GET["subpage"])) : "";
+$subpage = (isset($_GET["subpage"]) && $_GET["subpage"] != "") ? esc_attr(sanitize_text_field(wp_unslash($_GET['subpage']))) : "";
 $version = PLUGIN_TVC_VERSION;
 
 $googleDetail = "";
@@ -104,10 +104,10 @@ if ($g_mail) {
 }
 
 //check if redirected from the authorization
-if (isset($_GET['subscription_id']) && sanitize_text_field($_GET['subscription_id'])) {
-    $subscriptionId = sanitize_text_field($_GET['subscription_id']);
-    if (isset($_GET['g_mail']) && sanitize_email($_GET['g_mail'])) {
-        $tvc_data['g_mail'] = sanitize_email($_GET['g_mail']);
+if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
+    $subscriptionId = sanitize_text_field(wp_unslash($_GET['subscription_id']));
+    if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
+        $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
         $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
@@ -409,7 +409,7 @@ jQuery(function() {
             url: tvc_ajax_url,
             data: {
                 action: "conv_save_pixel_data",
-                pix_sav_nonce: "<?php echo esc_html(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
                 conv_options_data: selected_vals,
                 conv_options_type: ["eeoptions"],
             },
