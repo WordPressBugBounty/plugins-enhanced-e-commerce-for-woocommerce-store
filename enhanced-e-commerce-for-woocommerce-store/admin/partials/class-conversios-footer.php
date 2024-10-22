@@ -202,9 +202,8 @@ if (!class_exists('Conversios_Footer')) {
                     var screen_name = '<?php echo isset($_GET['page']) ? esc_js(sanitize_text_field(wp_unslash($_GET['page']))) : ''; ?>';
                     var error_msg = 'null';
                     jQuery('.navinfotopnav ul li a').click(function() {
-                        cons
-                        var slug = $(this).find('span').text();
-                        var menu = $(this).attr('href');
+                        var slug = jQuery(this).find('span').text();
+                        var menu = jQuery(this).attr('href');
                         str_menu = slug.replace(/\s+/g, '_').toLowerCase();
                         user_tracking_data('click', error_msg, screen_name, 'topmenu_' + str_menu);
                     });
@@ -265,6 +264,10 @@ if (!class_exists('Conversios_Footer')) {
                         jQuery("#conuptppro_ulink").attr('href', propopup_ulink_arr[popupopener]);
                         jQuery("#upgradetopromodal").modal('show');
                     });
+
+                    jQuery('#conv_save_success_modal').on('hidden.bs.modal', function () {
+                        jQuery('#conv_save_success_modal .leave-a-review').hide();
+                    });
                 });
 
                 function user_tracking_data(event_name, error_msg, screen_name, event_label) {
@@ -302,6 +305,67 @@ if (!class_exists('Conversios_Footer')) {
                         n.q = [], window.FreshworksWidget = n
                     }
                 }()
+                function createOverlay() {
+                    // Create overlay element
+                    let overlay = document.createElement('div');
+                    overlay.id = 'customOverlay';
+                    overlay.style.position = 'fixed';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100%';
+                    overlay.style.height = '100%';
+                    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Dark overlay with transparency
+                    overlay.style.zIndex = '999'; // Place it behind the Freshworks widget
+                    document.body.appendChild(overlay);
+                }
+                function removeOverlay() {
+                    let overlay = document.getElementById('customOverlay');
+                    if (overlay) {
+                        document.body.removeChild(overlay);
+                    }
+                }
+                document.getElementById('conv_freshwork_chat').addEventListener('click', function() {
+                    // support chat box
+                    FreshworksWidget('open');
+                    createOverlay();
+                });
+                // if freshwork widget hide
+                window.onload = function() {
+                    setTimeout(function() {
+                        // Select the target node to observe (in this case, #freshworks-container)
+                        const targetNode = document.getElementById('freshworks-container');
+
+                        // Check if the target node exists
+                        if (!targetNode) {
+                            console.error('Target node #freshworks-container not found');
+                            return;
+                        }
+
+                        // Define the observer configuration
+                        const config = { childList: true, subtree: true };
+
+                        // Define the callback function for when mutations occur
+                        const callback = function(mutationsList, observer) {
+                            for (let mutation of mutationsList) {
+                                if (mutation.type === 'childList') {
+                                    // Check if the #freshworks-frame-wrapper element is removed
+                                    if (!document.getElementById('freshworks-frame-wrapper')) {
+                                        removeOverlay(); 
+                                        // console.log('Element removed');
+                                    }
+                                }
+                            }
+                        };
+
+                        // Create a MutationObserver instance and pass the callback function
+                        const observer = new MutationObserver(callback);
+
+                        // Start observing the target node
+                        observer.observe(targetNode, config);
+                        
+                    }, 2000);
+                };
+
             </script>
             <script type='text/javascript' src='https://ind-widget.freshworks.com/widgets/81000001743.js' async defer></script>
 <?php

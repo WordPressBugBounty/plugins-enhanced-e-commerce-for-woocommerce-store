@@ -160,9 +160,9 @@ if (!class_exists('TVC_Ajax_File')) :
     {
       if (isset($_POST['wp_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wp_nonce'])), 'convnewfeaturemodal_nonce')) {
         update_option('conv_popup_newfeature', 'yes');
-        wp_send_json( array('save'=>'success') );
+        wp_send_json(array('save' => 'success'));
       } else {
-        wp_send_json( array('save'=>'failed') );
+        wp_send_json(array('save' => 'failed'));
       }
       die();
     }
@@ -296,7 +296,7 @@ if (!class_exists('TVC_Ajax_File')) :
     // All new functions for new UIUX
     public function conv_save_pixel_data()
     {
-      if (isset($_POST['pix_sav_nonce']) && $this->safe_ajax_call(sanitize_text_field( wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')) {
+      if (isset($_POST['pix_sav_nonce']) && $this->safe_ajax_call(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')) {
         $post = array(
           "conv_options_data" => "",
           "conv_options_type" => "",
@@ -372,7 +372,7 @@ if (!class_exists('TVC_Ajax_File')) :
     // Save google ads settings
     public function conv_save_googleads_data()
     {
-      if (isset($_POST['pix_sav_nonce']) && $this->safe_ajax_call(sanitize_text_field( wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')) {
+      if (isset($_POST['pix_sav_nonce']) && $this->safe_ajax_call(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')) {
         $conv_options_data = isset($_POST['conv_options_data']) && is_array($_POST['conv_options_data']) ? array_map('sanitize_text_field', wp_unslash($_POST['conv_options_data'])) : (isset($_POST['conv_options_data']) ? sanitize_text_field(wp_unslash($_POST['conv_options_data'])) : '');
         $googleDetail_setting = array();
         if (isset($conv_options_data['remarketing_tags'])) {
@@ -456,7 +456,6 @@ if (!class_exists('TVC_Ajax_File')) :
           ];
           $api_obj->linkAnalyticToAdsAccount($postData);
         }
-        
       }
       echo "1";
       exit;
@@ -851,7 +850,8 @@ if (!class_exists('TVC_Ajax_File')) :
                 $con_string = $value->tagSnippets;
                 $conversion_label_check = $TVC_Admin_Helper->get_conversion_label($con_string);
                 if ($conversion_label_check != "" && $conversion_label_check != null) {
-                  $conversion_label[$value->id] = $TVC_Admin_Helper->get_conversion_label($con_string);
+                  $conversion_label[$value->id . "(" . $value->name . ")"] = $TVC_Admin_Helper->get_conversion_label($con_string);
+                  //$conversion_label[$value->id] = $TVC_Admin_Helper->get_conversion_label($con_string)."(".$value->name.")";
                 }
               }
               echo wp_json_encode($conversion_label);
@@ -1666,7 +1666,7 @@ if (!class_exists('TVC_Ajax_File')) :
         );
 
         $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s"));
-        echo wp_json_encode(array("error" => false, "message" => esc_html__("Dupliacte Feed created successfully", "enhanced-e-commerce-for-woocommerce-store")));
+        echo wp_json_encode(array("error" => false, "message" => esc_html__("Duplicate Feed created successfully", "enhanced-e-commerce-for-woocommerce-store")));
       } else {
         echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
@@ -2444,7 +2444,9 @@ if (!class_exists('TVC_Ajax_File')) :
                 if ($response->error == false) {
                   if (isset($_POST['feedId'])) {
                     $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['feedId'])));
-                  }else { $where = ''; }
+                  } else {
+                    $where = '';
+                  }
                   $filed = ['total_product'];
                   $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
                   $totalProduct = 0;
@@ -2518,12 +2520,16 @@ if (!class_exists('TVC_Ajax_File')) :
               if (isset($_POST['feedId'])) {
                 as_unschedule_all_actions('init_feed_wise_product_sync_process_scheduler_ee', array("feedId" => sanitize_text_field(wp_unslash($_POST['feedId']))));
                 $isSyncComplete = $TVCProductSyncHelper->manualProductSync(sanitize_text_field(wp_unslash($_POST['feedId'])));
-              }else{ $isSyncComplete = ''; }
+              } else {
+                $isSyncComplete = '';
+              }
               if ($isSyncComplete['status'] === 'success') {
 
                 if (isset($_POST['feedId'])) {
                   $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['feedId'])));
-                }else { $where = ''; }
+                } else {
+                  $where = '';
+                }
                 $filed = ['auto_sync_interval', 'auto_schedule'];
                 $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
                 $last_sync_date = gmdate('Y-m-d H:i:s', current_time('timestamp'));
@@ -3045,6 +3051,7 @@ if (!class_exists('TVC_Ajax_File')) :
     function ee_super_AI_feed()
     {
       if ($this->safe_ajax_call(filter_input(INPUT_POST, 'create_superFeed_nonce', FILTER_UNSAFE_RAW), 'create_superFeed_nonce_val')) {
+
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $TVC_Admin_Helper->plugin_log('Super AI Feed start', 'product_sync');
         $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
@@ -3055,8 +3062,13 @@ if (!class_exists('TVC_Ajax_File')) :
         $TVCProductSyncHelper = new TVCProductSyncHelper();
 
         $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+        // if(isset($google_detail['setting']->conwizenablesuperfeed))
+        // {
+        //   echo wp_json_encode(array("error" => true, "message" => esc_html__("Super Already Created.", "enhanced-e-commerce-for-woocommerce-store")));
+        //   exit;
+        // }
         $mappedAttrs = unserialize(get_option('ee_prod_mapped_attrs'));
-        $categories = is_array(unserialize(get_option('ee_prod_mapped_cats'))) ? unserialize(get_option('ee_prod_mapped_cats')) : '';
+        $categories = is_array(unserialize(get_option('ee_prod_mapped_cats'))) ? unserialize(get_option('ee_prod_mapped_cats')) : array();
         if ($mappedAttrs == '') {
           $sel_val = get_locale();
           if (strlen($sel_val) > 0) {
@@ -3068,27 +3080,15 @@ if (!class_exists('TVC_Ajax_File')) :
             'description' => 'post_excerpt',
             'price' => '_regular_price',
             'sale_price' => '_sale_price',
-            'brand' => '',
-            'gtin' => '',
-            'mpn' => '',
-            'age_group' => '',
-            'color' => '',
-            'sizes' => '',
-            'gender' => '',
-            'product_weight' => '',
-            'shipping_weight' => '',
-            'shipping' => '',
-            'tax' => '',
             'content_language' => $sel_val,
-            'target_country' => $TVC_Admin_Helper->get_woo_country(),
             'availability' => '_stock_status',
-            'condition' => 'new',
+            'target_country' => $TVC_Admin_Helper->get_woo_country(),
           ];
           update_option("ee_prod_mapped_attrs", serialize($mappedAttrs));
         }
         $TVC_Admin_Helper->plugin_log('Attribute is mapped', 'product_sync');
         $feed_data = array(
-          'feed_name' => esc_sql('Super AI Feed'),
+          'feed_name' => esc_sql('Conversios Super Feed'),
           'channel_ids' => esc_sql(1),
           'auto_sync_interval' => esc_sql(25),
           'auto_schedule' => esc_sql(0),
@@ -3185,7 +3185,7 @@ if (!class_exists('TVC_Ajax_File')) :
           $customObj = new CustomApi();
           $result = $customObj->get_tiktok_business_account($customer_subscription_id);
           $tikTokData = [];
-          if (isset($result->status) && $result->status === 200 && is_array($result->data) && $result->data != '') {            
+          if (isset($result->status) && $result->status === 200 && is_array($result->data) && $result->data != '') {
             foreach ($result->data as $value) {
               if ($value->bc_info->status === 'ENABLE') {
                 $tikTokData[$value->bc_info->bc_id] = $value->bc_info->name;
@@ -3211,26 +3211,73 @@ if (!class_exists('TVC_Ajax_File')) :
      * Type POST
      * parameter $businessId
      */
+    // function get_tiktok_user_catalogs()
+    // {
+    //   if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW), 'conversios_onboarding_nonce')) {
+    //     $customer_subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+    //     $business_id = isset($_POST['business_id']) ? sanitize_text_field(wp_unslash($_POST['business_id'])) : '';
+    //     if ($customer_subscription_id !== '' && $business_id !== '') {
+    //       $customer_subscription_id['customer_subscription_id'] = sanitize_text_field(wp_unslash($_POST['customer_subscription_id']));
+    //       $customer_subscription_id['business_id'] = isset($_POST['business_id']) ? sanitize_text_field(wp_unslash($_POST['business_id'])) : '';
+    //       $customObj = new CustomApi();
+    //       $result = $customObj->get_tiktok_user_catalogs($customer_subscription_id);
+    //       $tikTokData = [];
+    //       if (isset($result->status) && $result->status === 200 && is_array($result->data) && $result->data != '') {            
+    //         foreach ($result->data as $key => $value) {
+    //           $tikTokData[$value->catalog_conf->country][$value->catalog_id] = $value->catalog_name;
+    //         }
+
+    //         foreach ($tikTokData as &$subArray) {
+    //           arsort($subArray);
+    //         }
+
+    //         echo wp_json_encode(array("error" => false, "data" => $tikTokData));
+    //       } else {
+    //         echo wp_json_encode(array("error" => true, "message" => esc_html__("Error: Business Account not found", "enhanced-e-commerce-for-woocommerce-store")));
+    //       }
+    //     } else {
+    //       echo wp_json_encode(array("error" => true, "message" => esc_html__("Error: Business Account not found", "enhanced-e-commerce-for-woocommerce-store")));
+    //     }
+    //   } else {
+    //     echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+    //   }
+    //   exit;
+    // }
+
+
     function get_tiktok_user_catalogs()
     {
       if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW), 'conversios_onboarding_nonce')) {
-        $customer_subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+        // Initialize as an array instead of a string
+        $customer_subscription_id = [];
+
+        // Get sanitized input fields
+        $subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
         $business_id = isset($_POST['business_id']) ? sanitize_text_field(wp_unslash($_POST['business_id'])) : '';
-        if ($customer_subscription_id !== '' && $business_id !== '') {
-          $customer_subscription_id['customer_subscription_id'] = sanitize_text_field(wp_unslash($_POST['customer_subscription_id']));
-          $customer_subscription_id['business_id'] = isset($_POST['business_id']) ? sanitize_text_field(wp_unslash($_POST['business_id'])) : '';
+
+        // Check if the necessary data is available
+        if ($subscription_id !== '' && $business_id !== '') {
+          // Assign values to the array
+          $customer_subscription_id['customer_subscription_id'] = $subscription_id;
+          $customer_subscription_id['business_id'] = $business_id;
+
+          // Call the Custom API
           $customObj = new CustomApi();
           $result = $customObj->get_tiktok_user_catalogs($customer_subscription_id);
+
+          // Process the result
           $tikTokData = [];
-          if (isset($result->status) && $result->status === 200 && is_array($result->data) && $result->data != '') {            
+          if (isset($result->status) && $result->status === 200 && is_array($result->data) && !empty($result->data)) {
             foreach ($result->data as $key => $value) {
               $tikTokData[$value->catalog_conf->country][$value->catalog_id] = $value->catalog_name;
             }
 
+            // Sort the catalogs by country
             foreach ($tikTokData as &$subArray) {
               arsort($subArray);
             }
 
+            // Return success response
             echo wp_json_encode(array("error" => false, "data" => $tikTokData));
           } else {
             echo wp_json_encode(array("error" => true, "message" => esc_html__("Error: Business Account not found", "enhanced-e-commerce-for-woocommerce-store")));
@@ -3243,6 +3290,8 @@ if (!class_exists('TVC_Ajax_File')) :
       }
       exit;
     }
+
+
     public function conv_save_tiktokmiddleware($post)
     {
       if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && $post['conv_options_data']['tiktok_setting']['tiktok_business_id'] !== '') {
@@ -3315,7 +3364,7 @@ if (!class_exists('TVC_Ajax_File')) :
     public function ee_createPmaxCampaign()
     {
       if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
-        if ( isset($_POST['subscription_id']) && sanitize_text_field(wp_unslash($_POST['subscription_id'])) == '') {
+        if (isset($_POST['subscription_id']) && sanitize_text_field(wp_unslash($_POST['subscription_id'])) == '') {
           echo wp_json_encode(array("error" => true, "message" => esc_html__("Subscription Id is missing. Contact plugin Admin", "enhanced-e-commerce-for-woocommerce-store")));
           exit;
         }
@@ -3331,7 +3380,7 @@ if (!class_exists('TVC_Ajax_File')) :
           echo wp_json_encode(array("error" => true, "message" => esc_html__("Store Id is missing. Contact plugin Admin.", "enhanced-e-commerce-for-woocommerce-store")));
           exit;
         }
-        if(isset($_POST['productSource']) === TRUE && $_POST['productSource'] == 'All Product') {
+        if (isset($_POST['productSource']) === TRUE && $_POST['productSource'] == 'All Product') {
 
           $post = array(
             'campaign_name' => isset($_POST['campaign_name']) ? sanitize_text_field(wp_unslash($_POST['campaign_name'])) : '',
@@ -3349,26 +3398,26 @@ if (!class_exists('TVC_Ajax_File')) :
 
           if (!class_exists('Conversios_PMax_Helper')) {
             require_once(ENHANCAD_PLUGIN_DIR . 'admin/helper/class-pmax-helper.php');
-          } 
+          }
           $Conversios_PMax_Helper = new Conversios_PMax_Helper();
           $result = $Conversios_PMax_Helper->create_pmax_campaign_callapi($post);
           if (isset($result->error) && $result->error == '') {
-						//print_r($api_rs->data);
-	        	if(isset($result->data->results[0]->resourceName) && $result->data != ""){
-	        		$resource_name = $result->data->results[0]->resourceName;
-	        		echo wp_json_encode(array('error'=>false, 'message'=> "Campaign Created Successfully with resource name - ".$resource_name));
-	        	}else if(isset($result->data)){
-	        		echo wp_json_encode(array('error'=>false, 'data' => $result->data));
-	        	}
-	        }else{
-	        	$errormsg = "";
-	        	if(!is_array($result->errors) && is_string($result->errors)){
-	        		$errormsg = $result->errors;
-	        	}else{
-	        		$errormsg= isset($result->errors[0])?$result->errors[0]:"";
-	        	}
-	        	echo wp_json_encode(array('error'=>true, 'message'=>$errormsg,  'status' => $result->status));
-	        }
+            //print_r($api_rs->data);
+            if (isset($result->data->results[0]->resourceName) && $result->data != "") {
+              $resource_name = $result->data->results[0]->resourceName;
+              echo wp_json_encode(array('error' => false, 'message' => "Campaign Created Successfully with resource name - " . $resource_name));
+            } else if (isset($result->data)) {
+              echo wp_json_encode(array('error' => false, 'data' => $result->data));
+            }
+          } else {
+            $errormsg = "";
+            if (!is_array($result->errors) && is_string($result->errors)) {
+              $errormsg = $result->errors;
+            } else {
+              $errormsg = isset($result->errors[0]) ? $result->errors[0] : "";
+            }
+            echo wp_json_encode(array('error' => true, 'message' => $errormsg,  'status' => $result->status));
+          }
         } else {
           $customObj = new CustomApi();
           $post = array(
@@ -3404,7 +3453,6 @@ if (!class_exists('TVC_Ajax_File')) :
             echo wp_json_encode(array("error" => true, "message" => esc_html($result->error_data[411]->errors[0])));
           }
         }
-        
       } else {
         echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
@@ -3698,15 +3746,49 @@ if (!class_exists('TVC_Ajax_File')) :
         $cnt = 0;
         if (!empty($tempAddAttr)) {
           $additionalAttribute = array(
-            'condition', 'shipping_weight', 'product_weight', 'gender', 'sizes', 'color', 'age_group', 'additional_image_links', 'sale_price_effective_date', 'material',
-            'pattern', 'product_types', 'availability_date', 'expiration_date', 'adult', 'ads_redirect',
-            'shipping_length', 'shipping_width', 'shipping_height', 'custom_label_0',
-            'custom_label_1', 'custom_label_2',
-            'custom_label_3', 'custom_label_4', 'mobile_link', 'energy_efficiency_class',
-            'is_bundle', 'loyalty_points', 'unit_pricing_measure', 'unit_pricing_base_measure',
-            'promotion_ids', 'shipping_label', 'excluded_destinations', 'included_destinations', 'tax_category',
-            'multipack', 'installment', 'min_handling_time', 'max_handling_time', 'min_energy_efficiency_class',
-            'max_energy_efficiency_class', 'identifier_exists', 'cost_of_goods_sold'
+            'condition',
+            'shipping_weight',
+            'product_weight',
+            'gender',
+            'sizes',
+            'color',
+            'age_group',
+            'additional_image_links',
+            'sale_price_effective_date',
+            'material',
+            'pattern',
+            'product_types',
+            'availability_date',
+            'expiration_date',
+            'adult',
+            'ads_redirect',
+            'shipping_length',
+            'shipping_width',
+            'shipping_height',
+            'custom_label_0',
+            'custom_label_1',
+            'custom_label_2',
+            'custom_label_3',
+            'custom_label_4',
+            'mobile_link',
+            'energy_efficiency_class',
+            'is_bundle',
+            'loyalty_points',
+            'unit_pricing_measure',
+            'unit_pricing_base_measure',
+            'promotion_ids',
+            'shipping_label',
+            'excluded_destinations',
+            'included_destinations',
+            'tax_category',
+            'multipack',
+            'installment',
+            'min_handling_time',
+            'max_handling_time',
+            'min_energy_efficiency_class',
+            'max_energy_efficiency_class',
+            'identifier_exists',
+            'cost_of_goods_sold'
           );
           $count_arr = count($additionalAttribute);
           foreach ($tempAddAttr as $key => $value) {
@@ -4084,7 +4166,7 @@ if (!class_exists('TVC_Ajax_File')) :
         } else {
           $TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_profile", $profile_data, array("id" => 1));
         }
-        if( isset($_POST['product_selection']) ) {
+        if (isset($_POST['product_selection'])) {
           switch ($_POST['product_selection']) {
             case 'all_product':
             case 'filter_product':
@@ -4164,7 +4246,7 @@ if (!class_exists('TVC_Ajax_File')) :
         $result = $convCustomApi->getUserBusinesses($data);
         echo wp_json_encode($result);
       } else {
-        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "product-feed-manager-for-woocommerce")));
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
       exit;
     }
@@ -4185,7 +4267,7 @@ if (!class_exists('TVC_Ajax_File')) :
         // $response->CatalogList = $result->data;
         echo wp_json_encode($result->data);
       } else {
-        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "product-feed-manager-for-woocommerce")));
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
       exit;
     }
@@ -4212,37 +4294,38 @@ if (!class_exists('TVC_Ajax_File')) :
       }
     }
 
-    public function ee_editPmaxCampaign() {
-      if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {   
+    public function ee_editPmaxCampaign()
+    {
+      if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {
         if (!class_exists('Conversios_PMax_Helper')) {
           require_once(ENHANCAD_PLUGIN_DIR . 'admin/helper/class-pmax-helper.php');
-        }      
+        }
         $PMax_Helper = new Conversios_PMax_Helper();
         if (isset($_POST['google_ads_id']) && isset($_POST['id'])) {
           $rs = $PMax_Helper->campaign_pmax_detail(sanitize_text_field(wp_unslash($_POST['google_ads_id'])), sanitize_text_field(wp_unslash($_POST['id'])));
         }
-        if(isset($rs->data)) {
-          if(isset($rs->data->campaign)){
+        if (isset($rs->data)) {
+          if (isset($rs->data->campaign)) {
             $campaign = $rs->data->campaign;
           }
-          if(isset($rs->data->campaign_budget)){
+          if (isset($rs->data->campaign_budget)) {
             $campaign_budget = $rs->data->campaign_budget;
           }
-          
-          $sale_country = isset($campaign->shoppingSetting->feedLabel) ? $campaign->shoppingSetting->feedLabel:"";
-          $budget_micro = isset($campaign_budget->amountMicros)? $campaign_budget->amountMicros:"";
-          if($budget_micro > 0){
+
+          $sale_country = isset($campaign->shoppingSetting->feedLabel) ? $campaign->shoppingSetting->feedLabel : "";
+          $budget_micro = isset($campaign_budget->amountMicros) ? $campaign_budget->amountMicros : "";
+          if ($budget_micro > 0) {
             $budget = $budget_micro / 1000000;
           }
-          $maximizeconversionvalue = isset($campaign->maximizeConversionValue)?$campaign->maximizeConversionValue:"";
-          $target_roas = $this->object_value($maximizeconversionvalue, "targetRoas")*100;
+          $maximizeconversionvalue = isset($campaign->maximizeConversionValue) ? $campaign->maximizeConversionValue : "";
+          $target_roas = $this->object_value($maximizeconversionvalue, "targetRoas") * 100;
           $startDate = $this->object_value($campaign, "startDate");
           $endDate = $this->object_value($campaign, "endDate");
           $status = $campaign->status;
           $resourceName = $campaign->resourceName;
           $campaignBudget = $campaign->campaignBudget;
           $campaignName = $this->object_value($campaign, "name");
-          $data = array (
+          $data = array(
             'campaignName' => $campaignName,
             'budget' => $budget,
             'sale_country' => $sale_country,
@@ -4256,84 +4339,85 @@ if (!class_exists('TVC_Ajax_File')) :
           );
           echo wp_json_encode(array("error" => false, "result" => $data));
         } else {
-          echo wp_json_encode(array("error" => true, "message" => esc_html__("No record found for the selected Campaign.", "product-feed-manager-for-woocommerce")));
+          echo wp_json_encode(array("error" => true, "message" => esc_html__("No record found for the selected Campaign.", "enhanced-e-commerce-for-woocommerce-store")));
         }
-        
       } else {
-        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "product-feed-manager-for-woocommerce")));
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
       exit;
     }
-    public function object_value($obj, $key){
-      if(!empty($obj) && $key && isset($obj->$key)){
+    public function object_value($obj, $key)
+    {
+      if (!empty($obj) && $key && isset($obj->$key)) {
         return $obj->$key;
       }
     }
 
-    public function ee_update_PmaxCampaign() {
-      $nonce = (isset($_POST['conversios_nonce']))?sanitize_text_field(wp_unslash($_POST['conversios_nonce'])):"";
+    public function ee_update_PmaxCampaign()
+    {
+      $nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
       $return = array();
       $formArry = array();
-      if($this->safe_ajax_call($nonce, 'conversios_nonce')){        
-        foreach($_POST as $key => $val) {         
-          if($key == 'action' || $key == 'conversios_nonce') {
+      if ($this->safe_ajax_call($nonce, 'conversios_nonce')) {
+        foreach ($_POST as $key => $val) {
+          if ($key == 'action' || $key == 'conversios_nonce') {
             continue;
           }
           $formArry[$key] = sanitize_text_field($val);
         }
-        if(isset($formArry["customer_id"]) ){
+        if (isset($formArry["customer_id"])) {
           $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
-          $where = '`campaign_name` = "'.esc_sql($formArry['campaign_name']).'"';
+          $where = '`campaign_name` = "' . esc_sql($formArry['campaign_name']) . '"';
           $filed = [
             'request_id',
           ];
           $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_pmax_campaign", $where, $filed);
-          if(isset($result[0]['request_id']) &&  $result[0]['request_id'] !== ''){
+          if (isset($result[0]['request_id']) &&  $result[0]['request_id'] !== '') {
             $formArry['request_id'] = $result[0]['request_id'];
             $profile_data = array(
-                                  "daily_budget" => esc_sql($formArry['budget']), 
-                                  "target_country_campaign" => esc_sql($formArry['target_country']),
-                                  "target_roas" => esc_sql($formArry['target_roas']),
-                                  "start_date" => esc_sql($formArry['start_date']),
-                                  "end_date" => esc_sql($formArry['end_date']),
-                                  "status" => esc_sql($formArry['status']),
-                                  "updated_date" => gmdate('Y-m-d H:i:s', current_time('timestamp')),
-                                );    
-          $TVC_Admin_DB_Helper->tvc_update_row("convpfm_pmax_campaign", $profile_data, array("campaign_name" => $formArry['campaign_name']));
+              "daily_budget" => esc_sql($formArry['budget']),
+              "target_country_campaign" => esc_sql($formArry['target_country']),
+              "target_roas" => esc_sql($formArry['target_roas']),
+              "start_date" => esc_sql($formArry['start_date']),
+              "end_date" => esc_sql($formArry['end_date']),
+              "status" => esc_sql($formArry['status']),
+              "updated_date" => gmdate('Y-m-d H:i:s', current_time('timestamp')),
+            );
+            $TVC_Admin_DB_Helper->tvc_update_row("convpfm_pmax_campaign", $profile_data, array("campaign_name" => $formArry['campaign_name']));
           }
           $PMax_Helper = new Conversios_PMax_Helper();
-          if($formArry["status"] == "REMOVED"){
-            $removeArr = array("customer_id"=>$formArry["customer_id"], "resource_name"=>$formArry["resource_name"]);
-            if(isset($result[0]['request_id']) &&  $result[0]['request_id'] !== ''){
+          if ($formArry["status"] == "REMOVED") {
+            $removeArr = array("customer_id" => $formArry["customer_id"], "resource_name" => $formArry["resource_name"]);
+            if (isset($result[0]['request_id']) &&  $result[0]['request_id'] !== '') {
               $removeArr['request_id'] = $result[0]['request_id'];
             }
-		    		$api_rs = $PMax_Helper->delete_pmax_campaign_callapi($removeArr);
-		    	}else{
-						$api_rs = $PMax_Helper->edit_pmax_campaign_callapi($formArry);	
-					}	
+            $api_rs = $PMax_Helper->delete_pmax_campaign_callapi($removeArr);
+          } else {
+            $api_rs = $PMax_Helper->edit_pmax_campaign_callapi($formArry);
+          }
           if (isset($api_rs->error) && $api_rs->error == '') {
-	        	if(isset($api_rs->data->results[0]->resourceName) && $api_rs->data != ""){
-	        		$resource_name = $api_rs->data->results[0]->resourceName;
-	        		if($formArry["status"] == "REMOVED"){
-	        			echo wp_json_encode(array('error'=>false, 'message'=> "Campaign Removed Successfully with resource name - ".$resource_name));
-	        		}else{
-	        			echo wp_json_encode(array('error'=>false, 'message'=> "Campaign Edited Successfully with resource name - ".$resource_name));
-	        		}
-	        	}else if(isset($api_rs->data)){
-	        		echo wp_json_encode(array('error'=>false, 'data' => $api_rs->data));
-	        	}
-	        }else{
-	        	$errormsg = "";
-	        	if(!is_array($api_rs->errors) && is_string($api_rs->errors)){
-	        		$errormsg = $api_rs->errors;
-	        	}else{
-	        		$errormsg= isset($api_rs->errors[0])?$api_rs->errors[0]:"";
-	        	}
-	        	echo wp_json_encode(array('error'=>true, 'message'=>$errormsg,  'status' => $api_rs->status));
-	        }
-				}	
-      }else{
-        echo wp_json_encode(array('error'=>true, 'message' => esc_html__("Admin security nonce is not verified.","product-feed-manager-for-woocommerce")));
+            if (isset($api_rs->data->results[0]->resourceName) && $api_rs->data != "") {
+              $resource_name = $api_rs->data->results[0]->resourceName;
+              if ($formArry["status"] == "REMOVED") {
+                echo wp_json_encode(array('error' => false, 'message' => "Campaign Removed Successfully with resource name - " . $resource_name));
+              } else {
+                echo wp_json_encode(array('error' => false, 'message' => "Campaign Edited Successfully with resource name - " . $resource_name));
+              }
+            } else if (isset($api_rs->data)) {
+              echo wp_json_encode(array('error' => false, 'data' => $api_rs->data));
+            }
+          } else {
+            $errormsg = "";
+            if (!is_array($api_rs->errors) && is_string($api_rs->errors)) {
+              $errormsg = $api_rs->errors;
+            } else {
+              $errormsg = isset($api_rs->errors[0]) ? $api_rs->errors[0] : "";
+            }
+            echo wp_json_encode(array('error' => true, 'message' => $errormsg,  'status' => $api_rs->status));
+          }
+        }
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
       exit;
     }

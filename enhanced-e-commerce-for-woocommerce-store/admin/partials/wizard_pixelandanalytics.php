@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 $TVC_Admin_Helper = new TVC_Admin_Helper();
@@ -109,6 +108,16 @@ if ($subscriptionId != "") {
 }
 $pixelprogressbarclass = [18];
 $conv_onboarding_done_step = (isset($ee_options["conv_onboarding_done_step"]) && $ee_options["conv_onboarding_done_step"] != "") ? $ee_options["conv_onboarding_done_step"] : "";;
+
+$is_domain_claim = "";
+if (isset($googleDetail->is_domain_claim) === TRUE) {
+    $is_domain_claim = esc_attr($googleDetail->is_domain_claim);
+}
+
+$is_site_verified = "";
+if (isset($googleDetail->is_site_verified) === TRUE) {
+    $is_site_verified = esc_attr($googleDetail->is_site_verified);
+}
 ?>
 <style>
     #conversioshead,
@@ -150,6 +159,14 @@ $conv_onboarding_done_step = (isset($ee_options["conv_onboarding_done_step"]) &&
         transition: width 0.6s ease;
         border-radius: 100px;
     }
+
+    .conv-border-box {
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        box-shadow: 0px 0px 4px #ccc;
+        padding: 15px;
+        margin: 0px;
+    }
 </style>
 <script>
     function conv_change_loadingbar(state = 'show') {
@@ -182,7 +199,7 @@ $conv_onboarding_done_step = (isset($ee_options["conv_onboarding_done_step"]) &&
     }
 
 
-    function getAlertMessageAll(type = 'Success', title = 'Success', message = '', icon = 'success', buttonText = 'Ok, Done', buttonColor = '#1967D2', iconImageTag = '') {
+    function getAlertMessageAll(type = 'Success', title = 'Success', message = '', icon = 'success', buttonText = 'Done!', buttonColor = '#1967D2', iconImageTag = '') {
         Swal.fire({
             type: type,
             icon: icon,
@@ -395,6 +412,7 @@ $conv_onboarding_done_step = (isset($ee_options["conv_onboarding_done_step"]) &&
 
 
 <?php
+//echo '<pre>'; print_r($ee_options); echo '</pre>';
 $connect_url_gagads = $tvs_admin->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios&wizard=pixelandanalytics_gasettings');
 $connect_url_gaa = $tvs_admin->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios&wizard=pixelandanalytics_gasettings');
 $connect_url_gadss = $tvs_admin->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios&wizard=pixelandanalytics_gadssettings');

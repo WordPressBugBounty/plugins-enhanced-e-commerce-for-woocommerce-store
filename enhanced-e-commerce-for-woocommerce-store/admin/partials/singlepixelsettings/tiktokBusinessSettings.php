@@ -77,8 +77,6 @@ body {
     $state = ['confirm_url' => admin_url() . $confirm_url, 'subscription_id' => $subscriptionId];
     $tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://connect.tatvic.com/laravelapi/public/auth/tiktok/callback&rid=q6uerfg9osn&state=" . urlencode(wp_json_encode($state));
     
-    //$tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://laravelapi.tatvic.com/laravelapi/public/auth/tiktok/callback&rid=tee9ehl4mwc&state=" . urlencode(wp_json_encode($state));
-
     if ($tiktok_mail === '' && $tiktok_user_id === '') { ?>
     <a onclick='window.open("<?php echo $tiktok_auth_url ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
         href="#">
@@ -191,14 +189,14 @@ body {
             </div>
             <div class="modal-body text-center p-0">
                 <img style="width:184px;"
-                    src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/update_success_logo.png'); ?>">
+                    src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>">
                 <h3 class="fw-normal pt-3">
                     <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>
-                <span id="conv_save_success_txt_" class="mb-1 lh-lg"></span>
+                <span id="conv_save_success_txt_" class="mb-1 lh-lg d-flex px-2"></span>
             </div>
             <div class="modal-footer border-0 pb-4 mb-1">
-                <button class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal">Ok, Done</button>
+                <button class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal">Done</button>
             </div>
         </div>
     </div>
@@ -213,7 +211,7 @@ body {
                 <div class="connection-box">
                     <div class="items">
                         <img style="width:35px;"
-                            src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce _logo.png'); ?>">
+                            src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
                         <span>
                             <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </span>
@@ -236,12 +234,12 @@ body {
             <div class="modal-body text-center p-4">
                 <div class="connected-content">
                     <h4>
-                        <?php esc_html_e("Successfully Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <?php esc_html_e("Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </h4>
                     <p><span
                             class="fw-bolder"><?php esc_html_e("TikTok Business Account -", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                         <span class="gmcAccount fw-bolder"></span>
-                        <?php esc_html_e("Has Been Successfully Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <?php esc_html_e("Has Been Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
                     <p class="my-3">
                         <?php esc_html_e("Success! Your product feed is now linked to TikTok's powerful catalog, unlocking vast global audiences and maximizing your sales potential through our plugin.","enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -274,11 +272,11 @@ body {
                             </div>
                             <div class="" style="justify-content: center">
                                 <a
-                                    href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage="gmcsettings"'); ?>"><?php esc_html_e("Connect
+                                    href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings'); ?>"><?php esc_html_e("Connect
                                 to Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                                 <span>OR</span>
                                 <a
-                                    href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage="metasettings"'); ?>"><?php esc_html_e("Connect
+                                    href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>"><?php esc_html_e("Connect
                                 to Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                             </div>
                         </div>

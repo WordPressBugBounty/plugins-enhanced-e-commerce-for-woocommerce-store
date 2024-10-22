@@ -27,12 +27,12 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 ?>
 
 <!-- Main container -->
-<div class="container-old conv-container conv-setting-container pt-4">
+<div class="container-old conv-setting-container pt-4">
 
     <!-- Main row -->
-    <div class="row justify-content-center">
+    <div class="row row-x-0 justify-content-center">
         <!-- Main col8 center -->
-        <div class="convfixedcontainermid col-md-8 col-xs-12 m-0 p-0">
+        <div class="convfixedcontainermid-removed col-md-12 px-45 pb-5 border-bottom">
 
             <!-- GTM Card -->
             <?php
@@ -62,105 +62,6 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 
             <?php } ?>
 
-            <div class="convcard d-flex flex-row p-2 mt-0 rounded-3 shadow-sm">
-                <div class="convcard-left conv-pixel-logo">
-                    <div class="convcard-logo text-center p-2 pe-3 border-end">
-                        <img src="<?php print esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gtm_logo.png'); ?>" />
-                    </div>
-                </div>
-                <div class="convcard-center p-2 ps-3 col-10">
-                    <div class="convcard-title">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <h3>
-                                    <?php esc_html_e("Google Tag Manager (GTM)", "enhanced-e-commerce-for-woocommerce-store"); ?>
-
-                                </h3>
-                            </div>
-                            <div class="col-md-2 p-0">
-                                <span class="gtm-badge badge rounded-pill conv-badge <?php print (empty($subscription_id) || $tracking_method != "gtm") ? "conv-badge-yellow" : "conv-badge-green"; ?>">
-                                    <?php print (empty($subscription_id) || $tracking_method !== "gtm") ? "Mandatory" : "Connected"; ?>
-                                </span>
-                            </div>
-                        </div>
-
-                        <span class="gtm-lable">
-                            Container ID: <b> GTM-K7X94DG (Conversios Default Container)</b>
-                        </span>
-                        <hr>
-                        <div class="d-flex">
-                            <span class="fw-bold-500 conv-recommended-text">
-                                <?php esc_html_e("Recommended: ", "enhanced-e-commerce-for-woocommerce-store"); ?>
-
-                            </span>
-                        </div>
-                        <div class="d-flex mt-2">
-                            <span>
-                                <?php esc_html_e("Use your Own GTM to get Faster, Secure and Personalize Experience. ", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                <!-- <a target="_blank" class="conv-link-blue conv-watch-video" href="https://www.youtube.com/watch?v=bvR1M0nh2qU"> -->
-                                <!-- <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                  <span class="material-symbols-outlined align-middle">play_circle_outline</span> -->
-                                </a>
-                            </span>
-                        </div>
-
-                        <div class="d-flex mt-2">
-                            <span>
-                                <?php esc_html_e("To User Your Own GTM Container. ", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M8.01953 11.417L8.76953 9.02116L6.79036 7.47949H9.20703L9.9987 5.00033L10.7695 7.47949H13.207L11.2279 9.02116L11.957 11.417L9.9987 9.93783L8.01953 11.417ZM5.08203 19.167V12.8337C4.45703 12.1809 4.00911 11.4656 3.73828 10.6878C3.46745 9.91005 3.33203 9.12533 3.33203 8.33366C3.33203 6.44477 3.97092 4.86144 5.2487 3.58366C6.52648 2.30588 8.10981 1.66699 9.9987 1.66699C11.8876 1.66699 13.4709 2.30588 14.7487 3.58366C16.0265 4.86144 16.6654 6.44477 16.6654 8.33366C16.6654 9.12533 16.5299 9.91005 16.2591 10.6878C15.9883 11.4656 15.5404 12.1809 14.9154 12.8337V19.167L9.9987 17.5212L5.08203 19.167ZM9.9987 13.7503C11.5126 13.7503 12.7938 13.226 13.8424 12.1774C14.8911 11.1288 15.4154 9.84755 15.4154 8.33366C15.4154 6.81977 14.8911 5.53852 13.8424 4.48991C12.7938 3.4413 11.5126 2.91699 9.9987 2.91699C8.48481 2.91699 7.20356 3.4413 6.15495 4.48991C5.10634 5.53852 4.58203 6.81977 4.58203 8.33366C4.58203 9.84755 5.10634 11.1288 6.15495 12.1774C7.20356 13.226 8.48481 13.7503 9.9987 13.7503ZM6.33203 17.417L9.9987 16.2712L13.6654 17.417V13.8545C13.1098 14.2573 12.5126 14.5489 11.8737 14.7295C11.2348 14.91 10.6098 15.0003 9.9987 15.0003C9.38759 15.0003 8.76259 14.91 8.1237 14.7295C7.48481 14.5489 6.88759 14.2573 6.33203 13.8545V17.417Z" fill="#1967D2" />
-                                </svg>
-
-                                <a target="_blank" class="conv-link-blue" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list">
-                                    <span class="text fw-bold"><?php esc_html_e("Upgrade to Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                                </a>
-                            </span>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="convcard-right ms-auto">
-                    <a href="<?php print esc_url('admin.php?page=conversios-google-analytics&subpage="gtmsettings"'); ?>" class="h-100 rounded-end d-flex justify-content-center convcard-right-arrow link-dark">
-                        <span class="material-symbols-outlined align-self-center">chevron_right</span>
-                    </a>
-                </div>
-
-            </div>
-            <!-- GTM Card End -->
-
-            <!-- GTM Server Side Start -->
-            <div class="convo_sst convcard d-flex flex-row  mt-3" data-bs-toggle="modal" data-bs-target="#convSsttoProModal">
-                <div class="convcard-left conv-pixel-logo">
-                    <div class="convcard-logo text-center">
-                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_sstgtm_logo.svg'); ?>" />
-                    </div>
-                </div>
-                <div class="convcard-center ">
-                    <div class="convcard-title">
-                        <h3>
-                            <?php esc_html_e("Server Side Tagging Via GTM", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </h3>
-                        <p>
-                            <?php esc_html_e("To Know The Benefits and How To User Server Side Tagging", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <span><img src="" alt=""><?php esc_html_e("Click Here", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="convcard-right ms-auto">
-                    <a href="" class=" rounded-end d-flex justify-content-center convcard-right-arrow link-dark" data-bs-toggle="modal" data-bs-target="#convSsttoProModal">
-                        <span class="material-symbols-outlined align-self-center">chevron_right</span>
-                    </a>
-                </div>
-            </div>
-            <!-- GTM Server Side End -->
-
-            <div id="pixelslist" class="pt-4 conv-heading-box">
-                <h3><?php esc_html_e("INTEGRATIONS", "enhanced-e-commerce-for-woocommerce-store"); ?></h3>
-                <span><?php esc_html_e("Once you’ve finished setting up your Google Tag Manager (GTM), go ahead with pixels & other integrations.", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-            </div>
-
             <!-- All pixel list -->
             <?php
             $conv_gtm_not_connected = (empty($subscription_id) || $tracking_method != "gtm") ? "conv-gtm-not-connected" : "conv-gtm-connected";
@@ -174,6 +75,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                 "twitter_ads_pixel_id" => (isset($data['twitter_ads_pixel_id']) && $data['twitter_ads_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
                 "pinterest_ads_pixel_id" => (isset($data['pinterest_ads_pixel_id']) && $data['pinterest_ads_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
                 "snapchat_ads_pixel_id" => (isset($data['snapchat_ads_pixel_id']) && $data['snapchat_ads_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
+                "linkedin_insight_id" => (isset($data['linkedin_insight_id']) && $data['linkedin_insight_id'] != '') ? '' : 'conv-pixel-not-connected',
                 "tiKtok_ads_pixel_id" => (isset($data['tiKtok_ads_pixel_id']) && $data['tiKtok_ads_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
                 "hotjar_pixel_id" => (isset($data['hotjar_pixel_id']) && $data['hotjar_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
                 "crazyegg_pixel_id" => (isset($data['hotjar_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
@@ -194,453 +96,442 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
             );
             ?>
 
-            <div id="conv_pixel_list_box" class="shadow-sm">
+            <div id="pixelslist" class="px-1 pb-0 conv-heading-box">
+                <h2 class="m-0"><?php esc_html_e("Pixel Integrations", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
+            </div>
+
+            <div id="conv_pixel_list_box" class="row">
 
                 <!-- Google analytics  -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-4 rounded-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
 
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Google Analytics", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['gm_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                        <?php if ((empty($pixel_not_connected['ga_id']) || empty($pixel_not_connected['gm_id'])) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="m-0">
-                                    <?php echo (isset($data['ga_id']) && $data['ga_id'] != '') ? esc_attr("GA3: " . $data['ga_id']) : ''; ?>
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Google Analytics", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
-                                <?php if (isset($data['gm_id']) && $data['gm_id'] != '') { ?>
-                                    <span class="<?php echo (isset($data['ga_id']) && $data['ga_id'] != '') ? 'border-start ps-2  ms-2' : 'm-0'; ?> ">
-                                        <?php echo (isset($data['gm_id']) && $data['gm_id'] != '') ? esc_attr("GA4: " . $data['gm_id']) : ''; ?>
-                                    </span>
+                            </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=gasettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+                         
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if ((empty($pixel_not_connected['ga_id']) || empty($pixel_not_connected['gm_id'])) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <?php if (isset($data['gm_id']) && $data['gm_id'] != '') { ?>
+                                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                                            <span class="d-flex  align-items-center <?php echo (isset($data['ga_id']) && $data['ga_id'] != '') ? 'border-start ps-2  ms-2' : 'm-0'; ?> ">
+                                                <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>Measurement ID: <?php echo (isset($data['gm_id']) && $data['gm_id'] != '') ? esc_attr($data['gm_id']) : ''; ?>
+                                            </span>
+                                        </div>
+                                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0" title="All the e-commerce event tracking including Purchase">All the e-commerce event tracking including Purchase</span>
+                                        </div>
+                                    <?php } ?>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Measurement ID: Not connected</span></div>
                                 <?php } ?>
                             </div>
-                        <?php } ?>
+                        </div>
                     </div>
-
-                    <div class="ms-auto d-flex">
-                        <?php if ((empty($pixel_not_connected['ga_id']) || empty($pixel_not_connected['gm_id'])) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="gasettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
-                    </div>
-
                 </div>
 
                 <!-- Google Ads -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Google Ads Remarketing & Conversion Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['google_ads_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                        <?php if (empty($pixel_not_connected['google_ads_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['google_ads_id']) && $data['google_ads_id'] != '') ? esc_attr($data['google_ads_id']) : ''; ?>
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Google Ads", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                        <?php } ?>
-                    </div>
 
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['google_ads_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="gadssettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=gadssettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+                          
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['google_ads_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span>Google ads Account ID: <?php echo (isset($data['google_ads_id']) && $data['google_ads_id'] != '') ? esc_attr($data['google_ads_id']) : ''; ?></span>
+                                    </div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span>Purchase Conversion Tracking</span></div>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Google ads Account ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Purchase Conversion Tracking</span></div>
+                                <?php } ?>
+                                
+                                <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Purchase Enhance conversion tracking &nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_SY1&&utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=gads">
+                                        <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
                 <!-- FB Pixel -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Facebook Pixel & Facebook Conversions API (Meta)", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['fb_pixel_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                        <?php if (empty($pixel_not_connected['fb_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['fb_pixel_id']) && $data['fb_pixel_id'] != '') ? esc_attr($data['fb_pixel_id']) : ''; ?>
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Facebook", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                        <?php } ?>
-                    </div>
-
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['fb_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="fbsettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
-                    </div>
-                </div>
-
-
-                <!-- MS Bing Pixel -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_bing_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Microsoft Clarity & Ads Pixel (Bing)", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['microsoft_ads_pixel_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=fbsettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
                             </a>
-                        </span>
 
-                        <?php if ((empty($pixel_not_connected['microsoft_ads_pixel_id']) || empty($pixel_not_connected['msclarity_pixel_id']))  && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
+                        </div>
 
-                                <?php
-                                if (isset($data['msclarity_pixel_id']) && $data['msclarity_pixel_id'] != '') { ?>
-                                    <span class="pe-2 m-0"> <?php echo esc_html($data['msclarity_pixel_id']); ?> </span>
-                                <?php }
-                                ?>
-
-                                <?php
-                                if (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') { ?>
-                                    <span class="pe-2 m-0">
-                                        <?php echo (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') ? esc_attr($data['microsoft_ads_pixel_id']) : ''; ?>
-                                    </span>
-                                <?php }
-                                ?>
-
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['fb_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Meta Pixel ID: <?php echo (isset($data['fb_pixel_id']) && $data['fb_pixel_id'] != '') ? esc_attr($data['fb_pixel_id']) : ''; ?></span>
+                                    </div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">All the e-commerce event tracking including Purchase</span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Meta Pixel ID: Not connected</span></div>
+                                <?php } ?>
+                                <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>FBCAPI Integration. &nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=fbcapi">
+                                        <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
+                                    </a>
+                                </div>
                             </div>
-                        <?php } ?>
-                    </div>
+                        </div>
 
-                    <div class="ms-auto d-flex">
-                        <?php if ((empty($pixel_not_connected['microsoft_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") || (empty($pixel_not_connected['msclarity_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected")) { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="bingsettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
                     </div>
                 </div>
 
+                  <!-- Tiktok -->
+                  <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Tiktok Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=tiktoksettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['tiKtok_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">TikTok Pixel ID: <?php echo (isset($data['tiKtok_ads_pixel_id']) && $data['tiKtok_ads_pixel_id'] != '') ? esc_attr($data['tiKtok_ads_pixel_id']) : 'Not connected'; ?></span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>TikTok Pixel ID: Not connected</span></div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                  <!-- Snapchat Pixel -->
+                  <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_snap_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Snapchat Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=snapchatsettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['snapchat_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Snapchat Pixel ID: <?php echo (isset($data['snapchat_ads_pixel_id']) && $data['snapchat_ads_pixel_id'] != '') ? esc_attr($data['snapchat_ads_pixel_id']) : 'Not connected'; ?></span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Snapchat Pixel ID: Not connected</span></div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Pinterest Pixel -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_pint_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Pinterest Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['pinterest_ads_pixel_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                        <?php if (empty($pixel_not_connected['pinterest_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['pinterest_ads_pixel_id']) && $data['pinterest_ads_pixel_id'] != '') ? esc_attr($data['pinterest_ads_pixel_id']) : ''; ?>
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_pint_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Pinterest Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                        <?php } ?>
-                    </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=pintrestsettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
 
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['pinterest_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="pintrestsettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['pinterest_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Pinterest Pixel ID: <?php echo (isset($data['pinterest_ads_pixel_id']) && $data['pinterest_ads_pixel_id'] != '') ? esc_attr($data['pinterest_ads_pixel_id']) : 'Not connected'; ?></span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Pinterest Pixel ID: Not connected</span></div>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- MS Bing Ads -->
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_bing_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Microsoft Ads (Bing)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=bingsettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['microsoft_ads_pixel_id'])  && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <?php if (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') { ?>
+                                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Ads ID: <?php echo (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') ? esc_attr($data['microsoft_ads_pixel_id']) : 'Not connected'; ?></span>
+                                        </div>
+                                    <?php } ?>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Ads ID: Not connected</span></div>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- MS Bing Clarity -->
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_clarity_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Microsoft Clarity (Bing)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=bingclaritysettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['msclarity_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <?php if (isset($data['msclarity_pixel_id']) && $data['msclarity_pixel_id'] != '') { ?>
+                                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Clarity ID: <?php echo (isset($data['msclarity_pixel_id']) && $data['msclarity_pixel_id'] != '') ? esc_attr($data['msclarity_pixel_id']) : 'Not connected'; ?></span>
+                                        </div>
+                                    <?php } ?>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Clarity ID: Not connected</span></div>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Linkedin Pixel -->
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_linkedin_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Linkedin Insight", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=linkedinsettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+
+                        </div>
+
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['linkedin_insight_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Linkedin Insight ID: <?php echo (isset($data['linkedin_insight_id']) && $data['linkedin_insight_id'] != '') ? esc_attr($data['linkedin_insight_id']) : 'Not connected'; ?></span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Linkedin Insight ID: Not connected</span></div>
+                                <?php } ?>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
 
-                <!-- Snapchat Pixel -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_snap_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Snapchat Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['snapchat_ads_pixel_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                        <?php if (empty($pixel_not_connected['snapchat_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['snapchat_ads_pixel_id']) && $data['snapchat_ads_pixel_id'] != '') ? esc_attr($data['snapchat_ads_pixel_id']) : ''; ?>
-                                </span>
-                            </div>
-                        <?php } ?>
-                    </div>
-
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['snapchat_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="snapchatsettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Tiktok -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Tiktok Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['tiKtok_ads_pixel_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                        <?php if (empty($pixel_not_connected['tiKtok_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['tiKtok_ads_pixel_id']) && $data['tiKtok_ads_pixel_id'] != '') ? esc_attr($data['tiKtok_ads_pixel_id']) : ''; ?>
-                                </span>
-                            </div>
-                        <?php } ?>
-                    </div>
-
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['tiKtok_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="tiktoksettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
-                    </div>
-                </div>
 
                 <!-- Twitter Pixel -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_twitter_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Twitter Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </span>
-                        <?php if (empty($pixel_not_connected['twitter_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['twitter_ads_pixel_id']) && $data['twitter_ads_pixel_id'] != '') ? esc_attr($data['twitter_ads_pixel_id']) : ''; ?>
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_twitter_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Twitter Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                        <?php } ?>
-                    </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=twittersettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+                        </div>
 
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['twitter_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="twittersettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <div class="d-flex align-items-start flex-column">
+                                <?php if (empty($pixel_not_connected['twitter_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Twitter Pixel ID: <?php echo (isset($data['twitter_ads_pixel_id']) && $data['twitter_ads_pixel_id'] != '') ? esc_attr($data['twitter_ads_pixel_id']) : 'Not connected'; ?></span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Twitter Pixel ID: Not connected</span></div>
+                                <?php } ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Hotjar -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_hotjar_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </span>
-                        <?php if (empty($pixel_not_connected['hotjar_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['hotjar_pixel_id']) && $data['hotjar_pixel_id'] != '') ? esc_attr($data['hotjar_pixel_id']) : ''; ?>
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_hotjar_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                        <?php } ?>
-                    </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=hotjarsettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+                        </div>
 
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['hotjar_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="hotjarsettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
+                        <div class="pt-3 pb-3 pixel-desc">
+                            <?php if (empty($pixel_not_connected['hotjar_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                <div class="d-flex align-items-start flex-column">
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Hotjar Pixel ID: <?php echo (isset($data['hotjar_pixel_id']) && $data['hotjar_pixel_id'] != '') ? esc_attr($data['hotjar_pixel_id']) : 'Not connected'; ?></span>
+                                    </div>
+                                </div>
+                            <?php } else { ?>
+                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Hotjar Pixel ID: Not connected</span></div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Crazyegg -->
-                <div class="convcard conv-pixel-list-item d-flex flex-row p-2 mt-0 border-top <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_crazyegg_logo.png'); ?>" />
-                    </div>
-
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold m-0">
-                            <?php esc_html_e("Crazyegg Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url($pixel_video_link['crazyegg_pixel_id']); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">play_circle_outline</span>
-                                <?php esc_html_e("Watch here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                        <?php if (empty($pixel_not_connected['crazyegg_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <div class="d-flex pt-2">
-                                <span class="pe-2 m-0">
-                                    <?php echo (isset($data['crazyegg_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? esc_attr($data['crazyegg_pixel_id']) : ''; ?>
+                <div class="col-md-4 p-3">
+                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="conv-pixel-logo d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_crazyegg_logo.png'); ?>" />
+                                <span class="fw-bold fs-4 ms-2 pixel-title">
+                                    <?php esc_html_e("Crazyegg Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                        <?php } ?>
-                    </div>
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=crazyeggsettings'); ?>" class="align-self-center">
+                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            </a>
+                        </div>
 
-                    <div class="ms-auto d-flex">
-                        <?php if (empty($pixel_not_connected['crazyegg_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-green m-0 me-3 align-self-center">Connected</span>
-                        <?php } else { ?>
-                            <span class="badge rounded-pill conv-badge conv-badge-red m-0 me-3 align-self-center">Not
-                                Connected</span>
-                        <?php } ?>
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="crazyeggsettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
+                        <div class="pt-3 pb-3 pixel-desc align-items-start flex-column">
+                            <?php if (empty($pixel_not_connected['crazyegg_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                                <div class="d-flex">
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Crazyegg Pixel ID: <?php echo (isset($data['crazyegg_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? esc_attr($data['crazyegg_pixel_id']) : 'Not connected'; ?></span>
+                                    </div>
+                                </div>
+                            <?php } else { ?>
+                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Crazyegg Pixel ID: Not connected</span></div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
-
-            </div>
-            <!-- All pixel list end -->
-
-            <?php if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) { ?>
-                <div class="pt-4 conv-heading-box">
-                    <h3>
-                        <?php esc_html_e("Advance Options", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h3>
-                    <span class="lh-base">
-                        <?php esc_html_e("This feature is for the woocommerce store which has changed standard woocommerce hooks or implemented custom woocommerce hooks.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </span>
-                </div>
+                <!-- All pixel list end -->
 
                 <!-- Advanced option -->
-                <div class="convcard conv-pixel-list-item rounded d-flex flex-row p-2 mt-1 <?php echo esc_attr($conv_gtm_not_connected); ?>">
-                    <div class="p-2 pe-3 conv-pixel-logo border-end d-flex">
-                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_event_track_custom.png'); ?>" />
+                <?php if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) { ?>
+                    <div class="col-md-4 p-3">
+                        <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                            <div class="conv-pixel-logo d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_event_track_custom.png'); ?>" />
+                                    <span class="fw-bold fs-4 ms-2 pixel-title">
+                                        <?php esc_html_e("Additional Configurations", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </span>
+                                </div>
+                                <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=customintgrationssettings'); ?>" class="align-self-center">
+                                    <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                                </a>
+                            </div>
+
+                            <div class="pt-3 pb-3 pixel-desc d-flex align-items-start">
+                                <span class="material-symbols-outlined align-text-bottom pe-1 fs-18">settings</span>
+                                <span class="fw-bold">
+                                    <?php esc_html_e("Events Tracking - Custom Integration", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            </div>
+
+                            <div class="pt-3 pb-3 pixel-desc align-items-start flex-column">
+                                <span><?php esc_html_e("This feature is for the woocommerce store which has changed standard woocommerce hooks or implemented custom woocommerce hooks.", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
+                                <div class="d-flex">
+                                    <span class="pe-2 m-0">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <!-- Advance option End -->
+                <?php }  ?>
 
-                    <div class="p-1 ps-3 align-self-center">
-                        <span class="fw-bold">
-                            <?php esc_html_e("Event Tracking - Custom Integration", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" class="conv-link-blue conv-watch-video ps-2 fw-normal invisible" href="<?php echo esc_url("https://" . TVC_AUTH_CONNECT_URL . "/help-center/event-tracking-custom-integration.pdf"); ?>">
-                                <span class="material-symbols-outlined align-text-bottom">article</span>
-                                <?php esc_html_e("Read Here", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </a>
-                        </span>
-                    </div>
-
-                    <div class="ms-auto d-flex">
-                        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage="customintgrationssettings"'); ?>" class="rounded-end convcard-right-arrow align-self-center link-dark">
-                            <span class="material-symbols-outlined p-2">chevron_right</span>
-                        </a>
-                    </div>
-
-                </div>
-                <!-- Advance option End -->
-            <?php } ?>
-
-
-            <!-- Blue upgrade to pro -->
-            <div class="convcard conv-green-grad-bg rounded-3 d-flex flex-row p-3 mt-4 shadow-sm">
-                <div class="convcard-blue-left align-self-center p-2 bd-highlight">
-                    <h3 class="text-light mb-3">
-                        <?php esc_html_e("Upgrade your Plan to get pro benefits", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h3>
-                    <span class="text-light">
-                        <ul class="conv-green-banner-list ps-4">
-                            <li><span>Google Consent Mode V2</span></li>
-                            <li><span>Own GTM container</span> with automated tag triggers.</li>
-                            <li><span>Google Ads conversion tracking</span></li>
-                            <li><span>Dynamic Remarketing</span></li>
-                            <li><span>FBCAPI, Snapchat CAPI, and TikTok Events API</span>.</li>
-                            <li><span>GA4 e-commerce reporting</span>.</li>
-                            <li><span>Google Ads conversion reporting</span>.</li>
-                            <li><span>Unlimited product feed</span></li>
-                            <li><span>Customer support</span>.</li>
-                            <li><span>Server-side tagging</span></li>
-                        </ul>
-                    </span>
-                    <span class="d-flex">
-                        <a style="padding:8px 24px 8px 24px;" class="btn conv-yellow-bg mt-4 btn-lg" href="<?php print esc_url($TVC_Admin_Helper->get_conv_pro_link_adv("banner", "pixel_list", "", "linkonly")); ?>" target="_blank">Upgrade Now</a>
-                    </span>
-                </div>
-                <div class="convcard-blue-right align-self-center p-2 bd-highlight mx-auto">
-                    <img src="<?php print esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/freetopaid_banner_img.png'); ?>" />
-                </div>
             </div>
-            <!-- Blue upgrade to pro End -->
-
 
         </div>
         <!-- Main col8 center -->
@@ -648,59 +539,6 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
     <!-- Main row -->
 </div>
 <!-- Main container End -->
-
-<!-- Upgrade to SST modal -->
-<div class="modal fade upgradetosstmodal" id="convSsttoProModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="modal-content">
-
-            <div class="d-flex align-items-center justify-content-start">
-                <img class="me-4" style="width: 55px;" src="<?php print esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_sstgtm_logo.svg'); ?>" />
-                <div>
-                    <h4 class="mb-0">
-                        <?php esc_html_e("Unlock Powerful Benefits with Server-Side Tagging via GTM", "enhanced-e-commerce-for-woocommerce-store"); ?> <br>
-                    </h4>
-                    <h5 class="mb-0">
-                        <?php esc_html_e("Boost Your Data Accuracy, Speed, and Security", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h5>
-                </div>
-
-
-            </div>
-
-            <div class="d-flex flex-row justify-content-center pt-4">
-                <div class="col-lg-5 col-md-12 col-12">
-                    <h6 class="conv-link-blue"><?php esc_html_e("Benefits", "enhanced-e-commerce-for-woocommerce-store"); ?></h6>
-                    <ul class="listing ps-3">
-                        <li><?php esc_html_e("Utilize First-Party Cookies"); ?></li>
-                        <li><?php esc_html_e("Improve Data Accuracy"); ?></li>
-                        <li><?php esc_html_e("Reduce Ad Blocker Impact"); ?></li>
-                        <li><?php esc_html_e("Enhance Page Speed"); ?></li>
-                        <li><?php esc_html_e("Strengthen Data Privacy & Security"); ?></li>
-                    </ul>
-                </div>
-                <div class="col-lg-7 col-md-12 col-12">
-                    <h6 class="conv-link-blue"><?php esc_html_e("Features", "enhanced-e-commerce-for-woocommerce-store"); ?></h6>
-                    <ul class="listing ps-3">
-                        <li><?php esc_html_e("Server-Side Tagging via GTM"); ?></li>
-                        <li><?php esc_html_e("Powerful Google Cloud Servers"); ?></li>
-                        <li><?php esc_html_e("Custom Loader & Domain Mapping"); ?></li>
-                        <li><?php esc_html_e("Support for Google Analytics 4 (GA4), Google Ads, & Facebook CAPI"); ?></li>
-                        <li><?php esc_html_e("Free Setup & Audit by Dedicated Customer Success Manager"); ?></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="discount-btn">
-                    <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=modal_popup&utm_campaign=sstpopup'); ?>" class="btn btn-dark common-btn">
-                        <?php esc_html_e("Don’t Miss Out – Get Your Discount Today"); ?>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- EC Start -->
 <div class="rounded-3 p-3 bg-white ecbuttonbox d-none hidden">
@@ -790,6 +628,27 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     window.open(fronturl, '_blank');
                     // console.log(response);
                 }
+            });
+        });
+    });
+</script>
+
+<script>
+    // make equale height divs for grid
+    jQuery(document).ready(function($) {
+
+        const gridItems = document.querySelector('#conv_pixel_list_box').children;
+        const rows = Array.from(gridItems).reduce((rows, item, index) => {
+            const rowIndex = Math.floor(index / 3);
+            rows[rowIndex] = rows[rowIndex] || [];
+            rows[rowIndex].push(item);
+            return rows;
+        }, []);
+
+        rows.forEach((row) => {
+            const maxHeight = Math.max(...row.map((item) => item.children[0].offsetHeight));
+            row.forEach((item) => {
+                item.children[0].style.minHeight = `${maxHeight}px`;
             });
         });
     });

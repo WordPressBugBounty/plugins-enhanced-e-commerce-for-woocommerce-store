@@ -98,7 +98,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                             <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
                         </div>
                     </div>
-                    <div class="ps-1">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
+                    <div class="ps-1 pt-2">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
                 <?php } ?>
             </div>
             <!-- Google SignIn End -->
@@ -128,7 +128,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                             $measurement_id = (isset($googleDetail->measurement_id) && $googleDetail->measurement_id != "") ? $googleDetail->measurement_id : "";
                             ?>
                             <div id="analytics_box_GA4" class="py-1">
-                                <div class="row pt-1">
+                                <div class="row conv-border-box">
                                     <div class="col-6">
                                         <h5 class="d-flex fw-normal mb-1 text-dark">
                                             <b><?php esc_html_e("GA4 Account", "enhanced-e-commerce-for-woocommerce-store"); ?></b>

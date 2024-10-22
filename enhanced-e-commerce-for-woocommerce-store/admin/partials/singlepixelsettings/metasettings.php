@@ -104,7 +104,7 @@ $contData = json_decode($getCountris);
     <form id="gmcsetings_form" class="convpixsetting-inner-box mt-4">
         <div id="analytics_box_UA" class="py-1 row">
             <div class="col-5">
-                <label class="text-dark">
+                <label class="text-dark fw-bold-500">
                     <?php esc_html_e("Facebook Business ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </label>
                 <div class="pt-2 conv-metasettings">
@@ -131,7 +131,7 @@ $contData = json_decode($getCountris);
                 </div>
             </div>
             <div class="col-5">
-                <label class="text-dark">
+                <label class="text-dark fw-bold-500">
                     <?php esc_html_e("Facebook Catalog ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </label>
                 <div class="pt-2 conv-metasettings">
@@ -177,7 +177,7 @@ $contData = json_decode($getCountris);
                 <div class="connection-box">
                     <div class="items">
                         <img style="width:35px;"
-                            src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce _logo.png'); ?>">
+                            src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
                         <span>
                             <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </span>
@@ -200,13 +200,13 @@ $contData = json_decode($getCountris);
             <div class="modal-body text-center p-4">
                 <div class="connected-content">
                     <h4>
-                        <?php esc_html_e("Successfully Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <?php esc_html_e("Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </h4>
                     <p><span class="fw-bolder">Facebook Business Account -</span> <span
                             class="gmcAccount fw-bolder"></span>
-                        Has Been Successfully Connected</p>
+                        Has Been Saved Successfully</p>
                     <p class="my-3">
-                        <?php esc_html_e("Success! Your product feed is now linked to Facebook's powerful catalog, unlocking vast global audiences and maximizing your sales potential through our plugin."); ?>
+                        <?php esc_html_e("Success! Your product feed is now linked to Facebook's powerful catalog, unlocking vast global audiences and maximizing your sales potential through our plugin.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
                 </div>
                 <div>
@@ -237,10 +237,10 @@ $contData = json_decode($getCountris);
                             <div class="col-12">
                             <div class="" style="justify-content: center">
                                 <a 
-                                href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage="gmcsettings"'); ?>">Connect
+                                href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings'); ?>">Connect
                                 to Google Merchant Center</a> <span>OR</span> 
                                 <a
-                                href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage="tiktokBusinessSettings"'); ?>">Connect
+                                href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>">Connect
                                 to TikTok Business Account</a>
                             </div>
                             </div>

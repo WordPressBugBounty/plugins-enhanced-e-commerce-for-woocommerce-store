@@ -511,6 +511,9 @@ class Con_GTM_WP_Tracking extends Con_Settings
     if ($this->snapchat_ads_pixel_id != "") {
       $dataLayer["cov_snapchat_pixel_id"] = esc_js($this->snapchat_ads_pixel_id);
     }
+    if ($this->linkedin_insight_id != "") {
+      $dataLayer["cov_linkedin_insight_id"] = esc_js($this->linkedin_insight_id);
+    }
     if ($this->tiKtok_ads_pixel_id != "") {
       $dataLayer["cov_tiktok_sdkid"] = esc_js($this->tiKtok_ads_pixel_id);
     }

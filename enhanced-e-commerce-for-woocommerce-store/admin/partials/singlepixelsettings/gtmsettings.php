@@ -300,7 +300,7 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
             <div class="col-md-12 text-center">
               <img class="mb-3" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gtm_logo.png'); ?>">
               <h4 class="fw-normal fs-4 my-3">
-                <?php esc_html_e("Successfully Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                <?php esc_html_e("Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
               </h4>
               <div class="fs-6 lh-3 lh-base">
                 <span class="fw-bold-500">

@@ -10,12 +10,15 @@ $is_sel_disable = 'disabled';
             <div id="hotjar_box" class="py-1">
                 <div class="row pt-2">
                     <div class="col-7">
-                        <label class="d-flex fw-normal mb-1 text-dark">
-                            <?php esc_html_e("Hotjar Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="The Hotjar Pixel ID Looks Like. 3694864">
+                        <h5 class="d-flex align-items-center mb-1 text-dark">
+                            <b><?php esc_html_e("Hotjar Pixel ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <?php if (!empty($hotjar_pixel_id)) { ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6">check_circle</span>
+                            <?php } ?>
+                            <!-- <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="The Hotjar Pixel ID Looks Like. 3694864">
                                 info
-                            </span>
-                        </label>
+                            </span> -->
+                        </h5>
                         <input type="text" name="hotjar_pixel_id" id="hotjar_pixel_id" class="form-control valtoshow_inpopup_this" value="<?php echo esc_attr($hotjar_pixel_id); ?>" placeholder="eg.3694864">
                     </div>
                 </div>

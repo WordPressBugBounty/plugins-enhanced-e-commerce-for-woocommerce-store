@@ -19,7 +19,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 
 <div class="convgads_mainbox mt-3">
     <div class="convwiz_pixtitle mt-0 mb-3 d-flex justify-content-between align-items-center py-0">
-        <div class="col-7">
+        <div class="col-8">
             <div class="convwizlogotitle">
                 <div class="d-flex flex-row align-items-center">
                     <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>" />
@@ -78,7 +78,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                             <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
                         </div>
                     </div>
-                    <div class="ps-1">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
+                    <div class="ps-1 pt-2">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
                 <?php } ?>
             </div>
             <!-- Google SignIn End -->
@@ -89,7 +89,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
     </div>
 
 
-    <form id="gadssetings_form" class="convgawiz_form_webads convpixsetting-inner-box mt-3 pb-4 convwiz_border formchanged_webads" datachannel="GoogleAds">
+    <form id="gadssetings_form" class="convgawiz_form_webads convpixsetting-inner-box mt-3 pb-1 convwiz_border formchanged_webads" datachannel="GoogleAds">
         <div class="product-feed">
             <div class="progress-wholebox">
                 <div class="card-body p-0">
@@ -98,7 +98,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                         <li class="gmc_account_id_step">
 
                             <!-- GAds Acc Selection -->
-                            <div id="analytics_box_ads" class="py-1">
+                            <div id="analytics_box_ads" class="py-1 row">
                                 <?php
                                 global $wp_filesystem;
                                 $countries = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json"));
@@ -123,68 +123,96 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                                     }
                                 }
                                 ?>
-                                <div class="row">
-                                    <div class="col-7 pt-2">
-                                        <h5 class="fw-normal mb-1 text-dark">
-                                            <b><?php esc_html_e("Select your existing Google Ads Account", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                                        </h5>
-                                        <select id="google_ads_id" name="google_ads_id" class="valtoshow_inpopup_this form-select form-select-lg mb-3 selecttwo google_ads_id" style="width: 100%" <?php echo esc_attr($is_sel_disable_gads); ?>>
-                                            <?php if (!empty($google_ads_id)) { ?>
-                                                <option value="<?php echo esc_attr($google_ads_id); ?>" selected><?php echo esc_html($google_ads_id); ?></option>
-                                            <?php } ?>
-                                            <option value="">Select Account</option>
-                                        </select>
-                                    </div>
-                                    <div id="spinner_mcc_check" class="mt-4 spinner-border text-primary d-none" role="status" style="margin-top: 38px !important;">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
 
-                                    <div id="conv_mcc_alert" class="my-3 mx-2 alert alert-danger d-none" role="alert">
-                                        <?php esc_html_e("You have selected a MCC account. Please select other google ads account to proceed further.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </div>
-
-
-                                    <div class="col-12 flex-row pt-2">
-                                        <h5 class="fw-normal mb-1 text-dark">
-                                            <b><?php esc_html_e("Don't have a Gogole Ads account?", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                                        </h5>
-                                        <div class="d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3">
-
-                                            <?php if ($off_credit_amt != "") { ?>
-                                                <div class="amtbtn">
-                                                    <?php echo esc_html($off_credit_amt); ?>
-                                                </div>
-                                                <div class="div">
-                                                    <h5 class="text-dark mb-0">
-                                                        <?php esc_html_e("Your " . $off_credit_amt . " in Ads Credit is ready to be claimed", "enhanced-e-commerce-for-woocommerce-store") ?>
-                                                    </h5>
-                                                    <span class="text-dark fs-12">
-                                                        <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                                        <br>
-                                                        <?php esc_html_e("your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                                        <a href="https://www.google.com/intl/en_in/ads/coupons/terms/cyoi/" class="" target="_blank">
-                                                            <u><?php esc_html_e("Terms and conditions apply.", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                            <?php } else { ?>
-                                                <div class="d-flex">
-                                                    <span class="text-dark d-flex align-items-center">
-                                                        <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                                    </span>
-                                                </div>
-                                            <?php } ?>
-
-                                            <div class="align-self-center">
-                                                <button id="conv_create_gads_new_btn" type="button" class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#conv_create_gads_new">
-                                                    <?php esc_html_e("Create Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                                </button>
-                                            </div>
-
+                                <div class="col-5 conv-border-box mx-3 mt-3">
+                                    <h5 class="fw-normal mb-1 text-dark">
+                                        <b><?php esc_html_e("Select your existing Google Ads Account", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                        <div id="spinner_mcc_check" class="spinner-border text-primary d-none float-end spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Loading...</span>
                                         </div>
+                                    </h5>
+                                    <select id="google_ads_id" name="google_ads_id" class="valtoshow_inpopup_this form-select form-select-lg mb-3 selecttwo google_ads_id" style="width: 100%" <?php echo esc_attr($is_sel_disable_gads); ?>>
+                                        <?php if (!empty($google_ads_id)) { ?>
+                                            <option value="<?php echo esc_attr($google_ads_id); ?>" selected><?php echo esc_html($google_ads_id); ?></option>
+                                        <?php } ?>
+                                        <option value="">Select Account</option>
+                                    </select>
+                                </div>
+
+                                <?php if (CONV_IS_WC) { ?>
+                                    <div class="col-6 conv-border-box mx-3 mt-3">
+                                        <ul class="ps-0">
+                                            <li class="<?php echo !CONV_IS_WC ? 'hidden' : 'd-flex align-items-center my-2' ?>">
+                                                <div class="inlist_text_pre" conversion_name="PURCHASE">
+                                                    <h5 class="mb-0"><?php esc_html_e("Purchase Conversion Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
+                                                    <div class="inlist_text_notconnected">
+                                                        <?php esc_html_e("Set to measure & optimize the Google Campaign ROAS", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                    </div>
+                                                    <div class="inlist_text_connected d-flex d-none">
+                                                        <div class="text-success pe-2"><?php esc_html_e("Connected :", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                                        <div class="inlist_text_connected_convid"></div>
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-outline-primary btn-sm ms-auto conv_con_modal_opener px-4 py-2" conversion_name="PURCHASE">
+                                                    <?php esc_html_e("Enable Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                <?php } ?>
+
+
+
+                                <div id="conv_mcc_alert" class="my-3 mx-2 alert alert-danger fs-8 d-none col-11" role="alert">
+                                    <?php esc_html_e("You have selected a MCC account OR account is in unsupported state(Cancelled, In Progress, Suspended). Please select other google ads account to proceed further.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </div>
+
+
+                                <div class="col-12 flex-row pt-3">
+                                    <h5 class="fw-normal mb-1 text-dark">
+                                        <b><?php esc_html_e("Don't have a Google Ads account?", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                    </h5>
+                                    <div class="d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3">
+
+                                        <?php if ($off_credit_amt != "") { ?>
+                                            <div class="amtbtn">
+                                                <?php echo esc_html($off_credit_amt); ?>
+                                            </div>
+                                            <div class="div">
+                                                <h5 class="text-dark mb-0">
+                                                    <?php
+                                                    $credit_message = "Your " . $off_credit_amt . " in Ads Credit is ready to be claimed";
+                                                    echo esc_html($credit_message);
+                                                    ?>
+                                                </h5>
+                                                <span class="text-dark fs-12">
+                                                    <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                    <br>
+                                                    <?php esc_html_e("your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                    <a href="https://www.google.com/intl/en_in/ads/coupons/terms/cyoi/" class="" target="_blank">
+                                                        <u><?php esc_html_e("Terms and conditions apply.", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="d-flex">
+                                                <span class="text-dark d-flex align-items-center">
+                                                    <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                </span>
+                                            </div>
+                                        <?php } ?>
+
+                                        <div class="align-self-center">
+                                            <button id="conv_create_gads_new_btn" type="button" class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#conv_create_gads_new">
+                                                <?php esc_html_e("Create Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                            </button>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
+
                             <!-- GAds Acc Selection End -->
 
                             <div class="pt-2">
@@ -193,7 +221,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                                         <h5 class="d-flex fw-normal mb-1 text-dark">
                                             <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=onboarding&utm_campaign=gadseec'); ?>" class="align-middle conv-link-blue fw-bold-500">
                                                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
-                                               <u><?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+                                                <u><?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
                                             </a>
                                         </h5>
                                         <ul class="conv-green-checklis list-unstyled mt-1">
@@ -221,8 +249,8 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                 </div>
             </div>
         </div>
-
-
+        <!-- <button role="button" id="conv_newgads_accbtn">New Gads Popup</button>
+        <input type="hidden" id="conv_newgads_accurl" name="conv_newgads_accbtn" value=""> -->
         <input type="hidden" id="merchant_id" name="merchant_id" value="<?php echo esc_attr($googleDetail->merchant_id) ?>">
         <input type="hidden" id="google_merchant_id" name="google_merchant_id" value="<?php echo esc_attr($googleDetail->google_merchant_id) ?>">
         <input type="hidden" id="ga_GMC" name="ga_GMC" value="<?php echo isset($googleDetail->google_merchant_id) && $googleDetail->google_merchant_id !== null ? 1 : 0 ?>">
@@ -252,6 +280,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
     </div>
 </div>
 
+
 <!-- Create New Ads Account Modal -->
 <div class="modal fade" id="conv_create_gads_new" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -265,7 +294,21 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
             </div>
             <div class="modal-body text-start">
                 <span id="before_gadsacccreated_text" class="mb-1 lh-lg fs-6 before-ads-acc-creation">
-                    <?php esc_html_e("You’ll receive an invite from Google on your email. Accept the invitation to enable your Google Ads Account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <ol>
+                        <li>
+                            <strong>Using Popup:</strong>
+                            <p>If popups are enabled, a window will appear. Just click <strong>"Accept"</strong> to access the account.</p>
+                        </li>
+                        <li class="text-center" style="list-style: none;">
+                            <strong>OR</strong>
+                        </li>
+                        <li>
+                            <strong>Using Email (if popup is blocked):</strong>
+                            <p>Check your email for an invitation from <strong>analytics1@tatvic.com </strong>. Click <strong>"Accept Invitation"</strong> in the email and sign in to confirm access.</p>
+                        </li>
+                    </ol>
+                    <?php //esc_html_e("You’ll receive an invite from Google on your email. Accept the invitation to enable your Google Ads Account.", "enhanced-e-commerce-for-woocommerce-store"); 
+                    ?>
                 </span>
 
                 <div class="onbrdpp-body alert alert-primary text-start d-none after-ads-acc-creation" id="new_google_ads_section">
@@ -286,7 +329,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                                 <br>
                                 <em><?php esc_html_e("OR", "enhanced-e-commerce-for-woocommerce-store"); ?></em>
                                 <?php esc_html_e("Open", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                <a href="" target="_blank" id="ads_invitationLink"><?php esc_html_e("Invitation Link", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+                                <a class="btn btn-sm btn-primary" href="" target="_blank" id="ads_invitationLink"><?php esc_html_e("Invitation Link", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                             </span>
                         </li>
                         <li><?php esc_html_e("Log into your Google Ads account and set up your billing preferences", "enhanced-e-commerce-for-woocommerce-store"); ?></li>
@@ -301,7 +344,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                 </button>
 
                 <button id="ads-continue-close" class="btn btn-secondary m-auto text-white d-none after-ads-acc-creation" data-bs-dismiss="modal">
-                    <?php esc_html_e("Ok, close", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
             </div>
         </div>
@@ -378,7 +421,44 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 <!-- Conversion creation edit popup end -->
 
 <script>
+    function showGAdsModalPopUp(url) {
+        //calcualte popUp size
+        var h = Math.max(800, window.screen.availHeight * 0.66) // try to use 66% of height, but no smaller than 800
+        var w = Math.max(500, window.screen.availWidth * 0.25) // try to use 25% of width, but no smaller than 800
+        //find popUp center
+        var windowLocation = {
+            left: (window.screen.availLeft + (window.screen.availWidth / 2)) - (w / 2),
+            top: (window.screen.availTop + (window.screen.availHeight / 2)) - (h / 2)
+        };
+        const confignew = "ModalPopUp" +
+            ", toolbar=no" +
+            ", scrollbars=no," +
+            ", location=no" +
+            ", statusbar=no" +
+            ", menubar=no" +
+            ", resizable=0" +
+            ", width=" + w +
+            ", height=" + h +
+            ", left=" + windowLocation.left +
+            ", top=" + windowLocation.top;
+        newWindow_wgadswin = window.open(url, 'Google Ads', confignew);
+        if (newWindow_wgadswin) {
+            newWindow_wgadswin.focus();
+            jQuery("#conv_create_gads_new").modal("hide");
+        }
+    }
+
+    function closeGAdsModalPopUp(m) {
+        m.close();
+    }
+
     jQuery(function() {
+
+        //var popUp = showGAdsModalPopUp("https://www.conversios.io/")
+        // document.getElementById('conv_newgads_accbtn').addEventListener('click', function() {
+        //     console.log('nnnnn');
+        //     showGAdsModalPopUpNew("https://www.conversios.io/");
+        // });
 
         jQuery(document).on("change", "#conv_conversion_select", function() {
             jQuery("#conv_conversion_textbox").val(jQuery(this).val());
@@ -516,6 +596,59 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 
     }
 
+    //Get conversion list
+    function get_conversion_list(conversionCategory = "", selectedVal = "") {
+        //conv_change_loadingbar("show");
+        //jQuery("#conversion_idlabel_box").addClass("d-none");
+        convpopuploading("loading");
+        var data = {
+            action: "conv_get_conversion_list_gads_bycat",
+            gads_id: jQuery("#google_ads_id").val(),
+            TVCNonce: "<?php echo esc_js(wp_create_nonce('con_get_conversion_list-nonce')); ?>",
+            conversionCategory: conversionCategory
+        };
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: data,
+            success: function(response) {
+                if (response == 0) {
+                    jQuery('#conv_conversion_select').html("<option value=''>No Conversion Label and ID Found for " + conversionCategory + "</option>");
+                    jQuery("#conversion_idlabel_box").removeClass("d-none");
+                    jQuery("#conv_conversion_selectHelp").html("<span class='text-danger'>No conversion labels are retrived, if conversion label is available in your google ads account kindly Enter it manually in below input box.");
+                    jQuery("#conv_conversion_selectbox").addClass("d-none");
+                    jQuery("#conv_conversion_textbox").removeClass("d-none");
+                    //conv_change_loadingbar("hide");
+                } else {
+                    var AccOptions = '<option value="">Select Conversion ID and Label</option>';
+                    var selected = '';
+                    Object.keys(response)?.forEach(item => {
+                        //if (selectedVal == item) {
+                        if (item.includes(selectedVal)) {
+                            selected = response[item];
+                        }
+                        AccOptions = AccOptions + '<option value="' + response[item] + '">' + response[item] + ' / ' + item + '</option>';
+                    });
+                    jQuery('#conv_conversion_select').html(AccOptions);
+                    jQuery('#conv_conversion_select').prop("disabled", false);
+                    jQuery("#conv_conversion_selectHelp").html("");
+                }
+
+                convpopuploading("notloading");
+                jQuery("#conv_conversion_select").select2({
+                    dropdownParent: jQuery("#conv_con_modal"),
+                    minimumResultsForSearch: -1,
+                    placeholder: function() {
+                        jQuery(this).data('placeholder');
+                    }
+                });
+                jQuery("#conv_conversion_select").val(selected).trigger("change");
+            }
+
+        });
+    }
+
 
     // Create new gads acc function
     function create_google_ads_account(tvc_data) {
@@ -549,6 +682,8 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                     jQuery("#new_google_ads_id").text(response.data.adwords_id);
                     if (response.data.invitationLink != "") {
                         jQuery("#ads_invitationLink").attr("href", response.data.invitationLink);
+                        //jQuery("#conv_newgads_accbtn").click();
+                        showGAdsModalPopUp(response.data.invitationLink);
                     } else {
                         jQuery("#invitationLink").html("");
                     }
@@ -621,6 +756,32 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
             save_gads_data()
         });
 
+        <?php
+        $gads_conversions = [];
+        if (array_key_exists("gads_conversions", $ee_options)) {
+
+            $gads_conversions = $ee_options["gads_conversions"];
+        }
+        ?>
+
+        gads_conversions = <?php echo wp_json_encode($gads_conversions); ?>;
+        jQuery.each(gads_conversions, function(key, value) {
+            jQuery('.inlist_text_pre[conversion_name="' + key + '"]').find(".inlist_text_notconnected").addClass("d-none");
+            jQuery('.inlist_text_pre[conversion_name="' + key + '"]').find(".inlist_text_connected").removeClass("d-none");
+            jQuery('.inlist_text_pre[conversion_name="' + key + '"]').find(".inlist_text_connected").find(".inlist_text_connected_convid").html(value);
+            jQuery('.inlist_text_pre[conversion_name="' + key + '"]').next().html("Edit");
+        });
+
+        <?php
+        $ee_conversio_send_to = !empty(get_option('ee_conversio_send_to')) ? get_option('ee_conversio_send_to') : "";
+        if ($ee_conversio_send_to != "") {
+        ?>
+            jQuery('.inlist_text_pre[conversion_name="PURCHASE"]').find(".inlist_text_notconnected").addClass("d-none");
+            jQuery('.inlist_text_pre[conversion_name="PURCHASE"]').find(".inlist_text_connected").removeClass("d-none");
+            jQuery('.inlist_text_pre[conversion_name="PURCHASE"]').find(".inlist_text_connected").find(".inlist_text_connected_convid").html('<?php echo esc_js($ee_conversio_send_to); ?>');
+            jQuery('.inlist_text_pre[conversion_name="PURCHASE"]').next().html("Edit");
+        <?php } ?>
+
         // Save data
         function save_webadsdata() {
             var has_error = 0;
@@ -672,7 +833,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
             selectedoptions['google_merchant_id'] = jQuery("#google_merchant_id").val();
             selectedoptions['link_google_analytics_with_google_ads'] = "1";
             selectedoptions['ga_GMC'] = ga_GMC;
-
+            selectedoptions['remarketing_tags'] = 1;
 
             jQuery.ajax({
                 type: "POST",
@@ -803,6 +964,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                         var responsearr = response.data.split("/");
                         get_conversion_list(conversionCategory, responsearr[responsearr.length - 1]);
                     }
+                    get_conversion_list(conversionCategory);
                     jQuery("#convcon_create_but").find(".spinner-border").addClass("d-none");
                 }
             });

@@ -28,8 +28,10 @@
         $pinterest_ads_pixel_id = (isset($ee_options["pinterest_ads_pixel_id"]) && $ee_options["pinterest_ads_pixel_id"] != "") ? $ee_options["pinterest_ads_pixel_id"] : "";
         $microsoft_ads_pixel_id = (isset($ee_options["microsoft_ads_pixel_id"]) && $ee_options["microsoft_ads_pixel_id"] != "") ? $ee_options["microsoft_ads_pixel_id"] : "";
         $msclarity_pixel_id = (isset($ee_options["msclarity_pixel_id"]) && $ee_options["msclarity_pixel_id"] != "") ? $ee_options["msclarity_pixel_id"] : "";
+        $linkedin_insight_id = (isset($ee_options["linkedin_insight_id"]) && $ee_options["linkedin_insight_id"] != "") ? $ee_options["linkedin_insight_id"] : "";
         $hotjar_pixel_id = (isset($ee_options["hotjar_pixel_id"]) && $ee_options["hotjar_pixel_id"] != "") ? $ee_options["hotjar_pixel_id"] : "";
         $crazyegg_pixel_id = (isset($ee_options["crazyegg_pixel_id"]) && $ee_options["crazyegg_pixel_id"] != "") ? $ee_options["crazyegg_pixel_id"] : "";
+        
         ?>
         <div id="otherpixel_box" class="py-1">
             <div class="row pt-2">
@@ -72,6 +74,14 @@
                         <b><?php esc_html_e("MS Clarity Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id" class="form-control" value="<?php echo esc_attr($msclarity_pixel_id); ?>">
+                </div>
+
+                <div class="col-6 pt-3">
+                    <h5 class="fw-normal mb-1 text-dark">
+                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_linkedin_logo.png'); ?>" />
+                        <b><?php esc_html_e("Linkedin Insight ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                    </h5>
+                    <input type="text" name="linkedin_insight_id" id="linkedin_insight_id" class="form-control" value="<?php echo esc_attr($linkedin_insight_id); ?>">
                 </div>
 
                 <div class="col-6 pt-3">
@@ -132,7 +142,7 @@
             jQuery("#google_merchant_center_id").val() != null
         ) {
             jQuery(".aftersetupurl").attr("href", "<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&tab=feed_list'); ?>");
-            jQuery("#aftersetupurlblue").html("Sync Products with Google Now <span class='material-symbols-outlined fs-5'>arrow_forward</span>");
+            jQuery("#aftersetupurlblue").html("Check your product feed <span class='material-symbols-outlined fs-5'>arrow_forward</span>");
         }
 
         jQuery("#conv_wizfinish").modal("show");
@@ -159,6 +169,7 @@
             selected_vals["pinterest_ads_pixel_id"] = jQuery("#pinterest_ads_pixel_id").val();
             selected_vals["microsoft_ads_pixel_id"] = jQuery("#microsoft_ads_pixel_id").val();
             selected_vals["msclarity_pixel_id"] = jQuery("#msclarity_pixel_id").val();
+            selected_vals["linkedin_insight_id"] = jQuery("#linkedin_insight_id").val();
             selected_vals["hotjar_pixel_id"] = jQuery("#hotjar_pixel_id").val();
             selected_vals["crazyegg_pixel_id"] = jQuery("#crazyegg_pixel_id").val();
 

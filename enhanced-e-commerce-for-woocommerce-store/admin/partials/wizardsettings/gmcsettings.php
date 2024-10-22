@@ -15,6 +15,9 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
     $google_merchant_center_id  = $ee_options['google_merchant_center_id'];
     $merchan_id = isset($ee_options['merchant_id']) ? $ee_options['merchant_id'] : '';
 }
+$conwizenablesuperfeed = (isset($ee_options['conwizenablesuperfeed'])) ? esc_attr($ee_options['conwizenablesuperfeed']) : "";
+$conwizverifysite = (isset($ee_options['conwizverifysite'])) ? esc_attr($ee_options['conwizverifysite']) : "";
+$conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_options['conwizverifydomain']) : "";
 ?>
 
 
@@ -44,8 +47,8 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
         </div>
     </div>
 
-    <div class="convwiz_pixtitle mt-0 mb-3 d-flex justify-content-between align-items-center py-4">
-        <div class="col-7">
+    <div class="convwiz_pixtitle mt-0 mb-0 d-flex justify-content-between align-items-center py-4">
+        <div class="col-8">
             <div class="convwizlogotitle">
                 <div class="d-flex flex-row align-items-center">
                     <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gmc_logo.png'); ?>" />
@@ -115,20 +118,20 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
                             <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
                         </div>
                     </div>
-                    <div class="ps-1">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
+                    <div class="ps-1 pt-2">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
                 <?php } ?>
             </div>
             <!-- Google SignIn End -->
         </div>
     </div>
 
-    <form id="gadssetings_form" class="convgawiz_form_webgmc convpixsetting-inner-box mt-3 convwiz_border" datachannel="GoogleGMC">
+    <form id="gadssetings_form" class="convgawiz_form_webgmc convpixsetting-inner-box mt-0 convwiz_border" datachannel="GoogleGMC">
         <div class="convwizard_pixtitle mt-0 mb-3">
-            <div class="row  pt-2">
-                <h5 class="fw-normal mb-1 text-dark">
-                    <b><?php esc_html_e("Select your existing Google Merchant Account", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                </h5>
-                <div class="col-10 d-flex">
+            <div class="row row-flex pt-2 align-items-center">
+                <div class="col-7 conv-border-box mx-3 mt-3">
+                    <h5 class="fw-normal mb-1 text-dark">
+                        <b><?php esc_html_e("Select your existing Google Merchant Account", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                    </h5>
                     <select id="google_merchant_center_id" name="google_merchant_center_id" class="form-select selecttwo" style="width: 100%" disabled>
                         <?php if (!empty($google_merchant_center_id)) { ?>
                             <option value="<?php echo esc_attr($google_merchant_center_id); ?>" selected>
@@ -136,17 +139,84 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
                         <?php } ?>
                     </select>
 
-                    <?php if ($g_email !== "") { ?>
-                        <div class="col-5">
-                            <span class="fs-14">&nbsp; Or &nbsp;</span>
-                            <div class="createNewGMC btn btn-primary px-5">Create New</div>
-                        </div>
-                    <?php } ?>
 
                     <input type="hidden" id="gmc_google_ads_id" value="<?php echo esc_attr($ee_options['google_ads_id']) ?>">
                 </div>
+                <div class="col-4">
+                    <?php if ($g_email !== "") { ?>
 
+                        <span class="fs-14">&nbsp; Or &nbsp;</span>
+                        <div class="createNewGMC btn btn-primary px-5">Create New</div>
 
+                    <?php } ?>
+                </div>
+
+                <?php if (CONV_IS_WC && ($conwizverifysite == "" || $conwizverifydomain == "" || $conwizenablesuperfeed == "" || $conwizverifysite == 0 || $conwizverifydomain == 0 || $conwizenablesuperfeed == 0)) { ?>
+                    <div id="convsitedomainfeed" class="col-7 conv-border-box mx-3 mt-3 disabledsection">
+
+                        <?php if ($conwizverifydomain == "" || $conwizverifydomain == 0) { ?>
+                            <div class="flex-row row">
+                                <div class="col-10">
+                                    <h6 class="fw-normal mb-1 text-dark">
+                                        <b><?php esc_html_e("Verify Your Site", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you verify your website, you let Google know that you're the owner of the website. You're the website owner if you have the ability to make edits to your website content. Not the website owner? Work together with your website owner or admin to verify the website.">
+                                            info
+                                        </span>
+                                    </h6>
+                                    <small>Let Google know that you're the owner of the website.</small>
+                                </div>
+                                <div class="col-2 m-auto text-end">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input ms-auto float-end" type="checkbox" role="switch" id="conwizverifysite" name="conwizverifysite" checked>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                        <?php } ?>
+
+                        <?php if ($conwizverifydomain == "" || $conwizverifydomain == 0) { ?>
+
+                            <div class="row domain_claimDiv">
+                                <div class="col-10">
+                                    <h6 class="fw-normal mb-1 text-dark">
+                                        <b><?php esc_html_e("Claim Your Domain", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you claim your website, it gives you the right to use your website in connection with your Merchant Center account. First you need to verify your website and then you can claim it. Only the user who verified the website can claim it.">
+                                            info
+                                        </span>
+                                    </h6>
+                                    <small>Connect your website with Google.</small>
+                                </div>
+                                <div class="col-2 m-auto text-end">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input ms-auto float-end" type="checkbox" role="switch" id="conwizverifydomain" name="conwizverifydomain" checked>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                        <?php } ?>
+
+                        <?php if ($conwizenablesuperfeed == "" || $conwizenablesuperfeed == 0) { ?>
+
+                            <div class="row domain_claimDiv">
+                                <div class="col-10">
+                                    <h6 class="fw-normal mb-1 text-dark">
+                                        <b><?php esc_html_e("Send your Woocommerce products to Google", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="Your products and business can show up across Google for free.">
+                                            info
+                                        </span>
+                                    </h6>
+                                    <small>Reach millions of customers on Google for free with Merchant Center</small>
+                                </div>
+                                <div class="col-2 m-auto text-end">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input ms-auto float-end" type="checkbox" role="switch" id="conwizenablesuperfeed" name="conwizenablesuperfeed" checked>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </form>
@@ -162,7 +232,7 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
                 <span class="spinner-border text-light spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 <?php esc_html_e('Save & Next', "enhanced-e-commerce-for-woocommerce-store"); ?>
             </button>
-            <button class="btn btn-outline-primary ms-3 conv_save_gmc">
+            <button class="btn btn-outline-primary ms-3 conv_save_gmc conskipandnext">
                 <?php esc_html_e('Skip & Next', "enhanced-e-commerce-for-woocommerce-store"); ?>
             </button>
         </div>
@@ -278,13 +348,105 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
                 </div>
             </form>
             <div class="modal-footer">
-                <button data-bs-dismiss="modal" style="width:112px; height:38px; border-radius: 4px; padding: 8px; gap:10px; border: 1px solid #ccc" class="btn btn-light fs-14 fw-medium" id="model_close_gmc_creation">Cancel</button>
+                <button data-bs-dismiss="modal" style="width:112px; height:38px; border-radius: 4px; padding: 8px; gap:10px; border: 1px solid #ccc" class="btn btn-light fs-14 fw-medium" id="model_close_gmc_creation">Close</button>
                 <button id="create_merchant_account_new" style="width:112px; height:38px; border-radius: 4px; padding: 8px; gap:10px;" class="btn btn-primary fs-14 fw-medium">Create</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Error Save Modal -->
+<div class="modal fade" id="conv_save_error_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 99999">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+
+            </div>
+            <div class="modal-body text-center p-0">
+                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
+                <h3 class="fw-normal pt-3">Error</h3>
+                <div id="conv_save_error_txt" class="mb-1 mx-3"></div>
+            </div>
+            <div class="modal-footer border-0 pb-4 mb-1">
+                <button class="btn conv-yellow-bg m-auto text-white" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Error Save Modal End -->
+<div class="modal fade" id="conv_save_success_modal_" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 99999">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+            </div>
+            <div class="modal-body text-center p-0">
+                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/update_success_logo.png'); ?>">
+                <h3 class="fw-normal pt-3 created_success">
+                    <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </h3>
+                <div id="conv_save_success_txt_" class="mb-1 lh-lg"></div>
+            </div>
+            <div class="modal-footer border-0 pb-4 mb-1">
+                <button type="button" class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal">Ok, Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    function call_site_verified() {
+        jQuery.post(tvc_ajax_url, {
+            action: "tvc_call_site_verified",
+            SiteVerifiedNonce: "<?php echo esc_js(wp_create_nonce('tvc_call_site_verified-nonce')); ?>"
+        }, function(response) {
+            var rsp = JSON.parse(response);
+            console.log(rsp.message);
+            user_tracking_data('refresh_call', 'null', 'product-feed-manager-for-woocommerce',
+                'call_site_verified');
+        });
+        jQuery('#conwizverifysite').addClass('disabledsection');
+    }
+
+    function call_domain_claim() {
+        jQuery.post(tvc_ajax_url, {
+            action: "tvc_call_domain_claim",
+            apiDomainClaimNonce: "<?php echo esc_js(wp_create_nonce('tvc_call_domain_claim-nonce')); ?>"
+        }, function(response) {
+            var rsp = JSON.parse(response);
+            console.log(rsp.message);
+            user_tracking_data('refresh_call', 'null', 'product-feed-manager-for-woocommerce', 'call_domain_claim');
+        });
+        jQuery('#conwizverifydomain').addClass('disabledsection');
+    }
+
+    /*************************Create Super AI Feed Start ************************************************************************/
+    function createSuperAIFeed() {
+
+        if (jQuery("#convsitedomainfeed").hasClass("superfeedcreated")) {
+            console.log('superfeed already created');
+            return;
+        }
+        jQuery("#convsitedomainfeed").addClass("superfeedcreated");
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: {
+                action: "ee_super_AI_feed",
+                create_superFeed_nonce: "<?php echo esc_js(wp_create_nonce('create_superFeed_nonce_val')); ?>",
+                type: 'GMC',
+            },
+            success: function(response) {
+                console.log("SAI Feed total=" + response.total_product);
+            },
+            error: function(error) {
+
+            }
+        });
+        jQuery('#conwizenablesuperfeed').addClass('disabledsection');
+    }
+    /*************************Create Super AI Feed End ***************************************************************************/
+
     <?php if ((isset($cust_g_email) && $cust_g_email != "")) { ?>
         jQuery('.pawizard_tab_but').on('shown.bs.tab', function(e) {
             if (jQuery(e.target).attr('aria-controls') == "webgmcbox") {
@@ -297,8 +459,11 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
     jQuery(document).on("change", "#google_merchant_center_id", function() {
         if (jQuery(this).val() == "") {
             jQuery("#save_gmc").addClass("disabledsection");
+            jQuery("#convsitedomainfeed").addClass("disabledsection");
+
         } else {
             jQuery("#save_gmc").removeClass("disabledsection");
+            jQuery("#convsitedomainfeed").removeClass("disabledsection");
         }
     });
 
@@ -406,10 +571,32 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
 
     //Save GMC channel       
     jQuery(document).on('click', '.conv_save_gmc', function() {
-        save_gmc_settings('GMC');
+        save_gmc_settings('GMC', jQuery(this));
     });
 
-    function save_gmc_settings(Channel) {
+    function save_gmc_settings(Channel, buttoncalled) {
+        jQuery("#convsitedomainfeed").addClass("disabledsection");
+        if (jQuery('#conwizenablesuperfeed').length) {
+            var conwizenablesuperfeed = 0;
+            if (jQuery("#conwizenablesuperfeed").is(':checked')) {
+                conwizenablesuperfeed = 1;
+            }
+        }
+
+        if (jQuery('#conwizverifysite').length) {
+            var conwizverifysite = 0;
+            if (jQuery("#conwizverifysite").is(':checked')) {
+                conwizverifysite = 1;
+            }
+        }
+
+        if (jQuery('#conwizverifydomain').length) {
+            var conwizverifydomain = 0;
+            if (jQuery("#conwizverifydomain").is(':checked')) {
+                conwizverifydomain = 1;
+            }
+        }
+
         jQuery(".conv_save_gmc").find(".spinner-border").addClass("d-none");
         //jQuery(".conv_save_gmc").removeClass('disabledsection');
         changeTabBox("webfbbox-tab");
@@ -428,6 +615,9 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
             selected_vals["merchant_id"] = jQuery('#google_merchant_center_id').find(':selected').data('merchant_id');
             selected_vals["website_url"] = "<?php echo esc_js(get_site_url()); ?>";
             selected_vals["conv_onboarding_done_step"] = "<?php echo esc_js("4"); ?>";
+            selected_vals["conwizenablesuperfeed"] = conwizenablesuperfeed;
+            selected_vals["conwizverifysite"] = conwizverifysite;
+            selected_vals["conwizverifydomain"] = conwizverifydomain;
 
             var google_ads_id = jQuery('#google_ads_id').val();
 
@@ -455,12 +645,24 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
                     jQuery("#google_merchant_center_id").val() != undefined &&
                     jQuery("#google_merchant_center_id").val() != null
                 ) {
-                    console.log('PPPPPP');
                     jQuery("#save_gmc").removeClass('disabledsection');
+
+                    <?php if (CONV_IS_WC) { ?>
+                        if (jQuery('#conwizverifysite').length && conwizverifysite == 1) {
+                            call_site_verified();
+                        }
+                        if (jQuery('#conwizverifydomain').length && conwizverifydomain == 1) {
+                            call_domain_claim();
+                        }
+                        if (jQuery('#conwizenablesuperfeed').length && conwizenablesuperfeed == 1) {
+                            createSuperAIFeed();
+                        }
+                    <?php } ?>
                 }
 
             }
         });
+
 
     }
 
@@ -532,6 +734,7 @@ if (isset($ee_options['google_merchant_center_id']) && $ee_options['google_merch
                     conv_change_loadingbar_popup("hide");
                     conv_change_loadingbar("hide");
                 }
+                jQuery("#save_gmc").removeClass("disabledsection");
             }
         });
     }

@@ -14,7 +14,7 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
     require_once("googlesignin.php");
     ?>
 
-    <form id="gasettings_form" class="convpixsetting-inner-box mt-4">
+    <form id="gasettings_form" class="convpixsetting-inner-box mt-3">
 
         <?php
         $tracking_option = (isset($ee_options['tracking_option']) && $ee_options['tracking_option'] != "") ? $ee_options['tracking_option'] : "";
@@ -33,11 +33,14 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
             $measurement_id = (isset($googleDetail->measurement_id) && $googleDetail->measurement_id != "") ? $googleDetail->measurement_id : "";
             ?>
             <div id="analytics_box_GA4" class="py-1">
-                <h5 class="fw-normal mb-1">
-                    <?php esc_html_e("Select Google Analytics 4 Id", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </h5>
-                <div class="row pt-1 conv-hideme-gasettings">
+                <div class="row pt-3 conv-hideme-gasettings">
                     <div class="col-5">
+                        <h5 class="mb-1 d-flex align-items-center">
+                            <b><?php esc_html_e("GA4 Account ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <?php if (!empty($ga4_analytic_account_id)) { ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6">check_circle</span>
+                            <?php } ?>
+                        </h5>
                         <select id="ga4_analytic_account_id" name="ga4_analytic_account_id" acctype="GA4"
                             class="form-select form-select-lg mb-3 ga_analytic_account_id ga_analytic_account_id_ga4 selecttwo_search"
                             style="width: 100%" <?php echo esc_html($is_sel_disable); ?>>
@@ -48,6 +51,12 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                         </select>
                     </div>
                     <div class="col-5">
+                        <h5 class="mb-1 d-flex align-items-center">
+                            <b><?php esc_html_e("GA4 Measurement ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <?php if (!empty($measurement_id)) { ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6">check_circle</span>
+                            <?php } ?>
+                        </h5>
                         <select id="ga4_property_id" name="measurement_id"
                             class="form-select form-select-lg mb-3 selecttwo_search" style="width: 100%"
                             <?php echo esc_html($is_sel_disable); ?>>
@@ -79,8 +88,8 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                 <div class="row pt-2">
                     <div class="col-12">
                         <h5 class="d-flex fw-normal mb-1 text-dark">
-                            <?php esc_html_e("GA4 API Secret (To track refund order)", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <span class="align-middle conv-link-blue fw-bold-500 upgradetopro_badge" popupopener="ga4apisecret_box_inner">&nbsp;<img
+                            <b><?php esc_html_e("GA4 API Secret", "enhanced-e-commerce-for-woocommerce-store"); ?></b>&nbsp;<?php esc_html_e("(To track refund order)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            <span class="ms-1 align-middle conv-link-blue fw-bold-500 upgradetopro_badge" popupopener="ga4apisecret_box_inner">&nbsp;<img
                                     src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>">&nbsp;Available
                                 In Pro</span>
                         </h5>

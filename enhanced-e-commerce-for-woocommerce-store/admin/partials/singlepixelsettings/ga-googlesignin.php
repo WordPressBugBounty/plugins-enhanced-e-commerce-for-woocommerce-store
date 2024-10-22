@@ -185,7 +185,7 @@ jQuery(function() {
     });
 
     jQuery(".google_connect_url").on("click", function() {
-        const w = 600;
+        const w = 800;
         const h = 650;
         const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
         const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;

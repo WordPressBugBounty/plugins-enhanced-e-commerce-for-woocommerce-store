@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"]) && isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
     update_option('ee_customer_gmail', sanitize_email($tvc_data["g_mail"]));
 
@@ -7,8 +7,7 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
         $eeapidata = unserialize(get_option('ee_api_data'));
         $eeapidata_settings = new stdClass();
 
-        if(!empty($eeapidata['setting']))
-        {
+        if (!empty($eeapidata['setting'])) {
             $eeapidata_settings = $eeapidata['setting'];
         }
 
@@ -34,34 +33,82 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
     }
 }
+$sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'subpage'))) : "";
 ?>
 
+<div class="convwiz_pixtitle mt-0 mb-3 d-flex justify-content-between align-items-center py-0">
+    <div class="col-7">
+        <?php if ($sub_page == "gasettings") { ?>
+            <ul class="conv-green-checklis list-unstyled mt-3">
+                <li class="d-flex">
+                    <span class="material-symbols-outlined text-success md-18">
+                        check_circle
+                    </span>
+                    <?php esc_html_e("All the e-commerce event tracking including Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="page_view, purchase, view_item_list, view_item, select_item, add_to_cart, remove_from_cart, view_cart, begin_checkout, add_payment_info, and add_shipping_info.">
+                        info
+                    </span>
+                </li>
+                <li class="d-flex">
+                    <span class="material-symbols-outlined text-success md-18">
+                        check_circle
+                    </span>
+                    <?php esc_html_e("All the lead generation event tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="lead_form_submit. email_click, phone_click, address_click">
+                        info
+                    </span>
+                </li>
+            </ul>
+        <?php } ?>
+        <?php if ($sub_page == "gadssettings") { ?>
+            <ul class="conv-green-checklis list-unstyled mt-3">
+                <li class="d-flex">
+                    <span class="material-symbols-outlined text-success md-18">
+                        check_circle
+                    </span>
+                    <?php esc_html_e("Google Ads Purchase & Lead Generation Conversion Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </li>
+                <li class="d-flex">
+                    <span class="material-symbols-outlined text-success md-18">
+                        check_circle
+                    </span>
+                    <?php esc_html_e("Easy-to-Set-Up Google Ads Pmax Campaign Creation", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-html="true" data-bs-original-title="<b>What is Pmax campaigns? </b><br>Performance max campaign are like a personal shopper for your WooCommerce store, automatically finding the best customers and showing them your ads at the perfect time.">
+                        info
+                    </span>
+                </li>
+            </ul>
+        <?php } ?>
 
-<div class="convpixsetting-inner-box">
-    <?php
-    $g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : "";
-    ?>
-    <?php if ($g_email != "") { ?>
-        <h5 class="fw-normal mb-1">
-            <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-        </h5>
-        <span>
-            <?php echo (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : ""; ?>
-            <span class="conv-link-blue ps-0 tvc_google_signinbtn">
-                <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
-            </span>
-        </span>
-    <?php } else { ?>
+    </div>
+    <div class="col convgauthcol">
+        <div class="convpixsetting-inner-box ps-3" style="border-left: 3px solid #09bd83;">
+            <?php
+            $g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : "";
+            ?>
+            <?php if ($g_email != "") { ?>
+                <h5 class="fw-normal mb-1">
+                    <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </h5>
+                <span>
+                    <?php echo (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : ""; ?>
+                    <span class="conv-link-blue ps-0 tvc_google_signinbtn">
+                        <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </span>
+                </span>
+            <?php } else { ?>
 
-        <div class="tvc_google_signinbtn_box" style="width: 185px;">
-            <div class="tvc_google_signinbtn google-btn">
-                <div class="google-icon-wrapper">
-                    <img class="google-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" />
+                <div class="tvc_google_signinbtn_box" style="width: 185px;">
+                    <div class="tvc_google_signinbtn google-btn">
+                        <div class="google-icon-wrapper">
+                            <img class="google-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" />
+                        </div>
+                        <p class="btn-text"><b><?php esc_html_e("Sign in with google", "enhanced-e-commerce-for-woocommerce-store"); ?></b></p>
+                    </div>
                 </div>
-                <p class="btn-text"><b><?php esc_html_e("Sign in with google", "enhanced-e-commerce-for-woocommerce-store"); ?></b></p>
-            </div>
+            <?php } ?>
         </div>
-    <?php } ?>
+    </div>
 </div>
 
 
@@ -73,7 +120,7 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
                 <div class="ppclsbtn clsbtntrgr"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/close-icon.png'); ?>" alt="" /></div>
             </div>
             <div class="onbrdpp-body">
-            <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
+                <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
                 <div class="google_signin_sec_left">
                     <?php if (!isset($tvc_data['g_mail']) || $tvc_data['g_mail'] == "" || $subscriptionId == "") { ?>
                         <div class="google_connect_url google-btn">
@@ -164,7 +211,7 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
         });
 
         jQuery(".google_connect_url").on("click", function() {
-            const w = 600;
+            const w = 800;
             const h = 650;
             const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
             const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;

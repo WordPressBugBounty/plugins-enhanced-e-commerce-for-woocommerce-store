@@ -59,6 +59,7 @@ class Con_Settings
 
     protected $pinterest_ads_pixel_id;
     protected $snapchat_ads_pixel_id;
+    protected $linkedin_insight_id;
     protected $tiKtok_ads_pixel_id;
 
     protected $want_to_use_your_gtm;
@@ -157,6 +158,7 @@ class Con_Settings
 
         $this->pinterest_ads_pixel_id = sanitize_text_field($this->get_option('pinterest_ads_pixel_id'));
         $this->snapchat_ads_pixel_id = sanitize_text_field($this->get_option('snapchat_ads_pixel_id'));
+        $this->linkedin_insight_id = sanitize_text_field($this->get_option('linkedin_insight_id'));
         $this->tiKtok_ads_pixel_id = sanitize_text_field($this->get_option('tiKtok_ads_pixel_id'));
         /* GTM*/
         $this->want_to_use_your_gtm = sanitize_text_field($this->get_option('want_to_use_your_gtm'));

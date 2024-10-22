@@ -2,7 +2,7 @@
 
 tbody { --bs-bg-opacity: 1; background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity)) !important; }
 th { font-weight: 500;font-size: 14px;font-style: normal; line-height: 16px; text-align: center; height: 25px; padding-left: 10px !important; }
-td { font-size: 14px; color: #5f6368; text-align: center; }
+tr { font-size: 14px; color: #5f6368; text-align: center; }
 #feed_list_table_info { font-size: 12px; }
 #feed_list_table_length { font-size: 12px; padding: 5px; }
 #feed_list_table_wrapper > div { background-color: white;}
@@ -140,7 +140,9 @@ tbody, td, tfoot, th, thead, tr {
   background: white;
   padding: 4px;
 }
-:disabled, [aria-disabled], .select2-container--disabled {
+.createCampaignDiv :disabled, 
+.createCampaignDiv [aria-disabled], 
+.createCampaignDiv .select2-container--disabled {
   background: #e9ecef !important;
 }
 [aria-disabled=false] {
@@ -247,10 +249,11 @@ a.paginate_button.disabled {
 .text-grey {
   color: #515151;
 }
-
+#feed_list_table_filter input {border-color: #dadce2;}
 .pointer { cursor: pointer; }
 .fs-14 { font-size: 14px; }
 .fs-16 { font-size: 16px; }
+.fs-18 { font-size: 18px; }
 .fs-20 { font-size: 20px; }
 .fs-12 { font-size: 12px; }
 .fs-10 { font-size: 10px; }
@@ -261,6 +264,10 @@ a.paginate_button.disabled {
     border-color: #0d6efd; /*set the color you want here*/
     box-shadow: none;
 }
+#feed_list_table .form-check .form-check-input{
+  height: 16px !important;
+}
+
 thead { background-color: #e4e4e4;}
 .errorInput {
     border: 1.3px solid #ef1717 !important ;
@@ -272,7 +279,7 @@ thead { background-color: #e4e4e4;}
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100px;
+  width: 95px;
   padding: 2px 10px;
   border-radius: 30px;
   margin-bottom: 6px;
@@ -364,6 +371,12 @@ thead { background-color: #e4e4e4;}
   border: 1px solid transparent;
   margin-right: 20px;
   text-transform: capitalize;
+}
+@media (max-width: 1349px) {
+  /* Styles for screen sizes below 1000px */
+  th{
+    font-size: 12px;
+  }
 }
 @media (max-width: 1460px) {
   /* Styles for screen sizes below 1000px */

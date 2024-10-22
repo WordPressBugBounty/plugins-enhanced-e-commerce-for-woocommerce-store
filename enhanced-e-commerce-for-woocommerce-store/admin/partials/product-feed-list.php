@@ -1,6 +1,7 @@
 <?php
 
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 
@@ -43,10 +44,11 @@ if (isset($ee_options['facebook_setting']['fb_catalog_id']) === TRUE && $ee_opti
     $facebook_catalog_id = esc_html($ee_options['facebook_setting']['fb_catalog_id']);
 }
 
-
+$not_connected_any_gmc = false;
 if ($google_merchant_center_id === '' && $tiktok_business_account === '' && $facebook_catalog_id === '') {
-    wp_safe_redirect("admin.php?page=conversios-google-shopping-feed"); //Odd
-    exit;
+    //wp_safe_redirect("admin.php?page=conversios-google-shopping-feed&tab=feed_list"); //Odd
+    //exit;
+    $not_connected_any_gmc = true;
 }
 
 
@@ -70,8 +72,143 @@ $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setu
 
 $contData = json_decode($getCountris);
 $data = unserialize(get_option('ee_options'));
-
 ?>
+
+<!-- Main row -->
+<div class="px-50 pt-4 conv-heading-box-no">
+    <h3 class="m-0">Product Feed Channels</h3>
+    <!-- <span>You can configure your Ads channels for your product feeds</span> -->
+</div>
+<div id="conv_grid_list_box" class="row px-50 conv-pixel-list-item justify-content-center pt-1 p-3" style="--bs-gutter-x: 0rem;">
+    <!-- Google Merchant card Start -->
+    <div class="col-md-4 p-3 ps-0">
+        <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
+
+            <div class="conv-pixel-logo d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gmc_logo.png'); ?>" />
+                    <span class="fw-bold fs-4 ms-2 pixel-title">
+                        <?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </span>
+                </div>
+                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings'); ?>" class="align-self-center">
+                    <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                </a>
+            </div>
+            <div class="pt-3 pb-3 pixel-desc">
+                <div class="d-flex align-items-start flex-column">
+
+                    <?php if (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>Google Merchant Center Account: <?php echo (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') ? esc_attr($data['google_merchant_id']) : ''; ?>
+                        </div>
+                    <?php } else { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Google Merchant Center Account: Not connected</span></div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TikTok Business Account Start -->
+    <div class="col-md-4 p-3">
+        <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
+            <div class="conv-pixel-logo d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>" />
+                    <span class="fw-bold fs-4 ms-2 pixel-title">
+                        <?php esc_html_e("TikTok Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </span>
+                </div>
+                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>" class="align-self-center">
+                    <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                </a>
+            </div>
+            <div class="pt-3 pb-3 pixel-desc">
+                <div class="d-flex align-items-start flex-column">
+
+                    <?php if (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>TikTok Business Account: <?php echo (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? esc_attr($data['tiktok_setting']['tiktok_business_id']) : ''; ?>
+                        </div>
+
+                    <?php } else { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>TikTok Business Accounts: Not connected</span></div>
+                    <?php } ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- TikTok Business Account End -->
+
+    <!-- Meta Business Account Start -->
+    <div class="col-md-4 p-3 pe-0">
+        <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
+            <div class="conv-pixel-logo d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
+                    <span class="fw-bold fs-4 ms-2 pixel-title">
+                        <?php esc_html_e("Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </span>
+                </div>
+                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>" class="align-self-center">
+                    <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                </a>
+            </div>
+            <div class="pt-3 pb-3 pixel-desc">
+                <div class="d-flex align-items-start flex-column">
+
+                    <!-- disconnect or connect button or btn -->
+                    <!-- <div class="row">
+                        <span
+                            class="float-end badge rounded-pill conv-badge <?php echo !empty($channel_not_connected['fb_business_id']) ? "conv-badge-yellow" : "conv-badge-green"; ?>">
+                            <?php echo !empty($channel_not_connected['fb_business_id']) ? "Not Connected" : "Connected"; ?>
+                        </span>
+                    </div> -->
+
+                    <?php if (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>Facebook Business Account: <?php echo (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') ? esc_attr($data['facebook_setting']['fb_business_id']) : ''; ?>
+                        </div>
+                        <!-- <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
+                                <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">All the e-commerce event tracking including Purchase</span>
+                            </div> -->
+                    <?php } else { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Facebook Business Account: Not connected</span></div>
+                    <?php } ?>
+
+                    <!-- <div class="d-flex mt-3">
+                        <span>
+                            <?php esc_html_e("Benefits and how to integrate Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store") ?>
+                            <a class="conv-link-blue conv-watch-video"
+                                href="https://www.conversios.io/docs/how-to-sync-your-woocommerce-products-to-facebook-catalogue/"
+                                target="_blank">
+                                Click here
+                                <span class="material-symbols-outlined align-middle">open_in_new_outline</span>
+                            </a>
+                        </span>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Meta Business Account End -->
+</div>
+
+<!-- <div class=" d-flex flex-columnf justify-content-center px-50 pb-3">
+    <div class="shadow-sm" style="max-width: 180px;">
+        <img class="align-self-center" src="<?php //echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/gmc-wc.png'); 
+                                            ?>" />
+    </div>
+    <div class="shadow-sm px-3 d-flex flex-column justify-content-center w-100 bg-white">
+        <h3>Reach you goal by creating campaign</h3>
+        <p>You can boost event matching, data accuracy, privacy compliance, and ad performance with Facebook Conversion API.
+        </p>
+    </div>
+</div> -->
+
 <style>
     .errorInput {
         border: 1.3px solid #ef1717 !important;
@@ -118,18 +255,18 @@ $data = unserialize(get_option('ee_options'));
         border-color: #cccccc;
     }
 </style>
-<div class="container-fluid pt-3 ps-3">
-    <div class="row ps-3 pe-3">
+<div class="container-fluid px-50 pb-0">
+    <div class="d-flex pb-0">
         <div class="m-0 p-0">
             <div class="conv-heading-box">
-                <h5 class="fs-20">
+                <h3 class="">
                     <?php esc_html_e("Feed Management", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </h5>
+                </h3>
                 <span class="fw-400 fs-14 text-secondary">
                     <?php
                     printf(
                         /* translators: %s: Total number of product */
-                        esc_html__('View and manage all your product feeds in one place. Easily track feed status, sync schedules, and performance across channels', "enhanced-e-commerce-for-woocommerce-store"),
+                        esc_html__('View and manage all your product feeds in one place. Easily track feed status, sync schedules, and performance across channels.', "enhanced-e-commerce-for-woocommerce-store"),
                         esc_html(number_format_i18n($total_products))
                     );
                     ?>
@@ -138,11 +275,11 @@ $data = unserialize(get_option('ee_options'));
         </div>
     </div>
 </div>
-<div class="container-fluid p-3 pb-2">
+<div class="container-fluid px-50 p-3 pb-2">
     <div id="loadingbar_blue" class="progress-materializecss d-none ps-2 pe-2">
         <div class="indeterminate"></div>
     </div>
-    <nav class="navbar navbar-light bg-white shadow-sm" style="border-top-left-radius:8px;border-top-right-radius:8px;">
+    <nav class="navbar navbar-light bg-white shadow-sm d-none" style="opacity:0;">
         <div class="col-12 col-md-12 col-sm-12">
             <div class="row">
                 <div class="col-8 col-md-8 col-sm-8 ps-3">
@@ -162,9 +299,14 @@ $data = unserialize(get_option('ee_options'));
                             </button>
                     <?php }
                     } ?>
-                    <button class="btn btn-soft-primary fs-14 me-2" name="create_new_feed" id="create_new_feed">
-                        <?php esc_html_e("Create New Feed", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </button>
+                    <div id="create_new_feed_div" class="d-flex align-items-center">
+                        <button class="btn btn-soft-primary fs-14 me-2" name="create_new_feed" id="create_new_feed" <?php echo $not_connected_any_gmc ? 'disabled' : '' ?>>Create New Feed</button>
+                        <?php if ($not_connected_any_gmc) : ?>
+                            <span class="material-symbols-outlined fs-6 me-1" data-bs-toggle="tooltip" data-bs-placement="right" title="For create new feed, GMC/FB/Tiktok any one need to setup first">
+                                info
+                            </span>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -179,13 +321,13 @@ $data = unserialize(get_option('ee_options'));
                             <input class="form-check-input checkbox fs-17" type="checkbox" name="selectAll" id="selectAll" value="selectAll">
                         </div>
                     </th>
-                    <th scope="col" class="text-start" style="width:25%">
+                    <th scope="col" class="text-start" style="width:30%">
                         <?php esc_html_e("FEED NAME", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
                     <th scope="col" class="text-center" style="width:10%">
                         <?php esc_html_e("TARGET COUNTRY", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
-                    <th scope="col" class="text-center" style="width:15%">
+                    <th scope="col" class="text-center" style="width:10%">
                         <?php esc_html_e("CHANNELS", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
                     <th scope="col" class="text-center" style="width:10%">
@@ -222,7 +364,7 @@ $data = unserialize(get_option('ee_options'));
                         }
 
                 ?>
-                        <tr class="height">
+                        <tr class="height" style="<?php echo $value->is_delete === '1' ? 'color: #708581; opacity: 0.5;' : ''; ?>">
                             <td class="align-middle text-start">
                                 <div class="form-check form-check-custom">
                                     <input class="form-check-input checkbox_feed fs-17" <?php echo $value->status == 'Synced' ? '' : 'disabled="disabled"' ?> type="checkbox" name="" id="checkFeed_<?php echo esc_attr($value->id); ?>" value="<?php echo esc_attr($value->id); ?>">
@@ -280,7 +422,7 @@ $data = unserialize(get_option('ee_options'));
                                     <?php echo esc_html(date_format(date_create($value->created_date), "H:i a")); ?>
                                 </p>
                             </td>
-                            <td class="align-middle text-center" data-sort='" <?php echo esc_html(strtotime($value->last_sync_date)) ?> "'>
+                            <td class="align-middle text-center" data-sort='" <?php echo esc_html(strtotime($value->last_sync_date ?? '0000-00-00 00:00:00')) ?> "'>
                                 <span>
                                     <?php echo $value->last_sync_date && $value->last_sync_date != '0000-00-00 00:00:00' ? esc_html(date_format(date_create($value->last_sync_date), "d M Y")) : 'NA'; ?>
                                 </span>
@@ -410,13 +552,13 @@ $data = unserialize(get_option('ee_options'));
                             <td class="align-middle">
                                 <div class="dropdown position-static">
                                     <?php if ($value->is_delete === '1') { ?>
-                                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="pointer-events: none;">
+                                        <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="pointer-events: none;">
                                             <span class="material-symbols-outlined">
                                                 more_horiz
                                             </span>
                                         </button>
                                     <?php } else { ?>
-                                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="material-symbols-outlined">
                                                 more_horiz
                                             </span>
@@ -451,6 +593,7 @@ $data = unserialize(get_option('ee_options'));
             ?></i>
     </small>
 </div>
+<hr />
 <!-- Modal -->
 <div class="modal fade" id="convCreateFeedModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -503,8 +646,11 @@ $data = unserialize(get_option('ee_options'));
                                 <?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <span>
-                                <a target="_blank" href="https://www.conversios.io/wordpress/product-feed-manager-for-woocommerce-pricing/?utm_source=app_wooPFM&utm_medium=BUSINESS&utm_campaign=Pricing"><b>
-                                        Upgrade To Pro</b></a>
+                                <a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup">
+                                    <b>
+                                        Upgrade To Pro
+                                    </b>
+                                </a>
                             </span>
                         </div>
                     </div>
@@ -596,13 +742,13 @@ $data = unserialize(get_option('ee_options'));
 <div class="modal fade" id="conv_save_error_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header border-0 pb-0">
+            <div class="modal-header border-0 pb-0 px-3">
 
             </div>
             <div class="modal-body text-center p-0">
                 <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
                 <h3 class="fw-normal pt-3">Error</h3>
-                <span id="conv_save_error_txt" class="mb-1 lh-lg"></span>
+                <span id="conv_save_error_txt" class="mb-1 lh-lg px-3"></span>
             </div>
             <div class="modal-footer border-0 pb-4 mb-1">
                 <button class="btn conv-yellow-bg m-auto text-white dismissErrorModal" data-bs-dismiss="modal">Close</button>
@@ -611,21 +757,27 @@ $data = unserialize(get_option('ee_options'));
     </div>
 </div>
 <!-- Error Save Modal End -->
-<!-- Success Save Modal -->
+<!-- Success Save Modal 2 -->
 <div class="modal fade" id="conv_save_success_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered max-w-600">
+        <div class="modal-content shadow-lg border-0">
             <div class="modal-header border-0 pb-0">
 
             </div>
-            <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/update_success_logo.png'); ?>">
-                <h3 class="fw-normal pt-3">
-                    <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?></h3>
-                <span id="conv_save_success_txt" class="mb-1 lh-lg"></span>
+            <div class="modal-body text-center px-5">
+                <!-- <img style="width:184px;" src="/admin/images/logos/successImg.png"> -->
+                <div class="success-round d-flex rounded-circle justify-content-center align-items-center border-radius">
+                    <span class="material-symbols-outlined text-white  fww-bold">check</span>
+                </div>
+                <h2 class="fw-normal pt-3 text-dark"><?php esc_html_e("Successful!", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
+                <h3 class="leave-a-review fw-normal mb-4 text-dark" style="display:none">
+                    <?php esc_html_e("How did you like our feed creation? Any feedback is appreciated! ", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <a target="_blank" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" class="conv-link-blue">Leave a Review</a>
+                </h3>
+                <span id="conv_save_success_txt" class="mb-1 d-flex justify-content-center text-dark fs-16 px-2"></span>
             </div>
-            <div class="modal-footer border-0 pb-4 mb-1 modalFooterSuccess" style="display:flex; justify-content: center">
-                <button class="btn conv-blue-bg text-white dismissModal" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer border-0 px-4 pb-4 mb-1 modalFooterSuccess w-100" style="display:flex; justify-content: center">
+                <button class="btn fs-20 fw-normal w-100 text-white dismissModal" data-bs-dismiss="modal" style="background-color: #209365;">Close</button>
             </div>
         </div>
     </div>
@@ -783,10 +935,17 @@ $data = unserialize(get_option('ee_options'));
                 });
             }
         });
-        jQuery('.dataTables_filter').addClass('d-none');
+
+        jQuery('.createCampaign').insertAfter('#feed_list_table_filter');
+        jQuery('#create_new_feed_div').insertAfter('#feed_list_table_filter');
+        jQuery('#feed_list_table_filter').insertAfter('#feed_list_table_length');
+        jQuery('#feed_list_table_filter').parent().addClass('d-flex align-items-center');
+        jQuery('#create_new_feed_div').parent().addClass('d-flex align-items-center justify-content-end');
+
+
         /*********************Custom DataTable for Search functionality End***********************************************/
         /****************Create Feed call start********************************/
-        jQuery('#create_new_feed').on('click', function(events) {
+        jQuery('#create_new_feed, .create_new_feed').on('click', function(events) {
             jQuery('#gmc_id').attr('disabled', false);
             //jQuery('#tiktok_id').attr('disabled', false);
             jQuery('#target_country').attr('disabled', false);
@@ -983,21 +1142,9 @@ $data = unserialize(get_option('ee_options'));
             },
             success: function(response) {
                 if (response.id) {
-                    jQuery('#convCreateFeedModal').modal('hide');
-                    jQuery("#conv_save_success_txt").html(
-                        "Great job! Your product feed is ready! The next step is to select the products you want to sync and expand your reach across multiple channels."
-                    );
-                    jQuery("#conv_save_success_modal").modal("show");
-                    setTimeout(function() {
-                        if (edit !== '') {
-                            location.reload(true);
-                        } else {
-                            window.location.replace(
-                                "<?php echo esc_url_raw($site_url . 'product_list&id='); ?>" +
-                                response.id);
-                        }
-
-                    }, 100);
+                    var feedurl = "<?php echo esc_url_raw($site_url . 'product_list&id='); ?>" + response.id;
+                    location.href = feedurl
+                    
                 } else if (response.errorType === 'tiktok') {
                     jQuery('.tiktok_catalog_id').empty();
                     jQuery('.tiktok_catalog_id').html(response.message);
@@ -1346,4 +1493,25 @@ $data = unserialize(get_option('ee_options'));
         window.location.replace("<?php echo esc_url($site_url_pmax); ?>");
     })
     /*********************************** Pmax Campaign related code End ***************************************************************/
+</script>
+
+<script>
+    // make equale height divs for grid
+    jQuery(document).ready(function($) {
+
+        const gridItems = document.querySelector('#conv_grid_list_box').children;
+        const rows = Array.from(gridItems).reduce((rows, item, index) => {
+            const rowIndex = Math.floor(index / 3);
+            rows[rowIndex] = rows[rowIndex] || [];
+            rows[rowIndex].push(item);
+            return rows;
+        }, []);
+
+        rows.forEach((row) => {
+            const maxHeight = Math.max(...row.map((item) => item.children[0].offsetHeight));
+            row.forEach((item) => {
+                item.children[0].style.minHeight = `${maxHeight}px`;
+            });
+        });
+    });
 </script>

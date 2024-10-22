@@ -337,6 +337,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
       "fb_event_id" => $this->get_fb_event_id(),
       "tvc_ajax_url" => esc_url(admin_url('admin-ajax.php')),
       "snapchat_ads_pixel_id" => esc_js($this->snapchat_ads_pixel_id),
+      "linkedin_insight_id" => esc_js($this->linkedin_insight_id),
       "snapchat_event_id" => $this->generate_unique_event_id(),
       "tiKtok_ads_pixel_id" => esc_js($this->tiKtok_ads_pixel_id),
       "tiktok_event_id" => $this->generate_unique_event_id(),

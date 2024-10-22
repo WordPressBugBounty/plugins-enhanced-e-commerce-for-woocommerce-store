@@ -189,7 +189,7 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
                 <div class="dash-conv">
                     <div class="container">
 
-                        <div class="row bg-white rounded py-4">
+                        <div class="row bg-white rounded py-2">
                             <div class="col-12 dshboardwelcome">
                                 <!-- licence key html call-->
                                 <?php //$this->dashboard_licencebox_html(); 
@@ -269,7 +269,7 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-center convhori-step-text pt-5">
+                            <div class="d-flex justify-content-center convhori-step-text pt-3">
                                 <a href="admin.php?page=conversios&amp;wizard=pixelandanalytics" class="btn btn-primary p-2 px-3 mt-auto d-flex align-items-center">
                                     Start Your Setup Now
                                     <span class="dashicons dashicons-arrow-right-alt ms-2"></span>

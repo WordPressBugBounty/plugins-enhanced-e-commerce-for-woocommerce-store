@@ -1296,8 +1296,8 @@ if (!class_exists('TVCProductSyncHelper')) {
 							$cat_matched_id = $term->term_id;
 						}	
 					}					
-					$object[] = (object) ['w_product_id' => $postvalue['ID'], 'w_cat_id' => $cat_matched_id, 'g_cat_id' => $categories->$cat_matched_id->id];
-					
+					//$object[] = (object) ['w_product_id' => $postvalue['ID'], 'w_cat_id' => $cat_matched_id, 'g_cat_id' => $categories->$cat_matched_id->id];
+					$object[] = (object) ['w_product_id' => $postvalue['ID'], 'w_cat_id' => $cat_matched_id, 'g_cat_id' => 0];
 				}
 
 				//add/update data in default profile
@@ -1334,7 +1334,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 
 					/**************************** API Call to GMC ****************************************************************************/
 					$CustomApi = new CustomApi();
-					$response = $CustomApi->feed_wise_products_sync($data);					
+					$response = $CustomApi->feed_wise_products_sync($data);
 					$endTime = new DateTime();
 					$startTime = new DateTime();
 					$diff = $endTime->diff($startTime);

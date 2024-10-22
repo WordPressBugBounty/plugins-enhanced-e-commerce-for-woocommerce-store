@@ -327,13 +327,39 @@
 </div>
 </div>
 
+<div id="feedback-bar" class="alert alert-info text-center shadow-lg d-flex justify-content-center align-items-center" role="alert">
+    <div>
+        <strong>😊 <?php esc_html_e("Enjoying the insights?", "enhanced-e-commerce-for-woocommerce-store"); ?>&nbsp;</strong><?php esc_html_e("Leave a quick review and help us improve!", "enhanced-e-commerce-for-woocommerce-store"); ?>&nbsp;
+        <a target="_blank" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" class="btn btn-darkblue btn-sm ml-2" ><?php esc_html_e("Click Here", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+    </div>
+    <button class="close btn p-0" id="close-feedback-bar" aria-label="">
+            <span aria-hidden="true" style="font-size: 30px;line-height: normal;">×</span>
+    </button>
+</div>
+
 
 <?php if (!$ga4_measurement_id == "") { ?>
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs"></script>
-
-
     <script>
+
+        jQuery(document).ready(function($) {
+            // Check if the bar has been closed before using localStorage
+            if (!localStorage.getItem('feedbackConvBarClosed')) {
+                // Show the bar after 2 minutes (120,000 ms)
+                setTimeout(function() {
+                    $('#feedback-bar').addClass('show');
+                    console.log('show');
+                }, 120000); // 2 minutes
+            }
+
+            // Close the bar and never show again
+            $('#close-feedback-bar').click(function() {
+                $('#feedback-bar').removeClass('show'); // Hide the bar
+                localStorage.setItem('feedbackConvBarClosed', 'true'); // Store the close action
+            });
+        });
+
         jQuery('#conv_reporttab_pill').on('show.bs.tab', function() {
             let tabid = event.target.id;
 
@@ -1134,7 +1160,7 @@
             data["action"] = "get_general_donut_reports";
             data["report_name"] = "conv_device_chart";
             conv_get_donut_reports(data, "conv_device_chart");
-
+            
             data["report_name"] = "conv_users_chart";
             conv_get_donut_reports(data, "conv_users_chart");
 

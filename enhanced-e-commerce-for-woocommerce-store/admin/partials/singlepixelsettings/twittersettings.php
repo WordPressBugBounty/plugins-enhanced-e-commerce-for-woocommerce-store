@@ -20,13 +20,16 @@ $is_sel_disable = 'disabled';
             <div id="twitter_box" class="py-1">
                 <div class="row pt-2">
                     <div class="col-7">
-                        <label class="d-flex fw-normal mb-1 text-dark">
-                            <?php esc_html_e("Twitter Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip"
+                        <h5 class="d-flex align-items-center mb-1 text-dark">
+                            <b><?php esc_html_e("Twitter Pixel ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <?php if (!empty($twitter_ads_pixel_id)) { ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6">check_circle</span>
+                            <?php } ?>
+                            <!-- <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip"
                                 data-bs-placement="top" title="The Twitter Ads pixel ID looks like. ocihb">
                                 info
-                            </span>
-                        </label>
+                            </span> -->
+                        </h5>
                         <input type="text" name="twitter_ads_pixel_id" id="twitter_ads_pixel_id"
                             class="form-control valtoshow_inpopup_this"
                             value="<?php echo esc_attr($twitter_ads_pixel_id); ?>" placeholder="e.g. ocihb">
@@ -34,7 +37,7 @@ $is_sel_disable = 'disabled';
                 </div>
                 <div class="row pt-4">
                     <h5 class="fw-normal mb-1 mt-3">
-                        <?php esc_html_e("Twitter events settings", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <b><?php esc_html_e("Twitter events settings:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                         <span class="fw-400 text-color fs-12">
                             <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip"
                                 data-bs-placement="right"
@@ -48,7 +51,7 @@ $is_sel_disable = 'disabled';
                 <div class="wc_event_configure <?php echo !CONV_IS_WC ? 'hidden' : '' ?>">
                     <div class="row pt-3">
                         <div class="col-6">
-                            <label class="d-flex fw-normal mb-1 text-dark">
+                            <label class="d-flex align-items-center mb-1 text-dark">
                                 <?php esc_html_e("Event ID for Add to Cart", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <input type="text" name="twitter_ads_add_to_cart_event_id"
@@ -57,7 +60,7 @@ $is_sel_disable = 'disabled';
                                 placeholder="e.g. tw-olwfn-olwio">
                         </div>
                         <div class="col-6">
-                            <label class="d-flex fw-normal mb-1 text-dark">
+                            <label class="d-flex align-items-center mb-1 text-dark">
                                 <?php esc_html_e("Event ID for Checkout Initiated", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <input type="text" name="twitter_ads_checkout_initiated_event_id"
@@ -69,7 +72,7 @@ $is_sel_disable = 'disabled';
 
                     <div class="row pt-3">
                         <div class="col-6">
-                            <label class="d-flex fw-normal mb-1 text-dark">
+                            <label class="d-flex align-items-center mb-1 text-dark">
                                 <?php esc_html_e("Event ID for Payment Info Added", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <input type="text" name="twitter_ads_payment_info_event_id"
@@ -78,7 +81,7 @@ $is_sel_disable = 'disabled';
                                 placeholder="e.g. tw-olwfn-olwio">
                         </div>
                         <div class="col-6">
-                            <label class="d-flex fw-normal mb-1 text-dark">
+                            <label class="d-flex align-items-center mb-1 text-dark">
                                 <?php esc_html_e("Event ID for Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <input type="text" name="twitter_ads_purchase_event_id" id="twitter_ads_purchase_event_id"
@@ -90,7 +93,7 @@ $is_sel_disable = 'disabled';
 
                 <div class="row pt-3">
                     <div class="col-6">
-                        <label class="d-flex fw-normal mb-1 text-dark">
+                        <label class="d-flex align-items-center mb-1 text-dark">
                             <?php esc_html_e("Event ID for Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </label>
                         <input type="text" name="twitter_ads_form_submit_event_id" id="twitter_ads_form_submit_event_id"
@@ -98,7 +101,7 @@ $is_sel_disable = 'disabled';
                             placeholder="e.g. tw-olwfn-olwio">
                     </div>
                     <div class="col-6">
-                        <label class="d-flex fw-normal mb-1 text-dark">
+                        <label class="d-flex align-items-center mb-1 text-dark">
                             <?php esc_html_e("Event ID for Email Click", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </label>
                         <input type="text" name="twitter_ads_email_click_event_id" id="twitter_ads_email_click_event_id"
@@ -108,7 +111,7 @@ $is_sel_disable = 'disabled';
                 </div>
                 <div class="row pt-3">
                     <div class="col-6">
-                        <label class="d-flex fw-normal mb-1 text-dark">
+                        <label class="d-flex align-items-center mb-1 text-dark">
                             <?php esc_html_e("Event ID for Phone Click", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </label>
                         <input type="text" name="twitter_ads_phone_click_event_id" id="twitter_ads_phone_click_event_id"
@@ -116,7 +119,7 @@ $is_sel_disable = 'disabled';
                             placeholder="e.g. tw-olwfn-olwio">
                     </div>
                     <div class="col-6">
-                        <label class="d-flex fw-normal mb-1 text-dark">
+                        <label class="d-flex align-items-center mb-1 text-dark">
                             <?php esc_html_e("Event ID for Address Click", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </label>
                         <input type="text" name="twitter_ads_address_click_event_id"

@@ -59,70 +59,28 @@ if (class_exists('Conversios_Header') === FALSE) {
 		{
 			?>
 				<!--- Promotion box start -->
-				<!-- <div id="conversioshead_notice" class="promobandtop">
+				<div id="conversioshead_notice" class="promobandtop">
 
 					<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
 						<div class="promoleft">
-							<div class="promobandmsg text-white">
-								<?php esc_html_e("Limited Time: Save $116 on Premium!", "enhanced-e-commerce-for-woocommerce-store"); ?>
-								<span><?php esc_html_e("Upgrade Now and Get 65% Off", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-							</div>
-						</div>
-						<div class="promoright">
-
-							<div class="prmoupgrdbtn d-flex">
-								<a class="btn button" target="_blank" href="https://bit.ly/46dN4gH">
-									<?php esc_html_e("Use coupon code", "enhanced-e-commerce-for-woocommerce-store"); ?>&nbsp;<b><?php esc_html_e("CONVSTARTER65", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+							<div class="promobandmsg text-white text-center fs-6">
+								<img style="width:25px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/freevspro.png'); ?>" />
+								<span class="fs-6"><?php esc_html_e("Grab 70% OFF", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
+								<?php esc_html_e(" on 'All In One' Plugin", "enhanced-e-commerce-for-woocommerce-store"); ?>
+								<a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=freeplugin&utm_medium=headerbanner&utm_campaign=festbanner&coupon=convfest70">
+									<span class="fs-6">
+										<u><?php esc_html_e("Professional Plan", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+									</span>
+									<span class="text-white fw-light" style="font-size:12px;">(FB CAPI + Snapchat CAPI + Tiktok CAPI & many more features)</span>
 								</a>
 							</div>
 						</div>
 					</div>
 
-				</div> -->
+				</div>
 				<!--- Promotion box end -->
-			<?php
-			echo esc_attr($this->call_tvc_site_verified_and_domain_claim());
-		}
-
-		/**
-		 * header section
-		 *
-		 * @since    4.1.4
-		 */
-		public function conversios_header()
-		{
-			$plan_name = esc_html__("Free Plan", "enhanced-e-commerce-for-woocommerce-store");
-			if (isset($this->subscription_data->plan_name) && !in_array($this->subscription_data->plan_id, array("1"))) {
-				$plan_name = $this->subscription_data->plan_name;
-			}
-			?>
-				<!-- header start -->
-				<header class="header">
-					<div class="hedertop">
-						<div class="row align-items-center">
-							<div class="hdrtpleft">
-								<div class="brandlogo">
-									<a target="_blank" href="<?php echo esc_url($this->conversios_site_url); ?>"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logo.png'); ?>" alt="" /></a>
-								</div>
-								<div class="hdrcntcbx">
-									<?php printf("%s <span><a href=\"mailto:info@conversios.io\">info@conversios.io</a></span>", esc_html_e("For any query, contact us on", "enhanced-e-commerce-for-woocommerce-store")); ?>
-								</div>
-							</div>
-							<div class="hdrtpright">
-								<div class="hustleplanbtn">
-									<a href="<?php echo esc_url($this->site_url . 'conversios-account'); ?>"><button class="cvrs-btn greenbtn">
-											<?php echo esc_attr($plan_name); ?>
-										</button></a>
-								</div>
-							</div>
-							<div class="hdrcntcbx mblhdrcntcbx">
-								<?php printf("%s <span><a href=\"tel:+1 (415) 968-6313\">+1 (415) 968-6313</a></span>", esc_html_e("For any query, contact us at", "enhanced-e-commerce-for-woocommerce-store")); ?>
-							</div>
-						</div>
-					</div>
-				</header>
-				<!-- header end -->
 				<?php
+				echo esc_attr($this->call_tvc_site_verified_and_domain_claim());
 			}
 
 			/* add active tab class */
@@ -156,9 +114,9 @@ if (class_exists('Conversios_Header') === FALSE) {
 								"title" => "Pixels & Analytics"
 							),
 							"conversios-google-shopping-feed" => array(
-								"page" => "#",
+								"page" => "conversios-google-shopping-feed&tab=feed_list",
 								"title" => "Product Feed",
-								"sub_menus" => array(
+								/*"sub_menus" => array(
 									"conversios-google-shopping-feed" => array(
 										"page" => "conversios-google-shopping-feed&tab=gaa_config_page",
 										"title" => "Channel Configuration"
@@ -167,7 +125,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 										"page" => "conversios-google-shopping-feed&tab=feed_list",
 										"title" => "Feed Management"
 									),
-								)
+								)*/
 							),
 							"conversios-pmax" => array(
 								"page" => "conversios-pmax",
@@ -230,15 +188,16 @@ if (class_exists('Conversios_Header') === FALSE) {
 				?>
 					<header id="conversioshead" class="border-bottom bg-white">
 						<div class="container-fluid col-12 p-0">
-							<nav class="navbar navbar-expand-lg navbar-light bg-light ps-4" style="height:40px;">
-								<div class="container-fluid">
+							<nav class="navbar navbar-expand-lg navbar-light bg-white ps-4 p-0" style="">
+								<div class="container-fluid py-0">
 									<a class="navbar-brand link-dark fs-16 fw-400">
-										<img style="width: 150px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logo.png'); ?>" />
+										<img style="width: 120px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logo.png'); ?>" />
 									</a>
 									<div class="collapse navbar-collapse" id="navbarSupportedContent">
 										<ul class="navbar-nav me-auto mb-lg-0">
 											<?php
 											foreach ($menu_list as $key => $value) {
+												$value['title'] = str_replace(array(" & Insights", " & Analytics", " Management"), " ", $value['title']);
 												if (isset($value['title']) && $value['title']) {
 													$is_active = $this->is_active_menu($key);
 													$active = $is_active != 'secondary' ? 'rich-blue' : '';
@@ -252,7 +211,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 														$is_parent_menu = "dropdown";
 													}
 											?>
-													<li class="nav-item fs-12 mt-1 fw-400 <?php echo esc_attr($active); ?> <?php echo esc_attr($is_parent_menu); ?>">
+													<li class="nav-item fs-14 mt-1 fw-400 <?php echo esc_attr($active); ?> <?php echo esc_attr($is_parent_menu); ?>">
 														<?php if ($is_parent_menu == "") { ?>
 															<a class="nav-link text-<?php echo esc_attr($is_active); ?> " aria-current="page" href="<?php echo esc_url($menu_url); ?>">
 																<?php echo esc_attr($value['title']); ?>
@@ -281,20 +240,26 @@ if (class_exists('Conversios_Header') === FALSE) {
 												}
 											} ?>
 										</ul>
-										<div class="d-flex">
+										<div class="d-flex align-items-center">
 											<?php
 											$plan_name = esc_html__("Free Plan", "enhanced-e-commerce-for-woocommerce-store");
-											$type = 'warning';
 											?>
-											<button type="button" class="btn btn-<?php echo esc_attr($type) ?> rounded-pill fs-12 fw-400 px-2 py-0" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
+											<a class="d-flex align-items-center flex-wrap text-dark" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" target="_blank">
+												<img style="max-width:95px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/rate-us.png'); ?>" /><span class="me-2 fs-12">Rate Us!</span>
+											</a>
+											<a href="javascript:void(0)" class="btn btn-warning rounded-pill text-white border-0 fw-bold fs-12 px-2 py-0" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
 												<?php echo esc_attr($plan_name) ?>
-											</button>
-											<a target="_blank" class="fs-12 fw-400 px-2 py-0 fw-bold text-dark" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade'); ?>">
+											</a>
+											<a target="_blank" class="ms-2 fs-12 fw-400 px-2 py-0 fw-bold btn-newgreen text-white rounded-pill text-center" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
 												<?php esc_html_e("Get Premium", "enhanced-e-commerce-for-woocommerce-store"); ?>
 											</a>
-											<a target="_blank" class="fs-12 fw-400 px-2 py-0 conv-link-blue fw-bold" href="<?php echo esc_url('https://www.conversios.io/docs-category/woocommerce-2/?utm_source=woo_aiofree_plugin&utm_medium=top_menu&utm_campaign=help_center'); ?>">
-												<u><?php esc_html_e("Help Center", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+											<a target="_blank" title="help center" class="px-2 py-0 text-dark lh-0" href="<?php echo esc_url('https://www.conversios.io/docs-category/woocommerce-2/?utm_source=woo_aiofree_plugin&utm_medium=top_menu&utm_campaign=help_center'); ?>" style="lh-0">
+												<!-- <u><?php esc_html_e("Help Center", "enhanced-e-commerce-for-woocommerce-store"); ?></u> -->
+												<span class="material-symbols-outlined">help_center</span>
 											</a>
+											<button id="conv_freshwork_chat" title="Support" class="btn p-0 lh-0">
+												<span class="material-symbols-outlined">sms</span>
+											</button>
 
 										</div>
 									</div>

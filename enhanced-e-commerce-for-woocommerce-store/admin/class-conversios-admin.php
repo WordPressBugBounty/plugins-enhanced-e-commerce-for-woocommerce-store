@@ -307,26 +307,6 @@ if (class_exists('Conversios_Admin') === FALSE) {
           array($this, 'showPage'),
           2
         );
-
-        add_submenu_page(
-          CONV_MENU_SLUG,
-          esc_html__('Account Summary', 'enhanced-e-commerce-for-woocommerce-store'),
-          esc_html__('Account Summary', 'enhanced-e-commerce-for-woocommerce-store'),
-          'manage_options',
-          'conversios-account',
-          array($this, 'showPage'),
-          6
-        );
-
-        add_submenu_page(
-          CONV_MENU_SLUG,
-          esc_html__('Free Vs Pro', 'enhanced-e-commerce-for-woocommerce-store'),
-          esc_html__('Free Vs Pro', 'enhanced-e-commerce-for-woocommerce-store') . '<img style="position: absolute; height: 30px;bottom: 5px; right: 10px;" src="' . esc_url($freevspro) . '">',
-          'manage_options',
-          'conversios-pricings',
-          array($this, 'showPage'),
-          5
-        );
       }
 
       if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
@@ -371,6 +351,28 @@ if (class_exists('Conversios_Admin') === FALSE) {
           'conversios-analytics-reports',
           array($this, 'showPage'),
           1
+        );
+      }
+
+      if (CONV_APP_ID == 1) {
+        add_submenu_page(
+          CONV_MENU_SLUG,
+          esc_html__('Account Summary', 'enhanced-e-commerce-for-woocommerce-store'),
+          esc_html__('Account Summary', 'enhanced-e-commerce-for-woocommerce-store'),
+          'manage_options',
+          'conversios-account',
+          array($this, 'showPage'),
+          12
+        );
+
+        add_submenu_page(
+          CONV_MENU_SLUG,
+          esc_html__('Free Vs Pro', 'enhanced-e-commerce-for-woocommerce-store'),
+          esc_html__('Free Vs Pro', 'enhanced-e-commerce-for-woocommerce-store') . '<img style="position: absolute; height: 30px;bottom: 5px; right: 10px;" src="' . esc_url($freevspro) . '">',
+          'manage_options',
+          'conversios-pricings',
+          array($this, 'showPage'),
+          13
         );
       }
     }
@@ -458,13 +460,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
       } else {
         if ($is_wizard != "" && $is_wizard == "pixelandanalytics") {
           require_once('partials/wizard_pixelandanalytics.php');
-        } elseif ($is_wizard != "" && $is_wizard == "productFeedOdd") {
-          require_once('partials/wizard-productfeed-odd.php');
-        } elseif ($is_wizard != "" && $is_wizard == "productFeedEven") {
-          require_once('partials/wizard-productfeed-even.php');
-        } elseif ($is_wizard != "" && $is_wizard == "campaignManagement") {
-          require_once('partials/wizard-campaign-management.php');
-        } else {
+        }else {
           require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-dashboard.php');
         }
       }

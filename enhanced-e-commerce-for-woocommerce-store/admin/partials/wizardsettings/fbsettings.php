@@ -1,4 +1,4 @@
-<div class="convwiz_pixtitle mt-3 mb-3 d-flex justify-content-between align-items-center py-0">
+<div class="convwiz_pixtitle mt-3 mb-0 d-flex justify-content-between align-items-center py-0">
     <div class="col-7">
         <div class="convwizlogotitle">
             <div class="d-flex flex-row align-items-center">
@@ -45,64 +45,62 @@
         ?>
         <div id="fbpixel_box" class="py-1">
             <div class="row pt-2">
-                <!-- <div class="convwizard_pixtitle mt-0">
-                    <div class="align-items-center mb-3">
-                        <h5 class="m-0 h5">
-                            <?php esc_html_e("Meta (Facebook) Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </h5>
-                        <?php esc_html_e(" Easily set up conversions and create audiences effortlessly using the simple steps given below.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-setup-fb-pixel-and-fbcapi-using-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=pixelandanalytics_wizard&utm_campaign=knowmore'); ?>" class="conv-link-blue">
-                            <u><?php esc_html_e("Know how", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-                        </a>
-                    </div>
-                </div> -->
-                <div class="col-6">
+                <div class="col-7 conv-border-box ms-3">
                     <h5 class="fw-normal mb-1 text-dark">
                         <b><?php esc_html_e("Enter Meta Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="form-control valtoshow_inpopup_this" value="<?php echo esc_attr($fb_pixel_id); ?>" placeholder="e.g. 518896233175751">
-                    <?php esc_html_e("Set up conversions and create audiences for Meta Business Center .", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <?php esc_html_e("Set up conversions and create audiences for Meta Business Center.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-setup-fb-pixel-and-fbcapi-using-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=pixelandanalytics_wizard&utm_campaign=knowmore'); ?>" class="conv-link-blue">
                         <u><?php esc_html_e("Know how", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
                     </a>
                 </div>
             </div>
 
-            <div class="pt-5">
+            <div class="pt-3">
                 <div class="row">
                     <div class="col-12">
-                        <h5 class="d-flex fw-normal mb-1 text-dark">
-                            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=onboarding&utm_campaign=capi'); ?>" class="align-middle conv-link-blue fw-bold-500">
-                                <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
-                                <u><?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-                            </a>
-                        </h5>
-                        <ul class="conv-green-checklis list-unstyled mt-1">
-                            <li class="d-flex">
-                                <span class="material-symbols-outlined text-success md-18">
-                                    check_circle
-                                </span>
-                                <?php esc_html_e("Improves Event Match Quality scores by sending extra user data (e.g., email, phone number).", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                            <li class="d-flex">
-                                <span class="material-symbols-outlined text-success md-18">
-                                    check_circle
-                                </span>
-                                <?php esc_html_e("Highest Event Match Quality Score via Our plugin 9.3", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                            <li class="d-flex">
-                                <span class="material-symbols-outlined text-success md-18">
-                                    check_circle
-                                </span>
-                                <?php esc_html_e("Complete picture of user journeys, resulting in better conversion attribution, especially with iOS 14+ restrictions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                            <li class="d-flex">
-                                <span class="material-symbols-outlined text-success md-18">
-                                    check_circle
-                                </span>
-                                <?php esc_html_e("Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                        </ul>
+                        <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
+                            <div class="mt-0 mb-2 col-2 d-flex justify-content-center">
+                                <div class="fb-kapi circle">
+                                    <div class="text">
+                                        <h3 class="m-0">93%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-0 mb-2 col-10">
+                                <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits</div>
+                                <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Improves Event Match Quality scores by sending extra user data (e.g., email, phone number).", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Highest Event Match Quality Score via Our plugin 9.3", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Complete picture of user journeys, resulting in better conversion attribution, especially with iOS 14+ restrictions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                </ul>
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=onboarding&utm_campaign=capi'); ?>" class="align-middle btn btn-sm btn-primary fw-bold-500">
+                                    <?php esc_html_e("Buy Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -148,7 +146,7 @@
         });
     }
 
-   
+
     jQuery(function() {
         jQuery(document).on("input", "#fb_pixel_id", function() {
             if (jQuery(this).val() == "") {

@@ -29,7 +29,7 @@ if ($subpage == "ga4ecommerce") {
 }
 ?>
 
-<div class="container-fluid conv_report_mainbox pt-4">
+<div class="container-fluid conv_report_mainbox p-4">
     <div class="row">
         <div class="d-flex">
             <div class="conv_pageheading">

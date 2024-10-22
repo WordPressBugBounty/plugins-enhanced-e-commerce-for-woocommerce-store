@@ -11,14 +11,37 @@ $is_sel_disable = 'disabled';
             ?>
             <div id="fbpixel_box" class="py-1">
                 <div class="row pt-2">
-                    <div class="col-8">
-                        <label class="d-flex fw-normal mb-1 text-dark">
-                            <?php esc_html_e("Meta (Facebook) Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="The Facebook pixel ID looks like. 518896233175751">
-                                info
-                            </span>
-                        </label>
-                        <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="form-control valtoshow_inpopup_this" value="<?php echo esc_attr($fb_pixel_id); ?>" placeholder="e.g. 518896233175751">
+                    <div class="col-7">
+                        <ul class="conv-green-checklis list-unstyled mb-3">
+                            <li class="d-flex">
+                                <span class="material-symbols-outlined text-success md-18">
+                                    check_circle
+                                </span>
+                                <?php esc_html_e("All the e-commerce pixel tracking including Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="PageView, ViewContent, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase">
+                                    info
+                                </span>
+                            </li>
+                            <li class="d-flex">
+                                <span class="material-symbols-outlined text-success md-18">
+                                    check_circle
+                                </span>
+                                <?php esc_html_e("All the lead generation pixel tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Lead, email_click, phone_click, address_click">
+                                    info
+                                </span>
+                            </li>
+                        </ul>
+                        <h5 class="d-flex align-items-center mb-1 text-dark">
+                            <b><?php esc_html_e("Meta (Facebook) Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>:</b>
+                            <?php if (!empty($fb_pixel_id)) { ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6">check_circle</span>
+                            <?php } ?>
+                            <!-- <sup>
+                                <span class="material-symbols-outlined text-secondary md-18 ps-1" data-bs-toggle="tooltip" data-bs-placement="top" title="The Facebook pixel ID looks like. 518896233175751">info</span>
+                            </sup> -->
+                            </h5>
+                        <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="form-control valtoshow_inpopup_this w-75" value="<?php echo esc_attr($fb_pixel_id); ?>" placeholder="e.g. 518896233175751">
                     </div>
 
                 </div>
@@ -32,24 +55,52 @@ $is_sel_disable = 'disabled';
             ?>
             <div id="fbapi_box" class="pt-4">
                 <div class="row pt-2">
-                    <div class="col-8">
-                        <label class="d-flex fw-normal mb-1 text-dark">
-                            <?php esc_html_e("Meta (Facebook) Conversion API Token", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <span class="conv-link-blue ms-2 fw-bold-500 upgradetopro_badge" popupopener="fbcapi_inner">
-                                <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
-                                <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </span>
-                        </label>
-                        <div class="mt-0 mb-2">
-                            <?php esc_html_e("Configure Facebook Conversions API by adding it below.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-setup-fb-pixel-and-fbcapi-using-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=pixelandanalytics_wizard&utm_campaign=knowmore'); ?>" class="conv-link-blue">
-                                <u><?php esc_html_e("Know how", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-                            </a>
-                            <input type="text" placeholder="eg. CnTrpcbsSTWFU%-TmSuhuSCnTrpcbsSTWFU%-TmSuhuS" class="form-control disabled disabledsection">
+                    <div class="col-12">
+                       
+
+                        <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
+                            <div class="mt-0 mb-2 col-2 d-flex justify-content-center">
+                                <div class="fb-kapi circle">
+                                    <div class="text">
+                                        <h3 class="m-0">93%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-0 mb-2 col-10">
+                                <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits</div>
+                                <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Improves Event Match Quality scores by sending extra user data (e.g., email, phone number).", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Highest Event Match Quality Score via Our plugin 9.3", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Complete picture of user journeys, resulting in better conversion attribution, especially with iOS 14+ restrictions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                    <li class="d-flex fs-14 fw-bold">
+                                        <span class="material-symbols-outlined text-success md-18">
+                                            check_circle
+                                        </span>
+                                        <?php esc_html_e("Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </li>
+                                </ul>
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=fbinnersetting&utm_campaign=capi'); ?>" class="align-middle btn btn-sm btn-primary fw-bold-500">
+                                    <?php esc_html_e("Buy Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </a>
+                            </div>
                         </div>
 
                     </div>
-
                 </div>
             </div>
             <!-- Facebook ID End-->

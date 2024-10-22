@@ -160,7 +160,7 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper
       wp_enqueue_script('tvc-ee-custom-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/tvc-ee-custom.js'), array('jquery'), esc_attr($this->version), false);
       wp_enqueue_script('tvc-ee-slick-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/slick.min.js'), array('jquery'), esc_attr($this->version), false);
 
-      wp_enqueue_script('sweetalert', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/sweetalert2@11.js'), array('jquery'), esc_attr($this->version), false);
+      wp_enqueue_script('sweetalert', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/sweetalert211.js'), array('jquery'), esc_attr($this->version), false);
 
       wp_register_script('plugin-select2', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/select2.min.js'));
       wp_enqueue_script('plugin-select2');

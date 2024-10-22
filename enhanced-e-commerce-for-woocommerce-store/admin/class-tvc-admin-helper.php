@@ -26,6 +26,7 @@ class TVC_Admin_Helper
   protected $api_subscription_data;
   protected $onboarding_page_url;
   protected $plan_id;
+  protected $tiktok_business_id;
   public function __construct()
   {
     $this->includes();

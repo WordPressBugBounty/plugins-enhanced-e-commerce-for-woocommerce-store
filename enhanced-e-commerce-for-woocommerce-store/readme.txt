@@ -7,8 +7,8 @@ Author: Conversios
 Requires at least: 4.6
 Tested up to: 6.6.2
 Requires PHP: 5.6
-Stable tag: 7.1.7
-Version: 7.1.7
+Stable tag: 7.1.8
+Version: 7.1.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -142,6 +142,10 @@ Conversios works seamlessly with popular GDPR compliance plugins like CookieYes 
 3. Complete the onboarding once activated the plugin.
 
 == Changelog ==
+= 7.1.8 - 22/10/2024 =
+* Enhamncement in the Facebook Conversion API screen.
+* Enhamncement in product feed user interface.
+
 = 7.1.7 - 27/09/2024 =
 * Improved UI for easier management of Google Ads campaigns via Campaign Management.
 * Added Google Ads Reporting and Insights for better campaign performance tracking.

@@ -343,14 +343,14 @@ $contData = json_decode($getCountris);
             <div class="modal-header border-0 pb-0">
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/update_success_logo.png'); ?>">
+                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>">
                 <h3 class="fw-normal pt-3 created_success">
                     <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>
-                <span id="conv_save_success_txt_" class="mb-1 lh-lg"></span>
+                <span id="conv_save_success_txt_" class="mb-1 lh-lg d-flex px-2"></span>
             </div>
             <div class="modal-footer border-0 pb-4 mb-1">
-                <button type="button" class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal">Ok, Done</button>
+                <button type="button" class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal">Done!</button>
             </div>
         </div>
     </div>
@@ -362,7 +362,7 @@ $contData = json_decode($getCountris);
             <div class="modal-header border-0 pb-0">
                 <div class="connection-box">
                     <div class="items">
-                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce _logo.png'); ?>">
+                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
                         <span> <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     </div>
                     <div class="items">
@@ -379,9 +379,9 @@ $contData = json_decode($getCountris);
             </div>
             <div class="modal-body text-center p-4">
                 <div class="connected-content">
-                    <h4><?php esc_html_e("Successfully Connected", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
+                    <h4><?php esc_html_e("Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
                     <p><span class="fw-bolder">Google Merchant Center Account -</span> <span class="gmcAccount fw-bolder"></span>
-                        Has Been Successfully Connected</p>
+                        Has Been Saved Successfully</p>
                     <p class="my-3"><?php esc_html_e("By this step you have expanded your product presence on Google Search, Google
                         Shopping,
                         Google Images, YouTube, Google Maps, and more, you're maximizing your reach and unlocking new
@@ -407,7 +407,7 @@ $contData = json_decode($getCountris);
                                     </div>
                                 </div>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage="tiktokBusinessSettings"'); ?>">Connect
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>">Connect
                                 to TikTok Business Account</a>
                         </div>
                     </div>

@@ -25,7 +25,11 @@ $pixel_settings_arr = array(
     ),
     "bingsettings" => array(
         "logo" => "/admin/images/logos/conv_bing_logo.png",
-        "title" => "Microsoft Clarity & Ads Pixel (Bing)",
+        "title" => "Microsoft Ads Pixel (Bing)",
+    ),
+    "bingclaritysettings" => array(
+        "logo" => "/admin/images/logos/conv_clarity_logo.png",
+        "title" => "Microsoft Clarity (Bing)",
     ),
     "twittersettings" => array(
         "logo" => "/admin/images/logos/conv_twitter_logo.png",
@@ -34,6 +38,10 @@ $pixel_settings_arr = array(
     "pintrestsettings" => array(
         "logo" => "/admin/images/logos/conv_pint_logo.png",
         "title" => "Pinterest Pixel",
+    ),
+    "linkedinsettings" => array(
+        "logo" => "/admin/images/logos/conv_linkedin_logo.png",
+        "title" => "Linkedin Insight",
     ),
     "snapchatsettings" => array(
         "logo" => "/admin/images/logos/conv_snap_logo.png",
@@ -45,7 +53,7 @@ $pixel_settings_arr = array(
     ),
     "customintgrationssettings" => array(
         "logo" => "/admin/images/logos/conv_event_track_custom.png",
-        "title" => "Event Tracking - Custom Integration",
+        "title" => "Events Tracking - Custom Integration",
     ),
     "gmcsettings" => array(
         "logo" => "/admin/images/logos/conv_gmc_logo.png",
@@ -58,7 +66,7 @@ $pixel_settings_arr = array(
         "topnoti" => "Product feed to TikTok catalog help you to run ads on tiktok for your product and reach out to more than 900 Million people."
     ),
     "metasettings" => array(
-        "logo" => "/admin/images/logos/conv_fb_catalog_logo.png",
+        "logo" => "/admin/images/logos/conv_meta_logo.png",
         "title" => "Facebook Business Account",
         "topnoti" => "Seamlessly sync and link your WooCommerce store to your FB catalog for targeted advertising, maximizing visibility and engagement through powerful FB ads. Elevate your business presence!"
     ),
@@ -155,7 +163,7 @@ if ($subscriptionId != "") {
                             src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . $pixel_settings_arr[$subpage]['logo']); ?>" />
                     </div>
                     <h4 class="m-0 fw-normal ms-2 fw-bold-500">
-                        <?php echo esc_html( $pixel_settings_arr[$subpage]['title'] ); ?>
+                        <?php echo esc_html($pixel_settings_arr[$subpage]['title']); ?>
                     </h4>
                     <button
                         class="btn text-white ms-auto d-flex justify-content-center conv-btn-connect conv-btn-connect-disabled"
@@ -178,92 +186,93 @@ if ($subscriptionId != "") {
                 <!-- Hero block -->
                 <div class="conv_hero_block">
                     <?php if ($subpage == "gtmsettings") { ?>
-                    <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                        <h4>Benefits of Using Your Own GTM Container:</h4>
-                        <p>As a free user, our plugin automatically tags your website using Conversios Global Container.
-                        </p>
-                        <p>But as a pro user, you gain full control by integrating your own GTM account. Unlock 76+
-                            pre-built tags and triggers, along with powerful data layer automation.</p>
-                        <p><a class="conv-link-blue" target="_blank"
-                                href="https://www.conversios.io/pricing/?utm_source=inapp&utm_medium=gtm_heroblock&utm_campaign=benefitsofowngtm">Upgrade
-                                now for ultimate customization and optimization!</a></p>
-                        <ol>
-                            <li><b>Faster Page Speed:</b> Optimize your site with your own GTM container for
-                                lightning-fast load times and improved user experience.</li>
-                            <li><b>Custom Event Tracking:</b> Tailor event tracking to your needs, gaining insights into
-                                user behaviour, conversions, and engagement.</li>
-                            <li><b>Centralized Management:</b> Take control of tags and analytics in one place. Manage
-                                and update with ease, saving time and reducing reliance on developers.</li>
-                            <li><b>Flexible Scalability:</b> Easily adapt to changing tracking requirements and scale
-                                your business. Add or modify tags without disrupting your site's functionality.</li>
-                            <li>Reach out to our experts for any clarification at info@conversios.io or from the help
-                                section.</li>
-                        </ol>
-                    </div>
+                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
+                            <h4>Benefits of Using Your Own GTM Container:</h4>
+                            <p>As a free user, our plugin automatically tags your website using Conversios Global Container.
+                            </p>
+                            <p>But as a pro user, you gain full control by integrating your own GTM account. Unlock 76+
+                                pre-built tags and triggers, along with powerful data layer automation.</p>
+                            <p><a class="conv-link-blue" target="_blank"
+                                    href="https://www.conversios.io/pricing/?utm_source=inapp&utm_medium=gtm_heroblock&utm_campaign=benefitsofowngtm">Upgrade
+                                    now for ultimate customization and optimization!</a></p>
+                            <ol>
+                                <li><b>Faster Page Speed:</b> Optimize your site with your own GTM container for
+                                    lightning-fast load times and improved user experience.</li>
+                                <li><b>Custom Event Tracking:</b> Tailor event tracking to your needs, gaining insights into
+                                    user behaviour, conversions, and engagement.</li>
+                                <li><b>Centralized Management:</b> Take control of tags and analytics in one place. Manage
+                                    and update with ease, saving time and reducing reliance on developers.</li>
+                                <li><b>Flexible Scalability:</b> Easily adapt to changing tracking requirements and scale
+                                    your business. Add or modify tags without disrupting your site's functionality.</li>
+                                <li>Reach out to our experts for any clarification at info@conversios.io or from the help
+                                    section.</li>
+                            </ol>
+                        </div>
                     <?php } ?>
 
                     <?php if ($subpage == "gasettings") { ?>
-                    <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                        <h4>Tips to validate Google Analytics 4 tracking:</h4>
-                        <ol>
-                            <li>Validate from GTM preview if the events are being tracked as expected. Complete an
-                                entire user journey to validate every event and data is being tracked. <a
-                                    href="https://youtu.be/KGGI8m_oiaU" class="conv-link-blue" target="_blank">Refer
-                                    this video to validate</a>.</li>
-                            <li>GA4 takes up to 48 hours to reflect data in your GA4 account. Hence, if you are able to
-                                validate tracking in step 1, do not worry your data will be populated in GA4 in upto 48
-                                hours.</li>
-                            <li>Monitor the tracking on Conversios - GA4 reporting dashboard for up 5-7 days and compare
-                                it with your woocommerce data.</li>
-                            <li>If you still find data discrepency, reach out to your dedicated customer success manager
-                                or reach out directly at info@conversios.io.</li>
-                        </ol>
-                    </div>
+                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
+                            <h4>Tips to validate Google Analytics 4 tracking:</h4>
+                            <ol>
+                                <li>Validate from GTM preview if the events are being tracked as expected. Complete an
+                                    entire user journey to validate every event and data is being tracked. <a
+                                        href="https://youtu.be/KGGI8m_oiaU" class="conv-link-blue" target="_blank">Refer
+                                        this video to validate</a>.</li>
+                                <li>GA4 takes up to 48 hours to reflect data in your GA4 account. Hence, if you are able to
+                                    validate tracking in step 1, do not worry your data will be populated in GA4 in upto 48
+                                    hours.</li>
+                                <li>Monitor the tracking on Conversios - GA4 reporting dashboard for up 5-7 days and compare
+                                    it with your woocommerce data.</li>
+                                <li>If you still find data discrepency, reach out to your dedicated customer success manager
+                                    or reach out directly at <a href="mailto:info@conversios.io">info@conversios.io.</li>
+                            </ol>
+                        </div>
                     <?php } ?>
 
 
 
                     <?php if ($subpage == "gadssettings") { ?>
-                    <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                        <h4>Tips to validate Google Ads conversion tracking and leveraging it to optimize your Google
-                            Ads campaigns:</h4>
-                        <ol>
-                            <li>Make sure you select right conversion id and label in the settings above and validate
+                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
+                            <!-- <h4>Tips to validate Google Ads conversion tracking and leveraging it to optimize your Google
+                            Ads campaigns:</h4> -->
+                            <h4>Notes:</h4>
+                            <ol>
+                                <!-- <li>Make sure you select right conversion id and label in the settings above and validate
                                 the conversion tracking <a href="https://youtu.be/iBOayyJijnU" class="conv-link-blue"
                                     target="__blank">by following this steps</a>.</li>
                             <li>Enable enhanced conversion tracking from the settings above this helps Google understand
-                                your traffic better and it in turn optimize your campaigns.</li>
-                            <li>You can see the conversion tracking data for your campaigns only if the campaigns are
-                                live and it takes upto 24 hours to reflect the data in Google Ads.</li>
-                            <li>Connect your Google Analytics 4 account with Google Ads account for better attribution
-                                and detail analysis.</li>
-                        </ol>
-                    </div>
+                                your traffic better and it in turn optimize your campaigns.</li> -->
+                                <li>You can see the conversion tracking data for your campaigns only if the campaigns are
+                                    live and it takes upto 24 hours to reflect the data in Google Ads.</li>
+                                <!-- <li>Connect your Google Analytics 4 account with Google Ads account for better attribution
+                                and detail analysis.</li> -->
+                            </ol>
+                        </div>
                     <?php } ?>
 
                     <?php if ($subpage == "fbsettings") { ?>
-                    <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                        <h4>Tips to validate and leverage FB pixel and FBCAPI:</h4>
-                        <ol>
-                            <li>It is advised to use FB pixel and FBCAPI together for better accuracy and efficiency.
-                                Hence, make sure you have configured both in above settings.</li>
-                            <li>Once you have set up FB pixel and/or FBCAPI, validate if the tracking is accurate on
-                                your store <a href="https://youtu.be/yRf83wuxU4E" target="_blank"
-                                    class="conv-link-blue"> by visiting this guide </a>.</li>
-                            <li>Open your FB business manager and go to Assets > Pixels to check if the data is being
-                                populated.</li>
-                            <li>Connect with your dedicated customer success manager if you are facing any issue or
-                                reach out to <a class="conv-link-blue"
-                                    href="mailto:info@conversios.io">info@conversios.io</a> with your query.</li>
-                        </ol>
-                    </div>
+                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
+                            <h4>Tips to validate and leverage FB pixel and FBCAPI:</h4>
+                            <ol>
+                                <li>It is advised to use FB pixel and FBCAPI together for better accuracy and efficiency.
+                                    Hence, make sure you have configured both in above settings.</li>
+                                <li>Once you have set up FB pixel and/or FBCAPI, validate if the tracking is accurate on
+                                    your store <a href="https://youtu.be/yRf83wuxU4E" target="_blank"
+                                        class="conv-link-blue"> by visiting this guide </a>.</li>
+                                <li>Open your FB business manager and go to Assets > Pixels to check if the data is being
+                                    populated.</li>
+                                <li>Connect with your dedicated customer success manager if you are facing any issue or
+                                    reach out to <a class="conv-link-blue"
+                                        href="mailto:info@conversios.io">info@conversios.io</a> with your query.</li>
+                            </ol>
+                        </div>
                     <?php } ?>
                 </div>
                 <!-- Hero block end -->
 
             </div>
 
-          
+
         </div>
         <!-- Main col8 center End-->
     </div>
@@ -273,23 +282,27 @@ if ($subscriptionId != "") {
 <!-- Main container End -->
 
 
-<!-- Success Save Modal -->
-<div class="modal fade" id="conv_save_success_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<!-- Success Save Modal 3 -->
+<div class="modal fade" id="conv_save_success_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered max-w-600">
+        <div class="modal-content shadow-lg border-0">
             <div class="modal-header border-0 pb-0">
 
             </div>
-            <div class="modal-body text-center p-0">
-                <img style="width:184px;"
-                    src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_modal_img_highfive.png'); ?>">
-                <h3 class="fw-normal pt-3">Successfully Connected</h3>
-                <span id="conv_save_success_txt" class="mb-1 lh-lg"></span>
+            <div class="modal-body text-center px-5">
+                <!-- <img style="width:184px;" src="/admin/images/logos/successImg.png"> -->
+                <div class="success-round d-flex rounded-circle justify-content-center align-items-center border-radius">
+                    <span class="material-symbols-outlined text-white  fww-bold">check</span>
+                </div>
+                <h2 class="fw-normal pt-3 text-dark"><?php esc_html_e("Successful!", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
+                <h3 class="leave-a-review fw-normal mb-4 text-dark" style="display:none">
+                    <?php esc_html_e("How did you like our onboarding setup? Any feedback is appreciated! ", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <a target="_blank" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" class="conv-link-blue">Leave a Review</a>
+                </h3>
+                <span id="conv_save_success_txt" class="mb-1 d-flex justify-content-center text-dark fs-16 px-2"></span>
             </div>
-            <div class="modal-footer border-0 pb-4 mb-1">
-                <button type="button" id="conv-modal-redirect-btn" class="btn conv-blue-bg m-auto text-white">Ok,
-                    Done</button>
+            <div class="modal-footer border-0 px-4 pb-4 mb-1 modalFooterSuccess w-100" style="display:flex; justify-content: center">
+                <button id="conv-modal-redirect-btn" class="btn fs-20 fw-normal w-100 text-white dismissModal" data-bs-dismiss="modal" style="background-color: #209365;">Close</button>
             </div>
         </div>
     </div>
@@ -298,158 +311,164 @@ if ($subscriptionId != "") {
 
 
 <script>
-//Other then GTM,GA,GAds
-function change_top_button_state(state = "enable") {
-    if (state == "enable" && !jQuery("form#pixelsetings_form input").hasClass("conv-border-danger")) {
-        jQuery(".conv-btn-connect").removeClass("conv-btn-connect-disabled");
-        jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled");
-        jQuery(".conv-btn-connect").text('Save');
-    }
-
-    if (state == "disable") {
-        jQuery(".conv-btn-connect").addClass("conv-btn-connect-disabled");
-        jQuery(".conv-btn-connect").removeClass("conv-btn-connect-enabled");
-        jQuery(".conv-btn-connect").text('Save');
-    }
-}
-
-function conv_change_loadingbar(state = 'show') {
-    if (state == 'show') {
-        jQuery("#loadingbar_blue").removeClass('d-none');
-    } else {
-        jQuery("#loadingbar_blue").addClass('d-none');
-    }
-}
-
-function getAlertMessageAll(type = 'Success', title = 'Success', message = '', icon = 'success', buttonText =
-    'Ok, Done', buttonColor = '#1967D2', iconImageTag = '') {
-
-    Swal.fire({
-        type: type,
-        icon: icon,
-        title: title,
-        confirmButtonText: buttonText,
-        confirmButtonColor: buttonColor,
-        text: message,
-    })
-    let swalContainer = Swal.getContainer();
-    jQuery(swalContainer).find('.swal2-icon-show').removeClass('swal2-' + icon).removeClass('swal2-icon').addClass(
-        'justify-content-center')
-    jQuery('.swal2-icon-show').html(iconImageTag)
-
-}
-//On page load logics
-jQuery(function() {
-    var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
-    let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
-
-    //initilize select2 for the inner screens
-    jQuery(".selecttwo").select2({
-        minimumResultsForSearch: -1,
-        placeholder: function() {
-            jQuery(this).data('placeholder');
+    //Other then GTM,GA,GAds
+    function change_top_button_state(state = "enable") {
+        if (state == "enable" && !jQuery("form#pixelsetings_form input").hasClass("conv-border-danger")) {
+            jQuery(".conv-btn-connect").removeClass("conv-btn-connect-disabled");
+            jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled");
+            jQuery(".conv-btn-connect").text('Save');
         }
-    });
 
-    // Show tootltip on click
-    jQuery('a[data-bs-toggle="tooltip"]').tooltip({
-        trigger: 'click'
-    });
-
-
-    // Enable save button on form change
-    jQuery(document).on("change", "form#pixelsetings_form", function() {
-        change_top_button_state("enable");
-    });
-
-    // Client side pixel id validations
-    jQuery(document).on("input",
-        "#fb_pixel_id, #microsoft_ads_pixel_id, #twitter_ads_pixel_id, #pinterest_ads_pixel_id, #snapchat_ads_pixel_id, #tiKtok_ads_pixel_id, #hotjar_pixel_id, #crazyegg_pixel_id, #msclarity_pixel_id",
-        function() {
-            var ele_id = this.id;
-            var ele_val = jQuery(this).val();
-            var regex_arr = {
-                fb_pixel_id: new RegExp(/^\d{14,16}$/m),
-                microsoft_ads_pixel_id: new RegExp(/^\d{7,9}$/m),
-                twitter_ads_pixel_id: new RegExp(/^[a-z0-9]{5,7}$/m),
-                pinterest_ads_pixel_id: new RegExp(/^\d{13}$/m),
-                snapchat_ads_pixel_id: new RegExp(/^[a-z0-9\-]*$/m),
-                tiKtok_ads_pixel_id: new RegExp(/^[A-Z0-9]{20,20}$/m),
-                hotjar_pixel_id: new RegExp(/^[0-9]{7,7}$/m),
-                crazyegg_pixel_id: new RegExp(/^[0-9]{8,8}$/m),
-                msclarity_pixel_id: new RegExp(/^[a-z0-9]{10,10}$/m),
-            };
-            if (ele_val.match(regex_arr[ele_id]) || ele_val === "") {
-                jQuery(this).removeClass("conv-border-danger");
-                change_top_button_state("enable");
-            } else {
-                jQuery(this).addClass("conv-border-danger");
-                change_top_button_state("disable");
-            }
-
-        });
-
-
-    //Save data other then GTM,GA,GAds
-    jQuery(document).on("click", ".conv-btn-connect-enabled", function() {
-        conv_change_loadingbar("show");
-        jQuery(this).addClass('disabled');
-        var valtoshow_inpopup = jQuery("#valtoshow_inpopup").val() + " " + jQuery(
-            ".valtoshow_inpopup_this").val();
-        var selected_vals = {};
-        selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
-
-        jQuery('form#pixelsetings_form input, textarea').each(function() {
-            selected_vals[jQuery(this).attr("name")] = jQuery(this).val();
-        });
-
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: {
-                action: "conv_save_pixel_data",
-                pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
-                conv_options_data: selected_vals,
-                conv_options_type: ["eeoptions"],
-            },
-            beforeSend: function() {
-                jQuery(".conv-btn-connect-enabled").text("Saving...");
-            },
-            success: function(response) {
-                var user_modal_txt =
-                    "Congratulations, you have successfully connected your <br> " +
-                    valtoshow_inpopup;
-
-                if (response == "0" || response == "1") {
-                    jQuery(".conv-btn-connect-enabled").text("Save");
-                    jQuery("#conv_save_success_txt").html(user_modal_txt);
-                    jQuery("#conv_save_success_modal").modal("show");
-                }
-                conv_change_loadingbar("hide");
-            }
-
-        });
-
-    });
-
-    jQuery("#conv-modal-redirect-btn").click(function() {
-        var redirectscreen =
-            '<?php echo (isset($_GET["redirectscreen"]) && $_GET["redirectscreen"] == "productfeed") ? "1" : "0"; ?>';
-        var subPage =
-            '<?php echo (isset($_GET["subpage"]) && $_GET["subpage"] == "gmcsettings") ? "1" : "0"; ?>';
-        if (subPage == "1") {
-            redirectscreen = "1";
+        if (state == "disable") {
+            jQuery(".conv-btn-connect").addClass("conv-btn-connect-disabled");
+            jQuery(".conv-btn-connect").removeClass("conv-btn-connect-enabled");
+            jQuery(".conv-btn-connect").text('Save');
         }
-        if (redirectscreen == "1") {
-            location.href = "admin.php?page=conversios-google-shopping-feed";
+    }
+
+    function conv_change_loadingbar(state = 'show') {
+        if (state == 'show') {
+            jQuery("#loadingbar_blue").removeClass('d-none');
         } else {
-            location.href = "admin.php?page=conversios-google-analytics";
+            jQuery("#loadingbar_blue").addClass('d-none');
         }
+    }
+
+    function getAlertMessageAll(type = 'Success', title = 'Success', message = '', icon = 'success', buttonText =
+        'Done!', buttonColor = '#1967D2', iconImageTag = '') {
+
+        Swal.fire({
+            type: type,
+            icon: icon,
+            title: title,
+            confirmButtonText: buttonText,
+            confirmButtonColor: buttonColor,
+            text: message,
+        })
+        let swalContainer = Swal.getContainer();
+        jQuery(swalContainer).find('.swal2-icon-show').removeClass('swal2-' + icon).removeClass('swal2-icon').addClass(
+            'justify-content-center')
+        jQuery('.swal2-icon-show').html(iconImageTag)
+
+    }
+    //On page load logics
+    jQuery(function() {
+        var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
+        let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
+
+        //initilize select2 for the inner screens
+        jQuery(".selecttwo").select2({
+            minimumResultsForSearch: -1,
+            placeholder: function() {
+                jQuery(this).data('placeholder');
+            }
+        });
+
+        // Show tootltip on click
+        jQuery('a[data-bs-toggle="tooltip"]').tooltip({
+            trigger: 'click'
+        });
+
+        //For tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
+
+        // Enable save button on form change
+        jQuery(document).on("change", "form#pixelsetings_form", function() {
+            change_top_button_state("enable");
+        });
+
+        // Client side pixel id validations
+        jQuery(document).on("input",
+            "#fb_pixel_id, #microsoft_ads_pixel_id, #twitter_ads_pixel_id, #pinterest_ads_pixel_id, #snapchat_ads_pixel_id, #tiKtok_ads_pixel_id, #hotjar_pixel_id, #crazyegg_pixel_id, #msclarity_pixel_id",
+            function() {
+                var ele_id = this.id;
+                var ele_val = jQuery(this).val();
+                var regex_arr = {
+                    fb_pixel_id: new RegExp(/^\d{14,16}$/m),
+                    microsoft_ads_pixel_id: new RegExp(/^\d{7,9}$/m),
+                    twitter_ads_pixel_id: new RegExp(/^[a-z0-9]{5,7}$/m),
+                    pinterest_ads_pixel_id: new RegExp(/^\d{13}$/m),
+                    snapchat_ads_pixel_id: new RegExp(/^[a-z0-9\-]*$/m),
+                    tiKtok_ads_pixel_id: new RegExp(/^[A-Z0-9]{20,20}$/m),
+                    hotjar_pixel_id: new RegExp(/^[0-9]{7,7}$/m),
+                    crazyegg_pixel_id: new RegExp(/^[0-9]{8,8}$/m),
+                    msclarity_pixel_id: new RegExp(/^[a-z0-9]{10,10}$/m),
+                };
+                if (ele_val.match(regex_arr[ele_id]) || ele_val === "") {
+                    jQuery(this).removeClass("conv-border-danger");
+                    change_top_button_state("enable");
+                } else {
+                    jQuery(this).addClass("conv-border-danger");
+                    change_top_button_state("disable");
+                }
+
+            });
+
+
+        //Save data other then GTM,GA,GAds
+        jQuery(document).on("click", ".conv-btn-connect-enabled", function() {
+            conv_change_loadingbar("show");
+            jQuery(this).addClass('disabled');
+            var valtoshow_inpopup = jQuery("#valtoshow_inpopup").val() + " " + jQuery(
+                ".valtoshow_inpopup_this").val();
+            var selected_vals = {};
+            selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
+
+            jQuery('form#pixelsetings_form input, textarea').each(function() {
+                selected_vals[jQuery(this).attr("name")] = jQuery(this).val();
+            });
+
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: tvc_ajax_url,
+                data: {
+                    action: "conv_save_pixel_data",
+                    pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                    conv_options_data: selected_vals,
+                    conv_options_type: ["eeoptions"],
+                },
+                beforeSend: function() {
+                    jQuery(".conv-btn-connect-enabled").text("Saving...");
+                },
+                success: function(response) {
+                    var user_modal_txt =
+                        "Congratulations, you have successfully connected your <br> " +
+                        valtoshow_inpopup;
+
+                    if (response == "0" || response == "1") {
+                        jQuery(".conv-btn-connect-enabled").text("Save");
+                        jQuery("#conv_save_success_txt").html(user_modal_txt);
+                        jQuery("#conv_save_success_modal").modal("show");
+                    }
+                    conv_change_loadingbar("hide");
+                }
+
+            });
+
+        });
+
+        jQuery("#conv-modal-redirect-btn").click(function() {
+            var redirectscreen =
+                '<?php echo (isset($_GET["redirectscreen"]) && $_GET["redirectscreen"] == "productfeed") ? "1" : "0"; ?>';
+            var subPage =
+                '<?php echo (isset($_GET["subpage"]) && $_GET["subpage"] == "gmcsettings") ? "1" : "0"; ?>';
+            if (subPage == "1") {
+                redirectscreen = "1";
+            }
+            if (redirectscreen == "1") {
+                location.href = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
+            } else {
+                location.href = "admin.php?page=conversios-google-analytics";
+            }
+
+        });
 
     });
-
-});
 </script>
 
 <?php

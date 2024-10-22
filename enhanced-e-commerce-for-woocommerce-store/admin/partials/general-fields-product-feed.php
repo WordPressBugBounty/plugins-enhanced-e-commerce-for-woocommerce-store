@@ -1,5 +1,10 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+if( !isset($_GET['tab']) || (isset($_GET['tab']) && $_GET['tab'] != 'feed_list') ) {
+    wp_safe_redirect("admin.php?page=conversios-google-shopping-feed&tab=feed_list"); //Odd
+    exit;
+}
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 echo "<script>var return_url ='" . esc_url_raw($this->url) . "';</script>";
@@ -40,8 +45,8 @@ if(isset($_GET['tab']) === FALSE
     || (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '')
     )) 
 {
-    wp_safe_redirect("admin.php?page=conversios-google-shopping-feed&tab=feed_list");
-    exit;
+    //wp_safe_redirect("admin.php?page=conversios-google-shopping-feed&tab=feed_list");
+    //exit;
 }
 $channel_not_connected = array(
     "gmc_id" => (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') ? '' : 'conv-pixel-not-connected',
@@ -150,7 +155,7 @@ body {
                     </div>
                 </div>
                 <div class="convcard-right ms-auto">
-                    <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage="gmcsettings"'); ?>"
+                    <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings'); ?>"
                         class="h-100 rounded-end d-flex justify-content-center convcard-right-arrow link-dark">
                         <span class="material-symbols-outlined align-self-center">chevron_right</span>
                     </a>
@@ -202,7 +207,7 @@ body {
                     </div>
                 </div>
                 <div class="convcard-right ms-auto">
-                    <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage="tiktokBusinessSettings"'); ?>"
+                    <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>"
                         class="h-100 rounded-end d-flex justify-content-center convcard-right-arrow link-dark">
                         <span class="material-symbols-outlined align-self-center">chevron_right</span>
                     </a>
@@ -254,7 +259,7 @@ body {
                     </div>
                 </div>
                 <div class="convcard-right ms-auto">
-                    <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage="metasettings"'); ?>"
+                    <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>"
                         class="h-100 rounded-end d-flex justify-content-center convcard-right-arrow link-dark">
                         <span class="material-symbols-outlined align-self-center">chevron_right</span>
                     </a>
@@ -399,7 +404,7 @@ body {
                                                             $sel_val = esc_attr($ee_mapped_attrs[$attribute["field"]]);
                                                         }
 
-                                                        $TVC_Admin_Helper->tvc_text($attribute["field"], 'number', '', esc_html__('Add shipping flat rate', 'product-feed-manager-for-woocommerce'), $sel_val, $require);
+                                                        $TVC_Admin_Helper->tvc_text($attribute["field"], 'number', '', esc_html__('Add shipping flat rate', 'enhanced-e-commerce-for-woocommerce-store'), $sel_val, $require);
                                                     } else if ($attribute["field"] === 'tax') {
                                                         $sel_val = esc_attr($sel_val_def);
                                                         if (isset($ee_mapped_attrs[$attribute["field"]]) === TRUE) {
@@ -408,9 +413,9 @@ body {
 
                                                         $TVC_Admin_Helper->tvc_text($attribute["field"], 'number', '', 'Add TAX flat (%)', $sel_val, $require);
                                                     } else if ($attribute["field"] === 'content_language') {
-                                                        $TVC_Admin_Helper->tvc_language_select($attribute["field"], 'content_language', esc_html__('Please Select Attribute', 'product-feed-manager-for-woocommerce'), 'en', $require);
+                                                        $TVC_Admin_Helper->tvc_language_select($attribute["field"], 'content_language', esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), 'en', $require);
                                                     } else if ($attribute["field"] === 'target_country') {
-                                                        $TVC_Admin_Helper->tvc_countries_select($attribute["field"], 'target_country', esc_html__('Please Select Attribute', 'product-feed-manager-for-woocommerce'), $require);
+                                                        $TVC_Admin_Helper->tvc_countries_select($attribute["field"], 'target_country', esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), $require);
                                                     } else {
                                                         if (isset($attribute['fixed_options']) === TRUE && $attribute['fixed_options'] !== "") {
                                                             $ee_select_option_t = explode(",", $attribute['fixed_options']);
@@ -420,13 +425,13 @@ body {
                                                             }
 
                                                             $sel_val = $sel_val_def;
-                                                            $TVC_Admin_Helper->tvc_select($attribute["field"], $attribute["field"], esc_html__('Please Select Attribute', 'product-feed-manager-for-woocommerce'), $sel_val, $require, $ee_select_option);
+                                                            $TVC_Admin_Helper->tvc_select($attribute["field"], $attribute["field"], esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), $sel_val, $require, $ee_select_option);
                                                         } else {
                                                             $sel_val = esc_attr($sel_val_def);
                                                             if (isset($ee_mapped_attrs[$attribute["field"]]) === TRUE) {
                                                                 $sel_val = esc_attr($ee_mapped_attrs[$attribute["field"]]);
                                                             }
-                                                            $TVC_Admin_Helper->tvc_select($attribute["field"], $attribute["field"], esc_html__('Please Select Attribute', 'product-feed-manager-for-woocommerce'), $sel_val, $require, $ee_select_option);
+                                                            $TVC_Admin_Helper->tvc_select($attribute["field"], $attribute["field"], esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), $sel_val, $require, $ee_select_option);
                                                         }
                                                     } //end attribute if                                                
                                                     ?>
@@ -831,7 +836,7 @@ body {
                 <div class="connection-box">
                     <div class="items">
                         <img style="width:35px;"
-                            src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce _logo.png'); ?>">
+                            src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
                         <span>Woo Commerce</span>
                     </div>
                     <div class="items">
@@ -850,7 +855,7 @@ body {
             </div>
             <div class="modal-body text-center p-4">
                 <div class="connected-content">
-                    <h4>Successfully Connected</h4>
+                    <h4>Saved Successfully</h4>
                     <p class="my-3"><?php esc_html_e("Congratulations on successfully mapping your product categories and attributes! By
                         ensuring accurate classification and detailed product information, you've enhanced the
                         discoverability and relevance of your products, providing a better shopping experience for
