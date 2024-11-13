@@ -171,7 +171,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                 <?php } ?>
                                 
                                 <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Purchase Enhance conversion tracking &nbsp;
-                                    <a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_SY1&&utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=gads">
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=gads&plugin_name=aio">
                                         <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
                                     </a>
                                 </div>
@@ -210,7 +210,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Meta Pixel ID: Not connected</span></div>
                                 <?php } ?>
                                 <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>FBCAPI Integration. &nbsp;
-                                    <a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=fbcapi">
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=fbcapi&plugin_name=aio">
                                         <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
                                     </a>
                                 </div>

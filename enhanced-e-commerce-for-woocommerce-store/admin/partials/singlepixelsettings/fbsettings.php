@@ -94,8 +94,8 @@ $is_sel_disable = 'disabled';
                                         <?php esc_html_e("Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </li>
                                 </ul>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=fbinnersetting&utm_campaign=capi'); ?>" class="align-middle btn btn-sm btn-primary fw-bold-500">
-                                    <?php esc_html_e("Buy Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=fbinnersetting&utm_campaign=capi&plugin_name=aio'); ?>" class="align-middle btn btn-sm btn-primary fw-bold-500">
+                                    <?php esc_html_e("Buy Professional Plan Now!", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
                             </div>
                         </div>

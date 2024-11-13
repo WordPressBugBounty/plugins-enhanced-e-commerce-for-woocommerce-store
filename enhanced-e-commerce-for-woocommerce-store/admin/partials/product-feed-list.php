@@ -105,6 +105,12 @@ $data = unserialize(get_option('ee_options'));
                     <?php } else { ?>
                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Google Merchant Center Account: Not connected</span></div>
                     <?php } ?>
+
+                    <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync &nbsp;
+                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedgrid&utm_campaign=gmc&plugin_name=aio">
+                            <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -646,7 +652,7 @@ $data = unserialize(get_option('ee_options'));
                                 <?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <span>
-                                <a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup">
+                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup&plugin_name=aio">
                                     <b>
                                         Upgrade To Pro
                                     </b>
@@ -1144,7 +1150,7 @@ $data = unserialize(get_option('ee_options'));
                 if (response.id) {
                     var feedurl = "<?php echo esc_url_raw($site_url . 'product_list&id='); ?>" + response.id;
                     location.href = feedurl
-                    
+
                 } else if (response.errorType === 'tiktok') {
                     jQuery('.tiktok_catalog_id').empty();
                     jQuery('.tiktok_catalog_id').html(response.message);

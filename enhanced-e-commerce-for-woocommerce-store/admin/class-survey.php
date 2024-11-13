@@ -1,8 +1,8 @@
 <?php
 
-if (! defined('ABSPATH')) exit; // Exit if accessed directly
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
-if (! class_exists('TVC_Survey')) {
+if (!class_exists('TVC_Survey')) {
     class TVC_Survey
     {
         public $name;
@@ -37,10 +37,10 @@ if (! class_exists('TVC_Survey')) {
                 $url = 'http://' . $url;
             }
             $url_parts = wp_parse_url($url);
-            $host      = ! empty($url_parts['host']) ? $url_parts['host'] : false;
-            if (! empty($url) && ! empty($host)) {
+            $host      = !empty($url_parts['host']) ? $url_parts['host'] : false;
+            if (!empty($url) && !empty($host)) {
                 if (false !== ip2long($host)) {
-                    if (! filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                    if (!filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
                         $is_local_url = true;
                     }
                 } else if ('localhost' === $host) {
@@ -74,12 +74,12 @@ if (! class_exists('TVC_Survey')) {
             if (empty($screen)) {
                 return false;
             }
-            return (! empty($screen->id) && in_array($screen->id, array('plugins', 'plugins-network'), true));
+            return (!empty($screen->id) && in_array($screen->id, array('plugins', 'plugins-network'), true));
         }
         public function tvc_js()
         {
 
-            if (! $this->is_plugin_page()) {
+            if (!$this->is_plugin_page()) {
                 return;
             }
 ?>
@@ -175,7 +175,7 @@ if (! class_exists('TVC_Survey')) {
         public function tvc_css()
         {
 
-            if (! $this->is_plugin_page()) {
+            if (!$this->is_plugin_page()) {
                 return;
             }
         ?>
@@ -227,6 +227,22 @@ if (! class_exists('TVC_Survey')) {
                     margin: 0 0 15px 0;
                     font-family: inter;
                     color: #333538;
+                }
+
+                .ee-survey-title-sub {
+                    display: block;
+                    font-size: 14px;
+                    font-weight: 500;
+                    padding: 0 0 15px 0;
+                    font-family: inter;
+                }
+
+                .ee-survey-title-sub-red {
+                    color: #840000;
+                }
+
+                .ee-survey-title-sub-green {
+                    color: #028202;
                 }
 
                 @keyframes shake {
@@ -418,49 +434,49 @@ if (! class_exists('TVC_Survey')) {
         }
         public function tvc_modal()
         {
-            if (! $this->is_plugin_page()) {
+            if (!$this->is_plugin_page()) {
                 return;
             }
         ?>
             <div class="ee-survey-modal" id="ee-survey-<?php echo esc_html($this->plugin); ?>">
                 <div class="ee-survey-wrap">
                     <form class="ee-survey" method="post">
-                        <span
-                            class="ee-survey-title"><?php echo ' ' . esc_html__('We appreciate your feedback on how we can improve.', 'enhanced-e-commerce-for-woocommerce-store'); ?></span>
+                        <span class="ee-survey-title"><?php echo ' ' . esc_html__('We appreciate your feedback on how we can improve.', 'enhanced-e-commerce-for-woocommerce-store'); ?></span>
+                        <b class="ee-survey-title-sub ee-survey-title-sub-red">
+                            <?php echo ' ' . esc_html__('⚠️ Caution: Your website will stop to track the events via our plugin.', 'enhanced-e-commerce-for-woocommerce-store'); ?>
+                        </b>
+                        <b class="ee-survey-title-sub ee-survey-title-sub-green">
+                            <?php echo ' ' . esc_html__('🎧 Help: Let us setup event tracking on your website.', 'enhanced-e-commerce-for-woocommerce-store'); ?>
+                            <a target="_blank" href="<?php echo esc_url('https://calendly.com/conversios/30min'); ?>">Set up a call now with us</a>
+                        </b> 
+                        <br>
                         <div class="feedback-reasons">
-                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)"
-                                data-question="<?php esc_html_e('Which plugin are you considering?', 'enhanced-e-commerce-for-woocommerce-store') ?>">
+                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)" data-question="<?php esc_html_e('Which plugin are you considering?', 'enhanced-e-commerce-for-woocommerce-store') ?>">
                                 <span class="dashicons dashicons-search"></span>
                                 <p><?php esc_html_e('Found a better Plugin', 'enhanced-e-commerce-for-woocommerce-store') ?></p>
                             </div>
-                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)"
-                                data-question='<?php esc_html_e("Could you please share more information about the limitations you are experiencing with the product?", 'enhanced-e-commerce-for-woocommerce-store') ?>'>
+                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)" data-question='<?php esc_html_e("Could you please share more information about the limitations you are experiencing with the product?", 'enhanced-e-commerce-for-woocommerce-store') ?>'>
                                 <span class="dashicons dashicons-products"></span>
                                 <p><?php esc_html_e('Product Limit', 'enhanced-e-commerce-for-woocommerce-store') ?></p>
                             </div>
-                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)"
-                                data-question="<?php esc_html_e("Please provide us with some information of what you didn't understand", 'enhanced-e-commerce-for-woocommerce-store') ?>">
+                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)" data-question="<?php esc_html_e("Please provide us with some information of what you didn't understand", 'enhanced-e-commerce-for-woocommerce-store') ?>">
                                 <span class="dashicons dashicons-editor-help"></span>
                                 <p><?php esc_html_e("Couldn't Understand", 'enhanced-e-commerce-for-woocommerce-store') ?></p>
                             </div>
-                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)"
-                                data-question="<?php esc_html_e('Could you provide some details about the specific feature that is absent in the product? (It will help us to improve our product)', 'enhanced-e-commerce-for-woocommerce-store') ?>">
+                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)" data-question="<?php esc_html_e('Could you provide some details about the specific feature that is absent in the product? (It will help us to improve our product)', 'enhanced-e-commerce-for-woocommerce-store') ?>">
                                 <span class="dashicons dashicons-admin-generic"></span>
                                 <p><?php esc_html_e('Missing a Specific Feature', 'enhanced-e-commerce-for-woocommerce-store') ?>
                                 </p>
                             </div>
-                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)"
-                                data-question="<?php esc_html_e('Could you kindly elaborate on the issue you experienced?', 'enhanced-e-commerce-for-woocommerce-store') ?>">
+                            <div tabindex="0" class="feedback-reason" onclick="selectReason(this)" data-question="<?php esc_html_e('Could you kindly elaborate on the issue you experienced?', 'enhanced-e-commerce-for-woocommerce-store') ?>">
                                 <span class="dashicons dashicons-warning"></span>
                                 <p><?php esc_html_e('Bugs', 'enhanced-e-commerce-for-woocommerce-store') ?></p>
                             </div>
                         </div>
                         <div class="form-field" id="question-container" style="display: none;">
-                            <textarea class="regular-text" id="question-text" rows="3"
-                                placeholder="What is your feedback?"></textarea>
+                            <textarea class="regular-text" id="question-text" rows="3" placeholder="What is your feedback?"></textarea>
                         </div>
-                        <p class="description text-danger mt-3"><span
-                                style="color:red">*</span><?php esc_html_e("Please, select one reason and submit.", 'enhanced-e-commerce-for-woocommerce-store') ?>
+                        <p class="description text-danger mt-3"><span style="color:red">*</span><?php esc_html_e("Please, select one reason and submit.", 'enhanced-e-commerce-for-woocommerce-store') ?>
                         </p>
                         <p class="description text-note mt-3" style="color:#FE4E4E; margin-top:8px; display:none;">
                             <b><?php esc_html_e("NOTE:", 'enhanced-e-commerce-for-woocommerce-store') ?></b>&nbsp;&nbsp;&nbsp;<?php esc_html_e("If you deactivate the plugin, the automatic scheduling of your product feed will also be turned off.", 'enhanced-e-commerce-for-woocommerce-store') ?>

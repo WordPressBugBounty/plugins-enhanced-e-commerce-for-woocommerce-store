@@ -64,15 +64,21 @@ if (class_exists('Conversios_Header') === FALSE) {
 					<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
 						<div class="promoleft">
 							<div class="promobandmsg text-white text-center fs-6">
-								<img style="width:25px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/freevspro.png'); ?>" />
+								<span class="fs-3">
+									📢
+								</span>
+								<span class="fs-6 text-dark me-2 px-2" style="background: #ffc700;">
+									<?php esc_html_e("Black Friday Offer", "enhanced-e-commerce-for-woocommerce-store"); ?>
+								</span>
 								<span class="fs-6"><?php esc_html_e("Grab 70% OFF", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
 								<?php esc_html_e(" on 'All In One' Plugin", "enhanced-e-commerce-for-woocommerce-store"); ?>
 								<a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=freeplugin&utm_medium=headerbanner&utm_campaign=festbanner&coupon=convfest70">
 									<span class="fs-6">
 										<u><?php esc_html_e("Professional Plan", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
 									</span>
-									<span class="text-white fw-light" style="font-size:12px;">(FB CAPI + Snapchat CAPI + Tiktok CAPI & many more features)</span>
 								</a>
+								<span class="text-white fw-light" style="font-size:14px;">(FB CAPI + Snapchat CAPI + Tiktok CAPI & <a class="text-white" href="https://www.conversios.io/pricing?utm_source=freeplugin&utm_medium=headerbanner&utm_campaign=festbanner&plugin_name=aio" target="_blank"><u>many more features</u></a>)</span>
+
 							</div>
 						</div>
 					</div>

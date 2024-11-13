@@ -180,7 +180,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                         <div class="inlist_text_connected_convid ps-2"></div>
                                     </div>
                                 </div>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
                                     <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
                                     <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
@@ -196,7 +196,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                         <div class="inlist_text_connected_convid ps-2"></div>
                                     </div>
                                 </div>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
                                     <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
                                     <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
@@ -212,7 +212,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                         <div class="inlist_text_connected_convid ps-2"></div>
                                     </div>
                                 </div>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
                                     <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
                                     <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
