@@ -81,7 +81,6 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                 "crazyegg_pixel_id" => (isset($data['hotjar_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
             );
 
-
             $pixel_video_link = array(
                 "gm_id" => "https://www.conversios.io/docs/ecommerce-events-that-will-be-automated-using-conversios/?utm_source=galisting_inapp&utm_medium=resource_center_list&utm_campaign=resource_center",
                 "google_ads_id" => "https://youtu.be/Vr7vEeMIf7c",
@@ -116,7 +115,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=gasettings'); ?>" class="align-self-center">
                                 <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
                             </a>
-                         
+
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc">
@@ -126,17 +125,26 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <?php if (isset($data['gm_id']) && $data['gm_id'] != '') { ?>
                                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
                                             <span class="d-flex  align-items-center <?php echo (isset($data['ga_id']) && $data['ga_id'] != '') ? 'border-start ps-2  ms-2' : 'm-0'; ?> ">
-                                                <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>Measurement ID: <?php echo (isset($data['gm_id']) && $data['gm_id'] != '') ? esc_attr($data['gm_id']) : ''; ?>
+                                                <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span>Measurement ID: <?php echo (isset($data['gm_id']) && $data['gm_id'] != '') ? esc_attr($data['gm_id']) : ''; ?>
                                             </span>
                                         </div>
                                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0" title="All the e-commerce event tracking including Purchase">All the e-commerce event tracking including Purchase</span>
+                                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0" title="All the e-commerce event tracking including Purchase">All the e-commerce event tracking including Purchase</span>
                                         </div>
                                     <?php } ?>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Measurement ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Measurement ID: Not connected</span></div>
                                 <?php } ?>
+                                <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Use your own GTM container &nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=ga&amp;plugin_name=aio">
+                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                                    </a>
+                                </div>
                             </div>
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -155,26 +163,27 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=gadssettings'); ?>" class="align-self-center">
                                 <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
                             </a>
-                          
+
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['google_ads_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span>Google ads Account ID: <?php echo (isset($data['google_ads_id']) && $data['google_ads_id'] != '') ? esc_attr($data['google_ads_id']) : ''; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span>Google ads Account ID: <?php echo (isset($data['google_ads_id']) && $data['google_ads_id'] != '') ? esc_attr($data['google_ads_id']) : ''; ?></span>
                                     </div>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span>Purchase Conversion Tracking</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1"><span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span>Purchase Conversion Tracking</span></div>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Google ads Account ID: Not connected</span></div>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Purchase Conversion Tracking</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Google ads Account ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Purchase Conversion Tracking</span></div>
                                 <?php } ?>
-                                
-                                <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Purchase Enhance conversion tracking &nbsp;
-                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=gads&plugin_name=aio">
-                                        <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
+
+                                <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Purchase Enhance conversion tracking &nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=gads&amp;plugin_name=aio">
+                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                                     </a>
                                 </div>
+
                             </div>
                         </div>
 
@@ -201,17 +210,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['fb_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Meta Pixel ID: <?php echo (isset($data['fb_pixel_id']) && $data['fb_pixel_id'] != '') ? esc_attr($data['fb_pixel_id']) : ''; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Meta Pixel ID: <?php echo (isset($data['fb_pixel_id']) && $data['fb_pixel_id'] != '') ? esc_attr($data['fb_pixel_id']) : ''; ?></span>
                                     </div>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">All the e-commerce event tracking including Purchase</span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">All the e-commerce event tracking including Purchase</span>
                                     </div>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Meta Pixel ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Meta Pixel ID: Not connected</span></div>
                                 <?php } ?>
-                                <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>FBCAPI Integration. &nbsp;
-                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixelgrid&utm_campaign=fbcapi&plugin_name=aio">
-                                        <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
+                                <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Facebook conversion API (Server Side)&nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=fbcapi&amp;plugin_name=aio">
+                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                                     </a>
                                 </div>
                             </div>
@@ -220,8 +229,8 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     </div>
                 </div>
 
-                  <!-- Tiktok -->
-                  <div class="col-md-4 p-3">
+                <!-- Tiktok -->
+                <div class="col-md-4 p-3">
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
@@ -239,18 +248,23 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['tiKtok_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">TikTok Pixel ID: <?php echo (isset($data['tiKtok_ads_pixel_id']) && $data['tiKtok_ads_pixel_id'] != '') ? esc_attr($data['tiKtok_ads_pixel_id']) : 'Not connected'; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">TikTok Pixel ID: <?php echo (isset($data['tiKtok_ads_pixel_id']) && $data['tiKtok_ads_pixel_id'] != '') ? esc_attr($data['tiKtok_ads_pixel_id']) : 'Not connected'; ?></span>
                                     </div>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>TikTok Pixel ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>TikTok Pixel ID: Not connected</span></div>
                                 <?php } ?>
+                                <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Tiktok Events API (Server Side) &nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=tiktok&amp;plugin_name=aio">
+                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                  <!-- Snapchat Pixel -->
-                  <div class="col-md-4 p-3">
+                <!-- Snapchat Pixel -->
+                <div class="col-md-4 p-3">
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
@@ -268,11 +282,20 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['snapchat_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Snapchat Pixel ID: <?php echo (isset($data['snapchat_ads_pixel_id']) && $data['snapchat_ads_pixel_id'] != '') ? esc_attr($data['snapchat_ads_pixel_id']) : 'Not connected'; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Snapchat Pixel ID: <?php echo (isset($data['snapchat_ads_pixel_id']) && $data['snapchat_ads_pixel_id'] != '') ? esc_attr($data['snapchat_ads_pixel_id']) : 'Not connected'; ?></span>
                                     </div>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Snapchat Pixel ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Snapchat Pixel ID: Not connected</span></div>
                                 <?php } ?>
+
+
+
+                                <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Snapchat Conversion API (Server Side)&nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=snapchat&amp;plugin_name=aio">
+                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -298,11 +321,20 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['pinterest_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Pinterest Pixel ID: <?php echo (isset($data['pinterest_ads_pixel_id']) && $data['pinterest_ads_pixel_id'] != '') ? esc_attr($data['pinterest_ads_pixel_id']) : 'Not connected'; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Pinterest Pixel ID: <?php echo (isset($data['pinterest_ads_pixel_id']) && $data['pinterest_ads_pixel_id'] != '') ? esc_attr($data['pinterest_ads_pixel_id']) : 'Not connected'; ?></span>
                                     </div>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Pinterest Pixel ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Pinterest Pixel ID: Not connected</span></div>
                                 <?php } ?>
+
+
+
+                                <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Pinterest Conversion API (Server Side) &nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=pinterest&amp;plugin_name=aio">
+                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
 
@@ -330,11 +362,11 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                 <?php if (empty($pixel_not_connected['microsoft_ads_pixel_id'])  && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <?php if (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') { ?>
                                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Ads ID: <?php echo (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') ? esc_attr($data['microsoft_ads_pixel_id']) : 'Not connected'; ?></span>
+                                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Ads ID: <?php echo (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') ? esc_attr($data['microsoft_ads_pixel_id']) : 'Not connected'; ?></span>
                                         </div>
                                     <?php } ?>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Ads ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Ads ID: Not connected</span></div>
                                 <?php } ?>
                             </div>
                         </div>
@@ -363,11 +395,11 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                 <?php if (empty($pixel_not_connected['msclarity_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <?php if (isset($data['msclarity_pixel_id']) && $data['msclarity_pixel_id'] != '') { ?>
                                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Clarity ID: <?php echo (isset($data['msclarity_pixel_id']) && $data['msclarity_pixel_id'] != '') ? esc_attr($data['msclarity_pixel_id']) : 'Not connected'; ?></span>
+                                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Clarity ID: <?php echo (isset($data['msclarity_pixel_id']) && $data['msclarity_pixel_id'] != '') ? esc_attr($data['msclarity_pixel_id']) : 'Not connected'; ?></span>
                                         </div>
                                     <?php } ?>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Clarity ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Clarity ID: Not connected</span></div>
                                 <?php } ?>
                             </div>
                         </div>
@@ -395,11 +427,19 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['linkedin_insight_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Linkedin Insight ID: <?php echo (isset($data['linkedin_insight_id']) && $data['linkedin_insight_id'] != '') ? esc_attr($data['linkedin_insight_id']) : 'Not connected'; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Linkedin Insight ID: <?php echo (isset($data['linkedin_insight_id']) && $data['linkedin_insight_id'] != '') ? esc_attr($data['linkedin_insight_id']) : 'Not connected'; ?></span>
                                     </div>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Linkedin Insight ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Linkedin Insight ID: Not connected</span></div>
                                 <?php } ?>
+
+
+
+                                <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>LinkedIn Conversion API (Server Side)&nbsp;
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=linkedin&amp;plugin_name=aio">
+                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -427,10 +467,10 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['twitter_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Twitter Pixel ID: <?php echo (isset($data['twitter_ads_pixel_id']) && $data['twitter_ads_pixel_id'] != '') ? esc_attr($data['twitter_ads_pixel_id']) : 'Not connected'; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Twitter Pixel ID: <?php echo (isset($data['twitter_ads_pixel_id']) && $data['twitter_ads_pixel_id'] != '') ? esc_attr($data['twitter_ads_pixel_id']) : 'Not connected'; ?></span>
                                     </div>
                                 <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Twitter Pixel ID: Not connected</span></div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Twitter Pixel ID: Not connected</span></div>
                                 <?php } ?>
                             </div>
                         </div>
@@ -456,11 +496,11 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <?php if (empty($pixel_not_connected['hotjar_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                 <div class="d-flex align-items-start flex-column">
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Hotjar Pixel ID: <?php echo (isset($data['hotjar_pixel_id']) && $data['hotjar_pixel_id'] != '') ? esc_attr($data['hotjar_pixel_id']) : 'Not connected'; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Hotjar Pixel ID: <?php echo (isset($data['hotjar_pixel_id']) && $data['hotjar_pixel_id'] != '') ? esc_attr($data['hotjar_pixel_id']) : 'Not connected'; ?></span>
                                     </div>
                                 </div>
                             <?php } else { ?>
-                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Hotjar Pixel ID: Not connected</span></div>
+                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Hotjar Pixel ID: Not connected</span></div>
                             <?php } ?>
                         </div>
                     </div>
@@ -485,11 +525,11 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                             <?php if (empty($pixel_not_connected['crazyegg_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                 <div class="d-flex">
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">Crazyegg Pixel ID: <?php echo (isset($data['crazyegg_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? esc_attr($data['crazyegg_pixel_id']) : 'Not connected'; ?></span>
+                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Crazyegg Pixel ID: <?php echo (isset($data['crazyegg_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? esc_attr($data['crazyegg_pixel_id']) : 'Not connected'; ?></span>
                                     </div>
                                 </div>
                             <?php } else { ?>
-                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Crazyegg Pixel ID: Not connected</span></div>
+                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Crazyegg Pixel ID: Not connected</span></div>
                             <?php } ?>
                         </div>
                     </div>

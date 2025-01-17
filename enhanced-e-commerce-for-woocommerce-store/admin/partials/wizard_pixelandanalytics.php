@@ -12,12 +12,9 @@ if ((isset($_GET['g_mail']) && sanitize_text_field(wp_unslash($_GET['g_mail'])))
     }
 
     if (isset($_GET['wizard_channel']) && (sanitize_text_field(wp_unslash($_GET['wizard_channel'])) == "gasettings" || sanitize_text_field(wp_unslash($_GET['wizard_channel'])) == "gadssettings")) {
-        update_option('ee_customer_gmail', sanitize_email(wp_unslash($_GET['g_mail'])));
-        if (array_key_exists("access_token", $tvc_data) && array_key_exists("refresh_token", $tvc_data)) {
+        update_option('ee_customer_gmail', sanitize_email(wp_unslash($_GET['g_mail'])));  
             $eeapidata = unserialize(get_option('ee_api_data'));
             $eeapidata_settings = new stdClass();
-        }
-
         //is not work for existing user && $ee_additional_data['con_created_at'] != "" 
         if (isset($ee_additional_data['con_created_at'])) {
             $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
@@ -95,8 +92,6 @@ if ($subscriptionId != "") {
         if (property_exists($google_detail, "data") && $google_detail->data != "") {
             $googleDetail = $google_detail->data;
             $tvc_data['subscription_id'] = $googleDetail->id;
-            $tvc_data['access_token'] = base64_encode(sanitize_text_field($googleDetail->access_token));
-            $tvc_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->refresh_token));
             $plan_id = $googleDetail->plan_id;
             $login_customer_id = $googleDetail->customer_id;
             $tracking_option = $googleDetail->tracking_option;

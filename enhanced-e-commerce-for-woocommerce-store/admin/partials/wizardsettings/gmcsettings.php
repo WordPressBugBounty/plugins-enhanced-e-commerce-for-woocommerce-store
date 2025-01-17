@@ -47,7 +47,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
         </div>
     </div>
 
-    <div class="convwiz_pixtitle mt-0 mb-0 d-flex justify-content-between align-items-center py-4">
+    <div class="convwiz_pixtitle mt-0 mb-0 d-flex justify-content-between align-items-center pt-3">
         <div class="col-8">
             <div class="convwizlogotitle">
                 <div class="d-flex flex-row align-items-center">
@@ -74,19 +74,13 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                     <span class="material-symbols-outlined text-success md-18">
                         check_circle
                     </span>
-                    <?php esc_html_e("Real Time API based product sync", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <?php esc_html_e("Real Time API based product sync (Upto 100)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </li>
                 <li class="d-flex">
                     <span class="material-symbols-outlined text-success md-18">
                         check_circle
                     </span>
                     <?php esc_html_e("Advance Attribute Mapping & Category Mapping", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </li>
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("Highest product approval rate", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </li>
             </ul>
 
@@ -126,7 +120,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
     </div>
 
     <form id="gadssetings_form" class="convgawiz_form_webgmc convpixsetting-inner-box mt-0 convwiz_border" datachannel="GoogleGMC">
-        <div class="convwizard_pixtitle mt-0 mb-3">
+        <div class="mt-0 mb-3">
             <div class="row row-flex pt-2 align-items-center">
                 <div class="col-7 conv-border-box mx-3 mt-3">
                     <h5 class="fw-normal mb-1 text-dark">
@@ -151,61 +145,20 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                     <?php } ?>
                 </div>
 
-                <?php if (CONV_IS_WC && ($conwizverifysite == "" || $conwizverifydomain == "" || $conwizenablesuperfeed == "" || $conwizverifysite == 0 || $conwizverifydomain == 0 || $conwizenablesuperfeed == 0)) { ?>
-                    <div id="convsitedomainfeed" class="col-7 conv-border-box mx-3 mt-3 disabledsection">
-
-                        <?php if ($conwizverifydomain == "" || $conwizverifydomain == 0) { ?>
-                            <div class="flex-row row">
-                                <div class="col-10">
-                                    <h6 class="fw-normal mb-1 text-dark">
-                                        <b><?php esc_html_e("Verify Your Site", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you verify your website, you let Google know that you're the owner of the website. You're the website owner if you have the ability to make edits to your website content. Not the website owner? Work together with your website owner or admin to verify the website.">
-                                            info
-                                        </span>
-                                    </h6>
-                                    <small>Let Google know that you're the owner of the website.</small>
-                                </div>
-                                <div class="col-2 m-auto text-end">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input ms-auto float-end" type="checkbox" role="switch" id="conwizverifysite" name="conwizverifysite" checked>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="my-1">
-                        <?php } ?>
-
-                        <?php if ($conwizverifydomain == "" || $conwizverifydomain == 0) { ?>
-
-                            <div class="row domain_claimDiv">
-                                <div class="col-10">
-                                    <h6 class="fw-normal mb-1 text-dark">
-                                        <b><?php esc_html_e("Claim Your Domain", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you claim your website, it gives you the right to use your website in connection with your Merchant Center account. First you need to verify your website and then you can claim it. Only the user who verified the website can claim it.">
-                                            info
-                                        </span>
-                                    </h6>
-                                    <small>Connect your website with Google.</small>
-                                </div>
-                                <div class="col-2 m-auto text-end">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input ms-auto float-end" type="checkbox" role="switch" id="conwizverifydomain" name="conwizverifydomain" checked>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="my-1">
-                        <?php } ?>
+                <?php if (CONV_IS_WC && ($conwizenablesuperfeed == "" || $conwizenablesuperfeed == 0)) { ?>
+                    <div id="convsitedomainfeed" class="col-7 conv-border-bo mx-3 mt-0 disabledsection">
 
                         <?php if ($conwizenablesuperfeed == "" || $conwizenablesuperfeed == 0) { ?>
 
                             <div class="row domain_claimDiv">
                                 <div class="col-10">
-                                    <h6 class="fw-normal mb-1 text-dark">
-                                        <b><?php esc_html_e("Send your Woocommerce products to Google", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                    <small class="fw-normal mb-1 text-dark">
+                                        <b><?php esc_html_e("Send your Woocommerce products to Google & Verify Site & Domain", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                                         <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="Your products and business can show up across Google for free.">
                                             info
                                         </span>
-                                    </h6>
-                                    <small>Reach millions of customers on Google for free with Merchant Center</small>
+                                    </small>
+                                    <!-- <small>Reach millions of customers on Google for free with Merchant Center</small> -->
                                 </div>
                                 <div class="col-2 m-auto text-end">
                                     <div class="form-check form-switch">
@@ -217,6 +170,39 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
 
                     </div>
                 <?php } ?>
+
+                <div class="pt-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
+                                <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
+                                    <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/gmcimpact.png'); ?>" />
+                                </div>
+                                <div class="mt-0 mb-2 col-9 ps-4">
+                                    <div class="fs-6 fw-bold text-primary">Expand your reach on Google, Facebook, and TikTok with the Starter Plan:</div>
+                                    <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
+                                        <li class="d-flex">
+                                            <span class="material-symbols-outlined text-success md-18">
+                                                check_circle
+                                            </span>
+                                            <?php esc_html_e("Sync up to 500 products with one click", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        </li>
+                                        <li class="d-flex">
+                                            <span class="material-symbols-outlined text-success md-18">
+                                                check_circle
+                                            </span>
+                                            <?php esc_html_e("Real-time product sync to GMC, Facebook, and TikTok only with our solution", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        </li>
+                                    </ul>
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=onboarding&amp;utm_campaign=gadseet&amp;plugin_name=aio" class="align-middle px-4 btn btn-sm btn-primary fw-bold-500">
+                                        Buy Now </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </form>
@@ -580,6 +566,8 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
             var conwizenablesuperfeed = 0;
             if (jQuery("#conwizenablesuperfeed").is(':checked')) {
                 conwizenablesuperfeed = 1;
+                conwizverifysite = 1;
+                conwizverifydomain = 1;
             }
         }
 
@@ -648,13 +636,9 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                     jQuery("#save_gmc").removeClass('disabledsection');
 
                     <?php if (CONV_IS_WC) { ?>
-                        if (jQuery('#conwizverifysite').length && conwizverifysite == 1) {
-                            call_site_verified();
-                        }
-                        if (jQuery('#conwizverifydomain').length && conwizverifydomain == 1) {
-                            call_domain_claim();
-                        }
                         if (jQuery('#conwizenablesuperfeed').length && conwizenablesuperfeed == 1) {
+                            call_domain_claim();
+                            call_site_verified();
                             createSuperAIFeed();
                         }
                     <?php } ?>

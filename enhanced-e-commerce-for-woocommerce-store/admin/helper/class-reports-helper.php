@@ -28,6 +28,7 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			$this->CustomApi = new CustomApi();
 			
 			add_action('wp_ajax_set_email_configurationGA4', array($this, 'set_email_configurationGA4'));
+			add_action('wp_ajax_save_logo_attachment', array($this,'save_logo_attachment'));
 			//general ga4 reports
 			add_action('wp_ajax_get_ga4_general_grid_reports', array($this, 'get_ga4_general_grid_reports'));
 			add_action('wp_ajax_get_ga4_page_report', array($this, 'get_ga4_page_report'));
@@ -64,7 +65,15 @@ if (!class_exists('Conversios_Reports_Helper')) {
 				$is_disabled = isset($_POST['is_disabled']) ? sanitize_text_field(wp_unslash($_POST['is_disabled'])) : "";
 				$custom_email = isset($_POST['custom_email']) ? sanitize_text_field(wp_unslash($_POST['custom_email'])) : "";
 				$email_frequency = isset($_POST['email_frequency']) ? sanitize_text_field(wp_unslash($_POST['email_frequency'])) : "";
-				
+				$save_email_bydefault = isset($_POST['save_email_bydefault']) ? sanitize_text_field(wp_unslash($_POST['save_email_bydefault'])) : "";
+				$options = get_option("ee_options");
+				if ($options) {
+					$options = is_array($options) ? $options : unserialize($options);
+					if (!isset($options['save_email_bydefault'])) {
+						$options['save_email_bydefault'] = $save_email_bydefault;
+						update_option('ee_options', serialize($options));
+					}
+				}
 				if ($is_disabled != "" && $custom_email != "" && $email_frequency != "") {
 					$api_rs = $this->ShoppingApi->set_email_configurationGA4($is_disabled, $custom_email, $email_frequency);
 					echo wp_json_encode($api_rs);
@@ -76,7 +85,15 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			}
 			wp_die();
 		}
-
+		function save_logo_attachment() {
+			$attachment_id = intval($_POST['attachment_id']);
+			if ($attachment_id) {
+				update_option('ee_logo_attachment_id', $attachment_id);
+				wp_send_json_success(['message' => 'Logo saved successfully!']);
+			} else {
+				wp_send_json_error(['message' => 'Invalid attachment ID']);
+			}
+		}
 		public function get_daily_visitors_report(){
 			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
 			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {

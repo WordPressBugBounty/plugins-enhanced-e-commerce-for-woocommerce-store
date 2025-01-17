@@ -5,10 +5,10 @@ Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-st
 Tags: google analytics 4, google ads, meta pixel, google tag manager, tiktok pixel, facebook pixel, GA4 tracking, GTM, Pixel tracking, Snapchat,FCAPI,GMC Google Merchant Center, Microsoft Bing Ads, Ads tracking, ecommerce tracking ,lead Generation tracking , campaign creation , audience building.
 Author: Conversios
 Requires at least: 4.6
-Tested up to: 6.6.2
+Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 7.1.9
-Version: 7.1.9
+Stable tag: 7.2.0
+Version: 7.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,7 +19,7 @@ An all-in-one plugin that offers accurate tracking, insightful reporting, and op
 Conversios is an easy-to-use, all-in-one plugin that offers accurate tracking, insightful reporting, and optimized marketing strategies. It easily integrates with Google Analytics 4, Google Tag Manager, and top ad platforms, including Google Ads, Meta Pixel (Facebook), Snapchat, Pinterest, TikTok, Microsoft Ads, and Twitter. Automate product feeds, access E-commerce Reporting and Google Ads Reporting with AI-powered insights, and manage campaigns directly from your WordPress dashboard.
 
 https://youtu.be/EAP7tem09jU
-
+  
 ###KEY FEATURES
 
 ### &#9989; GA4 E-Commerce Tracking
@@ -142,9 +142,12 @@ Conversios works seamlessly with popular GDPR compliance plugins like CookieYes 
 3. Complete the onboarding once activated the plugin.
 
 == Changelog ==
+= 7.2.0 - 17/01/2025 =
+* UIUX Enhancement.
+
 = 7.1.8 - 22/10/2024 =
-* Enhamncement in the Facebook Conversion API screen.
-* Enhamncement in product feed user interface.
+* Enhancement in the Facebook Conversion API screen.
+* Enhancement in product feed user interface.
 
 = 7.1.7 - 27/09/2024 =
 * Improved UI for easier management of Google Ads campaigns via Campaign Management.

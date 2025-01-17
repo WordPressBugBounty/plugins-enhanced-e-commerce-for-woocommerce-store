@@ -40,7 +40,7 @@ $is_sel_disable = 'disabled';
                             <!-- <sup>
                                 <span class="material-symbols-outlined text-secondary md-18 ps-1" data-bs-toggle="tooltip" data-bs-placement="top" title="The Facebook pixel ID looks like. 518896233175751">info</span>
                             </sup> -->
-                            </h5>
+                        </h5>
                         <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="form-control valtoshow_inpopup_this w-75" value="<?php echo esc_attr($fb_pixel_id); ?>" placeholder="e.g. 518896233175751">
                     </div>
 
@@ -50,24 +50,16 @@ $is_sel_disable = 'disabled';
 
 
             <!-- Facebook ID  -->
-            <?php
-            $fb_conversion_api_token = (isset($ee_options["fb_conversion_api_token"]) && $ee_options["fb_conversion_api_token"] != "") ? $ee_options["fb_conversion_api_token"] : "";
-            ?>
-            <div id="fbapi_box" class="pt-4">
-                <div class="row pt-2">
-                    <div class="col-12">
-                       
 
+            <div class="pt-3">
+                <div class="row">
+                    <div class="col-12">
                         <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
-                            <div class="mt-0 mb-2 col-2 d-flex justify-content-center">
-                                <div class="fb-kapi circle">
-                                    <div class="text">
-                                        <h3 class="m-0">93%</h3>
-                                    </div>
-                                </div>
+                            <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
+                                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/fbcapiimpact.png'); ?>" />
                             </div>
-                            <div class="mt-0 mb-2 col-10">
-                                <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits</div>
+                            <div class="mt-0 mb-2 col-9">
+                                <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits in Professional Plan</div>
                                 <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
                                     <li class="d-flex fs-14 fw-bold">
                                         <span class="material-symbols-outlined text-success md-18">
@@ -94,13 +86,13 @@ $is_sel_disable = 'disabled';
                                         <?php esc_html_e("Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </li>
                                 </ul>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=fbinnersetting&utm_campaign=capi&plugin_name=aio'); ?>" class="align-middle btn btn-sm btn-primary fw-bold-500">
-                                    <?php esc_html_e("Buy Professional Plan Now!", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=innerfb&utm_campaign=capi'); ?>" class="align-middle btn btn-sm btn-primary fw-bold-500">
+                                    <?php esc_html_e("Buy Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
             <!-- Facebook ID End-->

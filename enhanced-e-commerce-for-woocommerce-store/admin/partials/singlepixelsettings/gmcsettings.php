@@ -149,9 +149,36 @@ $contData = json_decode($getCountris);
                     ?>
                 </div>
             </div>
-
-
         </div>
+
+        <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3 mt-3" style="background: #caf3e3;">
+            <div class="mt-0 mb-2 col-10">
+                <div class="fs-6 fw-bold text-primary">Unlock Google First Party Mode with Server Side Tagging</div>
+                <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
+                        Improves Event Match Quality scores by sending extra user data (e.g., email, phone number).
+                    </li>
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">
+                            check_circle
+                        </span>
+                        Capture events like purchases and form submissions directly from your server, regardless of browser restrictions.
+                    </li>
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
+                        Complete picture of user journeys, resulting in better conversion attribution, especially with iOS 14+ restrictions.
+                    </li>
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
+                        Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.
+                    </li>
+                </ul>
+                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=snapinnersetting&amp;utm_campaign=sstcapi&amp;plugin_name=aio" class="align-middle btn btn-sm btn-primary fw-bold-500">
+                    Buy Professional Plan Now! </a>
+            </div>
+        </div>
+        
     </form>
 
     <input type="hidden" id="valtoshow_inpopup" value="Google Merchant Center Account:" />
@@ -407,8 +434,13 @@ $contData = json_decode($getCountris);
                                     </div>
                                 </div>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>">Connect
-                                to TikTok Business Account</a>
+                            <span>
+                                <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>">Connect
+                                    to TikTok Business Account | </a>
+                                <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>">Connect
+                                to Facebook Business Account</a>
+                            </span>
+                            
                         </div>
                     </div>
                 </div>
@@ -538,8 +570,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             </label>
                         </div>
                         <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value=""
-                                id="fb_id" name="fb_id" <?php echo $fb_catalog_id !== '' ? "checked" : 'disabled' ?>>
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="fb_id" name="fb_id" <?php echo $fb_catalog_id !== '' ? "checked" : 'disabled' ?>>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("Facebook Catalog Id :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
@@ -940,15 +971,15 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                         let google_merchant_center_id = jQuery('#google_merchant_center_id').val();
                         let merchant_id = jQuery('#google_merchant_center_id').find(':selected').data('merchant_id');
                         // save_merchant_data(google_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, true).then((res) => {
-                            // if (feedType !== '') {
-                            //    // createSuperAIFeed();
-                            // } else {
-                                conv_change_loadingbar("hide");
-                                jQuery(".conv-btn-connect-enabled-gmc").text("Save");
-                                jQuery(".conv-btn-connect-enabled-gmc").removeClass('disabled');
-                                jQuery('.gmcAccount').html(selected_vals["google_merchant_id"])
-                                jQuery("#conv_save_success_modal_cta").modal("show");
-                            // }
+                        // if (feedType !== '') {
+                        //    // createSuperAIFeed();
+                        // } else {
+                        conv_change_loadingbar("hide");
+                        jQuery(".conv-btn-connect-enabled-gmc").text("Save");
+                        jQuery(".conv-btn-connect-enabled-gmc").removeClass('disabled');
+                        jQuery('.gmcAccount').html(selected_vals["google_merchant_id"])
+                        jQuery("#conv_save_success_modal_cta").modal("show");
+                        // }
                         // });
                     }
                 }
@@ -1110,13 +1141,13 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         });
 
         /****************Submit Feed call end***********************************/
-        jQuery(document).on('click', '#gmc_id', function (e) {
+        jQuery(document).on('click', '#gmc_id', function(e) {
             jQuery('.errorChannel').css('border', '');
         });
-        jQuery(document).on('click', '#tiktok_id', function (e) {
+        jQuery(document).on('click', '#tiktok_id', function(e) {
             jQuery('.errorChannel').css('border', '');
         });
-        jQuery(document).on('click', '#fb_id', function (e) {
+        jQuery(document).on('click', '#fb_id', function(e) {
             jQuery('.errorChannel').css('border', '');
         });
     });
@@ -1129,7 +1160,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             action: "save_feed_data",
             feedName: jQuery('#feedName').val(),
             google_merchant_center: jQuery('input#gmc_id').is(':checked') ? '1' : '',
-            fb_catalog_id:jQuery('input#fb_id').is(':checked') ? '2' : '',
+            fb_catalog_id: jQuery('input#fb_id').is(':checked') ? '2' : '',
             tiktok_id: jQuery('input#tiktok_id').is(':checked') ? '3' : '',
             tiktok_catalog_id: jQuery('input#tiktok_id').is(':checked') ? jQuery('input#tiktok_id').val() : '',
             autoSync: jQuery('input#autoSync').is(':checked') ? '1' : '0',

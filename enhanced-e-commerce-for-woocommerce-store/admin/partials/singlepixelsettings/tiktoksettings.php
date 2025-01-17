@@ -40,49 +40,39 @@ $is_sel_disable = 'disabled';
             <!-- Tiktok Pixel End-->
         </div>
 
-        <div id="fbapi_box" class="pt-4">
-            <div class="row pt-2">
-                <div class="col-12">
-                    <h5 class="d-flex align-items-center mb-1 text-dark">
-                        <b><?php esc_html_e("Tiktok Events API Benefits:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                        <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=woo_aiofree_plugin&utm_medium=tiktokinnersetting&utm_campaign=capi'); ?>" class="conv-link-blue ms-2 fw-bold-500">
-                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
-                            <u><?php esc_html_e("Available In Professional Plan", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-                        </a>
-                    </h5>
-                    <div class="mt-0 mb-2 col-10">
-                        <ul class="conv-green-checkli fb-kapi list-unstyled mt-1">
-                            <li class="d-flex fs-14 fw-bold">
-                                <span class="material-symbols-outlined">
-                                    fiber_manual_record
-                                </span>
-                                <?php esc_html_e("Improves Event Match Quality scores by sending extra user data (e.g., email, phone number).", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                            <li class="d-flex fs-14 fw-bold">
-                                <span class="material-symbols-outlined">
-                                    fiber_manual_record
-                                </span>
-                                <?php esc_html_e("Capture events like purchases and form submissions directly from your server, regardless of browser restrictions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                            <li class="d-flex fs-14 fw-bold">
-                                <span class="material-symbols-outlined">
-                                    fiber_manual_record
-                                </span>
-                                <?php esc_html_e("Complete picture of user journeys, resulting in better conversion attribution, especially with iOS 14+ restrictions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                            <li class="d-flex fs-14 fw-bold">
-                                <span class="material-symbols-outlined">
-                                    fiber_manual_record
-                                </span>
-                                <?php esc_html_e("Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </li>
-                        </ul>
-                    </div>
+        <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3 mt-4" style="background: #caf3e3;">
+            <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
+                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/sstimpact.png'); ?>" />
+            </div>
+            <div class="mt-0 mb-2 col-9">
+                <div class="fs-6 fw-bold text-primary">Increase conversions by 40% with the Server-Side Tagging Enterprise Plan</div>
+                <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
+                        Full automation for server-side tracking and web container setup including Datalayer setup
+                    </li>
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">
+                            check_circle
+                        </span>
+                        Custom GTM loader with First party mode enable
+                    </li>
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
+                        Server-side tracking for GA4, Google Ads, Facebook CAPI, Snapchat, and TikTok Events API
+                    </li>
+                    <li class="d-flex fs-14 fw-bold">
+                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
+                        Faster load time with server-side tracking
 
-                </div>
-
+                    </li>
+                </ul>
+                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=tiktokinnersetting&amp;utm_campaign=sstnudge&amp;plugin_name=aio" class="align-middle btn btn-sm btn-primary fw-bold-500">
+                    Buy Now! </a>
             </div>
         </div>
+
+
     </form>
     <input type="hidden" id="valtoshow_inpopup" value="TikTok Pixel ID:" />
 

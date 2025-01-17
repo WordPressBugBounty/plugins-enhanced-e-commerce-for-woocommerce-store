@@ -19,8 +19,6 @@ if (!class_exists('TVC_Ajax_File')) :
   class TVC_Ajax_File extends TVC_Ajax_Calls
   {
     private $apiDomain;
-    protected $access_token;
-    protected $refresh_token;
     public function __construct()
     {
       parent::__construct();
@@ -263,7 +261,8 @@ if (!class_exists('TVC_Ajax_File')) :
     public function conv_save_data_middleware($postDataFull = array())
     {
       $postData = $postDataFull['conv_options_data'];
-
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       try {
         $url = $this->apiDomain . '/customer-subscriptions/update-detail';
         $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
@@ -271,7 +270,8 @@ if (!class_exists('TVC_Ajax_File')) :
         foreach ($postData as $key => $value) {
           $data[$key] = sanitize_text_field((isset($value)) ? $value : '');
         }
-
+        $data['store_id'] = $google_detail['setting']->store_id;
+        $data["subscription_id"] = $google_detail['setting']->id;
         $args = array(
           'headers' => $header,
           'method' => 'POST',
@@ -325,9 +325,7 @@ if (!class_exists('TVC_Ajax_File')) :
           $this->conv_save_data_eeapidata($post);
         }
         if (isset($_POST['conv_options_data']['ga_GMC']) && $_POST['conv_options_data']['ga_GMC'] == '1' && isset($_POST['conv_options_data']['merchant_id'])) {
-          $access_token = $this->get_tvc_access_token();
-          $refresh_token = $this->get_tvc_refresh_token();
-          $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($access_token), sanitize_text_field($refresh_token));
+          $api_obj = new Conversios_Onboarding_ApiCall();
           $postData = [
             'subscription_id' => isset($_POST['conv_options_data']['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['conv_options_data']['subscription_id'])) : '',
             'merchant_id' => isset($_POST['conv_options_data']['merchant_id']) ? sanitize_text_field(wp_unslash($_POST['conv_options_data']['merchant_id'])) : '',
@@ -335,6 +333,10 @@ if (!class_exists('TVC_Ajax_File')) :
             'adwords_id' => isset($_POST['conv_options_data']['google_ads_id']) ? sanitize_text_field(wp_unslash($_POST['conv_options_data']['google_ads_id'])) : ''
           ];
           $api_obj->linkGoogleAdsToMerchantCenter($postData);
+        }
+        if (isset($_POST['conv_options_data']['ga_cid']) && $_POST['conv_options_data']['ga_cid'] == '1') {
+          $api_obj = new Conversios_Onboarding_ApiCall();
+          $api_obj->gaDimension();
         }
         if (in_array("eeselectedevents", $_POST['conv_options_type']) && isset($_POST["conv_options_data"]["conv_selected_events"]['ga'])) {
           $selectedevents = is_array($_POST["conv_options_data"]["conv_selected_events"]['ga']) ? array_map('sanitize_text_field', wp_unslash($_POST["conv_options_data"]["conv_selected_events"]['ga'])) : sanitize_text_field(wp_unslash($_POST["conv_options_data"]["conv_selected_events"]['ga']));
@@ -432,9 +434,7 @@ if (!class_exists('TVC_Ajax_File')) :
         $TVC_Admin_Helper->update_remarketing_snippets();
         $TVC_Admin_Helper->update_app_status();
         if (isset($conv_options_data['ga_GMC']) && $conv_options_data['ga_GMC'] == '1' && isset($_POST['conv_options_data']['merchant_id'])) {
-          $access_token = $this->get_tvc_access_token();
-          $refresh_token = $this->get_tvc_refresh_token();
-          $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($access_token), sanitize_text_field($refresh_token));
+          $api_obj = new Conversios_Onboarding_ApiCall();
           $postData = [
             'subscription_id' => isset($_POST['conv_options_data']['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['conv_options_data']['subscription_id'])) : '',
             'merchant_id' => isset($_POST['conv_options_data']['merchant_id']) ? sanitize_text_field(wp_unslash($_POST['conv_options_data']['merchant_id'])) : '',
@@ -445,9 +445,7 @@ if (!class_exists('TVC_Ajax_File')) :
         }
 
         if (isset($conv_options_data['link_google_analytics_with_google_ads'])) {
-          $access_token = $this->get_tvc_access_token();
-          $refresh_token = $this->get_tvc_refresh_token();
-          $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($access_token), sanitize_text_field($refresh_token));
+          $api_obj = new Conversios_Onboarding_ApiCall();
           $postData = [
             'ads_customer_id' => sanitize_text_field($conv_options_data['google_ads_id']),
             'web_property_id' => isset($conv_options_data['web_property_id']) ? sanitize_text_field($conv_options_data['web_property_id']) : "",
@@ -1065,29 +1063,7 @@ if (!class_exists('TVC_Ajax_File')) :
         exit;
       }
     }
-    public function get_tvc_access_token()
-    {
-      if (!empty($this->access_token)) {
-        return $this->access_token;
-      } else {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-        $this->access_token = sanitize_text_field(base64_decode($google_detail['setting']->access_token));
-        return $this->access_token;
-      }
-    }
 
-    public function get_tvc_refresh_token()
-    {
-      if (!empty($this->refresh_token)) {
-        return $this->refresh_token;
-      } else {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-        $this->refresh_token = sanitize_text_field(base64_decode($google_detail['setting']->refresh_token));
-        return $this->refresh_token;
-      }
-    }
     /**
      * Delete the campaign
      */
@@ -3342,10 +3318,14 @@ if (!class_exists('TVC_Ajax_File')) :
       if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_country_nonce', FILTER_UNSAFE_RAW), 'conv_country_nonce')) {
         if (isset($_POST['countryCode']) === TRUE && $_POST['countryCode'] !== '') {
           $country_code = sanitize_text_field(wp_unslash($_POST['countryCode']));
-          $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
-          $where = '`country` = "' . esc_sql($country_code) . '"';
-          $filed = array('catalog_id');
-          $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_tiktok_catalog", $where, $filed);
+          global $wpdb;
+          $table_name = $wpdb->prefix . 'ee_tiktok_catalog';
+          $country_code = 'US';
+          $query = $wpdb->prepare(
+            "SELECT catalog_id FROM $table_name WHERE `country` = %s",
+            $country_code
+          );
+          $result = $wpdb->get_results($query, ARRAY_A);
           $catalog_id['catalog_id'] = isset($result[0]['catalog_id']) === TRUE && isset($result[0]['catalog_id']) !== '' ? $result[0]['catalog_id'] : '';
           echo wp_json_encode(array("error" => false, "data" => $catalog_id));
         }
@@ -3392,7 +3372,6 @@ if (!class_exists('TVC_Ajax_File')) :
             'merchant_id' => isset($_POST['google_merchant_id']) ? sanitize_text_field(wp_unslash($_POST['google_merchant_id'])) : '',
             'customer_id' => isset($_POST['google_ads_id']) ? sanitize_text_field(wp_unslash($_POST['google_ads_id'])) : '',
             'target_roas' => isset($_POST['target_roas']) && !empty($_POST['target_roas']) ? (float)sanitize_text_field(wp_unslash($_POST['target_roas'])) / 100 : '',
-            'access_token' => $this->get_tvc_access_token(),
             'status' => isset($_POST['status']) ? sanitize_text_field(wp_unslash($_POST['status'])) : '',
           );
 

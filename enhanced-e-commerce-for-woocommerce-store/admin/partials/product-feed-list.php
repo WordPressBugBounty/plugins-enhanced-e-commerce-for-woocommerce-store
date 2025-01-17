@@ -17,8 +17,6 @@ $customApiObj = new CustomApi();
 $googledetail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
 $googleDetail = $googledetail->data;
 $conv_data['subscription_id'] = $googleDetail->id;
-$conv_data['access_token'] = base64_encode(sanitize_text_field($googleDetail->access_token));
-$conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->refresh_token));
 $conv_data = $TVC_Admin_Helper->get_store_data();
 $conv_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
 $google_detail = $TVC_Admin_Helper->get_ee_options_data();
@@ -77,7 +75,10 @@ $data = unserialize(get_option('ee_options'));
 <!-- Main row -->
 <div class="px-50 pt-4 conv-heading-box-no">
     <h3 class="m-0">Product Feed Channels</h3>
-    <!-- <span>You can configure your Ads channels for your product feeds</span> -->
+    <div class="h6 alert alert-success p-2 m-0 mt-2 fw-light text-dark">
+        <?php esc_html_e("Automated, real-time API-based product feeds ensure the highest product approval rates,", "enhanced-e-commerce-for-woocommerce-store"); ?>
+        <?php esc_html_e("enhancing online campaign optimization across Google, Facebook, and TikTok.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+    </div>
 </div>
 <div id="conv_grid_list_box" class="row px-50 conv-pixel-list-item justify-content-center pt-1 p-3" style="--bs-gutter-x: 0rem;">
     <!-- Google Merchant card Start -->
@@ -99,16 +100,16 @@ $data = unserialize(get_option('ee_options'));
                 <div class="d-flex align-items-start flex-column">
 
                     <?php if (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>Google Merchant Center Account: <?php echo (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') ? esc_attr($data['google_merchant_id']) : ''; ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1">
+                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span>Google Merchant Center Account: <?php echo (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') ? esc_attr($data['google_merchant_id']) : ''; ?>
                         </div>
                     <?php } else { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Google Merchant Center Account: Not connected</span></div>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Google Merchant Center Account: Not connected</span></div>
                     <?php } ?>
 
-                    <div class="d-flex align-items-center"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync &nbsp;
-                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedgrid&utm_campaign=gmc&plugin_name=aio">
-                            <small class="text-success btn-success lh-0 fs-10 m-0"><b class="pro">Pro</b></small>
+                    <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to GMC&nbsp;
+                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=gmc&amp;plugin_name=aio">
+                            <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                         </a>
                     </div>
                 </div>
@@ -132,15 +133,19 @@ $data = unserialize(get_option('ee_options'));
             </div>
             <div class="pt-3 pb-3 pixel-desc">
                 <div class="d-flex align-items-start flex-column">
-
                     <?php if (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>TikTok Business Account: <?php echo (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? esc_attr($data['tiktok_setting']['tiktok_business_id']) : ''; ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1">
+                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span>TikTok Business Account: <?php echo (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? esc_attr($data['tiktok_setting']['tiktok_business_id']) : ''; ?>
                         </div>
-
                     <?php } else { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>TikTok Business Accounts: Not connected</span></div>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>TikTok Business Accounts: Not connected</span></div>
                     <?php } ?>
+
+                    <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Tiktok&nbsp;
+                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=gmc&amp;plugin_name=aio">
+                            <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                        </a>
+                    </div>
 
                 </div>
             </div>
@@ -164,57 +169,25 @@ $data = unserialize(get_option('ee_options'));
             </div>
             <div class="pt-3 pb-3 pixel-desc">
                 <div class="d-flex align-items-start flex-column">
-
-                    <!-- disconnect or connect button or btn -->
-                    <!-- <div class="row">
-                        <span
-                            class="float-end badge rounded-pill conv-badge <?php echo !empty($channel_not_connected['fb_business_id']) ? "conv-badge-yellow" : "conv-badge-green"; ?>">
-                            <?php echo !empty($channel_not_connected['fb_business_id']) ? "Not Connected" : "Connected"; ?>
-                        </span>
-                    </div> -->
-
                     <?php if (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') { ?>
                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span>Facebook Business Account: <?php echo (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') ? esc_attr($data['facebook_setting']['fb_business_id']) : ''; ?>
+                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span>Facebook Business Account: <?php echo (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') ? esc_attr($data['facebook_setting']['fb_business_id']) : ''; ?>
                         </div>
-                        <!-- <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><span class="pe-2 m-0">All the e-commerce event tracking including Purchase</span>
-                            </div> -->
                     <?php } else { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Facebook Business Account: Not connected</span></div>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Facebook Business Account: Not connected</span></div>
                     <?php } ?>
 
-                    <!-- <div class="d-flex mt-3">
-                        <span>
-                            <?php esc_html_e("Benefits and how to integrate Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store") ?>
-                            <a class="conv-link-blue conv-watch-video"
-                                href="https://www.conversios.io/docs/how-to-sync-your-woocommerce-products-to-facebook-catalogue/"
-                                target="_blank">
-                                Click here
-                                <span class="material-symbols-outlined align-middle">open_in_new_outline</span>
-                            </a>
-                        </span>
-                    </div> -->
-
+                    <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Meta&nbsp;
+                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=meta&amp;plugin_name=aio">
+                            <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Meta Business Account End -->
 </div>
-
-<!-- <div class=" d-flex flex-columnf justify-content-center px-50 pb-3">
-    <div class="shadow-sm" style="max-width: 180px;">
-        <img class="align-self-center" src="<?php //echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/gmc-wc.png'); 
-                                            ?>" />
-    </div>
-    <div class="shadow-sm px-3 d-flex flex-column justify-content-center w-100 bg-white">
-        <h3>Reach you goal by creating campaign</h3>
-        <p>You can boost event matching, data accuracy, privacy compliance, and ad performance with Facebook Conversion API.
-        </p>
-    </div>
-</div> -->
-
 <style>
     .errorInput {
         border: 1.3px solid #ef1717 !important;

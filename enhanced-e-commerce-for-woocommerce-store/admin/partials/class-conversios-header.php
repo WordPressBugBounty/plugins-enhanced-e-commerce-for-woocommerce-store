@@ -63,21 +63,16 @@ if (class_exists('Conversios_Header') === FALSE) {
 
 					<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
 						<div class="promoleft">
-							<div class="promobandmsg text-white text-center fs-6">
-								<span class="fs-3">
+							<div class="promobandmsg text-white text-center fs-6 d-flex align-items-center">
+								<span class="fs-3 px-3">
 									📢
 								</span>
-								<span class="fs-6 text-dark me-2 px-2" style="background: #ffc700;">
-									<?php esc_html_e("Black Friday Offer", "enhanced-e-commerce-for-woocommerce-store"); ?>
-								</span>
-								<span class="fs-6"><?php esc_html_e("Grab 70% OFF", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-								<?php esc_html_e(" on 'All In One' Plugin", "enhanced-e-commerce-for-woocommerce-store"); ?>
-								<a target="_blank" href="https://www.conversios.io/checkout/?pid=wpAIO_PY1&utm_source=freeplugin&utm_medium=headerbanner&utm_campaign=festbanner&coupon=convfest70">
-									<span class="fs-6">
-										<u><?php esc_html_e("Professional Plan", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-									</span>
-								</a>
-								<span class="text-white fw-light" style="font-size:14px;">(FB CAPI + Snapchat CAPI + Tiktok CAPI & <a class="text-white" href="https://www.conversios.io/pricing?utm_source=freeplugin&utm_medium=headerbanner&utm_campaign=festbanner&plugin_name=aio" target="_blank"><u>many more features</u></a>)</span>
+								<div class="text-white">
+									Boost
+									<u><span class="px-1" style="color: #ffc700;">Conversions by 30% with CAPI</span></u>
+									for Facebook, Snapchat, and TikTok Ads with our Professional Plan
+									<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn btn-sm text-white fw-normal" style="background: #07BB4F">Buy Now</a>
+								</div>
 
 							</div>
 						</div>

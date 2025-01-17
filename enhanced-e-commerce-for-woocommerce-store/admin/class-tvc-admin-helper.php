@@ -192,8 +192,6 @@ class TVC_Admin_Helper
     $google_detail = $this->customApiObj->getGoogleAnalyticDetail();
     if (property_exists($google_detail, "error") && $google_detail->error == false) {
       if (property_exists($google_detail, "data") && $google_detail->data != "") {
-        $google_detail->data->access_token = base64_encode(sanitize_text_field($google_detail->data->access_token));
-        $google_detail->data->refresh_token = base64_encode(sanitize_text_field($google_detail->data->refresh_token));
         $googleDetail = $google_detail->data;
       }
     }
@@ -237,8 +235,6 @@ class TVC_Admin_Helper
     $google_detail = $this->customApiObj->getGoogleAnalyticDetail();
     if (property_exists($google_detail, "error") && $google_detail->error == false) {
       if (property_exists($google_detail, "data") && $google_detail->data != "") {
-        $google_detail->data->access_token = base64_encode(sanitize_text_field($google_detail->data->access_token));
-        $google_detail->data->refresh_token = base64_encode(sanitize_text_field($google_detail->data->refresh_token));
         $googleDetail = $google_detail->data;
       }
     } else {
@@ -1187,19 +1183,6 @@ function call_domain_claim_both(first_message = null) {
   /*
    * Check refresh tocken status
    */
-  public function is_refresh_token_expire()
-  {
-    $access_token = $this->customApiObj->get_tvc_access_token();
-    $refresh_token = $this->customApiObj->get_tvc_refresh_token();
-    if ($access_token != "" && $refresh_token != "") {
-      $access_token = $this->customApiObj->generateAccessToken($access_token, $refresh_token);
-    }
-    if ($access_token != "") {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   public function convtvc_admin_notice()
   {

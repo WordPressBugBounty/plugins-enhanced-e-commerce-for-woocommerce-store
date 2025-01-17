@@ -209,7 +209,7 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                         <td class="text-end"><?php echo esc_html($result->metrics->conversions) ?></td>
                         <td class="text-end"><?php echo esc_html($sales) ?></td>
                         <td data-id="<?php echo esc_html($result->campaign->id) ?>" class="text-center">
-                            <span class="d-none"><? php // echo esc_html($result->campaign->id)
+                            <span class="d-none"><?php // echo esc_html($result->campaign->id)
                                                     ?></span>
                             <label class="text-primary pointer edit-btn" onclick="editCampaign(<?php echo esc_html($result->campaign->id) ?>)">Edit</label>
                         </td>
@@ -257,7 +257,7 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                                 <td class="text-end">NA</td>
                                 <td class="text-end">NA</td>
                                 <td>
-                                    <span class="d-none"><? php // echo esc_html($result->campaign->id)
+                                    <span class="d-none"><?php // echo esc_html($result->campaign->id)
                                                             ?></span>
                                     <label class="text-primary pointer" onclick="editFailedCampaign(<?php echo esc_html($value->id) ?>)">Edit</label>
                                 </td>

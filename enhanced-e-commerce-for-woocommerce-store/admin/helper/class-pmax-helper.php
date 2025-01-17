@@ -251,12 +251,15 @@ if(!class_exists('Conversios_PMax_Helper')){
 	
 		/*API CALL*/
 		public function campaign_pmax_detail($customer_id, $campaign_id) {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       try {
         $url = $this->apiDomain . '/pmax/detail';        
         $data = [
           'customer_id' => $customer_id,
           'campaign_id' => $campaign_id,
-          'access_token' => $this->CustomApi->generateAccessToken( $this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token() )
+          'store_id' => $google_detail['setting']->store_id,
+          'subscription_id' => $google_detail['setting']->id
         ];
         $header = array(
           "Authorization: Bearer $this->token",
@@ -294,13 +297,16 @@ if(!class_exists('Conversios_PMax_Helper')){
       }
     }
 		public function campaign_pmax_list($customer_id, $page_size, $page_token, $page) {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       try {
         $url = $this->apiDomain . '/pmax/list';        
         $data = [
           'customer_id' => $customer_id,
           'page_size' => $page_size,
           'page_token' => $page_token,
-          'access_token' => $this->CustomApi->generateAccessToken( $this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token() )
+          'store_id' => $google_detail['setting']->store_id,
+          'subscription_id' => $google_detail['setting']->id
         ];
         $header = array(
           "Authorization: Bearer $this->token",
@@ -314,7 +320,7 @@ if(!class_exists('Conversios_PMax_Helper')){
         );
 
         $return = new \stdClass();
-        if( empty($data['customer_id']) || empty($data['access_token']) ) {
+        if( empty($data['customer_id'])) {
           $return->error = true;
           $return->data = "";
           return $return;
@@ -344,114 +350,132 @@ if(!class_exists('Conversios_PMax_Helper')){
       }
     }
 
-    public function create_pmax_campaign_callapi($post_data) {
+    public function create_pmax_campaign_callapi($post_data)
+    {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      $store_id = $google_detail['setting']->store_id;
+      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
       try {
         $url = $this->apiDomain . '/pmax/create';
-        $post_data["access_token"] =$this->CustomApi->generateAccessToken( $this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token() );
-       // print_r($post_data);
         $header = array(
-          "Authorization: Bearer $this->token",
+          "Authorization" => "Bearer " . $this->token,
           "Content-Type" => "application/json"
         );
+        $post_data['subscription_id'] = $subscription_id;
+        $post_data['store_id'] = $store_id;
         $args = array(
-        	'timeout' => 300,
-          'headers' =>$header,
+          'timeout' => 300,
+          'headers' => $header,
           'method' => 'POST',
           'body' => wp_json_encode($post_data)
         );
-        //print_r($args);
         // Send remote request
-        $request = wp_remote_post(esc_url($url), $args);
+        $request = wp_remote_post(esc_url_raw($url), $args);
 
         // Retrieve information
         $response_code = wp_remote_retrieve_response_code($request);
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-       // print_r($result);
-        if( isset($result->error) && isset($result->data) && $result->error == '' ) {
-          $return->data = (isset($result->data))?$result->data:"";
+        // print_r($result);
+        if (isset($result->error) && isset($result->data) && $result->error == '') {
+          $return->data = (isset($result->data)) ? $result->data : "";
           $return->error = false;
           //print_r($return);
           return $return;
-        }else{
+        } else {
           $return->error = true;
-          $return->data = (isset($result->data))?$result->data:"";      
-        	$result->errors = (array)$result->errors;
-      		if(!empty($result->errors) ){
-            if(count($result->errors) != count($result->errors, COUNT_RECURSIVE)){
-              $return->errors = implode(" & ",array_map(function($a) {return implode("~",$a);},$result->errors));
-            }else{
-              $return->errors = implode(" ",$result->errors);
+          $return->data = (isset($result->data)) ? $result->data : "";
+          $result->errors = (array)$result->errors;
+          if (!empty($result->errors)) {
+            if (count($result->errors) != count($result->errors, COUNT_RECURSIVE)) {
+              $return->errors = implode(" & ", array_map(function ($a) {
+                return implode("~", $a);
+              }, $result->errors));
+            } else {
+              $return->errors = implode(" ", $result->errors);
             }
-          }else{
+          } else {
             $return->errors = $result->errors;
           }
           $return->status = $response_code;
           return $return;
         }
-          
       } catch (Exception $e) {
-          return $e->getMessage();
+        return $e->getMessage();
       }
     }
 
-    public function edit_pmax_campaign_callapi($post_data) {
+    public function edit_pmax_campaign_callapi($post_data)
+    {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      $store_id = $google_detail['setting']->store_id;
+      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
+
       try {
         $url = $this->apiDomain . '/pmax/update';
-        $post_data["access_token"] =$this->CustomApi->generateAccessToken( $this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token() );
-       // print_r($post_data);
+        //$post_data["access_token"] = $this->CustomApi->generateAccessToken($this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token());
+        // print_r($post_data);
+        $post_data["subscription_id"] = $subscription_id;
+        $post_data["store_id"] = $store_id;
+
         $header = array(
-          "Authorization: Bearer $this->token",
+          "Authorization" => "Bearer " . $this->token,
           "Content-Type" => "application/json"
         );
         $args = array(
-        	'timeout' => 300,
-          'headers' =>$header,
-          'method' => 'POST',
+          'timeout' => 300,
+          'headers' => $header,
+          'method' => 'patch',
           'body' => wp_json_encode($post_data)
         );
         //print_r($args);
         // Send remote request
         $request = wp_remote_post(esc_url($url), $args);
-
+        
         // Retrieve information
         $response_code = wp_remote_retrieve_response_code($request);
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-       // print_r($result);
-        if( isset($result->error) && isset($result->data) && $result->error == '' ) {
-          $return->data = (isset($result->data))?$result->data:"";
+        // print_r($result);
+        if (isset($result->error) && isset($result->data) && $result->error == '') {
+          $return->data = (isset($result->data)) ? $result->data : "";
           $return->error = false;
           //print_r($return);
           return $return;
-        }else{
+        } else {
           $return->error = true;
-          $return->data = (isset($result->data))?$result->data:"";      
-        	$result->errors = (array)$result->errors;
-      		if(!empty($result->errors) ){
-            if(count($result->errors) != count($result->errors, COUNT_RECURSIVE)){
-              $return->errors = implode(" & ",array_map(function($a) {return implode("~",$a);},$result->errors));
-            }else{
-              $return->errors = implode(" ",$result->errors);
+          $return->data = (isset($result->data)) ? $result->data : "";
+          $result->errors = (array)$result->errors;
+          if (!empty($result->errors)) {
+            if (count($result->errors) != count($result->errors, COUNT_RECURSIVE)) {
+              $return->errors = implode(" & ", array_map(function ($a) {
+                return implode("~", $a);
+              }, $result->errors));
+            } else {
+              $return->errors = implode(" ", $result->errors);
             }
-          }else{
+          } else {
             $return->errors = $result->errors;
           }
           $return->status = $response_code;
           return $return;
         }
-          
       } catch (Exception $e) {
-          return $e->getMessage();
+        return $e->getMessage();
       }
     }
 
     public function delete_pmax_campaign_callapi($post_data) {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      $postData['store_id'] = $google_detail['setting']->store_id;
+      $postData['subscription_id'] = $google_detail['setting']->id;
       try {
         $url = $this->apiDomain . '/pmax/delete';
-        $post_data["access_token"] =$this->CustomApi->generateAccessToken( $this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token() );
         $header = array(
           "Authorization: Bearer $this->token",
           "Content-Type" => "application/json"
@@ -459,7 +483,7 @@ if(!class_exists('Conversios_PMax_Helper')){
         $args = array(
         	'timeout' => 300,
           'headers' =>$header,
-          'method' => 'POST',
+          'method' => 'DELETE',
           'body' => wp_json_encode($post_data)
         );
         // Send remote request
@@ -499,11 +523,14 @@ if(!class_exists('Conversios_PMax_Helper')){
     }
 
     public function get_campaign_currency_code($customer_id) {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       try {
         $url = $this->apiDomain . '/pmax/currency-code';        
         $data = [
           'customer_id' => $customer_id,
-          'access_token' => $this->CustomApi->generateAccessToken( $this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token() )
+          'store_id' => $google_detail['setting']->store_id,
+          'subscription_id' => $google_detail['setting']->id
         ];
         $header = array(
           "Authorization: Bearer $this->token",

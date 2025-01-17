@@ -777,7 +777,16 @@ class Con_GTM_WC_Tracking extends Con_Settings
   }
   public function add_gtm_no_script()
   {
-    $gtm_id = ($this->want_to_use_your_gtm && $this->use_your_gtm_id != "") ? $this->use_your_gtm_id : "GTM-K7X94DG";
+    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+      $base_country_code = WC()->countries->get_base_country();
+      if ($base_country_code == "US") {
+        $gtm_id = ($this->want_to_use_your_gtm && $this->use_your_gtm_id != "") ? $this->use_your_gtm_id : "GTM-NGTQ2D2P";
+      }else{
+        $gtm_id = ($this->want_to_use_your_gtm && $this->use_your_gtm_id != "") ? $this->use_your_gtm_id : "GTM-K7X94DG";
+      }
+    }else{
+      $gtm_id = ($this->want_to_use_your_gtm && $this->use_your_gtm_id != "") ? $this->use_your_gtm_id : "GTM-K7X94DG";
+    }
     $gtm_url = "https://www.googletagmanager.com";
   ?>
     <!-- Google Tag Manager (noscript) conversios -->

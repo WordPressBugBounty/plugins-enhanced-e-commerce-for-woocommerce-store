@@ -52,7 +52,7 @@
                     <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="form-control valtoshow_inpopup_this" value="<?php echo esc_attr($fb_pixel_id); ?>" placeholder="e.g. 518896233175751">
                     <?php esc_html_e("Set up conversions and create audiences for Meta Business Center.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-setup-fb-pixel-and-fbcapi-using-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=pixelandanalytics_wizard&utm_campaign=knowmore'); ?>" class="conv-link-blue">
-                        <u><?php esc_html_e("Know how", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+                        <u><?php esc_html_e("Learn More", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
                     </a>
                 </div>
             </div>
@@ -61,15 +61,11 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
-                            <div class="mt-0 mb-2 col-2 d-flex justify-content-center">
-                                <div class="fb-kapi circle">
-                                    <div class="text">
-                                        <h3 class="m-0">93%</h3>
-                                    </div>
-                                </div>
+                            <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
+                                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/fbcapiimpact.png'); ?>" />
                             </div>
-                            <div class="mt-0 mb-2 col-10">
-                                <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits</div>
+                            <div class="mt-0 mb-2 col-9">
+                                <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits in Professional Plan</div>
                                 <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
                                     <li class="d-flex fs-14 fw-bold">
                                         <span class="material-symbols-outlined text-success md-18">

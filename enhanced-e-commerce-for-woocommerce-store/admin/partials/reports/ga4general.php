@@ -315,8 +315,11 @@
             </span>
         </h4>
         <div class="bg-white conv_bordershadow rounded">
-            <div id="conv_date_diff" class="p-2 fs-4 fw-bold"></div>
-            <div id="conv_daily_visitors_total" class="fs-3 px-2 text-secondary fw-bolder"></div>
+            <div class="d-flex">
+                <div id="conv_date_diff" class="p-2 fs-4 fw-bold"></div>
+                <div id="conv_daily_visitors_total" class="p-2 fs-4 fw-bold"></div>
+            </div>
+
 
             <div>
                 <canvas id="conv_daily_visitors_chart" class="p-3" height="300"></canvas>
@@ -327,39 +330,11 @@
 </div>
 </div>
 
-<div id="feedback-bar" class="alert alert-info text-center shadow-lg d-flex justify-content-center align-items-center" role="alert">
-    <div>
-        <strong>😊 <?php esc_html_e("Enjoying the insights?", "enhanced-e-commerce-for-woocommerce-store"); ?>&nbsp;</strong><?php esc_html_e("Leave a quick review and help us improve!", "enhanced-e-commerce-for-woocommerce-store"); ?>&nbsp;
-        <a target="_blank" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" class="btn btn-darkblue btn-sm ml-2" ><?php esc_html_e("Click Here", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
-    </div>
-    <button class="close btn p-0" id="close-feedback-bar" aria-label="">
-            <span aria-hidden="true" style="font-size: 30px;line-height: normal;">×</span>
-    </button>
-</div>
-
 
 <?php if (!$ga4_measurement_id == "") { ?>
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs"></script>
     <script>
-
-        jQuery(document).ready(function($) {
-            // Check if the bar has been closed before using localStorage
-            if (!localStorage.getItem('feedbackConvBarClosed')) {
-                // Show the bar after 2 minutes (120,000 ms)
-                setTimeout(function() {
-                    $('#feedback-bar').addClass('show');
-                    console.log('show');
-                }, 120000); // 2 minutes
-            }
-
-            // Close the bar and never show again
-            $('#close-feedback-bar').click(function() {
-                $('#feedback-bar').removeClass('show'); // Hide the bar
-                localStorage.setItem('feedbackConvBarClosed', 'true'); // Store the close action
-            });
-        });
-
         jQuery('#conv_reporttab_pill').on('show.bs.tab', function() {
             let tabid = event.target.id;
 
@@ -468,69 +443,77 @@
         }
 
         function get_ga4_general_grid_reports(post_data) {
-            conv_changeplaceholder("show");
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: tvc_ajax_url,
-                data: post_data,
-                success: function(response) {
-                    console.log("grid response", response);
-                    if (response?.error == false) {
+        conv_changeplaceholder("show");
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: post_data,
+            success: function(response) { //console.log("grid response",response);
+                if (response?.error == false) {
+        
+                    let presentdata = response.data_present[0];
+                    let pastdata = response.data_past[0];
+                    //console.log("check",presentdata);
+                    //console.log("check",pastdata);
+                    if(presentdata != undefined && pastdata != undefined){
+                        let sessions_diff = presentdata.sessions - pastdata.sessions;
+                        let sessions_cmp = (sessions_diff != 0 && pastdata.sessions != 0) ? (sessions_diff / pastdata.sessions) * 100 : 0;
 
-                        let presentdata = response.data_present[0];
-                        let pastdata = response.data_past[0];
-                        //console.log("check",presentdata);
-                        //console.log("check",pastdata);
-                        if (presentdata != undefined && pastdata != undefined) {
-                            let sessions_diff = presentdata.sessions - pastdata.sessions;
-                            let sessions_cmp = (sessions_diff != 0 && pastdata.sessions != 0) ? (sessions_diff /
-                                pastdata.sessions) * 100 : 0;
+                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
+                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_per").html(sessions_cmp.toFixed(2) + "%");
+                        conv_setupdownarrow(sessions_cmp, 'conv_rgrid_sessions');
 
-                            jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
-                            jQuery(".conv_rgrid_sessions .conv_rgrid_data_per").html(sessions_cmp.toFixed(2) + "%");
-                            conv_setupdownarrow(sessions_cmp, 'conv_rgrid_sessions');
+                        let newUsers_diff = presentdata.newUsers - pastdata.newUsers;
+                        let newUsers_cmp = (newUsers_diff != 0 && pastdata.newUsers != 0) ? (newUsers_diff / pastdata.newUsers) * 100 : 0;
 
-                            let newUsers_diff = presentdata.newUsers - pastdata.newUsers;
-                            let newUsers_cmp = (newUsers_diff != 0 && pastdata.newUsers != 0) ? (newUsers_diff /
-                                pastdata.newUsers) * 100 : 0;
+                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
+                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_per").html(newUsers_cmp.toFixed(2) + "%");
+                        conv_setupdownarrow(newUsers_cmp, 'conv_rgrid_newUsers');
 
-                            jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
-                            jQuery(".conv_rgrid_newUsers .conv_rgrid_data_per").html(newUsers_cmp.toFixed(2) + "%");
-                            conv_setupdownarrow(newUsers_cmp, 'conv_rgrid_newUsers');
+                        let avgduration_diff = presentdata.averageSessionDuration - pastdata.averageSessionDuration;
+                        let avgduration_cmp = (avgduration_diff != 0 && pastdata.averageSessionDuration != 0) ? (avgduration_diff / pastdata.averageSessionDuration) * 100 : 0;
 
-                            let avgduration_diff = presentdata.averageSessionDuration - pastdata
-                                .averageSessionDuration;
-                            let avgduration_cmp = (avgduration_diff != 0 && pastdata.averageSessionDuration != 0) ?
-                                (avgduration_diff / pastdata.averageSessionDuration) * 100 : 0;
+                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata.averageSessionDuration)).toFixed(2));
+                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_per").html(avgduration_cmp.toFixed(2) + "%");
+                        conv_setupdownarrow(avgduration_cmp, 'conv_rgrid_avgduration');
 
-                            jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata
-                                .averageSessionDuration)).toFixed(2));
-                            jQuery(".conv_rgrid_avgduration .conv_rgrid_data_per").html(avgduration_cmp.toFixed(2) +
-                                "%");
-                            conv_setupdownarrow(avgduration_cmp, 'conv_rgrid_avgduration');
+                        let bounce_diff = (presentdata.bounceRate * 100) - (pastdata.bounceRate * 100);
+                        let bounce_cmp = (bounce_diff != 0 && pastdata.bounceRate != 0) ? (bounce_diff / pastdata.bounceRate) * 100 : 0;
 
-                            let bounce_diff = (presentdata.bounceRate * 100) - (pastdata.bounceRate * 100);
-                            let bounce_cmp = (bounce_diff != 0 && pastdata.bounceRate != 0) ? (bounce_diff /
-                                pastdata.bounceRate) * 100 : 0;
+                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata.bounceRate) *100).toFixed(2));
+                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_per").html(bounce_cmp.toFixed(2) + "%");
+                        conv_setupdownarrow(bounce_cmp, 'conv_rgrid_bounce');
 
-                            jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata
-                                .bounceRate) * 100).toFixed(2));
-                            jQuery(".conv_rgrid_bounce .conv_rgrid_data_per").html(bounce_cmp.toFixed(2) + "%");
-                            conv_setupdownarrow(bounce_cmp, 'conv_rgrid_bounce');
+                        conv_set_gridboxwidth();
+                        conv_changeplaceholder("hide");
+                    }else if(presentdata != undefined && pastdata == undefined){
+                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
+                        
 
-                            conv_set_gridboxwidth();
-                            conv_changeplaceholder("hide");
-                        } else {
-                            console.log("No data");
-                        }
-                    } else {
-                        console.log("Error in data fetching");
+                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
+
+                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata.averageSessionDuration)).toFixed(2));
+                        
+
+                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata.bounceRate) *100).toFixed(2));
+                        conv_set_gridboxwidth();
+                        conv_changeplaceholder("hide");
                     }
-                },
-            });
-        }
-
+                    else{
+                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html('N/A');
+                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html('N/A');
+                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html('N/A');
+                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html('N/A');
+                        jQuery(".conv_rgrid_data_per").html('N/A');
+                        console.log("No data");
+                    }
+                } else {
+                    console.log("Error in data fetching");
+                }
+            },
+        });
+    }
         function conv_daily_visitors_create_chart(data) {
             let chartStatus_dailyVisitors = Chart.getChart("conv_daily_visitors_chart"); // <canvas> id
             if (chartStatus_dailyVisitors != undefined) {
@@ -549,7 +532,7 @@
             });
             //console.log("key array",dateArray);
             //console.log("value array",visitorsArray);
-            jQuery("#conv_daily_visitors_total").html("Total Users: " + dailyVisitors_count);
+            jQuery("#conv_daily_visitors_total").html("Total Users " + dailyVisitors_count);
             const visitors_graphData = {
                 labels: dateArray,
                 datasets: [{
@@ -1138,7 +1121,7 @@
                 end_date = end.format('DD/MM/YYYY') || 0;
             var datdiff = end.diff(start, 'days') + 1;
             jQuery(".conv_rgrid_data_compari").html("From last " + datdiff + " days");
-            jQuery("#conv_date_diff").html("Last " + datdiff + " days");
+            jQuery("#conv_date_diff").html("Last " + datdiff + " days: ");
             jQuery('span.daterangearea').html(start_date + ' - ' + end_date);
             var data = {
                 action: 'get_ga4_general_grid_reports',
@@ -1160,7 +1143,7 @@
             data["action"] = "get_general_donut_reports";
             data["report_name"] = "conv_device_chart";
             conv_get_donut_reports(data, "conv_device_chart");
-            
+
             data["report_name"] = "conv_users_chart";
             conv_get_donut_reports(data, "conv_users_chart");
 

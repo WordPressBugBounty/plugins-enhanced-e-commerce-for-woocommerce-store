@@ -74,15 +74,12 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
             $conv_onboarding_done_step = isset($this->ee_options['conv_onboarding_done_step']) ? $this->ee_options['conv_onboarding_done_step'] : "";
             $conv_onboarding_done = isset($this->ee_options['conv_onboarding_done']) ? $this->ee_options['conv_onboarding_done'] : "";
 
-
-            // Redirect to report
             if (version_compare(PLUGIN_TVC_VERSION, "7.1.2", ">") && ($gm_id != "" || $google_ads_id != "" || $google_merchant_id != "")) {
                 if (empty($conv_onboarding_done_step) || $conv_onboarding_done_step == "6") {
                     if (!empty($conv_onboarding_done) || ($gm_id != "" || $google_ads_id != "" || $google_merchant_id != "")) {
                         $conv_oldredi = admin_url('admin.php?page=conversios-analytics-reports');
                         echo "<script> location.href='" . esc_js($conv_oldredi) . "'; </script>";
                         exit();
-                        //add_action('wp_loaded', array($this, 'conv_redirect_olduser'));
                     }
                 }
             }
@@ -198,7 +195,7 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
                                     <?php esc_html_e("Conversios All In One Plugin", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </h2>
                                 <h4 class="text-center">
-                                Start instantly with no coding - our <b>ready-to-use GTM</b> setup handles everything for you.
+                                    Start instantly with no coding - our <b>ready-to-use GTM</b> setup handles everything for you.
                                 </h4>
                             </div>
 

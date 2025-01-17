@@ -236,39 +236,13 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                         </ul>
                     </div>
                     <div class="col-5 pt-0 p-4 d-flex justify-content-center">
-
-                        <div class="card">
+                        <div class="card rounded shadow">
                             <div class="card-body">
-                                <h5 class="card-title">Upgrade Now & Get <span class="text-primary">70% OFF</span></h5>
-                                <h5 class="card-title">Use Coupon <u class="text-success ">CONVFEST70</span></u></h5>
-
-                                <ul class="conv-green-checklis list-unstyled mt-3">
-                                    <li class="d-flex">
-                                        <span class="material-symbols-outlined text-success md-18">
-                                            check_circle
-                                        </span>
-                                        Enhance Conversion Tracking
-                                    </li>
-                                    <li class="d-flex">
-                                        <span class="material-symbols-outlined text-success md-18">
-                                            check_circle
-                                        </span>
-                                        Gogole Ads Dynamic Remarketing
-                                    </li>
-                                    <li class="d-flex">
-                                        <span class="material-symbols-outlined text-success md-18">
-                                            check_circle
-                                        </span>
-                                        Send unlimited Products to Google
-                                    </li>
-                                    <li class="d-flex ps-4">
-                                        and more....
-                                    </li>
-                                </ul>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn btn-sm mt-2 btn-primary">Upgrade Now</a>
+                                <h5 class="card-title text-center">Increase Google Ads <br> Conversion Rate by</h5>
+                                <h5 class="h1 text-center text-primary">30%<sup>*</sup></h5>
+                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn btn-sm mt-2 btn-primary w-100">Upgrade Now</a>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -1135,16 +1109,19 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                     data: data,
                     success: function(response) {
                         var newResponse = JSON.parse(response);
-                        if (newResponse.status == 200 && newResponse?.data[0] != "") {
-                            var managerStatus = newResponse.data[0]?.managerStatus;
-                            if (managerStatus) { //mcc true
-                                //console.log("mcc is there");
-                                jQuery("#conv_mcc_alert").removeClass("d-none");
-                                jQuery("#google_ads_id").val('').trigger('change');
-                                jQuery("#save_gads_finish").addClass("disabledsection");
-                            } else {
-                                jQuery("#save_gads_finish").removeClass("disabledsection");
+                        if (newResponse.status == 200 && newResponse.data !== null) {
+                            if (newResponse.data[0] !== undefined) {
+                                var managerStatus = newResponse.data[0]?.managerStatus;
+                                if (managerStatus) { //mcc true
+                                    //console.log("mcc is there");
+                                    jQuery("#conv_mcc_alert").removeClass("d-none");
+                                    jQuery("#google_ads_id").val('').trigger('change');
+                                    jQuery("#save_gads_finish").addClass("disabledsection");
+                                } else {
+                                    jQuery("#save_gads_finish").removeClass("disabledsection");
+                                }
                             }
+
                         }
                         jQuery("#spinner_mcc_check").addClass("d-none");
                         jQuery("#accordionFlushExample .accordion-body").removeClass("disabledsection");

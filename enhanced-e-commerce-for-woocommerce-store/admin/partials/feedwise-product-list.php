@@ -185,8 +185,6 @@ if (isset($google_detail['setting'])) {
     }
 }
 $conv_data['subscription_id'] = $googleDetail->id;
-$conv_data['access_token'] = base64_encode(sanitize_text_field($googleDetail->access_token));
-$conv_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->refresh_token));
 ?>
 <style>
     #categoryModal .modal-dialog .modal-content {

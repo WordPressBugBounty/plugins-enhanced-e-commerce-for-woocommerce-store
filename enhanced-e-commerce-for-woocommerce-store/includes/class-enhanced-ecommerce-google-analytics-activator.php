@@ -37,7 +37,7 @@ class Enhanced_Ecommerce_Google_Analytics_Activator
 
         $subscriptionId = (isset($ee_options_settings['subscription_id'])) ? $ee_options_settings['subscription_id'] : "";
 
-        $apiDomain = "https://connect.tatvic.com/laravelapi/public/api";
+        $apiDomain = "https://connect.tatvic.com/laravelapi/public/api/v1";
 
         $header = array(
             "Authorization: Bearer 'MTIzNA=='",
@@ -55,8 +55,6 @@ class Enhanced_Ecommerce_Google_Analytics_Activator
             $postData = [
                 'first_name' => "",
                 'last_name' => "",
-                'access_token' => "",
-                'refresh_token' => "",
                 'email' => $current_user->user_email,
                 'sign_in_type' => 1,
                 'app_id' => CONV_APP_ID,
@@ -77,8 +75,6 @@ class Enhanced_Ecommerce_Google_Analytics_Activator
             $postData = [
                 'subscription_id' => "",
                 'gmail' => $current_user->user_email,
-                'access_token' => "",
-                'refresh_token' => "",
                 'domain' => get_site_url(),
                 'app_id' =>  CONV_APP_ID,
                 'platform_id' => 1

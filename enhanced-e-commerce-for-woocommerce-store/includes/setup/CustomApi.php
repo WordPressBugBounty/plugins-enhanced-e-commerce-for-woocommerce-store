@@ -6,39 +6,10 @@ class CustomApi
 {
   private $apiDomain;
   private $token;
-  protected $access_token;
-  protected $refresh_token;
   public function __construct()
   {
     $this->apiDomain = TVC_API_CALL_URL;
     $this->token = 'MTIzNA==';
-  }
-  public function get_tvc_access_token()
-  {
-    if (!empty($this->access_token)) {
-      return $this->access_token;
-    } else {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      if ((isset($google_detail['setting']->access_token))) {
-        $this->access_token = sanitize_text_field(base64_decode($google_detail['setting']->access_token));
-      }
-      return $this->access_token;
-    }
-  }
-
-  public function get_tvc_refresh_token()
-  {
-    if (!empty($this->refresh_token)) {
-      return $this->refresh_token;
-    } else {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      if (isset($google_detail['setting']->refresh_token)) {
-        $this->refresh_token = sanitize_text_field(base64_decode($google_detail['setting']->refresh_token));
-      }
-      return $this->refresh_token;
-    }
   }
 
   public function tc_wp_remot_call_post($url, $args)
@@ -316,7 +287,8 @@ class CustomApi
       $data = [
         'key' => sanitize_text_field($licence_key),
         'domain' => get_site_url(),
-        'subscription_id' => sanitize_text_field($subscription_id)
+        'subscription_id' => sanitize_text_field($subscription_id),
+        'app_id' => 1
       ];
       $args = array(
         'timeout' => 300,
@@ -392,6 +364,8 @@ class CustomApi
   }
   public function get_conversion_list($customer_id, $conversionCategory = "")
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $header = array(
         "Authorization: Bearer MTIzNA==",
@@ -404,6 +378,7 @@ class CustomApi
         'customer_id' => sanitize_text_field($customer_id),
         'conversionCategory' => sanitize_text_field($conversionCategory),
         'subscription_id' => sanitize_text_field($subscription_id),
+        'store_id' => $google_detail['setting']->store_id
       ];
       $args = array(
         'timeout' => 300,
@@ -437,6 +412,8 @@ class CustomApi
 
   public function conv_create_gads_conversion($customer_id, $conversionName, $conversionCategory = "")
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $header = array(
         "Authorization: Bearer MTIzNA==",
@@ -449,7 +426,8 @@ class CustomApi
         'customer_id' => sanitize_text_field($customer_id),
         'name' => sanitize_text_field($conversionName),
         'subscription_id' => sanitize_text_field($subscription_id),
-        'conversionCategory' => sanitize_text_field($conversionCategory)
+        'conversionCategory' => sanitize_text_field($conversionCategory),
+        'store_id' => $google_detail['setting']->store_id
       ];
       $args = array(
         'timeout' => 300,
@@ -487,6 +465,10 @@ class CustomApi
    */
   public function get_google_analytics_reports_ga4($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();  
+    $postData['store_id'] = $google_detail['setting']->store_id;
+    $postData['subscription_id'] = $google_detail['setting']->id;
     try {
       $url = $this->apiDomain . "/actionable-dashboard/google-analytics-reports-ga4";
       $header = array(
@@ -533,7 +515,6 @@ class CustomApi
         "Content-Type" => "application/json"
       );
       $url = $this->apiDomain . "/actionable-dashboard/analytics-get-ga4-property-id";
-      $postData['access_token'] = $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token());
       $args = array(
         'timeout' => 300,
         'headers' => $header,
@@ -637,6 +618,8 @@ class CustomApi
   }
   public function products_sync($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if (!empty($postData)) {
         foreach ($postData as $key => $value) {
@@ -645,13 +628,14 @@ class CustomApi
           }
         }
       }
+      $postData['store_id'] = $google_detail['setting']->store_id;
+      $postData['subscription_id'] = $google_detail['setting']->id;
       $url = $this->apiDomain . "/products/batch";
       $args = array(
         'timeout' => 300,
         'headers' => array(
           'Authorization' => "Bearer MTIzNA==",
-          'Content-Type' => 'application/json',
-          'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          'Content-Type' => 'application/json'
         ),
         'body' => wp_json_encode($postData)
       );
@@ -695,8 +679,7 @@ class CustomApi
         'timeout' => 300,
         'headers' => array(
           'Authorization' => "Bearer MTIzNA==",
-          'Content-Type' => 'application/json',
-          'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          'Content-Type' => 'application/json'
         ),
         'body' => wp_json_encode($postData)
       );
@@ -764,6 +747,10 @@ class CustomApi
 
   public function getCampaignCurrencySymbol($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+    $postData['store_id'] = $google_detail['setting']->store_id;
+    $postData['subscription_id'] = $google_detail['setting']->id;
     try {
       if (!empty($postData)) {
         foreach ($postData as $key => $value) {
@@ -845,8 +832,7 @@ class CustomApi
         'timeout' => 300,
         'headers' => array(
           'Authorization' => "Bearer MTIzNA==",
-          'Content-Type' => 'application/json',
-          'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          'Content-Type' => 'application/json'
         ),
         'body' => wp_json_encode($postData)
       );
@@ -879,88 +865,27 @@ class CustomApi
     }
   }
 
-  public function generateAccessToken($access_token, $refresh_token)
-  {
-
-    if( empty($access_token) || $access_token == "" ) {
-      return false;
-    }
-
-    if ($this->check_if_basesixtyfour($access_token) == true) {
-      $access_token = base64_decode($access_token);
-    }
-
-    if ($this->check_if_basesixtyfour($refresh_token) == true) {
-      $refresh_token = base64_decode($refresh_token);
-    }
-
-    $url = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" . $access_token;
-    $request =  wp_remote_get(esc_url_raw($url), array('timeout' => 300));
-    $response_code = wp_remote_retrieve_response_code($request);
-
-    $response_message = wp_remote_retrieve_response_message($request);
-    $result = json_decode(wp_remote_retrieve_body($request));
-
-    if (isset($result->error) && $result->error) {
-      //$credentials = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
-
-      global $wp_filesystem;
-      $credentials = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
-
-      $url = 'https://www.googleapis.com/oauth2/v4/token';
-      $header = array("Content-Type" => "application/json");
-      $clientId = $credentials['web']['client_id'];
-      $clientSecret = $credentials['web']['client_secret'];
-
-      $data = [
-        "grant_type" => 'refresh_token',
-        "client_id" => sanitize_text_field($clientId),
-        'client_secret' => sanitize_text_field($clientSecret),
-        'refresh_token' => sanitize_text_field($refresh_token),
-      ];
-      $args = array(
-        'timeout' => 300,
-        'headers' => $header,
-        'method' => 'POST',
-        'body' => wp_json_encode($data)
-      );
-      $request = wp_remote_post(esc_url_raw($url), $args);
-      // Retrieve information
-      $response_code = wp_remote_retrieve_response_code($request);
-      $response_message = wp_remote_retrieve_response_message($request);
-      $response = json_decode(wp_remote_retrieve_body($request));
-      if (isset($response->access_token)) {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-        $google_detail["setting"]->access_token = base64_encode(sanitize_text_field($response->access_token));
-        $TVC_Admin_Helper->set_ee_options_data($google_detail);
-        return $response->access_token;
-      } else {
-        //return $access_token;
-      }
-    } else {
-      return $access_token;
-    }
-  } //generateAccessToken
-
 
   public function siteVerificationToken($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $url = $this->apiDomain . '/gmc/site-verification-token';
       $data = [
         'merchant_id' => sanitize_text_field($postData['merchant_id']),
         'website' => sanitize_text_field($postData['website_url']),
         'account_id' => sanitize_text_field($postData['account_id']),
-        'method' => sanitize_text_field($postData['method'])
+        'method' => sanitize_text_field($postData['method']),
+        'store_id' => $google_detail['setting']->store_id,
+        'subscription_id' => $google_detail['setting']->id
       ];
 
       $args = array(
         'timeout' => 300,
         'headers' => array(
           'Authorization' => "Bearer MTIzNA==",
-          'Content-Type' => 'application/json',
-          'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          'Content-Type' => 'application/json'
         ),
         'method' => 'POST',
         'body' => wp_json_encode($data)
@@ -996,6 +921,8 @@ class CustomApi
 
   public function siteVerification($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $url = $this->apiDomain . '/gmc/site-verification';
       $data = [
@@ -1003,15 +930,15 @@ class CustomApi
         'website' => esc_url_raw($postData['website_url']),
         'subscription_id' => sanitize_text_field($postData['subscription_id']),
         'account_id' => sanitize_text_field($postData['account_id']),
-        'method' => sanitize_text_field($postData['method'])
+        'method' => sanitize_text_field($postData['method']),
+        'store_id' => $google_detail['setting']->store_id      
       ];
 
       $args = array(
         'timeout' => 300,
         'headers' => array(
           'Authorization' => "Bearer MTIzNA==",
-          'Content-Type' => 'application/json',
-          'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          'Content-Type' => 'application/json'
         ),
         'method' => 'POST',
         'body' => wp_json_encode($data)
@@ -1049,21 +976,22 @@ class CustomApi
 
   public function claimWebsite($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $url = $this->apiDomain . '/gmc/claim-website';
       $data = [
         'merchant_id' => sanitize_text_field($postData['merchant_id']),
         'account_id' => sanitize_text_field($postData['account_id']),
         'website' => esc_url_raw($postData['website_url']),
-        'access_token' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token()),
         'subscription_id' => sanitize_text_field($postData['subscription_id']),
+        'store_id' => $google_detail['setting']->store_id
       ];
       $args = array(
         'timeout' => 300,
         'headers' => array(
           'Authorization' => "Bearer MTIzNA==",
-          'Content-Type' => 'application/json',
-          'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          'Content-Type' => 'application/json'
         ),
         'body' => wp_json_encode($data)
       );
@@ -1133,8 +1061,7 @@ class CustomApi
         $url = $this->apiDomain . '/products/list';
         $header = array(
           "Authorization: Bearer " . $this->token,
-          "Content-Type" => "application/json",
-          "AccessToken" => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          "Content-Type" => "application/json"
         );
 
         $args = array(
@@ -1156,8 +1083,7 @@ class CustomApi
         $url = $this->apiDomain . '/products/status-list';
         $header = array(
           "Authorization: Bearer " . $this->token,
-          "Content-Type" => "application/json",
-          "AccessToken" => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          "Content-Type" => "application/json"
         );
 
         $args = array(
@@ -1199,6 +1125,8 @@ class CustomApi
   }
   public function delete_from_channels($data)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
@@ -1206,10 +1134,10 @@ class CustomApi
         $url = $this->apiDomain . '/products/batch';
         $header = array(
           "Authorization: Bearer " . $this->token,
-          "Content-Type" => "application/json",
-          "AccessToken" => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          "Content-Type" => "application/json"
         );
-
+        $data['store_id'] = $google_detail['setting']->store_id;
+        $data['subscription_id'] = $google_detail['setting']->id;
         $args = array(
           'headers' => $header,
           'method' => 'DELETE',
@@ -1259,6 +1187,8 @@ class CustomApi
   }
   public function feed_wise_products_sync($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if (!empty($postData)) {
         foreach ($postData as $key => $value) {
@@ -1267,13 +1197,14 @@ class CustomApi
           }
         }
       }
+      $postData['store_id'] = $google_detail['setting']->store_id;
+      $postData['subscription_id'] = $google_detail['setting']->id;
       $url = $this->apiDomain . "/products/batch-all";
       $args = array(
         'timeout' => 300,
         'headers' => array(
           'Authorization' => "Bearer MTIzNA==",
-          'Content-Type' => 'application/json',
-          'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+          'Content-Type' => 'application/json'
         ),
         'body' => wp_json_encode($postData)
       );
@@ -1351,6 +1282,9 @@ class CustomApi
 
   public function store_business_center($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+    $postData['store_id'] = $google_detail['setting']->store_id;
     try {
       if ($postData != "") {
         $url = $this->apiDomain . '/tiktok/storeBusinessCenter';
@@ -1374,6 +1308,9 @@ class CustomApi
 
   public function store_user_catalog($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+    $postData['store_id'] = $google_detail['setting']->store_id;
     try {
       if ($postData != "") {
         $url = $this->apiDomain . '/tiktok/storeUserCatalog';
@@ -1443,6 +1380,10 @@ class CustomApi
 
   public function createPmaxCampaign($postData)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+    $postData['store_id'] = $google_detail['setting']->store_id;
+    $postData['subscription_id'] = $google_detail['setting']->id;
     try {
       if ($postData != "") {
         $url = $this->apiDomain . '/pmax/retail';
@@ -1539,6 +1480,8 @@ class CustomApi
   }
   public function storeUserBusiness($data)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if (isset($data)) {
         $url = $this->apiDomain . '/facebook/storeUserBusiness';
@@ -1546,7 +1489,7 @@ class CustomApi
           "Authorization: Bearer " . $this->token,
           "Content-Type" => "application/json"
         );
-
+        $data['store_id'] = $google_detail['setting']->store_id;
         $args = array(
           'headers' => $header,
           'method' => 'POST',
@@ -1584,6 +1527,8 @@ class CustomApi
 
   public function ads_checkMcc($subscription_id, $ads_accountId)
   {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if ($subscription_id != "" && $ads_accountId != "") {
         $url = $this->apiDomain . '/adwords/check-manager-account';
@@ -1593,7 +1538,8 @@ class CustomApi
         );
         $data = array(
           "subscription_id" => $subscription_id,
-          "customer_id" => $ads_accountId
+          "customer_id" => $ads_accountId,
+          'store_id' => $google_detail['setting']->store_id
         );
         $args = array(
           'headers' => $header,

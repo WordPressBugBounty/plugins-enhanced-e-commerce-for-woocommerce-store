@@ -2,8 +2,6 @@
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"]) && isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
     update_option('ee_customer_gmail', sanitize_email($tvc_data["g_mail"]));
-
-    if (array_key_exists("access_token", $tvc_data) && array_key_exists("refresh_token", $tvc_data)) {
         $eeapidata = unserialize(get_option('ee_api_data'));
         $eeapidata_settings = new stdClass();
 
@@ -11,12 +9,9 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
             $eeapidata_settings = $eeapidata['setting'];
         }
 
-        $eeapidata_settings->access_token = base64_encode(sanitize_text_field($tvc_data["access_token"]));
-        $eeapidata_settings->refresh_token = base64_encode(sanitize_text_field($tvc_data["refresh_token"]));
-
         $eeapidata['setting'] = $eeapidata_settings;
         update_option('ee_api_data', serialize($eeapidata));
-    }
+
 
     // $eeapidata['setting'] = $eeapidata_settings;
     // update_option('ee_api_data', serialize($eeapidata));

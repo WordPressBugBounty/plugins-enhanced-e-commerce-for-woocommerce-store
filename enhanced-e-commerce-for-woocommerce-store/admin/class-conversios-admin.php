@@ -240,6 +240,11 @@ if (class_exists('Conversios_Admin') === FALSE) {
         wp_enqueue_script('conversios-chart-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/chart.js'));
         wp_enqueue_script('conversios-chart-datalabels-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/chartjs-plugin-datalabels.js'));
         wp_enqueue_script('conversios-basictable-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.basictable.min.js'));
+        wp_enqueue_script('conversios-htmlcanvas', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/html2canvas.min.js'));
+        wp_enqueue_script('conversios-jspdf', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/jspdf.umd.min.js'));
+        wp_enqueue_media();
+        //wp_register_script( 'wk-admin-script', plugins_url( __FILE__ ), array('jquery') );
+        //wp_enqueue_script( 'wk-admin-script' );
         if (!wp_script_is('moment', 'enqueued')) {
           // Enqueue Moment.js only if it's not already enqueued
           wp_enqueue_script('conversios-moment-js', ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js', array(), '2.22.1', false);
@@ -259,6 +264,8 @@ if (class_exists('Conversios_Admin') === FALSE) {
           wp_enqueue_script('conversios-moment-js', ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js', array(), '2.22.1', false);
         }
       }
+
+
     }
 
     /**

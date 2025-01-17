@@ -215,29 +215,41 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 
                             <!-- GAds Acc Selection End -->
 
-                            <div class="pt-2">
+                            <div class="pt-3">
                                 <div class="row">
                                     <div class="col-12">
-                                        <h5 class="d-flex fw-normal mb-1 text-dark">
-                                            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=onboarding&utm_campaign=gadseec'); ?>" class="align-middle conv-link-blue fw-bold-500">
-                                                <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
-                                                <u><?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-                                            </a>
-                                        </h5>
-                                        <ul class="conv-green-checklis list-unstyled mt-1">
-                                            <li class="d-flex">
-                                                <span class="material-symbols-outlined text-success md-18">
-                                                    check_circle
-                                                </span>
-                                                <?php esc_html_e("Google Ads Enhance Conversion for Ecommerce Purchase Event", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            </li>
-                                            <li class="d-flex">
-                                                <span class="material-symbols-outlined text-success md-18">
-                                                    check_circle
-                                                </span>
-                                                <?php esc_html_e("Google Ads Conversion Tracking for Add to cart and Begin checkout", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            </li>
-                                        </ul>
+                                        <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
+                                            <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
+                                                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/gadsconversion.png'); ?>" />
+                                            </div>
+                                            <div class="mt-0 mb-2 col-9 ps-4">
+                                                <div class="fs-6 fw-bold text-primary">Drive More Sales with Starter Plan:</div>
+                                                <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
+                                                    <li class="d-flex">
+                                                        <span class="material-symbols-outlined text-success md-18">
+                                                            check_circle
+                                                        </span>
+                                                        <?php esc_html_e("Track Every Step of Your Google Ads Funnel (Add to Cart, Begin Checkout, Purchase)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                    </li>
+                                                    <li class="d-flex">
+                                                        <span class="material-symbols-outlined text-success md-18">
+                                                            check_circle
+                                                        </span>
+                                                        <?php esc_html_e("Enhance Accuracy with Enhanced Conversions", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                        <a href="https://support.google.com/google-ads/answer/9888656" class="ps-2 text-primary" target="_blank">Learn More</a>
+                                                    </li>
+                                                    <li class="d-flex">
+                                                        <span class="material-symbols-outlined text-success md-18">
+                                                            check_circle
+                                                        </span>
+                                                        <?php esc_html_e("Maximize ROI with Dynamic Remarketing", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                        <a href="https://support.google.com/google-ads/answer/3124536" class="ps-2 text-primary" target="_blank">Learn More</a>
+                                                    </li>
+                                                </ul>
+                                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=onboarding&amp;utm_campaign=gadseet&amp;plugin_name=aio" class="align-middle px-4 btn btn-sm btn-primary fw-bold-500">
+                                                    Buy Now </a>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -1038,15 +1050,16 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                     data: data,
                     success: function(response) {
                         var newResponse = JSON.parse(response);
-                        if (newResponse.status == 200 && newResponse?.data[0] != "") {
-                            var managerStatus = newResponse.data[0]?.managerStatus;
-                            if (managerStatus) { //mcc true
-                                //console.log("mcc is there");
-                                jQuery("#conv_mcc_alert").removeClass("d-none");
-                                jQuery("#google_ads_id").val('').trigger('change');
-                                jQuery("#save_gads_finish").addClass("disabledsection");
-                            } else {
-                                jQuery("#save_gads_finish").removeClass("disabledsection");
+                        if (newResponse.status == 200 && newResponse.data !== null) {
+                            if (newResponse.data[0] !== undefined) {
+                                var managerStatus = newResponse.data[0]?.managerStatus;
+                                if (managerStatus) { //mcc true
+                                    jQuery("#conv_mcc_alert").removeClass("d-none");
+                                    jQuery("#google_ads_id").val('').trigger('change');
+                                    jQuery("#save_gads_finish").addClass("disabledsection");
+                                } else {
+                                    jQuery("#save_gads_finish").removeClass("disabledsection");
+                                }
                             }
                         }
                         jQuery("#spinner_mcc_check").addClass("d-none");

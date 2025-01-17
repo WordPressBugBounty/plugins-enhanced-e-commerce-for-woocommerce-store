@@ -132,8 +132,6 @@ if ($subscriptionId != "") {
         if (property_exists($google_detail, "data") && $google_detail->data != "") {
             $googleDetail = $google_detail->data;
             $tvc_data['subscription_id'] = $googleDetail->id;
-            $tvc_data['access_token'] = base64_encode(sanitize_text_field($googleDetail->access_token));
-            $tvc_data['refresh_token'] = base64_encode(sanitize_text_field($googleDetail->refresh_token));
             $plan_id = $googleDetail->plan_id;
             $login_customer_id = $googleDetail->customer_id;
             $tracking_option = $googleDetail->tracking_option;
@@ -154,20 +152,16 @@ if ($subscriptionId != "") {
             <div class="col-md-12 g-0">
                 <!-- Pixel setting header -->
                 <div class="conv_pixel_settings_head d-flex flex-row mt-0 align-items-center mb-3">
-                    <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics'); ?>"
-                        class="link-dark rounded-3 border border-2 hreflink">
+                    <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics'); ?>" class="link-dark rounded-3 border border-2 hreflink">
                         <span class="material-symbols-outlined p-1">arrow_back</span>
                     </a>
                     <div class="ms-4 ps-1">
-                        <img
-                            src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . $pixel_settings_arr[$subpage]['logo']); ?>" />
+                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . $pixel_settings_arr[$subpage]['logo']); ?>" />
                     </div>
                     <h4 class="m-0 fw-normal ms-2 fw-bold-500">
                         <?php echo esc_html($pixel_settings_arr[$subpage]['title']); ?>
                     </h4>
-                    <button
-                        class="btn text-white ms-auto d-flex justify-content-center conv-btn-connect conv-btn-connect-disabled"
-                        style="width:110px">Save</button>
+                    <button class="btn text-white ms-auto d-flex justify-content-center conv-btn-connect conv-btn-connect-disabled" style="width:110px">Save</button>
                 </div>
                 <!-- Pixel setting header end-->
 
@@ -182,97 +176,7 @@ if ($subscriptionId != "") {
                 }
                 ?>
                 <!-- Pixel setting body end -->
-
-                <!-- Hero block -->
-                <div class="conv_hero_block">
-                    <?php if ($subpage == "gtmsettings") { ?>
-                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                            <h4>Benefits of Using Your Own GTM Container:</h4>
-                            <p>As a free user, our plugin automatically tags your website using Conversios Global Container.
-                            </p>
-                            <p>But as a pro user, you gain full control by integrating your own GTM account. Unlock 76+
-                                pre-built tags and triggers, along with powerful data layer automation.</p>
-                            <p><a class="conv-link-blue" target="_blank"
-                                    href="https://www.conversios.io/pricing/?utm_source=inapp&utm_medium=gtm_heroblock&utm_campaign=benefitsofowngtm">Upgrade
-                                    now for ultimate customization and optimization!</a></p>
-                            <ol>
-                                <li><b>Faster Page Speed:</b> Optimize your site with your own GTM container for
-                                    lightning-fast load times and improved user experience.</li>
-                                <li><b>Custom Event Tracking:</b> Tailor event tracking to your needs, gaining insights into
-                                    user behaviour, conversions, and engagement.</li>
-                                <li><b>Centralized Management:</b> Take control of tags and analytics in one place. Manage
-                                    and update with ease, saving time and reducing reliance on developers.</li>
-                                <li><b>Flexible Scalability:</b> Easily adapt to changing tracking requirements and scale
-                                    your business. Add or modify tags without disrupting your site's functionality.</li>
-                                <li>Reach out to our experts for any clarification at info@conversios.io or from the help
-                                    section.</li>
-                            </ol>
-                        </div>
-                    <?php } ?>
-
-                    <?php if ($subpage == "gasettings") { ?>
-                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                            <h4>Tips to validate Google Analytics 4 tracking:</h4>
-                            <ol>
-                                <li>Validate from GTM preview if the events are being tracked as expected. Complete an
-                                    entire user journey to validate every event and data is being tracked. <a
-                                        href="https://youtu.be/KGGI8m_oiaU" class="conv-link-blue" target="_blank">Refer
-                                        this video to validate</a>.</li>
-                                <li>GA4 takes up to 48 hours to reflect data in your GA4 account. Hence, if you are able to
-                                    validate tracking in step 1, do not worry your data will be populated in GA4 in upto 48
-                                    hours.</li>
-                                <li>Monitor the tracking on Conversios - GA4 reporting dashboard for up 5-7 days and compare
-                                    it with your woocommerce data.</li>
-                                <li>If you still find data discrepency, reach out to your dedicated customer success manager
-                                    or reach out directly at <a href="mailto:info@conversios.io">info@conversios.io.</li>
-                            </ol>
-                        </div>
-                    <?php } ?>
-
-
-
-                    <?php if ($subpage == "gadssettings") { ?>
-                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                            <!-- <h4>Tips to validate Google Ads conversion tracking and leveraging it to optimize your Google
-                            Ads campaigns:</h4> -->
-                            <h4>Notes:</h4>
-                            <ol>
-                                <!-- <li>Make sure you select right conversion id and label in the settings above and validate
-                                the conversion tracking <a href="https://youtu.be/iBOayyJijnU" class="conv-link-blue"
-                                    target="__blank">by following this steps</a>.</li>
-                            <li>Enable enhanced conversion tracking from the settings above this helps Google understand
-                                your traffic better and it in turn optimize your campaigns.</li> -->
-                                <li>You can see the conversion tracking data for your campaigns only if the campaigns are
-                                    live and it takes upto 24 hours to reflect the data in Google Ads.</li>
-                                <!-- <li>Connect your Google Analytics 4 account with Google Ads account for better attribution
-                                and detail analysis.</li> -->
-                            </ol>
-                        </div>
-                    <?php } ?>
-
-                    <?php if ($subpage == "fbsettings") { ?>
-                        <div class="convcard p-4 mt-0 rounded-3 shadow-sm mt-3">
-                            <h4>Tips to validate and leverage FB pixel and FBCAPI:</h4>
-                            <ol>
-                                <li>It is advised to use FB pixel and FBCAPI together for better accuracy and efficiency.
-                                    Hence, make sure you have configured both in above settings.</li>
-                                <li>Once you have set up FB pixel and/or FBCAPI, validate if the tracking is accurate on
-                                    your store <a href="https://youtu.be/yRf83wuxU4E" target="_blank"
-                                        class="conv-link-blue"> by visiting this guide </a>.</li>
-                                <li>Open your FB business manager and go to Assets > Pixels to check if the data is being
-                                    populated.</li>
-                                <li>Connect with your dedicated customer success manager if you are facing any issue or
-                                    reach out to <a class="conv-link-blue"
-                                        href="mailto:info@conversios.io">info@conversios.io</a> with your query.</li>
-                            </ol>
-                        </div>
-                    <?php } ?>
-                </div>
-                <!-- Hero block end -->
-
             </div>
-
-
         </div>
         <!-- Main col8 center End-->
     </div>

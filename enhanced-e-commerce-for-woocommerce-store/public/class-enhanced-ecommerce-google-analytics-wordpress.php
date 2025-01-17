@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -30,6 +31,7 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
   protected $version;
   protected $fb_page_view_event_id;
   protected $gtm;
+
 
   /**
    * Enhanced_Ecommerce_Google_Analytics_Public constructor.
@@ -91,38 +93,40 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
     add_action('wp_ajax_nopriv_datalayer_push', array($this, 'datalayer_push'));
   }
 
+
+
   /*
    * it push datalayer by global ajax sucess event
    */
   public function datalayer_push()
   {
     if (!isset($_POST['nonce']) && !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'conv_aio_nonce'))
-    wp_die('only human allowed!');
+      wp_die('only human allowed!');
 
     $data_layer['event'] = 'form_lead_submit';
 
     // WpForms plugin's form whenever submit via ajax then we will push datalayer.
-    if ( isset($_POST['form_action']) && $_POST['form_action'] == "wpforms_submit" ) {      
+    if (isset($_POST['form_action']) && $_POST['form_action'] == "wpforms_submit") {
       $data_layer['cov_form_name'] = 'Submited by WpForm plugin';
       $data_layer['cov_form_type'] = 'WpForm plugin';
-      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field(wp_unslash($_POST['form_id'])) : '' ;
+      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field(wp_unslash($_POST['form_id'])) : '';
 
       $form = wpforms()->form->get($data_layer['cov_form_id']);
-      if ( $form ) {
+      if ($form) {
         $data_layer['cov_form_name'] = $form->post_title;
       }
       wp_send_json($data_layer);
     }
 
     // Formidable plugin's form whenever submit via ajax then we will push datalayer.
-    if ( isset($_POST['form_action']) && $_POST['form_action'] == "frm_entries_create" ) {      
+    if (isset($_POST['form_action']) && $_POST['form_action'] == "frm_entries_create") {
       $data_layer['cov_form_name'] = 'Submited by Formidable plugin';
       $data_layer['cov_form_type'] = 'Formidable plugin';
-      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field(wp_unslash($_POST['form_id'])) : '' ;
+      $data_layer['cov_form_id'] = isset($_POST['form_id']) ? sanitize_text_field(wp_unslash($_POST['form_id'])) : '';
 
       if (class_exists('FrmForm')) {
         $form = FrmForm::getOne($data_layer['cov_form_id']);
-        if ( $form ) {
+        if ($form) {
           $data_layer['cov_form_name'] = $form->name;
         }
       }
@@ -157,7 +161,7 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
       if (is_plugin_active('formidable/formidable.php')) {
         //Note: even entry is disabled it will call/work.
         add_action("frm_after_create_entry", array($this->gtm, "track_formidable_plugin_submission"), 10, 2);
-        if( isset($_POST['frm_action']) && isset($_POST['form_key']) ) {
+        if (isset($_POST['frm_action']) && isset($_POST['form_key'])) {
           add_action("wp_footer", array($this->gtm, "track_formidable_plugin_submission_post"));
         }
       }
@@ -387,12 +391,12 @@ class Con_GTM_WP_Tracking extends Con_Settings
       } else if (is_order_received_page()) { // get user       
         $order = "";
         $order_id = "";
-        
+
         $order = $this->tvc_get_order_from_order_received_page();
-        if( $order != false && $order !="" && !empty($order) ) {
+        if ($order != false && $order != "" && !empty($order)) {
           $order_id = $order->get_id();
         }
-        
+
         if ($order_id) {
           $billing_country  = $order->get_billing_country();
           $calling_code = WC()->countries->get_country_calling_code($billing_country);
@@ -526,7 +530,7 @@ class Con_GTM_WP_Tracking extends Con_Settings
       $dataLayer["cov_gads_conversion_id"] = isset($conversio_send_to[0]) ? $conversio_send_to[0] : null;
       $dataLayer["cov_gads_conversion_label"] = isset($conversio_send_to[1]) ? $conversio_send_to[1] : "";
     }
-    
+
     if ($this->hotjar_pixel_id != "") {
       $dataLayer["cov_hotjar_pixel_id"] = esc_js($this->hotjar_pixel_id);
     }
@@ -552,7 +556,7 @@ class Con_GTM_WP_Tracking extends Con_Settings
       $dataLayer["conv_track_address"] = "1";
     }
 
-    $this->add_gtm_begin_datalayer_js($dataLayer);    
+    $this->add_gtm_begin_datalayer_js($dataLayer);
   }
 
   /** 
@@ -560,7 +564,16 @@ class Con_GTM_WP_Tracking extends Con_Settings
    **/
   public function add_gtm_begin_datalayer_js($data_layer)
   {
-    $gtm_id = "GTM-K7X94DG";
+    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+      $base_country_code = WC()->countries->get_base_country();
+      if ($base_country_code == "US") {
+        $gtm_id = "GTM-NGTQ2D2P";
+      } else {
+        $gtm_id = "GTM-K7X94DG";
+      }
+    } else {
+      $gtm_id = "GTM-K7X94DG";
+    }
     $has_html5_support = current_theme_supports('html5');
     echo '<script data-cfasync="false" data-pagespeed-no-defer' . ($has_html5_support ? ' type="text/javascript"' : '') . '>
       window.dataLayer = window.dataLayer || [];
@@ -588,7 +601,7 @@ class Con_GTM_WP_Tracking extends Con_Settings
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo esc_js($gtm_id); ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <?php
+  <?php
   }
 
   /** 
@@ -602,139 +615,139 @@ class Con_GTM_WP_Tracking extends Con_Settings
       dataLayer.push(' . wp_json_encode($data_layer) . ');
     </script>';
   }
-  
+
   /**
    * Formidable plugin form: formSubmit tracking without ajax
    */
-  public function track_formidable_plugin_submission_post() {
+  public function track_formidable_plugin_submission_post()
+  {
 
     $has_html5_support = current_theme_supports('html5');
-    ?>
-    <script data-cfasync="false" data-pagespeed-no-defer <?php echo $has_html5_support ? ' type="text/javascript"' : '' ?> >
+  ?>
+    <script data-cfasync="false" data-pagespeed-no-defer <?php echo $has_html5_support ? ' type="text/javascript"' : '' ?>>
       // Formidable - FormSubmit event
       if (typeof conv_form_lead_submit !== 'undefined') {
-          var datalayer = conv_form_lead_submit;
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push(datalayer);
+        var datalayer = conv_form_lead_submit;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(datalayer);
       }
     </script><?php
-  }
-  /**
-   * Gravity plugin form: formSubmit tracking
-   */
-  public function track_gravity_plugin_submission() {
+            }
+            /**
+             * Gravity plugin form: formSubmit tracking
+             */
+            public function track_gravity_plugin_submission()
+            {
 
-    $has_html5_support = current_theme_supports('html5');
-    ?>
-    <script data-cfasync="false" data-pagespeed-no-defer <?php echo $has_html5_support ? ' type="text/javascript"' : '' ?> >
-                
+              $has_html5_support = current_theme_supports('html5');
+              ?>
+    <script data-cfasync="false" data-pagespeed-no-defer <?php echo $has_html5_support ? ' type="text/javascript"' : '' ?>>
       // Gravity - FormSubmit event
 
       // when ajax method
       jQuery(document).on('gform_confirmation_loaded', function(event, formId) {
-          //var form = window['gform'].forms[formId];
-          var datalayer = {
-              event: 'form_lead_submit',
-              cov_form_type: "Gravity Form Plugin",
-              cov_form_id: formId,
-              cov_form_name: jQuery(this).data('title') || jQuery('.gform_title').text() || 'Form id:' + formId,
-          };
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push(datalayer);
+        //var form = window['gform'].forms[formId];
+        var datalayer = {
+          event: 'form_lead_submit',
+          cov_form_type: "Gravity Form Plugin",
+          cov_form_id: formId,
+          cov_form_name: jQuery(this).data('title') || jQuery('.gform_title').text() || 'Form id:' + formId,
+        };
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(datalayer);
       });
 
       // when no ajax
       jQuery(document).on('gform_post_render', function(event, formId) {
         jQuery('#gform_' + formId).on('submit', function() {
-              var datalayer = {
-                  event: 'form_lead_submit',
-                  cov_form_type: "Gravity Form Plugin",
-                  cov_form_id: formId,
-                  cov_form_name: jQuery(this).data('title') || jQuery('.gform_title').text() || 'Form id-' + formId,
-              };
-              window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push(datalayer);
-          });
+          var datalayer = {
+            event: 'form_lead_submit',
+            cov_form_type: "Gravity Form Plugin",
+            cov_form_id: formId,
+            cov_form_name: jQuery(this).data('title') || jQuery('.gform_title').text() || 'Form id-' + formId,
+          };
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(datalayer);
+        });
       });
     </script><?php
-  }
+            }
 
-  /**
-   * WpForm plugin form: formSubmit tracking
-   */
-  public function track_wpform_plugin_submission($fields, $entry, $form_data, $entry_id)
-  {
+            /**
+             * WpForm plugin form: formSubmit tracking
+             */
+            public function track_wpform_plugin_submission($fields, $entry, $form_data, $entry_id)
+            {
 
-    $title = isset($form_data['settings']['form_title']) ? $form_data['settings']['form_title'] : '';
-    $id = $form_data['id'] ?? '';
+              $title = isset($form_data['settings']['form_title']) ? $form_data['settings']['form_title'] : '';
+              $id = $form_data['id'] ?? '';
 
-    $dataLayer = array();
-    $dataLayer["event"] = "form_lead_submit";
-    $dataLayer['cov_form_name'] = $title;
-    $dataLayer["cov_form_type"] = "WpForm Plugin";
-    $dataLayer['cov_form_id'] = $id;
+              $dataLayer = array();
+              $dataLayer["event"] = "form_lead_submit";
+              $dataLayer['cov_form_name'] = $title;
+              $dataLayer["cov_form_type"] = "WpForm Plugin";
+              $dataLayer['cov_form_id'] = $id;
 
-    if ( !wp_doing_ajax() ) {
-      // when no ajax method using by wpform
-      $this->add_gtm_datalayer_js($dataLayer);
-    } // else we will push datalayer via global ajax request
-  }
+              if (!wp_doing_ajax()) {
+                // when no ajax method using by wpform
+                $this->add_gtm_datalayer_js($dataLayer);
+              } // else we will push datalayer via global ajax request
+            }
 
-  /**
-   * Formidable form plugin: Form submit tracking
-   *
-   * Note: even entry is disabled it will call/work.
-   */
-  public function track_formidable_plugin_submission($entry_id, $form_id)
-  {
-    $form = FrmForm::getOne($form_id);
-    $title = isset($form->name) ? $form->name : '';
-    $id = isset($form_id) ? $form_id : '';
+            /**
+             * Formidable form plugin: Form submit tracking
+             *
+             * Note: even entry is disabled it will call/work.
+             */
+            public function track_formidable_plugin_submission($entry_id, $form_id)
+            {
+              $form = FrmForm::getOne($form_id);
+              $title = isset($form->name) ? $form->name : '';
+              $id = isset($form_id) ? $form_id : '';
 
-    $dataLayer = array();
-    $dataLayer["event"] = "form_lead_submit";
-    $dataLayer["cov_form_name"] = $title;
-    $dataLayer["cov_form_type"] = "Formidable Plugin";
-    $dataLayer["cov_form_id"] = $id;
+              $dataLayer = array();
+              $dataLayer["event"] = "form_lead_submit";
+              $dataLayer["cov_form_name"] = $title;
+              $dataLayer["cov_form_type"] = "Formidable Plugin";
+              $dataLayer["cov_form_id"] = $id;
 
-    if ( !wp_doing_ajax() ) {
-      // when no ajax method using
+              if (!wp_doing_ajax()) {
+                // when no ajax method using
 
-      /*
+                /*
        * this code will use when page being redirect on submit.
        */
-      //$this->begin_datalayer();
-      //$this->add_gtm_datalayer_js($dataLayer); //<= we are not using this one because begin_datalayer() run after this hook
+                //$this->begin_datalayer();
+                //$this->add_gtm_datalayer_js($dataLayer); //<= we are not using this one because begin_datalayer() run after this hook
 
-      $has_html5_support = current_theme_supports('html5');
-      echo '<script data-cfasync="false" data-pagespeed-no-defer' . ($has_html5_support ? ' type="text/javascript"' : '') . '>';
-        echo "conv_form_lead_submit=". wp_json_encode($dataLayer);
-      echo '</script>';
+                $has_html5_support = current_theme_supports('html5');
+                echo '<script data-cfasync="false" data-pagespeed-no-defer' . ($has_html5_support ? ' type="text/javascript"' : '') . '>';
+                echo "conv_form_lead_submit=" . wp_json_encode($dataLayer);
+                echo '</script>';
+              } // else we will push datalayer via global ajax request
+            }
 
-    }// else we will push datalayer via global ajax request
-  }
+            public function enqueue_scripts()
+            {
+              wp_enqueue_script(esc_js($this->plugin_name), esc_url(ENHANCAD_PLUGIN_URL . '/public/js/con-gtm-google-analytics.js'), array('jquery'), esc_js($this->version), false);
+              $nonce = wp_create_nonce('conv_aio_nonce');
+              wp_localize_script(esc_js($this->plugin_name), 'ConvAioGlobal', array('nonce' => $nonce));
+            }
 
-  public function enqueue_scripts()
-  {
-    wp_enqueue_script(esc_js($this->plugin_name), esc_url(ENHANCAD_PLUGIN_URL . '/public/js/con-gtm-google-analytics.js'), array('jquery'), esc_js($this->version), false);
-    $nonce = wp_create_nonce('conv_aio_nonce');
-    wp_localize_script(esc_js($this->plugin_name), 'ConvAioGlobal', array('nonce' => $nonce));
-  }
+            /**
+             * Creat DataLyer object for create JS data layer
+             **/
+            public function add_gtm_data_layer_wp()
+            {
 
-  /**
-   * Creat DataLyer object for create JS data layer
-   **/
-  public function add_gtm_data_layer_wp()
-  {
+              if ($this->disable_tracking($this->ga_eeT)) {
+                return;
+              }
 
-    if ($this->disable_tracking($this->ga_eeT)) {
-      return;
-    }
-
-    /**
-     * Form submit event tracking
-     **/
-    if (!$this->disable_tracking($this->ga_eeT, "form_submit")) { ?>
+              /**
+               * Form submit event tracking
+               **/
+              if (!$this->disable_tracking($this->ga_eeT, "form_submit")) { ?>
       <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
         tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
         <?php if (is_plugin_active('contact-form-7/wp-contact-form-7.php')) : ?>
@@ -765,8 +778,8 @@ class Con_GTM_WP_Tracking extends Con_Settings
         <?php endif; ?>
 
         <?php if ((is_plugin_active('wpforms-lite/wpforms.php') || is_plugin_active('wpforms/wpforms.php')) ||
-          is_plugin_active('formidable/formidable.php')
-        ) { ?>
+                  is_plugin_active('formidable/formidable.php')
+                ) { ?>
 
           /*
            * Global - jjQuery event handler that is triggered when an AJAX request completes successfully.
@@ -780,17 +793,17 @@ class Con_GTM_WP_Tracking extends Con_Settings
                 var formdata = [];
                 for (var pair of settings.data.entries()) {
 
-                  if( 'form_id' in formdata && 'action' in formdata )
+                  if ('form_id' in formdata && 'action' in formdata)
                     break;
 
-                  if( pair[0] == 'wpforms[id]' ) 
+                  if (pair[0] == 'wpforms[id]')
                     formdata['form_id'] = pair[1];
 
-                  if( pair[0] == 'action' && pair[1] == 'wpforms_submit' ) 
+                  if (pair[0] == 'action' && pair[1] == 'wpforms_submit')
                     formdata['action'] = pair[1];
 
                 }
-                if ( formdata['action'] == 'wpforms_submit' && settings.data != 'action=datalayer_push') {
+                if (formdata['action'] == 'wpforms_submit' && settings.data != 'action=datalayer_push') {
                   var data = [];
                   tvc_js.formsubmit_ajax_tracking(formdata);
                   return;
@@ -814,16 +827,17 @@ class Con_GTM_WP_Tracking extends Con_Settings
             <?php } ?>
 
           });
-        <?php } // if end : is any one plugin active from formidable, wpform ?>
+        <?php } // if end : is any one plugin active from formidable, wpform 
+        ?>
       </script>
-      <?php
-    } // END: if disable_tracking form_submit global.
+<?php
+              } // END: if disable_tracking form_submit global.
 
 
-    /**
-     * on view page event
-     **/
-    /*if(empty($variable)){
+              /**
+               * on view page event
+               **/
+              /*if(empty($variable)){
       $variable=array(); //define empty array so if empty
     }else{
       $dataLayer = array();
@@ -840,6 +854,6 @@ class Con_GTM_WP_Tracking extends Con_Settings
       );
       $this->add_gtm_datalayer_js($dataLayer);
     }*/
-  } // End add_gtm_data_layer();
+            } // End add_gtm_data_layer();
 
-} // End Class Con_GTM_WP_Tracking()
+          } // End Class Con_GTM_WP_Tracking()

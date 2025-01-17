@@ -48,15 +48,7 @@ class TVC_Account
                 <div class="tvc_licence_key_wapper ">
                   <p>
                     <?php esc_html_e("Level up your E-commerce business with full control. Integrate GTM, GA4, FB Conversions API, Google Ads Conversion, Unlimited Product Feed, Dedicated success manager and more.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <?php
-                    $conv_pro_link_adv = $this->TVC_Admin_Helper->get_conv_pro_link_adv("notice", "account_summary",  "conv-link-blue fw-bold", "anchor", "Upgrade now!");
-                    echo wp_kses($conv_pro_link_adv, array(
-                      'a' => array(
-                        'href' => array(),
-                        'title' => array()
-                      )
-                    ));
-                    ?>
+                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=notice&utm_campaign=account_summary&plugin_name=aio">Upgrade Now</a>
                   </p>
                 </div>
                 <div class="google-account-analytics tvc_licence_key_change_wapper tvc-hide ">

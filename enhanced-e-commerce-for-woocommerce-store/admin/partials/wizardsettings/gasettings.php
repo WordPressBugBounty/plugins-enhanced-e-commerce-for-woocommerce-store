@@ -156,7 +156,19 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                                 </div>
                             </div>
                             <!-- GA4 account ID Selection End -->
+                            <div id="enable_cid" class="pt-3 ps-2">
+                                <div class="row ">
+                                    <div class="col-12 m-auto text-end d-flex">
+                                        <div class="form-check p-0 me-2">
+                                            <input class="form-check-input ms-auto float-end" type="checkbox" id="ga_cid" name="ga_cid" checked>
+                                        </div>
+                                        <label class="form-check-label fw-normal text-dark" for="ga_cid">
+                                            Enable client id and Enhance conversion in GA4 for better reporting
+                                        </label>
 
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -167,7 +179,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
     </form>
 
     <!-- Tab bottom buttons -->
-    <div class="tab_bottom_buttons d-flex align-items-center pt-2">
+    <div class="tab_bottom_buttons d-flex align-items-center pt-0">
         <div class="ms-auto d-flex align-items-center">
             <?php
             $isgsdisabled = "";
@@ -429,6 +441,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
             selected_vals["measurement_id"] = "";
             selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
             selected_vals["conv_onboarding_done_step"] = "<?php echo esc_js("2"); ?>";
+            selected_vals["ga_cid"] = document.getElementById('ga_cid').checked ? "1" : "0";
             jQuery(box_id).find("select, input").each(function() {
                 if (!jQuery(this).val() || jQuery(this).val() == "" || jQuery(this).val() ==
                     "undefined") {
