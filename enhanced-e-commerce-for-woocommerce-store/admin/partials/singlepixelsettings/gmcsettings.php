@@ -178,7 +178,7 @@ $contData = json_decode($getCountris);
                     Buy Professional Plan Now! </a>
             </div>
         </div>
-        
+
     </form>
 
     <input type="hidden" id="valtoshow_inpopup" value="Google Merchant Center Account:" />
@@ -341,7 +341,6 @@ $contData = json_decode($getCountris);
                     </button>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -353,7 +352,17 @@ $contData = json_decode($getCountris);
 
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/error_logo.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="fw-normal pt-3">Error</h3>
                 <span id="conv_save_error_txt" class="mb-1 lh-lg"></span>
             </div>
@@ -370,7 +379,17 @@ $contData = json_decode($getCountris);
             <div class="modal-header border-0 pb-0">
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/successImg.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="fw-normal pt-3 created_success">
                     <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>
@@ -389,7 +408,17 @@ $contData = json_decode($getCountris);
             <div class="modal-header border-0 pb-0">
                 <div class="connection-box">
                     <div class="items">
-                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/popup_woocommerce_logo.png', '', '', 'width:35px;'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <span> <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     </div>
                     <div class="items">
@@ -398,7 +427,17 @@ $contData = json_decode($getCountris);
                         </span>
                     </div>
                     <div class="items">
-                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_gmc_logo.png'); ?>">
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/popup_gmc_logo.png', '', '', 'width:35px;'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <span><?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     </div>
                 </div>
@@ -420,7 +459,17 @@ $contData = json_decode($getCountris);
                             <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/Manage_feed.png'); ?>">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/Manage_feed.png', '', '', 'width:35px;'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="attribute-content para">
                                         <h3><?php esc_html_e("Manage Feeds", "enhanced-e-commerce-for-woocommerce-store"); ?></h3>
@@ -438,9 +487,9 @@ $contData = json_decode($getCountris);
                                 <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>">Connect
                                     to TikTok Business Account | </a>
                                 <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>">Connect
-                                to Facebook Business Account</a>
+                                    to Facebook Business Account</a>
                             </span>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -621,7 +670,17 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             <div class="col-xl-6 col-lg-6 col-md-6 col-6">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <img style="width:35px;filter: drop-shadow(3px 3px 3px #ccc);" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/Campaign-Management.svg'); ?>">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/Campaign-Management.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="attribute-content para">
                                         <h3>
@@ -640,7 +699,17 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             <div class="col-xl-6 col-lg-6 col-md-6 col-6">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <img style="width:35px;filter: drop-shadow(3px 3px 3px #ccc);" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/Integrations.svg'); ?>">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/Integrations.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="attribute-content para">
                                         <h3>

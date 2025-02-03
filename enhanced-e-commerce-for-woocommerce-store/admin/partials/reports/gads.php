@@ -28,23 +28,33 @@
         </div>
     </div>
     <div id="imgcontainerconv">
-        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/web-reports-gads.png'); ?>" class="w-100" />
+        <?php echo wp_kses(
+            enhancad_get_plugin_image('/admin/images/web-reports-gads.png', '', 'w-100'),
+            array(
+                'img' => array(
+                    'src' => true,
+                    'alt' => true,
+                    'class' => true,
+                    'style' => true,
+                ),
+            )
+        ); ?>
     </div>
 </div>
 <script>
-function cb(start, end) {
-    start_date = start.format('DD/MM/YYYY') || 0,
-        end_date = end.format('DD/MM/YYYY') || 0;
-    jQuery('span.daterangearea').html(start_date + ' - ' + end_date);
-}
-jQuery(function() {
-    jQuery("#upgradetopromodalotherReports").modal('show');
-    jQuery("body.modal-open").css("overflow", "auto !important");
+    function cb(start, end) {
+        start_date = start.format('DD/MM/YYYY') || 0,
+            end_date = end.format('DD/MM/YYYY') || 0;
+        jQuery('span.daterangearea').html(start_date + ' - ' + end_date);
+    }
+    jQuery(function() {
+        jQuery("#upgradetopromodalotherReports").modal('show');
+        jQuery("body.modal-open").css("overflow", "auto !important");
 
-});
-jQuery(document).on('show.bs.modal', '#upgradetopromodalotherReports', function() {
-    setTimeout(function() {
-        jQuery("body.modal-open").addClass("overflow-auto");
-    }, 1000);
-});
+    });
+    jQuery(document).on('show.bs.modal', '#upgradetopromodalotherReports', function() {
+        setTimeout(function() {
+            jQuery("body.modal-open").addClass("overflow-auto");
+        }, 1000);
+    });
 </script>

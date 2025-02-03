@@ -2,15 +2,15 @@
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"]) && isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
     update_option('ee_customer_gmail', sanitize_email($tvc_data["g_mail"]));
-        $eeapidata = unserialize(get_option('ee_api_data'));
-        $eeapidata_settings = new stdClass();
+    $eeapidata = unserialize(get_option('ee_api_data'));
+    $eeapidata_settings = new stdClass();
 
-        if (!empty($eeapidata['setting'])) {
-            $eeapidata_settings = $eeapidata['setting'];
-        }
+    if (!empty($eeapidata['setting'])) {
+        $eeapidata_settings = $eeapidata['setting'];
+    }
 
-        $eeapidata['setting'] = $eeapidata_settings;
-        update_option('ee_api_data', serialize($eeapidata));
+    $eeapidata['setting'] = $eeapidata_settings;
+    update_option('ee_api_data', serialize($eeapidata));
 
 
     // $eeapidata['setting'] = $eeapidata_settings;
@@ -49,7 +49,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                         check_circle
                     </span>
                     <?php esc_html_e("All the lead generation event tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="lead_form_submit. email_click, phone_click, address_click">
+                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Lead Form Submit, Lead Email Click, Lead Phone Click, Page Scroll, File Download, Author, Login, Signup">
                         info
                     </span>
                 </li>
@@ -96,7 +96,17 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                 <div class="tvc_google_signinbtn_box" style="width: 185px;">
                     <div class="tvc_google_signinbtn google-btn">
                         <div class="google-icon-wrapper">
-                            <img class="google-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" />
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/g-logo.png', '', 'google-icon'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                         </div>
                         <p class="btn-text"><b><?php esc_html_e("Sign in with google", "enhanced-e-commerce-for-woocommerce-store"); ?></b></p>
                     </div>
@@ -112,7 +122,19 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
     <div class="onbrdppmain" role="document">
         <div class="onbrdnpp-cntner acccretppcntnr">
             <div class="onbrdnpp-hdr">
-                <div class="ppclsbtn clsbtntrgr"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/close-icon.png'); ?>" alt="" /></div>
+                <div class="ppclsbtn clsbtntrgr">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/close-icon.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
+                </div>
             </div>
             <div class="onbrdpp-body">
                 <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
@@ -120,7 +142,17 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                     <?php if (!isset($tvc_data['g_mail']) || $tvc_data['g_mail'] == "" || $subscriptionId == "") { ?>
                         <div class="google_connect_url google-btn">
                             <div class="google-icon-wrapper">
-                                <img class="google-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/g-logo.png', '', 'google-icon'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                             </div>
                             <p class="btn-text"><b><?php esc_html_e("Sign in with google", "enhanced-e-commerce-for-woocommerce-store"); ?></b></p>
                         </div>
@@ -129,14 +161,34 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                             <p class="alert alert-primary"><?php esc_html_e("It seems the token to access your Google accounts is expired. Sign in again to continue.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
                             <div class="google_connect_url google-btn">
                                 <div class="google-icon-wrapper">
-                                    <img class="google-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/g-logo.png', '', 'google-icon'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                 </div>
                                 <p class="btn-text"><b><?php esc_html_e("Sign in with google", "enhanced-e-commerce-for-woocommerce-store"); ?></b></p>
                             </div>
                         <?php } else { ?>
                             <div class="google_connect_url google-btn">
                                 <div class="google-icon-wrapper">
-                                    <img class="google-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/g-logo.png', '', 'google-icon'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                 </div>
                                 <p class="btn-text mr-35"><b><?php esc_html_e("Reauthorize", "enhanced-e-commerce-for-woocommerce-store"); ?></b></p>
                             </div>

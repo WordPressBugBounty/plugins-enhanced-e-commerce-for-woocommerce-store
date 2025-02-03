@@ -43,16 +43,46 @@ if ($subpage == "ga4ecommerce") {
                 <h2>
                     <?php esc_html_e("Reports & Insights", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </h2>
-                <h5 id="conv_pdf_logo" class="d-none ms-2">by <img style="width: 120px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logo.png'); ?>" /></h5>
+                <h5 id="conv_pdf_logo" class="d-none ms-2">by <?php echo wp_kses(
+                                                                    enhancad_get_plugin_image('/admin/images/logo.png', '', '', 'width:120px;'),
+                                                                    array(
+                                                                        'img' => array(
+                                                                            'src' => true,
+                                                                            'alt' => true,
+                                                                            'class' => true,
+                                                                            'style' => true,
+                                                                        ),
+                                                                    )
+                                                                ); ?></h5>
             </div>
             <div class="ms-auto p-2 bd-highlight">
-                <div id="reportrange" class="dshtpdaterange upgradetopro_badge" popupopener="generalreport">
+                <div id="reportrange" class="dshtpdaterange upgradetopro_badge d-flex" popupopener="generalreport">
                     <div class="dateclndicn">
-                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/claendar-icon.png'); ?>" alt="" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/claendar-icon.png'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                     </div>
                     <span class="daterangearea report_range_val"></span>
                     <div class="careticn">
-                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/caret-down.png'); ?>" alt="" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/caret-down.png'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                     </div>
                 </div>
             </div>
@@ -72,7 +102,7 @@ if ($subpage == "ga4ecommerce") {
                 </a>
             </div>
             <?php if ($ga4_measurement_id != "") { ?>
-                <div class="ms-auto p-2 bd-highlight d-flex">
+                <div id="conv_report_opright" class="ms-auto p-2 bd-highlight d-flex">
                     <h4 class="conv-link-blue d-flex pe-2" data-bs-toggle="modal" data-bs-target="#schedule_email_modal">
                         <span class="material-symbols-outlined conv-link-blue pe-1">check_circle</span>
                         <?php esc_html_e("Schedule Email", "enhanced-e-commerce-for-woocommerce-store") ?>
@@ -168,7 +198,17 @@ if ($subpage == "ga4ecommerce") {
                 <!-- Image Preview Container -->
                 <div id="image-preview-container" class="border d-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 36px; background-color: #f8f9fa;">
                     <span id="no-image-text" class="text-muted small">No image selected</span>
-                    <img id="selected-media-preview" class="d-none img-fluid" src="" alt="Selected Media Preview" style="max-width: 120px; max-height: 36px;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/claendar-icon.png', 'Selected Media Preview', 'd-none img-fluid', 'max-width: 120px; max-height: 36px;', 'selected-media-preview'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                 </div>
 
                 <!-- Buttons -->
@@ -464,8 +504,11 @@ if ($subpage == "ga4ecommerce") {
     });
     jQuery(function() {
         jQuery('#conv-download-pdf').click(function() {
+            jQuery("#conv_report_opright").addClass("d-none");
+            jQuery("#conv-download-pdf").addClass("disabledsection");
             jQuery("#conv_pdf_logo").removeClass('d-none');
             const element = document.getElementById('conv-report-main-div');
+            const watermarkURL = "<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logo.png'); ?>";
 
             html2canvas(element, {
                 scale: 2,
@@ -480,14 +523,32 @@ if ($subpage == "ga4ecommerce") {
                 const canvasHeight = canvas.height;
 
                 const pdfWidth = (canvasWidth * 25.4) / 96; // Convert canvas width from px to mm
-                const pdfHeight = (canvasHeight * 25.4) / 96; // Convert canvas height from px to mm
+                const pdfHeight = (canvasHeight * 25.4) / 96;
 
                 const pdf = new jsPDF('p', 'mm', [pdfWidth, pdfHeight]);
 
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save('ConversiosGA4Report.pdf');
-                jQuery("#conv_pdf_logo").addClass('d-none');
+                // Add the main content image
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+                // Load the watermark image and add it to the center
+                const watermark = new Image();
+                watermark.src = watermarkURL;
+                watermark.onload = function() {
+                    const wmWidth = pdfWidth * 0.7; // 50% of PDF width
+                    const wmHeight = (watermark.height / watermark.width) * wmWidth;
+                    const wmX = (pdfWidth - wmWidth) / 1.3; // Center horizontally
+                    const wmY = (pdfHeight - wmHeight) / 1.6; // Center vertically
+
+                    pdf.setGState(new pdf.GState({
+                        opacity: 0.1
+                    })); // Set low opacity
+                    pdf.addImage(watermark, 'PNG', wmX, wmY, wmWidth, wmHeight, undefined, 'NONE', 45);
+                    pdf.save('ConversiosGA4Report.pdf');
+                    jQuery("#conv_pdf_logo").addClass('d-none');
+                };
             });
+            jQuery("#conv-download-pdf").removeClass("disabledsection");
+            jQuery("#conv_report_opright").removeClass("d-none");
         });
     });
 </script>

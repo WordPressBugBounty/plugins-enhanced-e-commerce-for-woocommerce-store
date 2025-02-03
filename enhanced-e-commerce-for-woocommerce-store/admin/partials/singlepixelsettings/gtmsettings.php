@@ -1,5 +1,5 @@
-<?php 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+<?php
+if (! defined('ABSPATH')) exit; // Exit if accessed directly 
 
 $ga3_id = isset($ee_options['ga_id']) && $ee_options['ga_id'] != "" ? $ee_options['ga_id'] : "";
 $ga4_id = isset($ee_options['gm_id']) && $ee_options['gm_id'] != "" ? $ee_options['gm_id'] : "";
@@ -54,7 +54,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
           <label class="form-check-label ps-2" for="want_to_use_your_gtm_own">
             <?php esc_html_e("Use Your Google Tag Manager Container", "enhanced-e-commerce-for-woocommerce-store"); ?>
             <span class="conv-link-blue ms-2 fw-bold-500 upgradetopro_badge" popupopener="gtmpro_inner">
-              <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+              <?php echo wp_kses(
+                enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+                array(
+                  'img' => array(
+                    'src' => true,
+                    'alt' => true,
+                    'class' => true,
+                    'style' => true,
+                  ),
+                )
+              ); ?>
               <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
             </span>
             <br />
@@ -85,7 +95,7 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
               <?php } ?>
             </select>
           </div>
-          
+
           <div class="py-2 conv_global_configs">
             <h5 class="fw-normal mb-1">
               <?php esc_html_e("Ecommerce Events to Track:", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -103,7 +113,7 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
                   if (!empty($conv_selected_events['ga'])) {
                     $is_selected =  in_array($slug, $conv_selected_events['ga']) ? "selected" : "";
                   }
-                  ?>
+                ?>
                   <option value="<?php echo esc_attr($slug); ?>" <?php echo esc_html($is_selected); ?>><?php echo esc_attr($name); ?></option>
                 <?php } ?>
               </select>
@@ -119,8 +129,8 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
                 info
               </span>
             </div>
-            <?php if(!CONV_IS_WC) : ?>
-                <small><?php esc_html_e("To utilize these tracking, you'll need WooCommerce", "enhanced-e-commerce-for-woocommerce-store") ?></small>
+            <?php if (!CONV_IS_WC) : ?>
+              <small><?php esc_html_e("To utilize these tracking, you'll need WooCommerce", "enhanced-e-commerce-for-woocommerce-store") ?></small>
             <?php endif; ?>
             <div style="<?php echo !CONV_IS_WC ? 'opacity:0.5;pointer-events:none;' : ''; ?>padding:0 0.5em;">
               <div class="form-check form-check-inline">
@@ -281,7 +291,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
       <h5 class="fw-normal mb-1">
         <?php esc_html_e("For complete ecommerce tracking and user browsing behavior for your Woo Shop, switch to our Starter plan.", "enhanced-e-commerce-for-woocommerce-store"); ?>
         <span class="align-middle conv-link-blue ms-2 fw-bold-500 upgradetopro_badge" data-bs-toggle="modal" data-bs-target="#upgradetopromodal">
-          <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+          <?php echo wp_kses(
+            enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+            array(
+              'img' => array(
+                'src' => true,
+                'alt' => true,
+                'class' => true,
+                'style' => true,
+              ),
+            )
+          ); ?>
           <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
         </span>
       </h5>
@@ -298,7 +318,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-12 text-center">
-              <img class="mb-3" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gtm_logo.png'); ?>">
+              <?php echo wp_kses(
+                enhancad_get_plugin_image('/admin/images/logos/conv_gtm_logo.png', '', 'mb-3'),
+                array(
+                  'img' => array(
+                    'src' => true,
+                    'alt' => true,
+                    'class' => true,
+                    'style' => true,
+                  ),
+                )
+              ); ?>
               <h4 class="fw-normal fs-4 my-3">
                 <?php esc_html_e("Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
               </h4>
@@ -324,7 +354,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
           <div class="row mt-5 featureadptboxes">
             <div class="col-md-4 text-center py-3 <?php echo $ga4_id == "" ? "" : "convboxactive"; ?>">
               <div class="convborder p-2 rounded">
-                <img class="mb-3 img-32" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>">
+                <?php echo wp_kses(
+                  enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'mb-3 img-32'),
+                  array(
+                    'img' => array(
+                      'src' => true,
+                      'alt' => true,
+                      'class' => true,
+                      'style' => true,
+                    ),
+                  )
+                ); ?>
                 <h4 class="fw-normal fs-6">
                   <?php esc_html_e("Google Analytics 4", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h4>
@@ -338,7 +378,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
                 <?php } else { ?>
                   <h4 class="fw-normal fs-6 d-flex justify-content-center pt-2">
                     <?php esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <img class="align-self-center ps-2" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . "/admin/images/icon/selected.png"); ?>" />
+                    <?php echo wp_kses(
+                      enhancad_get_plugin_image('/admin/images/icon/selected.png', '', 'align-self-center ps-2'),
+                      array(
+                        'img' => array(
+                          'src' => true,
+                          'alt' => true,
+                          'class' => true,
+                          'style' => true,
+                        ),
+                      )
+                    ); ?>
                   </h4>
                 <?php } ?>
               </div>
@@ -346,7 +396,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
 
             <div class="col-md-4 text-center py-3 <?php echo $google_ads_id == "" ? "" : "convboxactive"; ?>">
               <div class="convborder p-2 rounded">
-                <img class="mb-3 img-32" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>">
+                <?php echo wp_kses(
+                  enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'mb-3 img-32'),
+                  array(
+                    'img' => array(
+                      'src' => true,
+                      'alt' => true,
+                      'class' => true,
+                      'style' => true,
+                    ),
+                  )
+                ); ?>
                 <h4 class="fw-normal fs-6">
                   <?php esc_html_e("Google Ads Conversion Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h4>
@@ -361,7 +421,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
                 <?php } else { ?>
                   <h4 class="fw-normal fs-6 d-flex justify-content-center pt-2">
                     <?php esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <img class="align-self-center ps-2" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . "/admin/images/icon/selected.png"); ?>" />
+                    <?php echo wp_kses(
+                      enhancad_get_plugin_image('/admin/images/icon/selected.png', '', 'align-self-center ps-2'),
+                      array(
+                        'img' => array(
+                          'src' => true,
+                          'alt' => true,
+                          'class' => true,
+                          'style' => true,
+                        ),
+                      )
+                    ); ?>
                   </h4>
                 <?php } ?>
 
@@ -370,7 +440,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
 
             <div class="col-md-4 text-center py-3 <?php echo $fb_pixel_id == "" ? "" : "convboxactive"; ?>">
               <div class="convborder p-2 rounded">
-                <img class="mb-3 img-32" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_fb_logo.png'); ?>">
+                <?php echo wp_kses(
+                  enhancad_get_plugin_image('/admin/images/logos/conv_fb_logo.png', '', 'mb-3 img-32'),
+                  array(
+                    'img' => array(
+                      'src' => true,
+                      'alt' => true,
+                      'class' => true,
+                      'style' => true,
+                    ),
+                  )
+                ); ?>
                 <h4 class="fw-normal fs-6">
                   <?php esc_html_e("Facebook Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h4>
@@ -385,7 +465,17 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
                 <?php } else { ?>
                   <h4 class="fw-normal fs-6 d-flex justify-content-center pt-2">
                     <?php esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <img class="align-self-center ps-2" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . "/admin/images/icon/selected.png"); ?>" />
+                    <?php echo wp_kses(
+                      enhancad_get_plugin_image('/admin/images/icon/selected.png', '', 'align-self-center ps-2'),
+                      array(
+                        'img' => array(
+                          'src' => true,
+                          'alt' => true,
+                          'class' => true,
+                          'style' => true,
+                        ),
+                      )
+                    ); ?>
                   </h4>
                 <?php } ?>
 
@@ -402,8 +492,12 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
 
 <script>
   jQuery(function() {
-    jQuery('#gtm_account_container_list').select2({ width: '100%' });
-    jQuery(".selecttwo_configs").select2({ width: '100%' });
+    jQuery('#gtm_account_container_list').select2({
+      width: '100%'
+    });
+    jQuery(".selecttwo_configs").select2({
+      width: '100%'
+    });
 
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     let tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -482,7 +576,7 @@ if ($ga4_id == "" || $google_ads_id == "" || $fb_pixel_id == "") {
             tracking_method: tracking_method,
             net_revenue_setting: net_revenue_setting,
           },
-          conv_options_type: ["eeoptions", "eeapidata","eeselectedevents"],
+          conv_options_type: ["eeoptions", "eeapidata", "eeselectedevents"],
         },
         beforeSend: function() {
           jQuery(".conv-btn-connect-enabled-google").text("Saving...");

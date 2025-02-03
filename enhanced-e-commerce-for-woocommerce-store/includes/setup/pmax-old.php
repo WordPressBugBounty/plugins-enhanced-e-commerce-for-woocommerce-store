@@ -76,7 +76,19 @@ class TVC_PMax
                                 <p class="ga-text">
                                     <span><a href="<?php echo esc_url($this->TVC_Admin_Helper->get_onboarding_page_url()); ?>" class="text-underline"><?php echo esc_html__('Get started', 'enhanced-e-commerce-for-woocommerce-store'); ?></a></span>
                                 </p>
-                                <p class="ga-text text-right"><a href="<?php echo esc_url($this->TVC_Admin_Helper->get_onboarding_page_url()); ?>" class="text-underline"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/icon/add.svg'); ?>" alt="connect account" /></a></p>
+                                <p class="ga-text text-right"><a href="<?php echo esc_url($this->TVC_Admin_Helper->get_onboarding_page_url()); ?>" class="text-underline">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/icon/add.svg', 'connect account'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
+                                    </a></p>
                             </div>
                         </div>
                     </div>

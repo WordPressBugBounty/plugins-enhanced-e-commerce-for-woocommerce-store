@@ -6,9 +6,6 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
 
 
 <div class="convcard p-4 mt-0 rounded-3 shadow-sm">
-
-
-
     <?php
     $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-analytics', "gasettings");
     require_once("googlesignin.php");
@@ -83,7 +80,18 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                     <div class="col-12">
                         <h5 class="d-flex fw-normal mb-1 text-dark">
                             <b><?php esc_html_e("GA4 API Secret", "enhanced-e-commerce-for-woocommerce-store"); ?></b>&nbsp;<?php esc_html_e("(To track refund order)", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <span class="ms-1 align-middle conv-link-blue fw-bold-500 upgradetopro_badge" popupopener="ga4apisecret_box_inner">&nbsp;<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>">&nbsp;Available
+                            <span class="ms-1 align-middle conv-link-blue fw-bold-500 upgradetopro_badge" popupopener="ga4apisecret_box_inner">&nbsp;
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png', '', 'rounded shadow'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?> &nbsp; Available
                                 In Pro</span>
                         </h5>
                         <input readonly type="text" name="ga4_api_secret" id="ga4_api_secret" class="form-control disabled" value="<?php echo esc_attr($ga4_api_secret); ?>" placeholder="e.g. CnTrpcbsStWFU5-TmSuhuS">
@@ -92,12 +100,104 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                 </div>
             </div>
             <!-- GA4 API Secret End-->
+            <div id="additional_tracking" class="py-3">
+                <?php
+                // Fetch stored values
+                //$ee_api_data_all = unserialize(get_option("ee_api_data"));
+                $conv_scroll_tracking = $ee_options['conv_track_page_scroll'] ?? "1";
+                $conv_file_download_tracking = $ee_options['conv_track_file_download'] ?? "1";
+                $conv_author_tracking = $ee_options['conv_track_author'] ?? "1";
+                $conv_signin_tracking = $ee_options['conv_track_signin'] ?? "1";
+                $conv_signup_tracking = $ee_options['conv_track_signup'] ?? "1";
+                ?>
+                <div class="row pt-1">
+                    <div class="col-12">
+                        <h5 class="d-flex fw-normal mb-1 text-dark">
+                            <b><?php esc_html_e("Additional Tracking:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                        </h5>
+                    </div>
+                    <div class="col-12 mx-3 my-2">
+                        <div class="row">
+                            <!-- Page Scroll Tracking -->
+                            <div class="form-check mt-2 col-4">
+                                <input class="form-check-input me-2" type="checkbox" id="conv_track_page_scroll"
+                                    <?php echo $conv_scroll_tracking ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="enable_scroll_tracking">
+                                    <?php esc_html_e("Page Scroll Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </label>
+                                <span class="material-symbols-outlined text-secondary md-18" data-bs-toggle="tooltip" data-bs-placement="top" title="
+                                Measure how far users scroll on your site to analyze engagement and optimize content placement." data-bs-original-title="">
+                                    info
+                                </span>
+                            </div>
+                            <!-- File Download Tracking -->
+                            <div class="form-check mt-2 col-4">
+                                <input class="form-check-input me-2" type="checkbox" id="conv_track_file_download"
+                                    <?php echo $conv_file_download_tracking ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="enable_file_download_tracking">
+                                    <?php esc_html_e("File Download Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </label>
+                                <span class="material-symbols-outlined text-secondary md-18" data-bs-toggle="tooltip" data-bs-placement="top" title="Track when users download files to measure engagement and improve content performance." data-bs-original-title="">
+                                    info
+                                </span>
+                            </div>
+                            <!-- Author Tracking -->
+                            <div class="form-check mt-2 col-4">
+                                <input class="form-check-input me-2" type="checkbox" id="conv_track_author"
+                                    <?php echo $conv_author_tracking ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="enable_author_tracking">
+                                    <?php esc_html_e("Author Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </label>
+                                <span class="material-symbols-outlined text-secondary md-18" data-bs-toggle="tooltip" data-bs-placement="top" title="Measures user interactions with author content to improve audience targeting and content strategy." data-bs-original-title="">
+                                    info
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <!-- SignIn Event Tracking -->
+                                <div class="form-check mt-2 col-4">
+                                    <input class="form-check-input me-2" type="checkbox" id="conv_track_signin"
+                                        <?php echo $conv_signin_tracking ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="enable_signin_tracking">
+                                        <?php esc_html_e("Login Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </label>
+                                    <span class="material-symbols-outlined text-secondary md-18" data-bs-toggle="tooltip" data-bs-placement="top" title=" Track when users log in to understand engagement and improve user retention.
+                                    " data-bs-original-title="">
+                                        info
+                                    </span>
+                                </div>
+                                <!-- SignUp Event Tracking -->
+                                <div class="form-check mt-2 col-4">
+                                    <input class="form-check-input me-2" type="checkbox" id="conv_track_signup"
+                                        <?php echo $conv_signup_tracking ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="enable_signup_tracking">
+                                        <?php esc_html_e("SignUp Event Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </label>
+                                    <span class="material-symbols-outlined text-secondary md-18" data-bs-toggle="tooltip" data-bs-placement="top" title="Track how many people sign up on your site to understand what attracts new users." data-bs-original-title="">
+                                        info
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
-
     <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
         <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
-            <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/sstimpact.png'); ?>" />
+            <?php echo wp_kses(
+                enhancad_get_plugin_image('/admin/images/sstimpact.png', '', 'rounded shadow'),
+                array(
+                    'img' => array(
+                        'src' => true,
+                        'alt' => true,
+                        'class' => true,
+                        'style' => true,
+                    ),
+                )
+            ); ?>
         </div>
         <div class="mt-0 mb-2 col-9">
             <div class="fs-6 fw-bold text-primary">Increase conversions by 40% with the Server-Side Tagging Enterprise Plan</div>
@@ -126,11 +226,8 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                 Buy Now! </a>
         </div>
     </div>
-
 </div>
 
-
-</div>
 <script>
     // get list of google analytics account
     function list_analytics_account(tvc_data, selelement, currele, page = 1) {
@@ -173,8 +270,17 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                             icon = 'info',
                             buttonText = 'Ok',
                             buttonColor = '#FCCB1E',
-                            iconImageSrc =
-                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                            iconImageSrc = '<?php echo wp_kses(
+                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                                array(
+                                                    'img' => array(
+                                                        'src' => true,
+                                                        'alt' => true,
+                                                        'class' => true,
+                                                        'style' => true,
+                                                    ),
+                                                )
+                                            ); ?>'
                         );
                     }
 
@@ -187,8 +293,17 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                     var error_msg = errors;
                 } else {
@@ -199,8 +314,17 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                 }
                 jQuery("#tvc-ga4-acc-edit-acc_box")?.removeClass('tvc-disable-edits');
@@ -256,8 +380,17 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                                 icon = 'info',
                                 buttonText = 'Ok',
                                 buttonColor = '#FCCB1E',
-                                iconImageSrc =
-                                '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                                iconImageSrc = '<?php echo wp_kses(
+                                                    enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                                    array(
+                                                        'img' => array(
+                                                            'src' => true,
+                                                            'alt' => true,
+                                                            'class' => true,
+                                                            'style' => true,
+                                                        ),
+                                                    )
+                                                ); ?>'
                             );
                         }
                         jQuery(".ga_analytic_account_id_ga4:not(#" + thisselid + ")").val(account_id).trigger(
@@ -273,8 +406,17 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                     //add_message("error", errors);
                     var error_msg = errors;
@@ -287,8 +429,17 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                 }
                 conv_change_loadingbar("hide");
@@ -421,6 +572,11 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
             });
             selected_vals["tracking_option"] = tracking_option;
             selected_vals["ga4_api_secret"] = jQuery("#ga4_api_secret").val();
+            selected_vals["conv_track_author"] = document.getElementById('conv_track_author').checked ? "1" : "0";
+            selected_vals["conv_track_signin"] = document.getElementById('conv_track_signin').checked ? "1" : "0";
+            selected_vals["conv_track_signup"] = document.getElementById('conv_track_signup').checked ? "1" : "0";
+            selected_vals["conv_track_page_scroll"] = document.getElementById('conv_track_page_scroll').checked ? "1" : "0";
+            selected_vals["conv_track_file_download"] = document.getElementById('conv_track_file_download').checked ? "1" : "0";
             // console.log(selected_vals);
             if (has_error == 1) {
                 jQuery(".conv-btn-connect").addClass("conv-btn-connect-disabled");

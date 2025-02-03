@@ -202,10 +202,20 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
                             <div class="convhori-step-text convhori-step-list py-3 my-2 mt-3">
                                 <h5 class="ps-4">Key Features</h5>
                                 <ul class="conv-green-checklist list-unstyled ms-5">
-                                    <li>GA4 <b>e-commerce</b> and <b>lead generation</b> tracking</li>
+                                    <li class="d-flex align-items-cente">
+                                        GA4 <b class="px-2">E-commerce</b> tracking for <b class="ps-2">Woocommerce</b>
+                                        <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="page_view, purchase, view_item_list, view_item, select_item, add_to_cart, remove_from_cart, view_cart, begin_checkout, add_payment_info, and add_shipping_info.">
+                                            info
+                                        </span>
+                                    </li>
+                                    <li class="d-flex align-items-cente">
+                                        GA4 <b class="px-2">Lead Generation</b> and Other tracking for <b class="ps-2">Wordpress</b>
+                                        <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Lead Form Submit, Lead Email Click, Lead Phone Click, Page Scroll, File Download, Author, Login, Signup">
+                                            info
+                                        </span>
+                                    </li>
                                     <li>Google Ads <b>purchase</b> and <b>lead</b> conversion tracking</li>
                                     <li>Facebook and other ad platform pixel integration</li>
-                                    <li>Google Ads <b>Performance Max campaign</b> setup</li>
                                     <li><b>Real-time</b> product feed sync with Google Merchant Center <br> Facebook, and TikTok</li>
                                 </ul>
                             </div>
@@ -214,34 +224,82 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
                                 <div class="convhori-step-container">
                                     <!-- Step 1 -->
                                     <div class="convhori-step-box">
-                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'align-self-center'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="convhori-step-line"></div>
-
                                     <!-- Step 2 -->
                                     <div class="convhori-step-box">
-                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'align-self-center'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="convhori-step-line"></div>
 
                                     <!-- Step 3 -->
                                     <div class="convhori-step-box">
-                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gmc_logo.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_gmc_logo.png', '', 'align-self-center'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="convhori-step-line"></div>
 
                                     <!-- Step 4 -->
                                     <div class="convhori-step-box">
-                                        <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_meta_logo.png', '', 'align-self-center'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="convhori-step-line"></div>
 
                                     <!-- Step 5 -->
                                     <div class="convhori-step-box">
-                                        <img style="width: 42px;" class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/mix_logos.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/mix_logos.png', '', 'align-self-center', 'width: 42px;'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="d-flex justify-content-center convhori-step-text">

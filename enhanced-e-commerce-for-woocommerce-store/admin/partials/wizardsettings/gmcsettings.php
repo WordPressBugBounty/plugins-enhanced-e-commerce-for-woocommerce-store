@@ -43,7 +43,17 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
             <h5 class="m-0 text-bold h5 ps-2">
                 <?php esc_html_e("Recommended for ", "enhanced-e-commerce-for-woocommerce-store"); ?>
             </h5>
-            <img class="ps-2" style="width: 150px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/logos_woocommerce.png'); ?>">
+            <?php echo wp_kses(
+                enhancad_get_plugin_image('/admin/images/logos/logos_woocommerce.png','','ps-2','width: 150px;'),
+                array(
+                    'img' => array(
+                        'src' => true,
+                        'alt' => true,
+                        'class' => true,
+                        'style' => true,
+                    ),
+                )
+            ); ?>
         </div>
     </div>
 
@@ -51,7 +61,17 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
         <div class="col-8">
             <div class="convwizlogotitle">
                 <div class="d-flex flex-row align-items-center">
-                    <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gmc_logo.png'); ?>" />
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_gmc_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                     <div>
                         <h5 class="m-0 text-bold h5">
                             <?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -109,7 +129,17 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
 
                     <div class="tvc_google_signinbtn_box " style="width: 185px;">
                         <div class="tvc_google_signinbtn_ga google-btn">
-                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/btn_google_signin_dark_normal_web.png'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                         </div>
                     </div>
                     <div class="ps-1 pt-2">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
@@ -176,7 +206,17 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                         <div class="col-12">
                             <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
                                 <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
-                                    <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/gmcimpact.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/gmcimpact.png', '', 'rounded shadow'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                 </div>
                                 <div class="mt-0 mb-2 col-9 ps-4">
                                     <div class="fs-6 fw-bold text-primary">Expand your reach on Google, Facebook, and TikTok with the Starter Plan:</div>
@@ -185,7 +225,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                                             <span class="material-symbols-outlined text-success md-18">
                                                 check_circle
                                             </span>
-                                            <?php esc_html_e("Sync up to 500 products with one click", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                            Sync up to <b class="px-1">500</b> products with one click
                                         </li>
                                         <li class="d-flex">
                                             <span class="material-symbols-outlined text-success md-18">
@@ -349,7 +389,17 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
 
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/error_logo.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="fw-normal pt-3">Error</h3>
                 <div id="conv_save_error_txt" class="mb-1 mx-3"></div>
             </div>
@@ -366,7 +416,17 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
             <div class="modal-header border-0 pb-0">
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/update_success_logo.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/update_success_logo.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="fw-normal pt-3 created_success">
                     <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>

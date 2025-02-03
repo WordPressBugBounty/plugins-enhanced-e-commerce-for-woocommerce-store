@@ -91,19 +91,7 @@ if(!class_exists('Conversios_PMax_Helper')){
 			if($this->admin_safe_ajax_call($nonce, 'conversios_nonce')){
 				$data = isset($_POST['tvc_data']) ? sanitize_text_field(urldecode(wp_unslash($_POST['tvc_data']))) : "";
 
-				// $site_key = isset($_POST['site_key'])?$_POST['site_key']:"";
-				// $site_url = isset($_POST['site_url'])?$_POST['site_url']:"";
-				// $urls = array();
-				// if(!empty($site_url)){
-				// 	foreach($site_url as $key => $val){
-				// 		if(isset($site_key[$key]) && $site_key[$key] && $val){
-				// 			$urls[]=array("key"=>sanitize_text_field($site_key[$key]), "value" => sanitize_text_field($val));
-				// 		}
-				// 	}
-				// }
-				//print_r($site_key);
-				//print_r($site_url);
-		    wp_parse_str($data, $form_array);    
+			  wp_parse_str($data, $form_array);    
 		    if(!empty($form_array)){
 		      foreach ($form_array as $key => $value) {
 		        $form_array[$key] = sanitize_text_field($value);
@@ -131,7 +119,7 @@ if(!class_exists('Conversios_PMax_Helper')){
 		    }else	if(isset($form_array["customer_id"]) ){
 					$api_rs = $this->create_pmax_campaign_callapi($form_array);					
 					if (isset($api_rs->error) && $api_rs->error == '') {
-						//print_r($api_rs->data);
+						
 	        	if(isset($api_rs->data->results[0]->resourceName) && $api_rs->data != ""){
 	        		$resource_name = $api_rs->data->results[0]->resourceName;
 	        		$return = array('error'=>false, 'message'=> "Campaign Created Successfully with resource name - ".$resource_name);
@@ -159,28 +147,14 @@ if(!class_exists('Conversios_PMax_Helper')){
 			$return = array();
 			if($this->admin_safe_ajax_call($nonce, 'conversios_nonce')){
 				$data = isset($_POST['tvc_data']) ? sanitize_text_field(urldecode(wp_unslash($_POST['tvc_data']))) : "";
-				// $site_key = isset($_POST['site_key'])?$_POST['site_key']:"";
-				// $site_url = isset($_POST['site_url'])?$_POST['site_url']:"";
-				// $urls = array();
-				// if(!empty($site_url)){
-				// 	foreach($site_url as $key => $val){
-				// 		if(isset($site_key[$key]) && $site_key[$key] && $val){
-				// 			$urls[]=array("key"=>sanitize_text_field($site_key[$key]), "value" => sanitize_text_field($val));
-				// 		}
-				// 	}
-				// }
-				//print_r($site_key);
-				//print_r($site_url);
+				
 		    wp_parse_str($data, $form_array);    
 		    if(!empty($form_array)){
 		      foreach ($form_array as $key => $value) {
 		        $form_array[$key] = sanitize_text_field($value);
 		      }
 		    }
-		    // unset($form_array["site_key"]);
-		    // unset($form_array["site_url"]);
-		    //$form_array["target_roas"] = $form_array["target_roas"]/100;
-		    //$form_array["urls"] = $urls;
+		    
 		    $require_fields = array("customer_id","merchant_id","campaign_name","budget","target_country","campaign_budget_resource_name","resource_name");
 		    foreach($require_fields as $val){
 		    	if(isset($form_array[$val]) && $form_array[$val] ==""){
@@ -221,7 +195,7 @@ if(!class_exists('Conversios_PMax_Helper')){
 						$api_rs = $this->edit_pmax_campaign_callapi($form_array);	
 					}				
 					if (isset($api_rs->error) && $api_rs->error == '') {
-						//print_r($api_rs->data);
+						
 	        	if(isset($api_rs->data->results[0]->resourceName) && $api_rs->data != ""){
 	        		$resource_name = $api_rs->data->results[0]->resourceName;
 	        		if($form_array["status"] == "REMOVED"){
@@ -279,7 +253,7 @@ if(!class_exists('Conversios_PMax_Helper')){
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-       // print_r($result);
+       
         if( isset($result->error) && isset($result->data) && $result->error == '' ) {
           $return->data = (isset($result->data))?$result->data:"";
           $return->error = false;
@@ -378,11 +352,11 @@ if(!class_exists('Conversios_PMax_Helper')){
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-        // print_r($result);
+        
         if (isset($result->error) && isset($result->data) && $result->error == '') {
           $return->data = (isset($result->data)) ? $result->data : "";
           $return->error = false;
-          //print_r($return);
+          
           return $return;
         } else {
           $return->error = true;
@@ -416,8 +390,7 @@ if(!class_exists('Conversios_PMax_Helper')){
 
       try {
         $url = $this->apiDomain . '/pmax/update';
-        //$post_data["access_token"] = $this->CustomApi->generateAccessToken($this->CustomApi->get_tvc_access_token(), $this->CustomApi->get_tvc_refresh_token());
-        // print_r($post_data);
+        
         $post_data["subscription_id"] = $subscription_id;
         $post_data["store_id"] = $store_id;
 
@@ -428,11 +401,10 @@ if(!class_exists('Conversios_PMax_Helper')){
         $args = array(
           'timeout' => 300,
           'headers' => $header,
-          'method' => 'patch',
+          'method' => 'PATCH',
           'body' => wp_json_encode($post_data)
         );
-        //print_r($args);
-        // Send remote request
+        
         $request = wp_remote_post(esc_url($url), $args);
         
         // Retrieve information
@@ -440,11 +412,11 @@ if(!class_exists('Conversios_PMax_Helper')){
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-        // print_r($result);
+        
         if (isset($result->error) && isset($result->data) && $result->error == '') {
           $return->data = (isset($result->data)) ? $result->data : "";
           $return->error = false;
-          //print_r($return);
+          
           return $return;
         } else {
           $return->error = true;
@@ -494,11 +466,11 @@ if(!class_exists('Conversios_PMax_Helper')){
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-       	//print_r($result);
+       	
         if( isset($result->error) && isset($result->data) && $result->error == '' ) {
           $return->data = (isset($result->data))?$result->data:"";
           $return->error = false;
-          //print_r($return);
+          
           return $return;
         }else{
           $return->error = true;
@@ -542,7 +514,7 @@ if(!class_exists('Conversios_PMax_Helper')){
           'method' => 'POST',
           'body' => wp_json_encode($data)
         );
-        //print_r($args);
+        
         // Send remote request
         $request = wp_remote_post(esc_url($url), $args);
 
@@ -551,7 +523,7 @@ if(!class_exists('Conversios_PMax_Helper')){
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-       // print_r($result);
+       
         if( isset($result->error) && isset($result->data) && $result->error == '' ) {
           $return->data = (isset($result->data))?$result->data:"";          
           $return->error = false;

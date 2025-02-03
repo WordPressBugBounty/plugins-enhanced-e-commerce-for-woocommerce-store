@@ -145,7 +145,7 @@ if ($subscriptionId != "") {
 <!-- Main container -->
 <div class="container-old conv-container conv-setting-container pt-4">
     <!-- Main row -->
-    <div class="row justify-content-center">
+    <div class="row justify-content-center gx-0">
         <!-- Main col8 center -->
         <div class="col-xs-12 row convfixedcontainerfull m-0 p-0">
 
@@ -156,7 +156,17 @@ if ($subscriptionId != "") {
                         <span class="material-symbols-outlined p-1">arrow_back</span>
                     </a>
                     <div class="ms-4 ps-1">
-                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . $pixel_settings_arr[$subpage]['logo']); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image($pixel_settings_arr[$subpage]['logo']),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),  
+                            )
+                        ); ?>
                     </div>
                     <h4 class="m-0 fw-normal ms-2 fw-bold-500">
                         <?php echo esc_html($pixel_settings_arr[$subpage]['title']); ?>
@@ -194,7 +204,6 @@ if ($subscriptionId != "") {
 
             </div>
             <div class="modal-body text-center px-5">
-                <!-- <img style="width:184px;" src="/admin/images/logos/successImg.png"> -->
                 <div class="success-round d-flex rounded-circle justify-content-center align-items-center border-radius">
                     <span class="material-symbols-outlined text-white  fww-bold">check</span>
                 </div>

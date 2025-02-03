@@ -288,7 +288,17 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                 <div class="col-7" style="padding: 3rem !important">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <img style="width:32px; height:32px" class="" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/google_ads_icon.png'); ?>" alt="">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/google_ads_icon.png', '', '', 'width:32px; height:32px;'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                             <span class="fw-600 fs-24 ms-2 campaign-pmax-title">Create Pmax Campaign</span>
                         </div>
                         <div><span class="campaign-go-back" id="cancel"><span class="dashicons dashicons-arrow-left-alt"></span>&nbsp;Go Back</span></div>
@@ -408,45 +418,124 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                             <div id="carouselCampainDesk" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
                                 <div class="carousel-indicators">
                                     <div class="carousel-ind active" data-bs-target="#carouselCampainDesk" data-bs-slide-to="0" aria-current="true">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/logo_youtube.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/logo_youtube.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Youtube</h6>
                                     </div>
                                     <div class="carousel-ind" data-bs-target="#carouselCampainDesk" data-bs-slide-to="1">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/gmail-logo.svg'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/gmail-logo.svg'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Gmail</h6>
                                     </div>
                                     <div class="carousel-ind" data-bs-target="#carouselCampainDesk" data-bs-slide-to="2">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_galpha_logo.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_galpha_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Search</h6>
                                     </div>
                                     <div class="carousel-ind" data-bs-target="#carouselCampainDesk" data-bs-slide-to="3">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/display_icon_48.svg'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/display_icon_48.svg'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Display</h6>
                                     </div>
                                     <!-- <div class="carousel-ind" data-bs-target="#carouselCampainDesk" data-bs-slide-to="4">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/discover_icon_48.svg'); ?>" class="">
                                         <h6 class="m-0">Discover</h6>
                                     </div> -->
                                 </div>
                                 <div class="carousel-inner">
                                     <!-- Slide 1 -->
                                     <div class="carousel-item active text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/desk-youtube.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/desk-youtube.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <div class="carousel-caption">
                                         </div>
                                     </div>
                                     <div class="carousel-item text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/desk-gmail.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/desk-gmail.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <div class="carousel-caption">
                                         </div>
                                     </div>
                                     <div class="carousel-item text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/desk-search.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/desk-search.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <div class="carousel-caption">
                                         </div>
                                     </div>
                                     <div class="carousel-item text-center desk-display">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/desk-display.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/desk-display.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <div class="carousel-caption">
                                         </div>
                                     </div>
@@ -466,51 +555,148 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                             <div id="carouselCampainMobi" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
                                 <div class="carousel-indicators">
                                     <div class="carousel-ind active" data-bs-target="#carouselCampainMobi" data-bs-slide-to="0" aria-current="true">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/logo_youtube.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/logo_youtube.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Youtube</h6>
                                     </div>
                                     <div class="carousel-ind" data-bs-target="#carouselCampainMobi" data-bs-slide-to="1">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/gmail-logo.svg'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/gmail-logo.svg'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Gmail</h6>
                                     </div>
                                     <div class="carousel-ind" data-bs-target="#carouselCampainMobi" data-bs-slide-to="2">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_galpha_logo.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_galpha_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Search</h6>
                                     </div>
                                     <div class="carousel-ind" data-bs-target="#carouselCampainMobi" data-bs-slide-to="3">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/display_icon_48.svg'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/display_icon_48.svg'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Display</h6>
                                     </div>
                                     <div class="carousel-ind" data-bs-target="#carouselCampainMobi" data-bs-slide-to="4">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/discover_icon_48.svg'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/discover_icon_48.svg'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <h6 class="m-0">Discover</h6>
                                     </div>
                                 </div>
                                 <div class="carousel-inner">
                                     <!-- Slide 1 -->
                                     <div class="carousel-item active text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/mobile-youtube.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/mobile-youtube.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="carousel-item text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/mobile-gmail.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/mobile-gmail.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="carousel-item text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/mobile-search.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/mobile-search.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="carousel-item text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/mobile-display.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/mobile-display.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="carousel-item text-center">
-                                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/campaign/mobile-discover.png'); ?>" class="">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/campaign/mobile-discover.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
         </div>
@@ -521,7 +707,17 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center infoBody">
-                <img class="" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>" alt="" style="width:150px; height:150px;">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/successImg.png', '', '', 'width:150px; height:150px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <div class="text-success">
                     Success! Your operation was completed.
                 </div>
@@ -736,13 +932,33 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                 jQuery("#wpbody").css("pointer-events", "auto");
                 jQuery('#submitCampaign').attr('disabled', false);
                 if (response.error == true) {
-                    var html = '<img class="" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/errorImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    var html = '<?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/errorImg.png', '', '', 'width:150px; height:150px;'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>';
                     html += '<div class="text-danger">Failed! Your operation was failed.</div>';
                     html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
                     jQuery('.infoBody').html(html)
                     jQuery('#infoModal').modal('show')
                 } else {
-                    var html = '<img class="" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    var html = '<?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/successImg.png', '', '', 'width:150px; height:150px;'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>';
                     html += '<div class="text-success">Success! Your operation was completed.</div>';
                     html += '<div class="text-dark fs-12 mt-2">Exciting things are happening behind the scenes! We\'re crafting your Pmax campaign for Google Ads with precision. Your products are gearing up to shine. Sit tight, and get ready for an amplified reach and increased sales.</div>';
 
@@ -862,13 +1078,33 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                 jQuery('#submitEditedCampaign').attr('disabled', false);
                 jQuery('#edit-campign-pop-up').modal('hide');
                 if (response.error == true) {
-                    var html = '<img class="" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/errorImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    var html = '<?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/errorImg.png', '', '', 'width:150px; height:150px;'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>';
                     html += '<div class="text-danger">Failed! Your operation was failed.</div>';
                     html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
                     jQuery('.infoBody').html(html)
                     jQuery('#infoModal').modal('show')
                 } else {
-                    var html = '<img class="" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    var html = '<?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/successImg.png', '', '', 'width:150px; height:150px;'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>';
                     html += '<div class="text-success">Success! Your operation was completed.</div>';
                     html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
 

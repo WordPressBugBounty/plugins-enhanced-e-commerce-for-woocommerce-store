@@ -56,7 +56,17 @@ $is_sel_disable = 'disabled';
                     <div class="col-12">
                         <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
                             <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
-                                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/fbcapiimpact.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/fbcapiimpact.png', '', 'rounded shadow'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                             </div>
                             <div class="mt-0 mb-2 col-9">
                                 <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits in Professional Plan</div>
@@ -165,7 +175,17 @@ $is_sel_disable = 'disabled';
             <h5 class="fw-normal mb-1">
                 <?php esc_html_e("For complete FB ads tracking, consider switching to our Started plan.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 <span class="align-middle conv-link-blue ms-2 fw-bold-500 upgradetopro_badge" data-bs-toggle="modal" data-bs-target="#upgradetopromodal">
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                     <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </span>
             </h5>

@@ -262,7 +262,7 @@ class TVC_Admin_Helper
    */
   public function update_remarketing_snippets()
   {
-    
+
     $customer_id = $this->get_currentCustomerId();
     if ($customer_id != "") {
       $rs = $this->customApiObj->get_remarketing_snippets($customer_id);
@@ -297,9 +297,7 @@ class TVC_Admin_Helper
   /*
    * update conversion send_to dapricated version 4.8.2
    */
-  public function update_conversion_send_to()
-  {
-  }
+  // public function update_conversion_send_to() {}
   /*
    * import GMC products in DB
    */
@@ -663,17 +661,17 @@ class TVC_Admin_Helper
     if ($name) {
       $countries_list = $this->get_gmc_language_list();
 ?>
-<select style="width: 100%"
-    class="fw-light text-secondary fs-6 form-control form-select-sm select2 <?php echo esc_attr($class_id); ?> <?php echo ($require == true) ? "field-required" : ""; ?>"
-    name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($class_id); ?>">
-    <option value=""><?php echo esc_html($label); ?></option>
-    <?php foreach ($countries_list as $Key => $val) { ?>
-    <option value="<?php echo esc_attr($val["code"]); ?>" <?php echo ($val["code"] == $sel_val) ? "selected" : ""; ?>>
-        <?php echo esc_html($val["name"]) . " (" . esc_html($val["native_name"]) . ")"; ?></option>
-    <?php
+      <select style="width: 100%"
+        class="fw-light text-secondary fs-6 form-control form-select-sm select2 <?php echo esc_attr($class_id); ?> <?php echo ($require == true) ? "field-required" : ""; ?>"
+        name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($class_id); ?>">
+        <option value=""><?php echo esc_html($label); ?></option>
+        <?php foreach ($countries_list as $Key => $val) { ?>
+          <option value="<?php echo esc_attr($val["code"]); ?>" <?php echo ($val["code"] == $sel_val) ? "selected" : ""; ?>>
+            <?php echo esc_html($val["name"]) . " (" . esc_html($val["native_name"]) . ")"; ?></option>
+        <?php
         } ?>
-</select>
-<?php
+      </select>
+    <?php
     }
   }
   public function tvc_countries_select($name, $class_id = "", string $label = "Please Select", bool $require = false)
@@ -682,34 +680,34 @@ class TVC_Admin_Helper
       $countries_list = $this->get_gmc_countries_list();
       $sel_val = $this->get_woo_country();
     ?>
-<select style="width: 100%"
-    class="fw-light text-secondary fs-6 form-control form-select-sm select2 <?php echo esc_attr($class_id); ?> <?php echo ($require == true) ? "field-required" : ""; ?>"
-    name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($class_id); ?>">
-    <option value=""><?php echo esc_html($label); ?></option>
-    <?php foreach ($countries_list as $Key => $val) { ?>
-    <option value="<?php echo esc_attr($val["code"]); ?>" <?php echo ($val["code"] == $sel_val) ? "selected" : ""; ?>>
-        <?php echo esc_html($val["name"]); ?></option>
-    <?php
+      <select style="width: 100%"
+        class="fw-light text-secondary fs-6 form-control form-select-sm select2 <?php echo esc_attr($class_id); ?> <?php echo ($require == true) ? "field-required" : ""; ?>"
+        name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($class_id); ?>">
+        <option value=""><?php echo esc_html($label); ?></option>
+        <?php foreach ($countries_list as $Key => $val) { ?>
+          <option value="<?php echo esc_attr($val["code"]); ?>" <?php echo ($val["code"] == $sel_val) ? "selected" : ""; ?>>
+            <?php echo esc_html($val["name"]); ?></option>
+        <?php
         } ?>
-</select>
-<?php
+      </select>
+    <?php
     }
   }
   public function tvc_select($name, $class_id = "", string $label = "Please Select", string $sel_val = null, bool $require = false, $option_list = array())
   {
     if (!empty($option_list) && $name) {
     ?>
-<select style="width: 100%"
-    class="fw-light text-secondary fs-6 form-control form-select-sm select2 <?php echo esc_attr($class_id); ?> <?php echo ($require == true) ? "field-required" : ""; ?>"
-    name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($class_id); ?>">
-    <option value=""><?php echo esc_html($label); ?></option>
-    <?php foreach ($option_list as $Key => $val) { ?>
-    <option value="<?php echo esc_attr($val["field"]); ?>" <?php echo ($val["field"] == $sel_val) ? "selected" : ""; ?>>
-        <?php echo esc_html($val["field"]); ?></option>
-    <?php
+      <select style="width: 100%"
+        class="fw-light text-secondary fs-6 form-control form-select-sm select2 <?php echo esc_attr($class_id); ?> <?php echo ($require == true) ? "field-required" : ""; ?>"
+        name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($class_id); ?>">
+        <option value=""><?php echo esc_html($label); ?></option>
+        <?php foreach ($option_list as $Key => $val) { ?>
+          <option value="<?php echo esc_attr($val["field"]); ?>" <?php echo ($val["field"] == $sel_val) ? "selected" : ""; ?>>
+            <?php echo esc_html($val["field"]); ?></option>
+        <?php
         } ?>
-</select>
-<?php
+      </select>
+    <?php
     }
   }
 
@@ -775,11 +773,11 @@ class TVC_Admin_Helper
   public function tvc_text($name, string $type = "text", string $class_id = "", string $label = null, $sel_val = null, bool $require = false)
   {
     ?>
-<input style="width:100%;" type="<?php echo esc_attr($type); ?>"
-    <?php echo esc_attr($type) == 'number' ? 'min="0"' : '' ?> name="<?php echo esc_attr($name); ?>"
-    class="tvc-text <?php echo esc_attr($class_id); ?>" id="<?php echo esc_attr($class_id); ?>"
-    placeholder="<?php echo esc_attr($label); ?>" value="<?php echo esc_attr($sel_val); ?>">
-<?php
+    <input style="width:100%;" type="<?php echo esc_attr($type); ?>"
+      <?php echo esc_attr($type) == 'number' ? 'min="0"' : '' ?> name="<?php echo esc_attr($name); ?>"
+      class="tvc-text <?php echo esc_attr($class_id); ?>" id="<?php echo esc_attr($class_id); ?>"
+      placeholder="<?php echo esc_attr($label); ?>" value="<?php echo esc_attr($sel_val); ?>">
+    <?php
   }
 
   /* end from input*/
@@ -849,75 +847,75 @@ class TVC_Admin_Helper
         }
         if ($message != "" && $title != "") {
     ?>
-<div class="errormsgtopbx claimalert">
-    <div class="errmscntbx">
-        <div class="errmsglft">
-            <span class="errmsgicon"><img
+          <div class="errormsgtopbx claimalert">
+            <div class="errmscntbx">
+              <div class="errmsglft">
+                <span class="errmsgicon"><img
                     src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/error-white-icon.png'); ?>"
                     alt="error" /></span>
-        </div>
-        <div class="erralertrigt">
-            <h6><?php echo esc_html($title); ?></h6>
-            <!--<p><?php echo esc_html($message); ?> <a href="javascript:void(0)" id="call_both_verification" onclick="call_tvc_site_verified_and_domain_claim('<?php echo esc_attr($call_js_function_args); ?>');"><?php esc_html_e("Click here", "enhanced-e-commerce-for-woocommerce-store"); ?></a> <?php esc_html_e("to verify and claim the domain.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>-->
-        </div>
-    </div>
-</div>
-<script>
-function call_tvc_site_verified_and_domain_claim(call_args) {
-    var tvs_this = event.target;
-    jQuery("#call_both_verification").css("visibility", "hidden");
-    jQuery(tvs_this).after(
-        '<div class="call_both_verification-spinner tvc-nb-spinner" id="both_verification-spinner"></div>');
-    if (call_args == "domain_claim") {
-        call_domain_claim_both();
-    } else {
-        jQuery.post(tvc_ajax_url, {
-            action: "tvc_call_site_verified",
-            SiteVerifiedNonce: "<?php echo esc_attr(wp_create_nonce('tvc_call_site_verified-nonce')); ?>"
-        }, function(response) {
-            var rsp = JSON.parse(response);
-            if (rsp.status == "success") {
-                if (call_args == "site_verified") {
-                    tvc_helper.tvc_alert("success", "", rsp.message);
-                    location.reload();
-                } else {
-                    call_domain_claim_both(rsp.message);
-                }
-            } else {
-                tvc_helper.tvc_alert("error", "", rsp.message);
-                jQuery("#both_verification-spinner").remove();
+              </div>
+              <div class="erralertrigt">
+                <h6><?php echo esc_html($title); ?></h6>
+                <!--<p><?php echo esc_html($message); ?> <a href="javascript:void(0)" id="call_both_verification" onclick="call_tvc_site_verified_and_domain_claim('<?php echo esc_attr($call_js_function_args); ?>');"><?php esc_html_e("Click here", "enhanced-e-commerce-for-woocommerce-store"); ?></a> <?php esc_html_e("to verify and claim the domain.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>-->
+              </div>
+            </div>
+          </div>
+          <script>
+            function call_tvc_site_verified_and_domain_claim(call_args) {
+              var tvs_this = event.target;
+              jQuery("#call_both_verification").css("visibility", "hidden");
+              jQuery(tvs_this).after(
+                '<div class="call_both_verification-spinner tvc-nb-spinner" id="both_verification-spinner"></div>');
+              if (call_args == "domain_claim") {
+                call_domain_claim_both();
+              } else {
+                jQuery.post(tvc_ajax_url, {
+                  action: "tvc_call_site_verified",
+                  SiteVerifiedNonce: "<?php echo esc_attr(wp_create_nonce('tvc_call_site_verified-nonce')); ?>"
+                }, function(response) {
+                  var rsp = JSON.parse(response);
+                  if (rsp.status == "success") {
+                    if (call_args == "site_verified") {
+                      tvc_helper.tvc_alert("success", "", rsp.message);
+                      location.reload();
+                    } else {
+                      call_domain_claim_both(rsp.message);
+                    }
+                  } else {
+                    tvc_helper.tvc_alert("error", "", rsp.message);
+                    jQuery("#both_verification-spinner").remove();
+                  }
+                });
+              }
             }
-        });
-    }
-}
 
-function call_domain_claim_both(first_message = null) {
-    jQuery.post(tvc_ajax_url, {
-        action: "tvc_call_domain_claim",
-        apiDomainClaimNonce: "<?php echo esc_attr(wp_create_nonce('tvc_call_domain_claim-nonce')); ?>"
-    }, function(response) {
-        var rsp = JSON.parse(response);
-        if (rsp.status == "success") {
-            if (first_message != "" || first_message == null) {
-                tvc_helper.tvc_alert("success", "", first_message, true, 4000);
-                setTimeout(function() {
+            function call_domain_claim_both(first_message = null) {
+              jQuery.post(tvc_ajax_url, {
+                action: "tvc_call_domain_claim",
+                apiDomainClaimNonce: "<?php echo esc_attr(wp_create_nonce('tvc_call_domain_claim-nonce')); ?>"
+              }, function(response) {
+                var rsp = JSON.parse(response);
+                if (rsp.status == "success") {
+                  if (first_message != "" || first_message == null) {
+                    tvc_helper.tvc_alert("success", "", first_message, true, 4000);
+                    setTimeout(function() {
+                      tvc_helper.tvc_alert("success", "", rsp.message, true, 4000);
+                      location.reload();
+                    }, 4000);
+                  } else {
                     tvc_helper.tvc_alert("success", "", rsp.message, true, 4000);
-                    location.reload();
-                }, 4000);
-            } else {
-                tvc_helper.tvc_alert("success", "", rsp.message, true, 4000);
-                setTimeout(function() {
-                    location.reload();
-                }, 4000);
+                    setTimeout(function() {
+                      location.reload();
+                    }, 4000);
+                  }
+                } else {
+                  tvc_helper.tvc_alert("error", "", rsp.message, true, 10000)
+                }
+                jQuery("#both_verification-spinner").remove();
+              });
             }
-        } else {
-            tvc_helper.tvc_alert("error", "", rsp.message, true, 10000)
-        }
-        jQuery("#both_verification-spinner").remove();
-    });
-}
-</script>
-<?php
+          </script>
+        <?php
         }
       }
     }
@@ -973,8 +971,8 @@ function call_domain_claim_both(first_message = null) {
           $myFile = ABSPATH . $siteVerificationToken->data->token;
           global $wp_filesystem;
           if (!$wp_filesystem->exists($myFile)) {
-              $wp_filesystem->put_contents($myFile, "google-site-verification: " . $siteVerificationToken->data->token);
-              $wp_filesystem->chmod($myFile, 0777);
+            $wp_filesystem->put_contents($myFile, "google-site-verification: " . $siteVerificationToken->data->token);
+            $wp_filesystem->chmod($myFile, 0777);
           }
           $postData['method'] = "file";
           $siteVerification = $this->customApiObj->siteVerification($postData);
@@ -1180,138 +1178,9 @@ function call_domain_claim_both(first_message = null) {
       return $google_detail['setting'];
     }
   }
-  /*
-   * Check refresh tocken status
-   */
-
-  public function convtvc_admin_notice()
-  {
-    $eeoptions = $this->get_ee_options_settings();
-
-    if (isset($eeoptions) && !empty($eeoptions)) {
-      // Notice for the BlackFriday 2023
-      $gadsid = (isset($eeoptions['google_ads_id']) && $eeoptions['google_ads_id'] != '') ? $eeoptions['google_ads_id'] : "";
-      $ee_convnotice = get_option('ee_convnotice', array());
-
-      if ($gadsid == "" && !array_key_exists('blackfriday2023', $ee_convnotice)) { ?>
-<div data-dismissible="convbfriday-forever" class="updated notice notice-success is-dismissible conversios_topnotice"
-    data-convnotiid="blackfriday2023">
-    <p>
-        <?php esc_html_e('Create a new google ads account using Conversios plugin and get $500 rewards when you spend $500 in the first 60 days**', 'enhanced-e-commerce-for-woocommerce-store'); ?>
-    </p>
-    <p>
-        <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=gadssettings'); ?>">
-            <?php esc_html_e('Connect Now', 'enhanced-e-commerce-for-woocommerce-store'); ?>
-        </a>
-    </p>
-</div>
 
 
-<script>
-var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
-(function($) {
-    jQuery(function() {
-        jQuery('.conversios_topnotice').on('click', '.notice-dismiss', function(event, el) {
-            var eeconv_notice_id = jQuery(this).parent('.is-dismissible').attr("data-convnotiid");
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: tvc_ajax_url,
-                data: {
-                    action: "conv_save_pixel_data",
-                    pix_sav_nonce: "<?php echo esc_attr(wp_create_nonce('pix_sav_nonce_val')); ?>",
-                    conv_options_data: eeconv_notice_id,
-                    conv_options_type: ["eeconvnotice"],
-                },
-                success: function(response) {
-                    // console.log(response);
-                }
-            });
-        });
-    });
 
-})(jQuery);
-</script>
-<?php }
-    }
-    ?>
-<?php
-  }
-
-  public function tvc_display_admin_notices()
-  {
-    $ee_additional_data = $this->get_ee_additional_data();
-    if (isset($ee_additional_data['admin_notices']) && !empty($ee_additional_data['admin_notices'])) {
-      $static_notice_priority = array("no_google_signin" => "1", "no_ga_account" => "2", "no_google_ads_account" => "3", "review_for_days" => "4", "no_merchant_account" => "5", "created_googleads_account" => "6", "created_merchant_account" => "7", "implementation_gatm_tracking" => "8", "no_product_sync" => "9");
-      $display_arr = array();
-      foreach ($ee_additional_data['admin_notices'] as $key => $admin_notice) {
-        if (!isset($admin_notice["key"])) {
-          $admin_notice["key"] = $key;
-        }
-        if (!empty($admin_notice['link_title']) && !empty($admin_notice['status']) && $admin_notice['status'] = "1") {
-          if ((!isset($admin_notice['priority']) || $admin_notice['priority'] == "")) {
-            if (isset($static_notice_priority[$key])) {
-              $admin_notice["priority"] = $static_notice_priority[$key];
-              $display_arr[$admin_notice["priority"]] = $admin_notice;
-            }
-          } else {
-            //after priority setting
-            $display_arr[$admin_notice["priority"]] = $admin_notice;
-          }
-        }
-      }
-      //display - sorting ascending - slice 2 
-      usort($display_arr, function ($a, $b) {
-        return $a['priority'] - $b['priority'];
-      });
-      //setting the limit 2 admin notices at a time.
-      $admin_notice_display_arr_limit = array_slice($display_arr, 0, 2);
-      if (isset($admin_notice_display_arr_limit) && !empty($admin_notice_display_arr_limit)) {
-        foreach ($admin_notice_display_arr_limit  as $con_display_admin_notice) {
-          if (!empty($con_display_admin_notice['link_title']) && !empty($con_display_admin_notice['status']) && $con_display_admin_notice['status'] == "1") {
-    ?>
-<div class="notice notice-info notice-dismiss_trigger is-dismissible"
-    data-id='<?php echo esc_attr($con_display_admin_notice['key']); ?>'>
-    <?php $greeting_content = sprintf('%s', esc_html($con_display_admin_notice['content'])); ?>
-    <?php $greeting_link_title = sprintf('%s', esc_html($con_display_admin_notice['link_title'])); ?>
-    <?php
-            $conv_notice_html = '<p>' . $greeting_content . ' <a href="' . esc_url($con_display_admin_notice["link"]) . '" target="_blank" ><b><u>' . $greeting_link_title . '</u></b></a></p></div>';
-            echo wp_kses($conv_notice_html, array(
-              'a' => array(
-                'href' => array(),
-                'target' => array()
-              ),
-              'p' => array(),
-              'u' => array(),
-              'b' => array(),
-              'div' => array()
-            ));
-          }
-        }
-      }
-    }
-      ?>
-    <script>
-    var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
-    (function($) {
-        jQuery(function() {
-            jQuery('.notice-dismiss_trigger').on('click', '.notice-dismiss', function(event, el) {
-                var ee_notice_dismiss_id_trigger = jQuery(this).parent('.is-dismissible').attr(
-                    "data-id");
-                jQuery.post(tvc_ajax_url, {
-                    action: "tvc_call_notice_dismiss_trigger",
-                    data: {
-                        ee_notice_dismiss_id_trigger: ee_notice_dismiss_id_trigger
-                    },
-                    apiNoticDismissNonce: "<?php echo esc_attr(wp_create_nonce('tvc_call_notice_dismiss-nonce')); ?>",
-                    dataType: "json"
-                }, function(response) {});
-            });
-        });
-    })(jQuery);
-    </script>
-    <?php
-  }
   //tvc_add_data_admin_notice function for adding the admin notices
   public function tvc_add_admin_notice($slug, $content, $status, $link_title = null, $link = null, $value = null, $title = null, $priority = "", $key = "")
   {
@@ -1330,125 +1199,7 @@ var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
       $this->set_ee_additional_data($ee_additional_data);
     }
   }
-  public function tvc_add_data_admin_notice()
-  {
-    $tvc_add_data_admin_notice = $this->get_ee_options_settings();
-    $con_subscription_id = $this->get_subscriptionId();
-    /*GTM release notice*/
-    $link_title = "Set it up in a single click..!!!!";
-    $link = "admin.php?page=conversios-google-analytics";
-    $content = "NEW FEATURE - Now automate Facebook, Snapchat, Tiktok, Pinterest, Microsoft Ads, Google Ads pixels using Conversios's faster and accurate Google Tag Manager implementation.";
-    $status = "1";
-    $this->tvc_add_admin_notice("implementation_gatm_tracking", $content, $status, $link_title, $link, "", "", "8", "implementation_gatm_tracking");
-    //when user google signed in
-    if ($con_subscription_id != "" && $con_subscription_id != null) {
-      $link_title = "User Manual Guide";
-      $content = "You have not linked Google Analytics, Google Ads and Google Merchant Center accounts with Conversios plugin. Set up the conversios plugin now and boost your sales. Refer User Manual guide to get started,";
-      $status = "0";
-      $this->tvc_dismiss_admin_notice("no_google_signin", $content, $status, $link_title);
-      //getting the review from user.
-      if (!isset($_POST['conversios_onboarding_nonce'])) {
-        $ee_additional_data = $this->get_ee_additional_data();
-        if (!isset($ee_additional_data['con_created_at'])) {
-          //if exisiting user and created date is not there
-          $ee_additional_data = $this->get_ee_additional_data();
-          $ee_additional_data['con_created_at'] = "";
-          $ee_additional_data['con_updated_at'] = gmdate('Y-m-d');
-          $this->set_ee_additional_data($ee_additional_data);
-          //add admin notice if created date is not there
-          $link_title = "review here.";
-          $content = "You have successfully started recording all the important ecommerce events in Google Analytics account using Conversios plugin. Let us know your experience by sharing your";
-          $status = "1";
-          $link = "https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/#reviews";
-          $this->tvc_add_admin_notice("review_for_days", $content, $status, $link_title, $link, "", "", "4", "review_for_days");
-        } else if (isset($ee_additional_data['con_created_at']) && $ee_additional_data['con_created_at'] != '') {
-          //existing user if created date is available
-          $current_date = gmdate('Y-m-d');
-          $created_date = date_create($ee_additional_data['con_created_at']);
-          $today = date_create($current_date);
-          $diff = date_diff($created_date, $today);
-          $day_diff = $diff->format("%a");
-          if ($day_diff >= 15) {
-            $link_title = "review here.";
-            $content = "You have successfully started recording all the important ecommerce events in Google Analytics account using Conversios plugin. Let us know your experience by sharing your";
-            $status = "1";
-            $link = "https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/#reviews";
-            $this->tvc_add_admin_notice("review_for_days", $content, $status, $link_title, $link, "", "", "4", "review_for_days");
-          }
-        }
-      }
-      //if user has not selected merchant center account.
-      if (!isset($tvc_add_data_admin_notice['google_merchant_id']) || (isset($tvc_add_data_admin_notice['google_merchant_id']) && $tvc_add_data_admin_notice['google_merchant_id'] == '')) {
-        $link_title = "Link Google Merchant account";
-        $content = "You have not linked Google Merchant Account account with conversios plugin yet. Increase your sales by linking the Google Merchant Account, Refer the user manual to link the account";
-        $status = "1";
-        $link = "admin.php?page=conversios-google-analytics";
-        $this->tvc_add_admin_notice("no_merchant_account", $content, $status, $link_title, $link, "", "", "5", "no_merchant_account");
-      } else {
-        $link_title = "Link Google Merchant account";
-        $content = "You have not linked Google Merchant Account account with conversios plugin yet. Increase your sales by linking the Google Merchant Account, Refer the user manual to link the account";
-        $status = "0";
-        $link = "admin.php?page=conversios-google-analytics";
-        $this->tvc_dismiss_admin_notice("no_merchant_account", $content, $status, $link_title, $link);
-      }
-
-      //if user has linked google merchant center account and not synced any product.
-      global $wpdb;
-      $tablename = esc_sql($wpdb->prefix . 'ee_product_feed');
-      $sql = $wpdb->prepare("select * from %i ORDER BY id ASC LIMIT 1", $tablename);
-      $result = $wpdb->get_results($sql);
-      if ((isset($tvc_add_data_admin_notice['google_merchant_id']) && $tvc_add_data_admin_notice['google_merchant_id'] != '')
-        && is_array($result) && isset(end($result)->feed_name) && end($result)->feed_name != 'Default Feed'
-        && isset(end($result)->is_mapping_update) && end($result)->is_mapping_update == '0'
-      ) {
-        $link_title = "Click here to create.";
-        $content = "Attention: Your GMC (Google Merchant Center) account is successfully connected, but it appears that you have not processed your product feed yet.";
-        $status = "1";
-        $link = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
-        $this->tvc_add_admin_notice("no_product_sync", $content, $status, $link_title, $link, "", "", "9", "no_product_sync");
-      } else {
-        $link_title = "Click here to create.";
-        $content = "Attention: Your GMC (Google Merchant Center) account is successfully connected, but it appears that you have not processed your product feed yet.";
-        $status = "0";
-        $link = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
-        $this->tvc_dismiss_admin_notice("no_product_sync", $content, $status, $link_title, $link);
-      }
-
-      //if user has not selected Google Ads account.
-      if (!isset($tvc_add_data_admin_notice['google_ads_id']) || (isset($tvc_add_data_admin_notice['google_ads_id']) && $tvc_add_data_admin_notice['google_ads_id'] == '')) {
-        $link_title = "Link Google Ads account";
-        $content = "You have not linked Google Ads account with conversios plugin yet. Increase your sales by linking the Google Ads account, Refer the user manual to link the account";
-        $status = "1";
-        $link = "admin.php?page=conversios-google-analytics";
-        $this->tvc_add_admin_notice("no_google_ads_account", $content, $status, $link_title, $link, "", "", "3", "no_google_ads_account");
-      } else {
-        $link_title = "Link Google Ads account";
-        $content = "You have not linked Google Ads account with conversios plugin yet. Increase your sales by linking the Google Ads account, Refer the user manual to link the account";
-        $status = "0";
-        $this->tvc_dismiss_admin_notice("no_google_ads_account", $content, $status, $link_title);
-      }
-      //if user has not selected any of google analytics account.
-      if ((!isset($tvc_add_data_admin_notice['gm_id']) || (isset($tvc_add_data_admin_notice['gm_id']) && $tvc_add_data_admin_notice['gm_id'] == '')) && (!isset($tvc_add_data_admin_notice['ga_id']) || (isset($tvc_add_data_admin_notice['ga_id']) && $tvc_add_data_admin_notice['ga_id'] == ''))) {
-        $link_title = "Link Google Analytics account";
-        $content = "You have not linked Google Analytics account with conversios plugin yet. Increase your sales by linking the Google Analytics account, Refer the user manual to link the account";
-        $status = "1";
-        $link = "admin.php?page=conversios-google-analytics";
-        $this->tvc_add_admin_notice("no_ga_account", $content, $status, $link_title, $link, "", "", "2", "no_ga_account");
-      } else {
-        $link_title = "Link Google Analytics account";
-        $content = "You have not linked Google Analytics account with conversios plugin yet. Increase your sales by linking the Google Analytics account, Refer the user manual to link the account";
-        $status = "0";
-        $this->tvc_dismiss_admin_notice("no_ga_account", $content, $status, $link_title);
-      }
-    } else {
-      //when user will not do google sign in 
-      $link_title = " User Manual Guide";
-      $content = "You have not linked Google Analytics, Google Ads and Google Merchant Center accounts with Conversios plugin. Set up the conversios plugin now and boost your sales. Refer User Manual guide to get started,";
-      $status = "1";
-      $link = "https://conversios.io/help-center/Installation-Manual.pdf";
-      $this->tvc_add_admin_notice("no_google_signin", $content, $status, $link_title, $link, "", "", "1", "no_google_signin");
-    }
-  }
+ 
   /*
    * conver curency code to currency symbols
    */

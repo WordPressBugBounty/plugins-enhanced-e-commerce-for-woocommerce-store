@@ -5,7 +5,18 @@
     <div class="onbrdppmain" role="document">
         <div class="onbrdnpp-cntner acccretppcntnr">
             <div class="onbrdnpp-hdr">
-                <div class="ppclsbtn clsbtntrgr"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/close-icon.png'); ?>" alt="" />
+                <div class="ppclsbtn clsbtntrgr">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/close-icon.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                 </div>
             </div>
             <div class="onbrdpp-body">
@@ -13,9 +24,17 @@
                 <div class="google_signin_sec_left">
                     <?php if (!isset($tvc_data['g_mail']) || $tvc_data['g_mail'] == "" || $subscriptionId == "") { ?>
                         <div class="google_connect_url_ga google-btn">
-
-                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
-
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/btn_google_signin_dark_normal_web.png'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                         </div>
                     <?php } else { ?>
                         <?php if ($is_refresh_token_expire == true) { ?>
@@ -23,15 +42,31 @@
                                 <?php esc_html_e("It seems the token to access your Google accounts is expired. Sign in again to continue.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </p>
                             <div class="google_connect_url_ga google-btn">
-
-                                <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
-
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/btn_google_signin_dark_normal_web.png'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                             </div>
                         <?php } else { ?>
                             <div class="google_connect_url_ga google-btn">
-
-                                <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
-
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/btn_google_signin_dark_normal_web.png'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                             </div>
                         <?php } ?>
                     <?php } ?>

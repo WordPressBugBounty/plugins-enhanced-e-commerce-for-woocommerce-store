@@ -2,7 +2,17 @@
     <div class="col-7">
         <div class="convwizlogotitle">
             <div class="d-flex flex-row align-items-center">
-                <img style="width: 42px;" class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/mix_logos.png'); ?>" />
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/mix_logos.png', '', 'conv_channel_logo me-2 align-self-center','width: 42px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <div>
                     <h5 class="m-0 text-bold h5">
                         <?php esc_html_e("Other Pixels Available", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -31,13 +41,23 @@
         $linkedin_insight_id = (isset($ee_options["linkedin_insight_id"]) && $ee_options["linkedin_insight_id"] != "") ? $ee_options["linkedin_insight_id"] : "";
         $hotjar_pixel_id = (isset($ee_options["hotjar_pixel_id"]) && $ee_options["hotjar_pixel_id"] != "") ? $ee_options["hotjar_pixel_id"] : "";
         $crazyegg_pixel_id = (isset($ee_options["crazyegg_pixel_id"]) && $ee_options["crazyegg_pixel_id"] != "") ? $ee_options["crazyegg_pixel_id"] : "";
-        
+
         ?>
         <div id="otherpixel_box" class="py-1">
             <div class="row pt-2">
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("Tiktok Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="tiKtok_ads_pixel_id" id="tiKtok_ads_pixel_id" class="form-control" value="<?php echo esc_attr($tiKtok_ads_pixel_id); ?>">
@@ -45,7 +65,17 @@
 
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_snap_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("Snapchat Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="snapchat_ads_pixel_id" id="snapchat_ads_pixel_id" class="form-control" value="<?php echo esc_attr($snapchat_ads_pixel_id); ?>">
@@ -54,7 +84,17 @@
 
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_pint_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_pint_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("Pinterest Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="pinterest_ads_pixel_id" id="pinterest_ads_pixel_id" class="form-control" value="<?php echo esc_attr($pinterest_ads_pixel_id); ?>">
@@ -62,7 +102,17 @@
 
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img style="height: 24px;" class="me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_bing_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_bing_logo.png', '', 'me-2 align-self-center', 'height: 24px;'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("Microsoft Ads (Bing) Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="microsoft_ads_pixel_id" id="microsoft_ads_pixel_id" class="form-control" value="<?php echo esc_attr($microsoft_ads_pixel_id); ?>">
@@ -70,7 +120,17 @@
 
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_clarity_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_clarity_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("MS Clarity Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id" class="form-control" value="<?php echo esc_attr($msclarity_pixel_id); ?>">
@@ -78,7 +138,17 @@
 
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_linkedin_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_linkedin_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("Linkedin Insight ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="linkedin_insight_id" id="linkedin_insight_id" class="form-control" value="<?php echo esc_attr($linkedin_insight_id); ?>">
@@ -86,7 +156,17 @@
 
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_hotjar_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_hotjar_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="hotjar_pixel_id" id="hotjar_pixel_id" class="form-control" value="<?php echo esc_attr($hotjar_pixel_id); ?>">
@@ -94,7 +174,17 @@
 
                 <div class="col-6 pt-3">
                     <h5 class="fw-normal mb-1 text-dark">
-                        <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_crazyegg_logo.png'); ?>" />
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_crazyegg_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <b><?php esc_html_e("Crazy Egg Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                     </h5>
                     <input type="text" name="crazyegg_pixel_id" id="crazyegg_pixel_id" class="form-control" value="<?php echo esc_attr($crazyegg_pixel_id); ?>">

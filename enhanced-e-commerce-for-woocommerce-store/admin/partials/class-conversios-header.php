@@ -192,7 +192,17 @@ if (class_exists('Conversios_Header') === FALSE) {
 							<nav class="navbar navbar-expand-lg navbar-light bg-white ps-4 p-0" style="">
 								<div class="container-fluid py-0">
 									<a class="navbar-brand link-dark fs-16 fw-400">
-										<img style="width: 120px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logo.png'); ?>" />
+										<?php echo wp_kses(
+											enhancad_get_plugin_image('/admin/images/logo.png', '', '', 'width: 120px;'),
+											array(
+												'img' => array(
+													'src' => true,
+													'alt' => true,
+													'class' => true,
+													'style' => true,
+												),
+											)
+										); ?>
 									</a>
 									<div class="collapse navbar-collapse" id="navbarSupportedContent">
 										<ul class="navbar-nav me-auto mb-lg-0">
@@ -246,7 +256,17 @@ if (class_exists('Conversios_Header') === FALSE) {
 											$plan_name = esc_html__("Free Plan", "enhanced-e-commerce-for-woocommerce-store");
 											?>
 											<a class="d-flex align-items-center flex-wrap text-dark" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" target="_blank">
-												<img style="max-width:95px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/rate-us.png'); ?>" /><span class="me-2 fs-12">Rate Us!</span>
+												<?php echo wp_kses(
+													enhancad_get_plugin_image('/admin/images/rate-us.png','','','max-width:95px;'),
+													array(
+														'img' => array(
+															'src' => true,
+															'alt' => true,
+															'class' => true,
+															'style' => true,
+														),
+													)
+												); ?>
 											</a>
 											<a href="javascript:void(0)" class="btn btn-warning rounded-pill text-white border-0 fw-bold fs-12 px-2 py-0" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
 												<?php echo esc_attr($plan_name) ?>
@@ -258,9 +278,9 @@ if (class_exists('Conversios_Header') === FALSE) {
 												<!-- <u><?php esc_html_e("Help Center", "enhanced-e-commerce-for-woocommerce-store"); ?></u> -->
 												<span class="material-symbols-outlined">help_center</span>
 											</a>
-											<button id="conv_freshwork_chat" title="Support" class="btn p-0 lh-0">
+											<a target="_blank" href="https://conversios.freshdesk.com/support/tickets/new" id="conv_freshwork_chat" title="Support" class="btn p-0 lh-0">
 												<span class="material-symbols-outlined">sms</span>
-											</button>
+											</a>
 
 										</div>
 									</div>

@@ -209,7 +209,17 @@ $contData = json_decode($getCountris);
             <div class="modal-header border-0 pb-0">
                 <div class="connection-box">
                     <div class="items">
-                        <img style="width:35px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/popup_woocommerce_logo.png', '', '', 'width:35px;'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <span>
                             <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </span>
@@ -220,7 +230,17 @@ $contData = json_decode($getCountris);
                         </span>
                     </div>
                     <div class="items">
-                        <img style="width:35px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/fb_channel_logo.png'); ?>">
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/fb_channel_logo.png', '', '', 'width:35px;'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
                         <span>
                             <?php esc_html_e("Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </span>
@@ -245,7 +265,17 @@ $contData = json_decode($getCountris);
                             <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <img style="width:35px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/Manage_feed.png'); ?>">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/Manage_feed.png', '', '', 'width:35px;'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     </div>
                                     <div class="attribute-content para">
                                         <h3>

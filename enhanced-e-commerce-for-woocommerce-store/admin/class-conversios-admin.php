@@ -211,7 +211,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
           wp_enqueue_style('jquery-ui');
         }
         //if ($screen->id != "conversios_page_conversios-google-shopping-feed") {
-        wp_enqueue_style('conversios-style-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/style.css'), array(), esc_attr($this->version), 'all');
+        //wp_enqueue_style('conversios-style-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/style.css'), array(), esc_attr($this->version), 'all');
         //}
 
         //pricingcss
@@ -264,8 +264,6 @@ if (class_exists('Conversios_Admin') === FALSE) {
           wp_enqueue_script('conversios-moment-js', ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js', array(), '2.22.1', false);
         }
       }
-
-
     }
 
     /**
@@ -433,21 +431,30 @@ if (class_exists('Conversios_Admin') === FALSE) {
     {
       do_action('add_conversios_header');
 ?>
-<div style="position:relative;">
-    <div class="card coming-soon-card shadow-lg"
-        style="position: fixed; top: 25%; left: 40%; z-index: 999;max-width: 400px; margin: 2rem auto; text-align: center;">
-        <div class="card-body" style="padding: 2rem;">
+      <div style="position:relative;">
+        <div class="card coming-soon-card shadow-lg"
+          style="position: fixed; top: 25%; left: 40%; z-index: 999;max-width: 400px; margin: 2rem auto; text-align: center;">
+          <div class="card-body" style="padding: 2rem;">
             <h5 class="card-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Feature Coming Soon</h5>
             <p class="card-text" style="font-size: 1rem; margin-bottom: 1.5rem;">We're working hard to bring this
-                feature to you. Stay tuned!</p>
+              feature to you. Stay tuned!</p>
             <a target="_blank"
-                href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list"
-                class="btn btn-primary">Learn More</a>
+              href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list"
+              class="btn btn-primary">Learn More</a>
+          </div>
         </div>
-    </div>
-    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/web-reports-placeholder.png'); ?>" alt="reports"
-        style="filter:opacity(0.7) blur(2px); margin-top:20px;" />
-</div>
+        <?php echo wp_kses(
+          enhancad_get_plugin_image('/admin/images/web-reports-placeholder.png','reports','','filter:opacity(0.7) blur(2px); margin-top:20px;'),
+          array(
+            'img' => array(
+              'src' => true,
+              'alt' => true,
+              'class' => true,
+              'style' => true,
+            ),
+          )
+        ); ?>
+      </div>
 <?php
       do_action('add_conversios_footer');
     }
@@ -467,7 +474,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
       } else {
         if ($is_wizard != "" && $is_wizard == "pixelandanalytics") {
           require_once('partials/wizard_pixelandanalytics.php');
-        }else {
+        } else {
           require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-dashboard.php');
         }
       }

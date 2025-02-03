@@ -104,7 +104,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                 <div class="div">
                                     <h5 class="text-dark mb-0">
                                         <?php
-                                        $credit_message = "Yourr " . $off_credit_amt . " in Ads Credit is ready to be claimed";
+                                        $credit_message = "Your " . $off_credit_amt . " in Ads Credit is ready to be claimed";
                                         echo esc_html($credit_message);
                                         ?>
                                     </h5>
@@ -181,7 +181,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                     </div>
                                 </div>
                                 <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
-                                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
                             </li>
@@ -197,7 +207,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                     </div>
                                 </div>
                                 <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
-                                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
                             </li>
@@ -213,7 +233,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                     </div>
                                 </div>
                                 <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
-                                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </a>
                             </li>
@@ -278,7 +308,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                         <b><?php esc_html_e("Enable dynamic remarketing tags", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                                     </label>
                                     <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
-                                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                         <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </a>
                                 </div>

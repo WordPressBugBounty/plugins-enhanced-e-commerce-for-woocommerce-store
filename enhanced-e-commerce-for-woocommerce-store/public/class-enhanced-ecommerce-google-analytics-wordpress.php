@@ -60,6 +60,9 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
       $user_id = $current_user->ID;
       $current_user_type = 'register_user';
     }
+    if (!session_id()) {
+      session_start();
+    }
     $this->tvc_options = array(
       "local_time" => esc_js(time()),
       "is_admin" => esc_attr(is_admin()),
@@ -91,10 +94,127 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
      */
     add_action('wp_ajax_datalayer_push', array($this, 'datalayer_push'));
     add_action('wp_ajax_nopriv_datalayer_push', array($this, 'datalayer_push'));
+    add_action('wp_footer', array($this, 'wp_login_datalayer'));
+    add_action('wp_footer', array($this, 'file_download_datalayer'));
+    add_action('wp_logout', array($this, 'delete_datalayer_cookie_on_logout'));
+    add_action('user_register', array($this, 'track_signup_event'), 10, 1);
+    add_action('wp_head', array($this, 'add_author_tracking_to_datalayer'));
   }
 
+  public function file_download_datalayer()
+  {
+?>
+    <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
+      document.addEventListener('DOMContentLoaded', function() {
+        var downloadLinks = document.querySelectorAll('a[href]');
 
+        downloadLinks.forEach(function(link) {
+          link.addEventListener('click', function(event) {
+            var fileUrl = link.href;
+            var fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+            var linkText = link.innerText || link.textContent;
+            var linkUrl = link.href;
 
+            var fileExtensionPattern = /\.(pdf|xlsx?|docx?|txt|rtf|csv|exe|key|pptx?|ppt|7z|pkg|rar|gz|zip|avi|mov|mp4|mpe?g|wmv|midi?|mp3|wav|wma)$/i;
+
+            if (fileExtensionPattern.test(fileUrl)) {
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                event: 'file_download',
+                file_name: fileName,
+                link_text: linkText,
+                link_url: linkUrl
+              });
+            }
+          });
+        });
+      });
+    </script>
+    <?php
+  }
+  public function track_signup_event($user_id)
+  {
+    if ($user_id) {
+      // Set a session flag to indicate a signup just happened
+      $_SESSION['conv_user_signed_up'] = true;
+    }
+  }
+  public function wp_login_datalayer()
+  {
+    if (is_user_logged_in() && !isset($_COOKIE['datalayer_login_fired'])) {
+      $is_signup = isset($_SESSION['conv_user_signed_up']) && $_SESSION['conv_user_signed_up'] === true;
+    ?>
+      <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
+        let expires = "";
+        let name = 'datalayer_login_fired';
+        let value = 'yes';
+        let days = 30;
+        if (days) {
+          let date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Convert days to milliseconds
+          expires = "; expires=" + date.toUTCString();
+        }
+        <?php if ($is_signup) { ?>
+          var datalayerSignup = {
+            event: "sign_up",
+            method: "email"
+          };
+          window.dataLayer.push(datalayerSignup);
+        <?php  } else {  ?>
+          var datalayer = {
+            event: "login",
+            method: "email",
+            custom_user_id: "<?php echo esc_attr($this->tvc_options['user_id']); ?>"
+          };
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(datalayer);
+        <?php } ?>
+        document.cookie = name + "=" + encodeURIComponent(value || "") + expires + "; path=/";
+      </script>
+      <?php
+      if ($is_signup) {
+        unset($_SESSION['conv_user_signed_up']);
+      }
+    }
+  }
+
+  public function delete_datalayer_cookie_on_logout()
+  {
+    setcookie('datalayer_login_fired', '', time() - 60, '/');
+  }
+
+  function add_author_tracking_to_datalayer()
+  {
+    if (!is_home() && is_singular() && (get_post_type() === 'post')) {
+      global $post;
+      $author_id = $post->post_author;
+      $author_name = get_the_author_meta('display_name', $author_id);
+      $categories = get_the_category($post->ID);
+      $category_names = wp_list_pluck($categories, 'name');
+      $tags = get_the_tags($post->ID);
+      $tag_names = $tags ? wp_list_pluck($tags, 'name') : [];
+      ?>
+      <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'article_load',
+          article_id: '<?php echo esc_js($post->ID); ?>',
+          article_category: '<?php echo esc_js(implode(', ', $category_names)); ?>',
+          author_id: '<?php echo esc_js($author_id); ?>',
+          author_name: '<?php echo esc_js($author_name); ?>',
+          article_title: '<?php echo esc_js(get_the_title()); ?>',
+          article_tags: "<?php echo esc_js(implode(', ', $tag_names)); ?>",
+          publication_date: '<?php echo get_the_date('Y-m-d'); ?>',
+          article_length: "<?php
+                            $content = get_post_field('post_content', $post->ID);
+                            $word_count = str_word_count(wp_strip_all_tags($content));
+                            echo esc_js($word_count);
+                            ?>",
+        });
+      </script>
+    <?php
+    }
+  }
   /*
    * it push datalayer by global ajax sucess event
    */
@@ -273,7 +393,7 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
    */
   function add_dev_id()
   {
-?>
+    ?>
     <script>
       (window.gaDevIds = window.gaDevIds || []).push('5CDcaG');
     </script>
@@ -331,6 +451,11 @@ class Con_GTM_WP_Tracking extends Con_Settings
   public function begin_datalayer()
   {
 
+    $google_detail = $this->TVC_Admin_Helper->get_ee_options_data();
+    $googleDetail = array();
+    if (isset($google_detail['setting'])) {
+      $googleDetail = $google_detail['setting'];
+    }
     if ($this->disable_tracking($this->ga_eeT)) {
       return;
     }
@@ -554,6 +679,47 @@ class Con_GTM_WP_Tracking extends Con_Settings
 
     if (!$this->disable_tracking($this->ga_eeT, "address_click")) {
       $dataLayer["conv_track_address"] = "1";
+    }
+
+    // initialize with 1 if not set
+    if (!isset($googleDetail->conv_track_page_scroll)) {
+      $googleDetail->conv_track_page_scroll = '1';
+    }
+
+    if (!isset($googleDetail->conv_track_file_download)) {
+      $googleDetail->conv_track_file_download = '1';
+    }
+
+    if (!isset($googleDetail->conv_track_author)) {
+      $googleDetail->conv_track_author = '1';
+    }
+
+    if (!isset($googleDetail->conv_track_signup)) {
+      $googleDetail->conv_track_signup = '1';
+    }
+
+    if (!isset($googleDetail->conv_track_signin)) {
+      $googleDetail->conv_track_signin = '1';
+    }
+
+    if (isset($googleDetail->conv_track_page_scroll) && ($googleDetail->conv_track_page_scroll === '1')) {
+      $dataLayer["conv_track_page_scroll"] = "1";
+    }
+
+    if (isset($googleDetail->conv_track_file_download) && ($googleDetail->conv_track_file_download === '1')) {
+      $dataLayer["conv_track_file_download"] = "1";
+    }
+
+    if (isset($googleDetail->conv_track_author) && ($googleDetail->conv_track_author === '1')) {
+      $dataLayer["conv_track_author"] = "1";
+    }
+
+    if (isset($googleDetail->conv_track_signup) && ($googleDetail->conv_track_signup === '1')) {
+      $dataLayer["conv_track_signup"] = "1";
+    }
+
+    if (isset($googleDetail->conv_track_signin) && ($googleDetail->conv_track_signin === '1')) {
+      $dataLayer["conv_track_signin"] = "1";
     }
 
     $this->add_gtm_begin_datalayer_js($dataLayer);

@@ -83,7 +83,17 @@ $data = unserialize(get_option('ee_options'));
 
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/error_logo.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="fw-normal pt-3">
                     <?php esc_html_e("Bad Request, Feed Id missing", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>
@@ -692,12 +702,32 @@ $conv_data['subscription_id'] = $googleDetail->id;
                         <div class="col-12 row conv-light-grey-bg m-0 p-0" style="height:48px;border-radius:4px;">
                             <div class="col-6 pt-2">
                                 <span class="ps-2 fw-normal">
-                                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/woocommerce_logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/woocommerce_logo.png'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <?php esc_html_e("WooCommerce Product Category", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                             </div>
                             <div class="col-6 pt-2 ps-0">
                                 <span class="ps-1 fw-normal">
-                                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conversios_logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/conversios_logo.png'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <?php esc_html_e("Conversios Product Category", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                             </div>
                         </div>
@@ -776,12 +806,32 @@ $conv_data['subscription_id'] = $googleDetail->id;
                         <div class="col-12 row conv-light-grey-bg m-0 p-0" style="height:48px;border-radius:4px;">
                             <div class="col-6 pt-2">
                                 <span class="ps-2 fw-normal">
-                                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conversios_logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/conversios_logo.png'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <?php esc_html_e("Conversios Product Attribute", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                             </div>
                             <div class="col-6 pt-2 ps-0">
                                 <span class="ps-1 fw-normal">
-                                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/woocommerce_logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/woocommerce_logo.png'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <?php esc_html_e("WooCommerce Product Attribute", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                             </div>
                         </div>
@@ -1057,7 +1107,17 @@ $conv_data['subscription_id'] = $googleDetail->id;
                 </button>
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/error_logo.png','','','width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="fw-normal pt-3 errorText">Error</h3>
                 <span id="conv_save_error_txt" class="mb-1 lh-lg"></span>
             </div>
@@ -1076,7 +1136,6 @@ $conv_data['subscription_id'] = $googleDetail->id;
 
             </div>
             <div class="modal-body text-center px-5">
-                <!-- <img style="width:184px;" src="/admin/images/logos/successImg.png"> -->
                 <span class="material-symbols-outlined conv-success-check-big">
                     check_circle
                 </span>

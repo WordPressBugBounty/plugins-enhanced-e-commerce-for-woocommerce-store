@@ -122,7 +122,19 @@
                     <th class="text-end p-1 text-truncate">
                         <?php esc_html_e("Page Path", "enhanced-e-commerce-for-woocommerce-store") ?></th>
                     <th class="text-end p-1 text-truncate d-flex flex-row-reverse">
-                        <div class="conv_rgrid_data_icon conv_rgrid_data_icon_black"><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/green-up.png'); ?>" alt="" /></div>
+                        <div class="conv_rgrid_data_icon conv_rgrid_data_icon_black">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/green-up.png'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                        </div>
                         <?php esc_html_e("Page Views", "enhanced-e-commerce-for-woocommerce-store") ?>
                     </th>
                     <th class="text-end p-1 text-truncate">
@@ -333,7 +345,6 @@
 
 <?php if (!$ga4_measurement_id == "") { ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/chartjs"></script>
     <script>
         jQuery('#conv_reporttab_pill').on('show.bs.tab', function() {
             let tabid = event.target.id;
@@ -443,77 +454,77 @@
         }
 
         function get_ga4_general_grid_reports(post_data) {
-        conv_changeplaceholder("show");
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: post_data,
-            success: function(response) { //console.log("grid response",response);
-                if (response?.error == false) {
-        
-                    let presentdata = response.data_present[0];
-                    let pastdata = response.data_past[0];
-                    //console.log("check",presentdata);
-                    //console.log("check",pastdata);
-                    if(presentdata != undefined && pastdata != undefined){
-                        let sessions_diff = presentdata.sessions - pastdata.sessions;
-                        let sessions_cmp = (sessions_diff != 0 && pastdata.sessions != 0) ? (sessions_diff / pastdata.sessions) * 100 : 0;
+            conv_changeplaceholder("show");
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: tvc_ajax_url,
+                data: post_data,
+                success: function(response) { //console.log("grid response",response);
+                    if (response?.error == false) {
 
-                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
-                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_per").html(sessions_cmp.toFixed(2) + "%");
-                        conv_setupdownarrow(sessions_cmp, 'conv_rgrid_sessions');
+                        let presentdata = response.data_present[0];
+                        let pastdata = response.data_past[0];
+                        //console.log("check",presentdata);
+                        //console.log("check",pastdata);
+                        if (presentdata != undefined && pastdata != undefined) {
+                            let sessions_diff = presentdata.sessions - pastdata.sessions;
+                            let sessions_cmp = (sessions_diff != 0 && pastdata.sessions != 0) ? (sessions_diff / pastdata.sessions) * 100 : 0;
 
-                        let newUsers_diff = presentdata.newUsers - pastdata.newUsers;
-                        let newUsers_cmp = (newUsers_diff != 0 && pastdata.newUsers != 0) ? (newUsers_diff / pastdata.newUsers) * 100 : 0;
+                            jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
+                            jQuery(".conv_rgrid_sessions .conv_rgrid_data_per").html(sessions_cmp.toFixed(2) + "%");
+                            conv_setupdownarrow(sessions_cmp, 'conv_rgrid_sessions');
 
-                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
-                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_per").html(newUsers_cmp.toFixed(2) + "%");
-                        conv_setupdownarrow(newUsers_cmp, 'conv_rgrid_newUsers');
+                            let newUsers_diff = presentdata.newUsers - pastdata.newUsers;
+                            let newUsers_cmp = (newUsers_diff != 0 && pastdata.newUsers != 0) ? (newUsers_diff / pastdata.newUsers) * 100 : 0;
 
-                        let avgduration_diff = presentdata.averageSessionDuration - pastdata.averageSessionDuration;
-                        let avgduration_cmp = (avgduration_diff != 0 && pastdata.averageSessionDuration != 0) ? (avgduration_diff / pastdata.averageSessionDuration) * 100 : 0;
+                            jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
+                            jQuery(".conv_rgrid_newUsers .conv_rgrid_data_per").html(newUsers_cmp.toFixed(2) + "%");
+                            conv_setupdownarrow(newUsers_cmp, 'conv_rgrid_newUsers');
 
-                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata.averageSessionDuration)).toFixed(2));
-                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_per").html(avgduration_cmp.toFixed(2) + "%");
-                        conv_setupdownarrow(avgduration_cmp, 'conv_rgrid_avgduration');
+                            let avgduration_diff = presentdata.averageSessionDuration - pastdata.averageSessionDuration;
+                            let avgduration_cmp = (avgduration_diff != 0 && pastdata.averageSessionDuration != 0) ? (avgduration_diff / pastdata.averageSessionDuration) * 100 : 0;
 
-                        let bounce_diff = (presentdata.bounceRate * 100) - (pastdata.bounceRate * 100);
-                        let bounce_cmp = (bounce_diff != 0 && pastdata.bounceRate != 0) ? (bounce_diff / pastdata.bounceRate) * 100 : 0;
+                            jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata.averageSessionDuration)).toFixed(2));
+                            jQuery(".conv_rgrid_avgduration .conv_rgrid_data_per").html(avgduration_cmp.toFixed(2) + "%");
+                            conv_setupdownarrow(avgduration_cmp, 'conv_rgrid_avgduration');
 
-                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata.bounceRate) *100).toFixed(2));
-                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_per").html(bounce_cmp.toFixed(2) + "%");
-                        conv_setupdownarrow(bounce_cmp, 'conv_rgrid_bounce');
+                            let bounce_diff = (presentdata.bounceRate * 100) - (pastdata.bounceRate * 100);
+                            let bounce_cmp = (bounce_diff != 0 && pastdata.bounceRate != 0) ? (bounce_diff / pastdata.bounceRate) * 100 : 0;
 
-                        conv_set_gridboxwidth();
-                        conv_changeplaceholder("hide");
-                    }else if(presentdata != undefined && pastdata == undefined){
-                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
-                        
+                            jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata.bounceRate) * 100).toFixed(2));
+                            jQuery(".conv_rgrid_bounce .conv_rgrid_data_per").html(bounce_cmp.toFixed(2) + "%");
+                            conv_setupdownarrow(bounce_cmp, 'conv_rgrid_bounce');
 
-                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
+                            conv_set_gridboxwidth();
+                            conv_changeplaceholder("hide");
+                        } else if (presentdata != undefined && pastdata == undefined) {
+                            jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
 
-                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata.averageSessionDuration)).toFixed(2));
-                        
 
-                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata.bounceRate) *100).toFixed(2));
-                        conv_set_gridboxwidth();
-                        conv_changeplaceholder("hide");
+                            jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
+
+                            jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata.averageSessionDuration)).toFixed(2));
+
+
+                            jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata.bounceRate) * 100).toFixed(2));
+                            conv_set_gridboxwidth();
+                            conv_changeplaceholder("hide");
+                        } else {
+                            jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html('N/A');
+                            jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html('N/A');
+                            jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html('N/A');
+                            jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html('N/A');
+                            jQuery(".conv_rgrid_data_per").html('N/A');
+                            console.log("No data");
+                        }
+                    } else {
+                        console.log("Error in data fetching");
                     }
-                    else{
-                        jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html('N/A');
-                        jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html('N/A');
-                        jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html('N/A');
-                        jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html('N/A');
-                        jQuery(".conv_rgrid_data_per").html('N/A');
-                        console.log("No data");
-                    }
-                } else {
-                    console.log("Error in data fetching");
-                }
-            },
-        });
-    }
+                },
+            });
+        }
+
         function conv_daily_visitors_create_chart(data) {
             let chartStatus_dailyVisitors = Chart.getChart("conv_daily_visitors_chart"); // <canvas> id
             if (chartStatus_dailyVisitors != undefined) {

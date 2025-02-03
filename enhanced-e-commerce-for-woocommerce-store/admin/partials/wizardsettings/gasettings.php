@@ -22,7 +22,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
 
 <div class="mt-3">
     <div class="alert alert-primary mb-5 d-flex" role="alert">
-        <img class="me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gtm_logo.png'); ?>" />
+        <?php echo wp_kses(
+            enhancad_get_plugin_image('/admin/images/logos/conv_gtm_logo.png','','me-2 align-self-center'),
+            array(
+                'img' => array(
+                    'src' => true,
+                    'alt' => true,
+                    'class' => true,
+                    'style' => true,
+                ),
+            )
+        ); ?>
         <div class="text-dark">
             <h4 class="m-0"><?php esc_html_e("🎉 Great News! ", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
             <ul class="list-styled ps-3">
@@ -39,7 +49,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
         <div class="col-7">
             <div class="convwizlogotitle">
                 <div class="d-flex flex-row align-items-center">
-                    <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png','','conv_channel_logo me-2 align-self-center'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                     <div>
                         <h5 class="m-0 text-bold h5">
                             <?php esc_html_e("Google Analytics 4", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -53,7 +73,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                     <span class="material-symbols-outlined text-success md-18">
                         check_circle
                     </span>
-                    <?php esc_html_e("All the e-commerce event tracking including Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    All the e-commerce event tracking including Purchase for <b class="px-2">Woocommerce</b>
                     <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="page_view, purchase, view_item_list, view_item, select_item, add_to_cart, remove_from_cart, view_cart, begin_checkout, add_payment_info, and add_shipping_info.">
                         info
                     </span>
@@ -62,8 +82,8 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                     <span class="material-symbols-outlined text-success md-18">
                         check_circle
                     </span>
-                    <?php esc_html_e("All the lead generation event tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="lead_form_submit. email_click, phone_click, address_click">
+                    All the lead generation event tracking including Form Submit for <b class="px-2">WordPress</b>
+                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Lead Form Submit, Lead Email Click, Lead Phone Click, Page Scroll, File Download, Author, Login, Signup">
                         info
                     </span>
                 </li>
@@ -95,7 +115,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
 
                     <div class="tvc_google_signinbtn_box " style="width: 185px;">
                         <div class="tvc_google_signinbtn_ga google-btn">
-                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/btn_google_signin_dark_normal_web.png'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                         </div>
                     </div>
                     <div class="ps-1 pt-2">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
@@ -156,8 +186,19 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                                 </div>
                             </div>
                             <!-- GA4 account ID Selection End -->
-                            <div id="enable_cid" class="pt-3 ps-2">
+                            <div id="enable_cid" class="pt-4 ps-2">
                                 <div class="row ">
+                                    <div class="col-12 m-auto text-end d-flex">
+                                        <div class="form-check p-0 me-2">
+                                            <input class="form-check-input ms-auto float-end" type="checkbox" id="non_woo_tracking" name="non_woo_tracking" checked>
+                                        </div>
+                                        <label class="form-check-label fw-normal text-dark" for="non_woo_tracking">
+                                            Enable Recommended Events in GA4
+                                        </label>
+                                        <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Page scroll tracking, File download, Author tracking, SignUp, Login.">
+                                            info
+                                        </span>
+                                    </div>
                                     <div class="col-12 m-auto text-end d-flex">
                                         <div class="form-check p-0 me-2">
                                             <input class="form-check-input ms-auto float-end" type="checkbox" id="ga_cid" name="ga_cid" checked>
@@ -165,7 +206,6 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                                         <label class="form-check-label fw-normal text-dark" for="ga_cid">
                                             Enable client id and Enhance conversion in GA4 for better reporting
                                         </label>
-
                                     </div>
                                 </div>
                             </div>
@@ -233,8 +273,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                             icon = 'info',
                             buttonText = 'Ok',
                             buttonColor = '#FCCB1E',
-                            iconImageSrc =
-                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                            iconImageSrc = '<?php echo wp_kses(
+                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                                array(
+                                                    'img' => array(
+                                                        'src' => true,
+                                                        'alt' => true,
+                                                        'class' => true,
+                                                        'style' => true,
+                                                    ),
+                                                )
+                                            ); ?>'
                         );
                     }
 
@@ -247,8 +296,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                     var error_msg = errors;
                 } else {
@@ -259,8 +317,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                 }
                 jQuery("#tvc-ga4-acc-edit-acc_box")?.removeClass('tvc-disable-edits');
@@ -319,8 +386,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                                 icon = 'info',
                                 buttonText = 'Ok',
                                 buttonColor = '#FCCB1E',
-                                iconImageSrc =
-                                '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                                iconImageSrc = '<?php echo wp_kses(
+                                                    enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                                    array(
+                                                        'img' => array(
+                                                            'src' => true,
+                                                            'alt' => true,
+                                                            'class' => true,
+                                                            'style' => true,
+                                                        ),
+                                                    )
+                                                ); ?>'
                             );
                         }
                         jQuery(".ga_analytic_account_id_ga4:not(#" + thisselid + ")").val(account_id).trigger(
@@ -336,8 +412,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                     //add_message("error", errors);
                     var error_msg = errors;
@@ -350,8 +435,17 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                 }
                 conv_change_loadingbar("hide");
@@ -442,6 +536,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
             selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
             selected_vals["conv_onboarding_done_step"] = "<?php echo esc_js("2"); ?>";
             selected_vals["ga_cid"] = document.getElementById('ga_cid').checked ? "1" : "0";
+            selected_vals["non_woo_tracking"] = document.getElementById('non_woo_tracking').checked ? "1" : "0";
             jQuery(box_id).find("select, input").each(function() {
                 if (!jQuery(this).val() || jQuery(this).val() == "" || jQuery(this).val() ==
                     "undefined") {

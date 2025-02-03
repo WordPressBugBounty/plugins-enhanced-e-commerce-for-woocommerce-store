@@ -87,7 +87,17 @@ $data = unserialize(get_option('ee_options'));
 
             <div class="conv-pixel-logo d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gmc_logo.png'); ?>" />
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_gmc_logo.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                     <span class="fw-bold fs-4 ms-2 pixel-title">
                         <?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </span>
@@ -122,7 +132,17 @@ $data = unserialize(get_option('ee_options'));
         <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
             <div class="conv-pixel-logo d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>" />
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                     <span class="fw-bold fs-4 ms-2 pixel-title">
                         <?php esc_html_e("TikTok Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </span>
@@ -158,7 +178,17 @@ $data = unserialize(get_option('ee_options'));
         <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
             <div class="conv-pixel-logo d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_meta_logo.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                     <span class="fw-bold fs-4 ms-2 pixel-title">
                         <?php esc_html_e("Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </span>
@@ -373,11 +403,41 @@ $data = unserialize(get_option('ee_options'));
                             <td class="align-middle text-center">
                                 <?php foreach ($channel_id as $val) {
                                     if ($val === '1') { ?>
-                                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/google_channel_logo.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/google_channel_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     <?php } elseif ($val === '2') { ?>
-                                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/fb_channel_logo.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/fb_channel_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                     <?php } elseif ($val === '3') { ?>
-                                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/tiktok_channel_logo.png'); ?>" />
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/tiktok_channel_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
                                 <?php }
                                 } ?>
                             </td>
@@ -725,7 +785,17 @@ $data = unserialize(get_option('ee_options'));
 
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/error_logo.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="fw-normal pt-3">Error</h3>
                 <span id="conv_save_error_txt" class="mb-1 lh-lg px-3"></span>
             </div>
@@ -744,7 +814,6 @@ $data = unserialize(get_option('ee_options'));
 
             </div>
             <div class="modal-body text-center px-5">
-                <!-- <img style="width:184px;" src="/admin/images/logos/successImg.png"> -->
                 <div class="success-round d-flex rounded-circle justify-content-center align-items-center border-radius">
                     <span class="material-symbols-outlined text-white  fww-bold">check</span>
                 </div>
@@ -766,7 +835,18 @@ $data = unserialize(get_option('ee_options'));
     <div class="onbrdppmain" role="document">
         <div class="onbrdnpp-cntner acccretppcntnr">
             <div class="onbrdnpp-hdr">
-                <div class="ppclsbtn clsbtntrgr"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/close-icon.png'); ?>" alt="" />
+                <div class="ppclsbtn clsbtntrgr">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/close-icon.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                 </div>
             </div>
             <div class="onbrdpp-body">
@@ -774,7 +854,17 @@ $data = unserialize(get_option('ee_options'));
                 <div class="google_signin_sec_left">
                     <div class="google_connect_url google-btn">
                         <div class="google-icon-wrapper">
-                            <img class="google-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" />
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/g-logo.png'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                         </div>
                         <p class="btn-text">
                             <b><?php esc_html_e("Sign in with google", "enhanced-e-commerce-for-woocommerce-store"); ?></b>

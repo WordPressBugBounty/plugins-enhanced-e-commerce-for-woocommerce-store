@@ -5,7 +5,17 @@
 
         <div class="convpixsetting-inner-box mt-4">
             <div class="d-flex align-items-center mb-2">
-                <img class="me-2" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/gtm_logo.png'); ?>" width="32px" height="32px">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/gtm_logo.png','','me-2','width="32px"; height="32px";'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h3 class="mb-0 h5" style="font-weight:500">
                     <?php esc_html_e("Select Google Tag Manager Container ID:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>
@@ -36,7 +46,17 @@
                     <label class="form-check-label h6 mb-0 ps-2">
                         <?php esc_html_e("Connect Custom GTM Container", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         <span class="conv-link-blue ms-2 fw-bold-500 upgradetopro_badge" popupopener="gtmpro">
-                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/upgrade_badge.png'); ?>" />
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                             <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </span>
                     </label>

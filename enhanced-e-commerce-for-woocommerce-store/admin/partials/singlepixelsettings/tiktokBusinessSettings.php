@@ -78,7 +78,7 @@ body {
     $tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://connect.tatvic.com/laravelapi/public/auth/tiktok/callback&rid=q6uerfg9osn&state=" . urlencode(wp_json_encode($state));
     
     if ($tiktok_mail === '' && $tiktok_user_id === '') { ?>
-    <a onclick='window.open("<?php echo $tiktok_auth_url ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
+    <a onclick='window.open("<?php echo esc_js(esc_url($tiktok_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
         href="#">
         <button class="btn btn-outline-dark" id="facebookLogin"><img style="width:19px"
                 src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>">
@@ -93,7 +93,7 @@ body {
         <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
     </h5>
     <?php echo esc_html($tiktok_mail) . ', <b>User Id: </b>' . esc_html($tiktok_user_id) . ' '; ?>
-    <a onclick='window.open("<?php echo $tiktok_auth_url ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
+    <a onclick='window.open("<?php echo esc_js(esc_url($tiktok_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
         href="#">Change</a>
     <?php }
     /**************Tiktok Auth end **********************************************************/

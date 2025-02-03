@@ -422,7 +422,7 @@ require_once ENHANCAD_PLUGIN_DIR . 'admin/partials/singlepixelsettings/googlesig
 
     jQuery(function() {
 
-        FreshworksWidget('hide');
+        // FreshworksWidget('hide');
 
         <?php if (!isset($_GET['wizard_channel'])) { ?>
             var conv_onboarding_done_step = "<?php echo esc_js($conv_onboarding_done_step) ?>";

@@ -338,6 +338,34 @@ if (!class_exists('TVC_Ajax_File')) :
           $api_obj = new Conversios_Onboarding_ApiCall();
           $api_obj->gaDimension();
         }
+        if (isset($_POST['conv_options_data']['non_woo_tracking']) && $_POST['conv_options_data']['non_woo_tracking'] == '1') {
+          $non_woo_data = array(
+            'conv_track_page_scroll' => '1',
+            'conv_track_file_download' => '1',
+            'conv_track_author' => '1',
+            'conv_track_signup' => '1',
+            'conv_track_signin' => '1',
+          );
+          $data = get_option('ee_options');
+          $data = $data ? maybe_unserialize($data) : array();
+          $updated_data = array_merge($data, $non_woo_data);
+          $serialized_data = maybe_serialize($updated_data);
+          update_option('ee_options', $serialized_data);
+        }
+        if (isset($_POST['conv_options_data']['non_woo_tracking']) || isset($_POST['conv_options_data']['conv_track_page_scroll']) || isset($_POST['conv_options_data']['conv_track_file_download']) || isset($_POST['conv_options_data']['conv_track_author']) || isset($_POST['conv_options_data']['conv_track_signup']) || isset($_POST['conv_options_data']['conv_track_signin'])) {
+          $data = array();
+          $ee_api_data_all = maybe_unserialize(get_option("ee_api_data"));
+          if (!isset($ee_api_data_all['setting'])) {
+            $ee_api_data_all['setting'] = new stdClass(); // Avoids undefined property error
+          }
+          $data['conv_track_page_scroll'] = $ee_api_data_all['setting']->conv_track_page_scroll;
+          $data['conv_track_file_download'] = $ee_api_data_all['setting']->conv_track_file_download;
+          $data['conv_track_author'] = $ee_api_data_all['setting']->conv_track_author;
+          $data['conv_track_signin'] = $ee_api_data_all['setting']->conv_track_signin;
+          $data['conv_track_signup'] = $ee_api_data_all['setting']->conv_track_signup;
+          $api_obj = new Conversios_Onboarding_ApiCall();
+          $api_obj->additional_dimensions($data);
+        }
         if (in_array("eeselectedevents", $_POST['conv_options_type']) && isset($_POST["conv_options_data"]["conv_selected_events"]['ga'])) {
           $selectedevents = is_array($_POST["conv_options_data"]["conv_selected_events"]['ga']) ? array_map('sanitize_text_field', wp_unslash($_POST["conv_options_data"]["conv_selected_events"]['ga'])) : sanitize_text_field(wp_unslash($_POST["conv_options_data"]["conv_selected_events"]['ga']));
           $selectedevents['ga'] = $selectedevents;
@@ -1523,7 +1551,7 @@ if (!class_exists('TVC_Ajax_File')) :
             'updated_date' => esc_sql(gmdate('Y-m-d H:i:s', current_time('timestamp'))),
             'next_schedule_date' => $next_schedule_date,
             'target_country' => isset($_POST['target_country']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['target_country']))) : '',
-            'tiktok_catalog_id' => isset($tiktok_catalog_id) ? esc_sql(sanitize_text_field($tiktok_catalog_id)) : '',
+            'tiktok_catalog_id' => isset($tiktok_catalog_id) ? esc_sql(sanitize_text_field($tiktok_catalog_id)) : ''
           );
 
           if (isset($_POST['is_mapping_update']) && $_POST['is_mapping_update'] != 1) {
@@ -2713,7 +2741,6 @@ if (!class_exists('TVC_Ajax_File')) :
               if (!empty($stock_status_to_fetch) && !empty($not_stock_status_to_fetch)) {
                 $meta_query = array('relation' => 'AND');
               }
-
               if (empty($tax_query) && empty($meta_query) && empty($product_ids_to_exclude) && empty($product_ids_to_include)) {
                 $count = (new WP_Query(['post_type' => 'product', 'post_status' => 'publish', 's' => $search]))->found_posts;
                 wp_reset_query();
@@ -3320,7 +3347,7 @@ if (!class_exists('TVC_Ajax_File')) :
           $country_code = sanitize_text_field(wp_unslash($_POST['countryCode']));
           global $wpdb;
           $table_name = $wpdb->prefix . 'ee_tiktok_catalog';
-          $country_code = 'US';
+          $country_code = $country_code;
           $query = $wpdb->prepare(
             "SELECT catalog_id FROM $table_name WHERE `country` = %s",
             $country_code

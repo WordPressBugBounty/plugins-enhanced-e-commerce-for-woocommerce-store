@@ -55,7 +55,19 @@ class TVC_Account
                   <div class="acc-num">
                     <label class="ga-title tvc_licence_key_title"><?php esc_html_e("Licence key:", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
                     <p class="ga-text tvc_licence_key"><?php echo esc_html($api_licence_key); ?></p>
-                    <p class="ga-text text-right tvc_licence_key_change"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/icon/refresh.svg'); ?>" alt="active licence key"></p>
+                    <p class="ga-text text-right tvc_licence_key_change">
+                      <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/icon/refresh.svg', 'active licence key'),
+                        array(
+                          'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                          ),
+                        )
+                      ); ?>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -85,8 +97,8 @@ class TVC_Account
         </div>
       </div>
     </div>
-    <?php 
-    echo wp_kses_post(get_connect_google_popup_html_to_active_licence()); 
+    <?php
+    echo wp_kses_post(get_connect_google_popup_html_to_active_licence());
     ?>
     <script>
       jQuery(document).ready(function() {

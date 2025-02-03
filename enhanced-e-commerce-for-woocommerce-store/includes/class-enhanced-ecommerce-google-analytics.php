@@ -191,9 +191,9 @@ class Enhanced_Ecommerce_Google_Analytics
     $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
     $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
     $this->loader->add_action('admin_notice_message', $plugin_admin, 'tvc_add_admin_notice');
-    $this->loader->add_action('admin_notices', $plugin_admin, 'tvc_display_admin_notices');
-    $this->loader->add_action('admin_notices', $plugin_admin, 'tvc_add_data_admin_notice');
-    $this->loader->add_action('admin_notices', $plugin_admin, 'convtvc_admin_notice');
+    //$this->loader->add_action('admin_notices', $plugin_admin, 'tvc_display_admin_notices');
+    //$this->loader->add_action('admin_notices', $plugin_admin, 'tvc_add_data_admin_notice');
+    //$this->loader->add_action('admin_notices', $plugin_admin, 'convtvc_admin_notice');
 
 
     if (is_admin()) {

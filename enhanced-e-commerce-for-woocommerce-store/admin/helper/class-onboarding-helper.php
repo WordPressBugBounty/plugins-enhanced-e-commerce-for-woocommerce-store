@@ -812,7 +812,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
     public function getGoogleAdsAccountList()
     {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $google_detail = $TVC_Admin_Helper->get_ee_options_data();  
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       $postData['store_id'] = $google_detail['setting']->store_id;
       $postData['subscription_id'] = $google_detail['setting']->id;
       try {
@@ -900,6 +900,37 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'headers' => $header,
           'method' => 'POST',
           'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
+        $return = new \stdClass();
+        return $return;
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+    public function additional_dimensions($data)
+    {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      $formatted_data = array(
+        "subscription_id" => intval($google_detail['setting']->id),
+        "store_id" => intval($google_detail['setting']->store_id),
+        "additional_dimension" => array(
+          "conv_track_page_scroll" => intval($data['conv_track_page_scroll']),
+          "conv_track_file_download" => intval($data['conv_track_file_download']),
+          "conv_track_author" => intval($data['conv_track_author']),
+          "conv_track_signin" => intval($data['conv_track_signin']),
+          "conv_track_signup" => intval($data['conv_track_signup']),
+        )
+      );
+      try {
+        $url = $this->apiDomain . '/google-analytics/additional/dimensions/insert';
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
+        $args = array(
+          'timeout' => 300,
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($formatted_data)
         );
         $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
         $return = new \stdClass();
@@ -1122,7 +1153,8 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'type' => "GA4",
           'ads_customer_id' => sanitize_text_field($postData['ads_customer_id']),
           'subscription_id' => sanitize_text_field($postData['subscription_id']),
-          'store_id' => $google_detail['setting']->store_id
+          'store_id' => $google_detail['setting']->store_id,
+          'web_property' => sanitize_text_field($postData['web_property'])
         ];
         $args = array(
           'timeout' => 300,
@@ -1378,4 +1410,15 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
       }
     }
   }
+}
+function enhancad_get_plugin_image($relative_path, $alt = 'Image', $class = '', $style = '', $id = '')
+{
+  $image_url = esc_url(ENHANCAD_PLUGIN_URL . $relative_path);
+  $alt_attr = ' alt="' . esc_attr($alt) . '"';
+  $class_attr = $class ? ' class="' . esc_attr($class) . '"' : '';
+  $id_attr = $id ? ' id="' . esc_attr($id) . '"' : '';
+  $style_attr = $style ? ' style="' . esc_attr($style) . '"' : '';
+
+  // Return the escaped <img> tag
+  return '<' . 'img src="' . $image_url . '"' . $alt_attr . $class_attr . $style_attr . $id_attr .'>';
 }

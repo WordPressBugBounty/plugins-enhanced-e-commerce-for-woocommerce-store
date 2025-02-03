@@ -72,15 +72,18 @@ class TVC_Pricings
                             <ul class="nav nav-tabs d-none" id="parentTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link nav-platform active" id="tab1" data-bs-toggle="tab" href="#content1" aria-selected="true" role="tab">
-                                        <img style="height: 55px" src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/wordpresslogo.png" alt="Wordpress Tab" class="img-fluid whitecolor">
+                                        <img
+                                            style="height: 55px" src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/wordpresslogo.png" alt="Wordpress Tab" class="img-fluid whitecolor">
                                         <b class="text-light">&amp;</b>
-                                        <img style="height: 55px" src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/woocommerce-logo-white.png" alt="Woocommerce Tab" class="img-fluid woocomimg">
+                                        <img
+                                            style="height: 55px" src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/woocommerce-logo-white.png" alt="Woocommerce Tab" class="img-fluid woocomimg">
                                     </a>
                                 </li>
 
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link nav-platform" id="tab3" data-bs-toggle="tab" href="#content3" aria-selected="false" tabindex="-1" role="tab">
-                                        <img style="height: 34px; width: auto;" src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/shopify_logo_black.png" alt="Shopify Tab" class="img-fluid shopifyimg">
+                                        <img
+                                            style="height: 34px; width: auto;" src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/shopify_logo_black.png" alt="Shopify Tab" class="img-fluid shopifyimg">
                                     </a>
                                 </li>
 
@@ -221,7 +224,7 @@ class TVC_Pricings
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" plan_cat="starter05+" boxperiod="yearly" boxdomain="10+">
                                                                     <h5 class="card-title">Starter</h5>
-                                                                   
+
                                                                 </div>
 
                                                                 <ul class="feature-listing" style="max-height: 300px !important; overflow-y: scroll;">
@@ -324,7 +327,7 @@ class TVC_Pricings
                                                                     </div>
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
-                                                                   
+
                                                                 </div>
 
                                                             </div>
@@ -405,7 +408,7 @@ class TVC_Pricings
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" plan_cat="professional05+" boxperiod="yearly" boxdomain="10+">
                                                                     <h5 class="card-title">Professional </h5>
-                                                                   
+
                                                                 </div>
 
 
@@ -496,7 +499,7 @@ class TVC_Pricings
                                                                     </div>
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
-                                                                   
+
                                                                 </div>
 
                                                             </div>
@@ -534,18 +537,18 @@ class TVC_Pricings
                                                                     <h5 class="card-title">Enterprise</h5>
                                                                     <p class="text-start my-2 px-3 py-2 plan_summ fs-10"><b>Faster page load with server-side GTM</b>, automate e-commerce &amp; lead tracking. Handles event &amp; conversion tracking for GA4,Google Ads,Facebook &amp; more paltforms</p>
 
-                                                                   
+
                                                                 </div>
 
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05" boxperiod="yearly" boxdomain="10">
                                                                     <h5 class="card-title">Enterprise</h5>
                                                                     <p class="text-start my-2 px-3 py-2 plan_summ fs-10"><b>Faster page load with server-side GTM</b>, automate e-commerce &amp; lead tracking. Handles event &amp; conversion tracking for GA4,Google Ads,Facebook &amp; more paltforms</p>
-                                                                   
-                                                                    
+
+
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05+" boxperiod="yearly" boxdomain="10+">
                                                                     <h5 class="card-title">Enterprise</h5>
-                                                                   
+
                                                                 </div>
 
 
@@ -600,7 +603,7 @@ class TVC_Pricings
                                                                         GET STARTED
                                                                     </a>
                                                                 </div> -->
-                                                                   
+
                                                                 </div>
 
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05" boxperiod="yearly" boxdomain="10">
@@ -609,10 +612,10 @@ class TVC_Pricings
                                                                         GET STARTED
                                                                     </a>
                                                                 </div> -->
-                                                                   
+
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05+" boxperiod="yearly" boxdomain="10+">
-                                                                   
+
                                                                 </div>
 
                                                             </div>
@@ -728,7 +731,7 @@ class TVC_Pricings
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
                                                                     <h5 class="card-title">Starter</h5>
-                                                                   
+
                                                                 </div>
 
                                                                 <ul class="feature-listing custom-scrollbar">
@@ -799,7 +802,7 @@ class TVC_Pricings
                                                                     </div>
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
-                                                                   
+
                                                                 </div>
                                                                 <div class="popular-plan">
                                                                     <p>Most Popular</p>
@@ -872,7 +875,7 @@ class TVC_Pricings
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
                                                                     <h5 class="card-title">Professional </h5>
-                                                                   
+
                                                                 </div>
 
 
@@ -950,7 +953,7 @@ class TVC_Pricings
                                                                     </div>
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
-                                                                   
+
                                                                 </div>
                                                                 <div class="popular-plan">
                                                                     <p>Most Popular</p>
@@ -1022,7 +1025,7 @@ class TVC_Pricings
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
                                                                     <h5 class="card-title">Enterprise</h5>
-                                                                   
+
                                                                 </div>
 
 
@@ -1101,7 +1104,7 @@ class TVC_Pricings
                                                                     </div>
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" boxperiod="yearly" boxdomain="10+">
-                                                                   
+
                                                                 </div>
                                                                 <div class="popular-plan">
                                                                     <p>Most Popular</p>
@@ -1180,16 +1183,16 @@ class TVC_Pricings
 
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise03" boxperiod="yearly" boxdomain="5">
                                                                     <h5 class="card-title">Server Side Tagging</h5>
-                                                                   
+
                                                                 </div>
 
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05" boxperiod="yearly" boxdomain="10">
                                                                     <h5 class="card-title">Server Side Tagging</h5>
-                                                                    
+
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05+" boxperiod="yearly" boxdomain="10+">
                                                                     <h5 class="card-title">Server Side Tagging</h5>
-                                                                   
+
                                                                 </div>
 
 
@@ -1286,7 +1289,7 @@ class TVC_Pricings
                                                                         GET STARTED
                                                                     </a>
                                                                 </div> -->
-                                                                   
+
                                                                 </div>
 
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05" boxperiod="yearly" boxdomain="10">
@@ -1295,10 +1298,10 @@ class TVC_Pricings
                                                                         GET STARTED
                                                                     </a>
                                                                 </div> -->
-                                                                   
+
                                                                 </div>
                                                                 <div class="dynamicprice_box d-none" plan_cat="enterprise05+" boxperiod="yearly" boxdomain="10+">
-                                                                   
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1811,7 +1814,8 @@ class TVC_Pricings
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <div class="card-icon">
-                                                                                    <img src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/privacy.png" alt="" class="img-fluid">
+                                                                                    <img
+                                                                                        src="https://www.conversios.io/wp-content/themes/conversios2023/assets/convo-images/pricing/privacy.png" alt="" class="img-fluid">
                                                                                 </div>
                                                                                 <h5 class="card-title">100% No Risk <br>
                                                                                     Moneyback Guarantee

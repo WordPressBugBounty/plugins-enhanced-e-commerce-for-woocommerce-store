@@ -138,7 +138,17 @@ if (!class_exists('Conversios_Footer')) {
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <img class="m-auto d-block" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/uptopro_2024.png'); ?>">
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/uptopro_2024.png','','m-auto d-block'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <h4 id="conuptppro_text" class="pt-4"></h4>
                             </div>
                             <div class="modal-footer border-0 justify-content-center pt-0">
@@ -170,11 +180,10 @@ if (!class_exists('Conversios_Footer')) {
         ?>
             <script>
                 jQuery(function() {
-                    //New feature modal popup initiate
-                    // if (!document.cookie.includes('conv_popup_newfeature') && jQuery('#convnewfeaturemodal').data('userdata') != 'yes') {
-                    // 	// First visit, display popup
-                    // 	jQuery("#convnewfeaturemodal").modal('show');
-                    // }
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl)
+                    });
                     jQuery('#conv_close_popup').click(function() {
                         // Set cookie to expire in 24 hours
                         document.cookie = "conv_popup_newfeature=true; expires=" + new Date(Date.now() + 24 * 60 * 60 *
@@ -265,7 +274,7 @@ if (!class_exists('Conversios_Footer')) {
                         jQuery("#upgradetopromodal").modal('show');
                     });
 
-                    jQuery('#conv_save_success_modal').on('hidden.bs.modal', function () {
+                    jQuery('#conv_save_success_modal').on('hidden.bs.modal', function() {
                         jQuery('#conv_save_success_modal .leave-a-review').hide();
                     });
                 });
@@ -293,81 +302,8 @@ if (!class_exists('Conversios_Footer')) {
             <?php
             $is_wizard = isset($_GET['wizard']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) : "";
             ?>
-            <script>
-                window.fwSettings = {
-                    'widget_id': 81000001743
-                };
-                ! function() {
-                    if ("function" != typeof window.FreshworksWidget) {
-                        var n = function() {
-                            n.q.push(arguments)
-                        };
-                        n.q = [], window.FreshworksWidget = n
-                    }
-                }()
-                function createOverlay() {
-                    // Create overlay element
-                    let overlay = document.createElement('div');
-                    overlay.id = 'customOverlay';
-                    overlay.style.position = 'fixed';
-                    overlay.style.top = '0';
-                    overlay.style.left = '0';
-                    overlay.style.width = '100%';
-                    overlay.style.height = '100%';
-                    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Dark overlay with transparency
-                    overlay.style.zIndex = '999'; // Place it behind the Freshworks widget
-                    document.body.appendChild(overlay);
-                }
-                function removeOverlay() {
-                    let overlay = document.getElementById('customOverlay');
-                    if (overlay) {
-                        document.body.removeChild(overlay);
-                    }
-                }
-                document.getElementById('conv_freshwork_chat').addEventListener('click', function() {
-                    // support chat box
-                    FreshworksWidget('open');
-                    createOverlay();
-                });
-                // if freshwork widget hide
-                window.onload = function() {
-                    setTimeout(function() {
-                        // Select the target node to observe (in this case, #freshworks-container)
-                        const targetNode = document.getElementById('freshworks-container');
-
-                        // Check if the target node exists
-                        if (!targetNode) {
-                            console.error('Target node #freshworks-container not found');
-                            return;
-                        }
-
-                        // Define the observer configuration
-                        const config = { childList: true, subtree: true };
-
-                        // Define the callback function for when mutations occur
-                        const callback = function(mutationsList, observer) {
-                            for (let mutation of mutationsList) {
-                                if (mutation.type === 'childList') {
-                                    // Check if the #freshworks-frame-wrapper element is removed
-                                    if (!document.getElementById('freshworks-frame-wrapper')) {
-                                        removeOverlay(); 
-                                        // console.log('Element removed');
-                                    }
-                                }
-                            }
-                        };
-
-                        // Create a MutationObserver instance and pass the callback function
-                        const observer = new MutationObserver(callback);
-
-                        // Start observing the target node
-                        observer.observe(targetNode, config);
-                        
-                    }, 2000);
-                };
-
-            </script>
-            <script type='text/javascript' src='https://ind-widget.freshworks.com/widgets/81000001743.js' async defer></script>
+         
+            
 <?php
         }
     }

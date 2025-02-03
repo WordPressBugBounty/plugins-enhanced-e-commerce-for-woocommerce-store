@@ -22,7 +22,17 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
         <div class="col-8">
             <div class="convwizlogotitle">
                 <div class="d-flex flex-row align-items-center">
-                    <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>" />
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
                     <div>
                         <h5 class="m-0 text-bold h5">
                             <?php esc_html_e("Google Ads", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -75,7 +85,17 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 
                     <div class="tvc_google_signinbtn_box " style="width: 185px;">
                         <div class="tvc_google_signinbtn_ga google-btn">
-                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/btn_google_signin_dark_normal_web.png'); ?>">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/btn_google_signin_dark_normal_web.png'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                         </div>
                     </div>
                     <div class="ps-1 pt-2">We only require Google authorization to access your Google Analytics 4 Account and Measurement ID for data tracking. Your personal information and account details remain completely secure and private.</div>
@@ -220,7 +240,17 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                                     <div class="col-12">
                                         <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
                                             <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
-                                                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/gadsconversion.png'); ?>" />
+                                                <?php echo wp_kses(
+                                                    enhancad_get_plugin_image('/admin/images/gadsconversion.png', '', 'rounded shadow'),
+                                                    array(
+                                                        'img' => array(
+                                                            'src' => true,
+                                                            'alt' => true,
+                                                            'class' => true,
+                                                            'style' => true,
+                                                        ),
+                                                    )
+                                                ); ?>
                                             </div>
                                             <div class="mt-0 mb-2 col-9 ps-4">
                                                 <div class="fs-6 fw-bold text-primary">Drive More Sales with Starter Plan:</div>
@@ -287,6 +317,12 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                 <span class="spinner-border text-light spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 <?php esc_html_e('Save & Next', "enhanced-e-commerce-for-woocommerce-store"); ?>
             </button>
+
+            <?php if (!CONV_IS_WC) { ?>
+                <button id="conv_skip_gads" class="btn btn-outline-primary ms-3 conv_skip_gads">
+                    <?php esc_html_e('Skip & Next', "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </button>
+            <?php } ?>
         </div>
 
     </div>
@@ -316,7 +352,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                         </li>
                         <li>
                             <strong>Using Email (if popup is blocked):</strong>
-                            <p>Check your email for an invitation from <strong>analytics1@tatvic.com </strong>. Click <strong>"Accept Invitation"</strong> in the email and sign in to confirm access.</p>
+                            <p>Check your email for an invitation from <strong>webdev@conversios.io </strong>. Click <strong>"Accept Invitation"</strong> in the email and sign in to confirm access.</p>
                         </li>
                     </ol>
                     <?php //esc_html_e("You’ll receive an invite from Google on your email. Accept the invitation to enable your Google Ads Account.", "enhanced-e-commerce-for-woocommerce-store"); 
@@ -472,6 +508,10 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
         //     showGAdsModalPopUpNew("https://www.conversios.io/");
         // });
 
+        jQuery("#conv_skip_gads").click(function() {
+            changeTabBox("webgmcbox-tab");
+        });
+
         jQuery(document).on("change", "#conv_conversion_select", function() {
             jQuery("#conv_conversion_textbox").val(jQuery(this).val());
             jQuery("#conv_conversion_textbox").trigger('change');
@@ -557,7 +597,17 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                             icon = 'info',
                             buttonText = 'Ok',
                             buttonColor = '#FCCB1E',
-                            iconImageSrc = '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                            iconImageSrc = '<?php echo wp_kses(
+                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                                array(
+                                                    'img' => array(
+                                                        'src' => true,
+                                                        'alt' => true,
+                                                        'class' => true,
+                                                        'style' => true,
+                                                    ),
+                                                )
+                                            ); ?>'
                         );
                         //showtoastdynamically("There are no Google ads accounts associated with email.");
                     } else {
@@ -591,7 +641,17 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc = '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                 }
                 jQuery('#ads-account').prop('disabled', false);

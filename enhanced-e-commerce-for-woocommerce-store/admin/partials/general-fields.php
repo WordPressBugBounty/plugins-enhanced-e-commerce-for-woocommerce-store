@@ -107,7 +107,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Google Analytics", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -154,7 +164,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Google Ads", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -195,7 +215,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_meta_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Facebook", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -234,7 +264,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Tiktok Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -268,7 +308,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_snap_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Snapchat Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -306,7 +356,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_pint_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_pint_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Pinterest Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -346,7 +406,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_bing_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_bing_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Microsoft Ads (Bing)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -379,7 +449,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_clarity_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_clarity_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Microsoft Clarity (Bing)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -412,7 +492,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_linkedin_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_linkedin_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Linkedin Insight", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -453,7 +543,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_twitter_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_twitter_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Twitter Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -482,7 +582,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_hotjar_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_hotjar_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -511,7 +621,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_crazyegg_logo.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_crazyegg_logo.png', '', 'align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                                 <span class="fw-bold fs-4 ms-2 pixel-title">
                                     <?php esc_html_e("Crazyegg Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
@@ -542,7 +662,17 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                         <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                             <div class="conv-pixel-logo d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_event_track_custom.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/conv_event_track_custom.png', '', 'align-self-center'),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                     <span class="fw-bold fs-4 ms-2 pixel-title">
                                         <?php esc_html_e("Additional Configurations", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </span>

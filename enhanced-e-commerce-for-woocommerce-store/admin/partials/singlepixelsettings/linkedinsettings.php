@@ -27,7 +27,17 @@ $is_sel_disable = 'disabled';
         </div>
         <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3 mt-4" style="background: #caf3e3;">
             <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
-                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/sstimpact.png'); ?>" />
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/sstimpact.png','','rounded shadow'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
             </div>
             <div class="mt-0 mb-2 col-9">
                 <div class="fs-6 fw-bold text-primary">Increase conversions by 40% with the Server-Side Tagging Enterprise Plan</div>

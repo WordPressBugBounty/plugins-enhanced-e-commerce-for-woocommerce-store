@@ -2,7 +2,17 @@
     <div class="col-7">
         <div class="convwizlogotitle">
             <div class="d-flex flex-row align-items-center">
-                <img class="conv_channel_logo me-2 align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" />
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/conv_meta_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <div>
                     <h5 class="m-0 text-bold h5">
                         <?php esc_html_e("Meta (Facebook) Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -62,7 +72,17 @@
                     <div class="col-12">
                         <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
                             <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
-                                <img class="rounded shadow" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/fbcapiimpact.png'); ?>" />
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/fbcapiimpact.png','','rounded shadow'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
                             </div>
                             <div class="mt-0 mb-2 col-9">
                                 <div class="fs-6 fw-bold text-primary">Facebook Conversion API (FCAPI) Benefits in Professional Plan</div>
@@ -176,7 +196,7 @@
                     conv_options_type: ["eeoptions", "eeapidata", "middleware"],
                 },
                 success: function(response) {
-                    if (jQuery(this).val() == "") {
+                    if (jQuery("#fb_pixel_id").val() == "") {
                         jQuery("#conv_save_fb_finish").addClass("disabledsection");
                     } else {
                         jQuery("#conv_save_fb_finish").removeClass("disabledsection");
