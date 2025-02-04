@@ -4,9 +4,9 @@ Tags: woocommerce, google analytics, google ads, facebook pixel, conversion trac
 Author: Conversios
 Requires at least: 4.6
 Tested up to: 6.7
-Requires PHP: 5.6
-Stable tag: 7.2.1
-Version: 7.2.1
+Requires PHP: 7.3
+Stable tag: 7.2.2
+Version: 7.2.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

@@ -454,7 +454,7 @@ class Con_GTM_WP_Tracking extends Con_Settings
     $google_detail = $this->TVC_Admin_Helper->get_ee_options_data();
     $googleDetail = array();
     if (isset($google_detail['setting'])) {
-      $googleDetail = $google_detail['setting'];
+      $googleDetail = (object)$google_detail['setting'];
     }
     if ($this->disable_tracking($this->ga_eeT)) {
       return;
@@ -683,41 +683,41 @@ class Con_GTM_WP_Tracking extends Con_Settings
 
     // initialize with 1 if not set
     if (!isset($googleDetail->conv_track_page_scroll)) {
-      $googleDetail->conv_track_page_scroll = '1';
+      $dataLayer["conv_track_page_scroll"] = "1";
     }
-
-    if (!isset($googleDetail->conv_track_file_download)) {
-      $googleDetail->conv_track_file_download = '1';
-    }
-
-    if (!isset($googleDetail->conv_track_author)) {
-      $googleDetail->conv_track_author = '1';
-    }
-
-    if (!isset($googleDetail->conv_track_signup)) {
-      $googleDetail->conv_track_signup = '1';
-    }
-
-    if (!isset($googleDetail->conv_track_signin)) {
-      $googleDetail->conv_track_signin = '1';
-    }
-
     if (isset($googleDetail->conv_track_page_scroll) && ($googleDetail->conv_track_page_scroll === '1')) {
       $dataLayer["conv_track_page_scroll"] = "1";
     }
 
+
+    if (!isset($googleDetail->conv_track_file_download)) {
+      $dataLayer["conv_track_file_download"] = "1";
+    }
     if (isset($googleDetail->conv_track_file_download) && ($googleDetail->conv_track_file_download === '1')) {
       $dataLayer["conv_track_file_download"] = "1";
     }
 
+
+
+    if (!isset($googleDetail->conv_track_author)) {
+      $dataLayer["conv_track_author"] = "1";
+    }
     if (isset($googleDetail->conv_track_author) && ($googleDetail->conv_track_author === '1')) {
       $dataLayer["conv_track_author"] = "1";
     }
 
+
+    if (!isset($googleDetail->conv_track_signup)) {
+      $dataLayer["conv_track_signup"] = "1";
+    }
     if (isset($googleDetail->conv_track_signup) && ($googleDetail->conv_track_signup === '1')) {
       $dataLayer["conv_track_signup"] = "1";
     }
 
+
+    if (!isset($googleDetail->conv_track_signin)) {
+      $googleDetail->conv_track_signin = '1';
+    }
     if (isset($googleDetail->conv_track_signin) && ($googleDetail->conv_track_signin === '1')) {
       $dataLayer["conv_track_signin"] = "1";
     }
