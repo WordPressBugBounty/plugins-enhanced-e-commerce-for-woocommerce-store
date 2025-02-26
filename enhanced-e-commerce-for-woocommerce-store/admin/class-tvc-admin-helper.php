@@ -1420,13 +1420,17 @@ class TVC_Admin_Helper
         "store_id" => $google_detail['setting']->store_id,
       );
       $response = $this->customApiObj->get_feed_status_by_store_id($data);
-      foreach ($response->data as $key => $val) {
-        $profile_data = array(
-          'status' => esc_sql($val->status_name),
-          'tiktok_status' => esc_sql($val->tiktok_status_name),
-          'fb_status' => esc_sql($val->facebook_status_name),
-        );
-        $this->TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => $val->store_feed_id));
+      //echo '<pre>'; print_r($response); echo '</pre>'; // woow 1424 - feed list
+      if (isset($response->data)) {
+        foreach ($response->data as $key => $val) {
+          $profile_data = array(
+            'status' => esc_sql($val->status_name), // woow 1426 - feed list
+            'tiktok_status' => esc_sql($val->tiktok_status_name),
+            'fb_status' => esc_sql($val->facebook_status_name),
+            'ms_status' => esc_sql($val->microsoft_status_name),
+          );
+          $this->TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => $val->store_feed_id));
+        }
       }
     }
     return true;

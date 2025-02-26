@@ -588,7 +588,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                 if (response.error === false) {
                     var error_msg = 'null';
                     if (response.data.length == 0) {
-                        add_message("warning", "There are no Google ads accounts associated with email.");
+                        //add_message("warning", "There are no Google ads accounts associated with email.");
+                        getAlertMessageAll(
+                            'info',
+                            'Error',
+                            message = 'There are no Google ads accounts associated with email.',
+                            icon = 'info',
+                            buttonText = 'Ok',
+                            buttonColor = '#FCCB1E',
+                            iconImageSrc =
+                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        );
                     } else {
                         if (response.data.length > 0) {
                             <?php if (isset($_GET['subscription_id'])) : ?>
@@ -720,7 +730,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
 
                 } else {
                     var error_msg = response.errors;
-                    add_message("error", response.data.message);
+                    //add_message("error", response.data.message);
+                    getAlertMessageAll(
+                        'info',
+                        'Error',
+                        message = 'Something wrong:' + error_msg,
+                        icon = 'info',
+                        buttonText = 'Ok',
+                        buttonColor = '#FCCB1E',
+                        iconImageSrc =
+                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                    );
                 }
                 //user_tracking_data(btn_cam, error_msg,ename,event_label);   
             }

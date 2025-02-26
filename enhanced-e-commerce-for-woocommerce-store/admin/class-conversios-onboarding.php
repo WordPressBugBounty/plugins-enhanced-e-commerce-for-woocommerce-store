@@ -48,10 +48,18 @@ if (!class_exists('Conversios_Onboarding')) {
 				$diffrent_days = floor(($current - $this->last_login) / (60 * 60 * 24));
 				if ($diffrent_days < 100) {
 					$this->subscriptionId = $this->TVC_Admin_Helper->get_subscriptionId();
+
+					// For google account
 					$g_mail = get_option('ee_customer_gmail');
 					$this->tvc_data['g_mail'] = "";
 					if ($g_mail) {
 						$this->tvc_data['g_mail'] = sanitize_email($g_mail);
+					}
+					// For microsoft account
+					$microsoft_mail = get_option('ee_customer_msmail');
+					$this->tvc_data['microsoft_mail'] = "";
+					if ($microsoft_mail) {
+						$this->tvc_data['microsoft_mail'] = sanitize_email($microsoft_mail);
 					}
 				}
 			}

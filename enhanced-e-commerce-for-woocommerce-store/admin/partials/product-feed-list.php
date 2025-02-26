@@ -16,12 +16,15 @@ $site_url_pmax = "admin.php?page=conversios-pmax";
 $customApiObj = new CustomApi();
 $googledetail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
 $googleDetail = $googledetail->data;
-$conv_data['subscription_id'] = $googleDetail->id;
+if (isset($googleDetail->id)) {
+    $conv_data['subscription_id'] = $googleDetail->id;
+}
 $conv_data = $TVC_Admin_Helper->get_store_data();
 $conv_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
 $google_detail = $TVC_Admin_Helper->get_ee_options_data();
 $total_products = (new WP_Query(['post_type' => 'product', 'post_status' => 'publish']))->found_posts;
 $ee_options = $TVC_Admin_Helper->get_ee_options_settings();
+
 $google_merchant_center_id = '';
 if (isset($ee_options['google_merchant_id']) === TRUE && $ee_options['google_merchant_id'] !== '') {
     $google_merchant_center_id = esc_html($ee_options['google_merchant_id']);
@@ -42,8 +45,22 @@ if (isset($ee_options['facebook_setting']['fb_catalog_id']) === TRUE && $ee_opti
     $facebook_catalog_id = esc_html($ee_options['facebook_setting']['fb_catalog_id']);
 }
 
+$microsoft_merchant_center_id = '';
+if (isset($ee_options['microsoft_merchant_center_id']) === TRUE && $ee_options['microsoft_merchant_center_id'] !== '') {
+    $microsoft_merchant_center_id = esc_html($ee_options['microsoft_merchant_center_id']);
+}
+$microsoft_catalog_id = '';
+if (isset($ee_options['ms_catalog_id']) === TRUE && $ee_options['ms_catalog_id'] !== '') {
+    $microsoft_catalog_id = esc_html($ee_options['ms_catalog_id']);
+}
+
 $not_connected_any_gmc = false;
-if ($google_merchant_center_id === '' && $tiktok_business_account === '' && $facebook_catalog_id === '') {
+if (
+    $google_merchant_center_id === ''
+    && $tiktok_business_account === ''
+    && $facebook_catalog_id === ''
+    && $microsoft_catalog_id === ''
+) {
     //wp_safe_redirect("admin.php?page=conversios-google-shopping-feed&tab=feed_list"); //Odd
     //exit;
     $not_connected_any_gmc = true;
@@ -81,8 +98,9 @@ $data = unserialize(get_option('ee_options'));
     </div>
 </div>
 <div id="conv_grid_list_box" class="row px-50 conv-pixel-list-item justify-content-center pt-1 p-3" style="--bs-gutter-x: 0rem;">
+
     <!-- Google Merchant card Start -->
-    <div class="col-md-4 p-3 ps-0">
+    <div class="col-md-3 p-3 ps-0">
         <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
 
             <div class="conv-pixel-logo d-flex justify-content-between">
@@ -102,7 +120,7 @@ $data = unserialize(get_option('ee_options'));
                         <?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </span>
                 </div>
-                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings'); ?>" class="align-self-center">
+                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
                     <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
                 </a>
             </div>
@@ -110,14 +128,14 @@ $data = unserialize(get_option('ee_options'));
                 <div class="d-flex align-items-start flex-column">
 
                     <?php if (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1">
-                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span>Google Merchant Center Account: <?php echo (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') ? esc_attr($data['google_merchant_id']) : ''; ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><?php echo (isset($data['google_merchant_id']) && $data['google_merchant_id'] != '') ? esc_attr($data['google_merchant_id']) : ''; ?>
                         </div>
                     <?php } else { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Google Merchant Center Account: Not connected</span></div>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
                     <?php } ?>
 
-                    <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to GMC&nbsp;
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to GMC&nbsp;
                         <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=gmc&amp;plugin_name=aio">
                             <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                         </a>
@@ -127,8 +145,45 @@ $data = unserialize(get_option('ee_options'));
         </div>
     </div>
 
+
+    <!-- Microsoft Merchant card Start -->
+    <div class="col-md-3 py-3 ps-0" style="padding-right:32px">
+        <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
+
+            <div class="conv-pixel-logo d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" />
+                    <span class="fw-bold fs-4 ms-2 pixel-title">
+                        <?php esc_html_e("Microsoft Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </span>
+                </div>
+                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=mmcsettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
+                    <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                </a>
+            </div>
+            <div class="pt-3 pb-3 pixel-desc">
+                <div class="d-flex align-items-start flex-column">
+
+                    <?php if (isset($data['ms_catalog_id']) && $data['ms_catalog_id'] != '') { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><?php echo (isset($data['ms_catalog_id']) && $data['ms_catalog_id'] != '') ? esc_attr($data['ms_catalog_id']) : ''; ?>
+                        </div>
+                    <?php } else { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
+                    <?php } ?>
+
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync &nbsp;
+                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedgrid&utm_campaign=gmc&plugin_name=aio">
+                            <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TikTok Business Account Start -->
-    <div class="col-md-4 p-3">
+    <div class="col-md-3 p-3">
         <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
             <div class="conv-pixel-logo d-flex justify-content-between">
                 <div class="d-flex align-items-center">
@@ -147,21 +202,21 @@ $data = unserialize(get_option('ee_options'));
                         <?php esc_html_e("TikTok Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </span>
                 </div>
-                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>" class="align-self-center">
+                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
                     <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
                 </a>
             </div>
             <div class="pt-3 pb-3 pixel-desc">
                 <div class="d-flex align-items-start flex-column">
                     <?php if (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1">
-                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span>TikTok Business Account: <?php echo (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? esc_attr($data['tiktok_setting']['tiktok_business_id']) : ''; ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><?php echo (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? esc_attr($data['tiktok_setting']['tiktok_business_id']) : ''; ?>
                         </div>
                     <?php } else { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>TikTok Business Accounts: Not connected</span></div>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
                     <?php } ?>
 
-                    <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Tiktok&nbsp;
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Tiktok&nbsp;
                         <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=gmc&amp;plugin_name=aio">
                             <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                         </a>
@@ -174,7 +229,7 @@ $data = unserialize(get_option('ee_options'));
     <!-- TikTok Business Account End -->
 
     <!-- Meta Business Account Start -->
-    <div class="col-md-4 p-3 pe-0">
+    <div class="col-md-3 p-3 pe-0">
         <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
             <div class="conv-pixel-logo d-flex justify-content-between">
                 <div class="d-flex align-items-center">
@@ -193,21 +248,21 @@ $data = unserialize(get_option('ee_options'));
                         <?php esc_html_e("Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </span>
                 </div>
-                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>" class="align-self-center">
+                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
                     <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
                 </a>
             </div>
             <div class="pt-3 pb-3 pixel-desc">
                 <div class="d-flex align-items-start flex-column">
                     <?php if (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                            <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span>Facebook Business Account: <?php echo (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') ? esc_attr($data['facebook_setting']['fb_business_id']) : ''; ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><?php echo (isset($data['facebook_setting']['fb_business_id']) && $data['facebook_setting']['fb_business_id'] != '') ? esc_attr($data['facebook_setting']['fb_business_id']) : ''; ?>
                         </div>
                     <?php } else { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n ps-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Facebook Business Account: Not connected</span></div>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
                     <?php } ?>
 
-                    <div class="alert alert-danger d-flex align-items-center p-1"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Meta&nbsp;
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Meta&nbsp;
                         <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=meta&amp;plugin_name=aio">
                             <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                         </a>
@@ -322,6 +377,8 @@ $data = unserialize(get_option('ee_options'));
     </nav>
     <input type="hidden" id="feedCount" name="feedCount" value="<?php echo !empty($feed_data) ? count($feed_data) : 0; ?>">
     <div class="table-responsive shadow-sm" style="border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
+        <?php // echo '<pre>'; print_r($feed_data); echo '</pre>'; // wow 
+        ?>
         <table class="table" id="feed_list_table" style="width:100%">
             <thead>
                 <tr>
@@ -364,6 +421,10 @@ $data = unserialize(get_option('ee_options'));
             </thead>
             <tbody id="table-body" class="table-body">
                 <?php
+
+                // echo '<pre>'; print_r($feed_data); echo '</pre>'; wow
+
+
                 $feedIdArr = [];
                 if (empty($feed_data) === FALSE) {
                     foreach ($feed_data as $value) {
@@ -429,6 +490,18 @@ $data = unserialize(get_option('ee_options'));
                                     <?php } elseif ($val === '3') { ?>
                                         <?php echo wp_kses(
                                             enhancad_get_plugin_image('/admin/images/logos/tiktok_channel_logo.png'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>
+                                    <?php } elseif ($val === '4') { ?>
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/ms_channel_logo.svg'),
                                             array(
                                                 'img' => array(
                                                     'src' => true,
@@ -541,6 +614,24 @@ $data = unserialize(get_option('ee_options'));
                                             break;
                                     }
 
+                                    switch ($value->ms_status) {
+                                        case 'Draft':
+                                            $draft++;
+                                            break;
+
+                                        case 'In Progress':
+                                            $inprogress++;
+                                            break;
+
+                                        case 'Synced':
+                                            $synced++;
+                                            break;
+
+                                        case 'Failed':
+                                            $failed++;
+                                            break;
+                                    }
+
                                     if ($draft !== 0) { ?>
                                         <div class="badgebox draft" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
                                             <?php echo esc_html('Draft'); ?>
@@ -551,6 +642,7 @@ $data = unserialize(get_option('ee_options'));
                                         <input type="hidden" class="draftGmcImg" value="<?php echo $value->status == 'Draft' ? "<img class='draft-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="draftTiktokImg" value="<?php echo $value->tiktok_status == 'Draft' ? "<img class='draft-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="draftfbImg" value="<?php echo $value->fb_status == 'Draft' ? "<img class='draft-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/fb_channel_logo.png") . "' />" : '' ?>">
+                                        <input type="hidden" class="draftmsImg" value="<?php echo $value->ms_status == 'Draft' ? "<img class='draft-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/ms_channel_logo.svg") . "' />" : '' ?>">
                                     <?php }
                                     if ($inprogress !== 0) { ?>
                                         <div class="badgebox inprogress" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
@@ -562,17 +654,19 @@ $data = unserialize(get_option('ee_options'));
                                         <input type="hidden" class="inprogressGmcImg" value="<?php echo $value->status == 'In Progress' ? "<img class='inprogress-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="inprogressTiktokImg" value="<?php echo $value->tiktok_status == 'In Progress' ? "<img class='inprogress-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="inprogressfbImg" value="<?php echo $value->fb_status == 'In Progress' ? "<img class='inprogress-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/fb_channel_logo.png") . "' />" : '' ?>">
+                                        <input type="hidden" class="inprogressmsImg" value="<?php echo $value->ms_status == 'In Progress' ? "<img class='inprogress-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/ms_channel_logo.svg") . "' />" : '' ?>">
                                     <?php }
                                     if ($synced !== 0) { ?>
-                                        <div class="badgebox synced" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
+                                        <div class="badgebox xyz synced" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
                                             <?php echo esc_html('Synced'); ?>
                                             <div class="count-badge" style="margin-top:-4px;color:#09bd83">
                                                 <?php echo esc_html($synced) ?>
                                             </div>
                                         </div>
-                                        <input type="hidden" class="syncedGmcImg" value="<?php echo $value->status == 'Synced' ? "<img class='synced-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
+                                        <input type="hidden" class="syncedGmcImg" value="<?php echo $value->status == 'Synced' ? "<img class='synced-status xyz-s' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="syncedTiktokImg" value="<?php echo $value->tiktok_status == 'Synced' ? "<img class='synced-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="syncedfbImg" value="<?php echo $value->fb_status == 'Synced' ? "<img class='synced-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/fb_channel_logo.png") . "' />" : '' ?>">
+                                        <input type="hidden" class="syncedmsImg" value="<?php echo $value->ms_status == 'Synced' ? "<img class='synced-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/ms_channel_logo.svg") . "' />" : '' ?>">
                                     <?php }
                                     if ($failed !== 0) { ?>
                                         <div class="badgebox failed" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
@@ -584,6 +678,7 @@ $data = unserialize(get_option('ee_options'));
                                         <input type="hidden" class="failedGmcImg" value="<?php echo $value->status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="failedTiktokImg" value="<?php echo $value->tiktok_status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="failedfbImg" value="<?php echo $value->fb_status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/fb_channel_logo.png") . "' />" : '' ?>">
+                                        <input type="hidden" class="failedmsImg" value="<?php echo $value->ms_status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/ms_channel_logo.svg") . "' />" : '' ?>">
                                 <?php }
                                 } //end if 
                                 ?>
@@ -728,7 +823,21 @@ $data = unserialize(get_option('ee_options'));
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php printf('%s', esc_html($google_merchant_center_id)); ?>" id="gmc_id" name="gmc_id" <?php echo $google_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php printf('%s', esc_html($microsoft_merchant_center_id)); ?>" id="mmc_id" name="mmc_id" <?php echo $microsoft_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
+                            <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
+                                <?php esc_html_e("Microsoft Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </label>
+                            <label class="col-form-label fs-14 pt-0 fw-400">
+                                <?php
+                                printf(
+                                    '%s',
+                                    esc_html($microsoft_merchant_center_id)
+                                );
+                                ?>
+                            </label>
+                        </div>
+                        <div class="form-check form-check-custom">
+                            <input class="form-check-input check-height fs-14 woow-830 errorChannel" type="checkbox" value="<?php printf('%s', esc_html($google_merchant_center_id)); ?>" id="gmc_id" name="gmc_id" <?php echo !empty($google_merchant_center_id) ? "checked" : 'disabled' ?>>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("Google Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
@@ -903,8 +1012,10 @@ $data = unserialize(get_option('ee_options'));
             var syncedTiktokImg = jQuery(this).next('.syncedGmcImg').next('.syncedTiktokImg').val();
             var syncedfbImg = jQuery(this).next('.syncedGmcImg').next('.syncedTiktokImg').next(
                 '.syncedfbImg').val();
+            var syncedmsImg = jQuery(this).next('.syncedGmcImg').next('.syncedTiktokImg').next(
+                '.syncedfbImg').next('.syncedmsImg').val();
             var content = '<div class="popover-box border-synced">' + syncedGmcImg + '  ' +
-                syncedTiktokImg + ' ' + syncedfbImg + '</div>';
+                syncedTiktokImg + ' ' + syncedfbImg + ' ' + syncedmsImg + '</div>';
             jQuery(this).popover({
                 html: true,
                 template: content,
@@ -917,8 +1028,10 @@ $data = unserialize(get_option('ee_options'));
             var failedTiktokImg = jQuery(this).next('.failedGmcImg').next('.failedTiktokImg').val();
             var failedfbImg = jQuery(this).next('.failedGmcImg').next('.failedTiktokImg').next(
                 '.failedfbImg').val();
+            var failedmsImg = jQuery(this).next('.failedGmcImg').next('.failedTiktokImg').next(
+                '.failedfbImg').next('.failedmsImg').val();
             var content = "<div class='popover-box border-failed'>" + failedGmcImg + "  " +
-                failedTiktokImg + " " + failedfbImg + "</div>";
+                failedTiktokImg + " " + failedfbImg + " " + failedmsImg + "</div>";
             jQuery(this).popover({
                 html: true,
                 template: content,
@@ -931,8 +1044,9 @@ $data = unserialize(get_option('ee_options'));
             var draftTiktokImg = jQuery(this).next('.draftGmcImg').next('.draftTiktokImg').val();
             var draftfbImg = jQuery(this).next('.draftGmcImg').next('.draftTiktokImg').next('.draftfbImg')
                 .val();
+            var draftmsImg = jQuery(this).next('.draftGmcImg').next('.draftTiktokImg').next('.draftfbImg').next('.draftmsImg').val();
             var content = '<div class="popover-box border-draft">' + draftGmcImg + '  ' + draftTiktokImg +
-                ' ' + draftfbImg + '</div>';
+                ' ' + draftfbImg + ' ' + draftmsImg + '</div>';
             jQuery(this).popover({
                 html: true,
                 template: content,
@@ -945,8 +1059,10 @@ $data = unserialize(get_option('ee_options'));
                 .val();
             var inprogressfbImg = jQuery(this).next('.inprogressGmcImg').next('.inprogressTiktokImg').next(
                 '.inprogressfbImg').val();
+            var inprogressmsImg = jQuery(this).next('.inprogressGmcImg').next('.inprogressTiktokImg').next(
+                '.inprogressfbImg').next('.inprogressmsImg').val();
             var content = '<div class="popover-box border-inprogress">' + inprogressGmcImg + '  ' +
-                inprogressTiktokImg + ' ' + inprogressfbImg + '</div>';
+                inprogressTiktokImg + ' ' + inprogressfbImg + ' ' + inprogressmsImg + '</div>';
             jQuery(this).popover({
                 html: true,
                 template: content,
@@ -1015,7 +1131,7 @@ $data = unserialize(get_option('ee_options'));
         /*********************Custom DataTable for Search functionality End***********************************************/
         /****************Create Feed call start********************************/
         jQuery('#create_new_feed, .create_new_feed').on('click', function(events) {
-            jQuery('#gmc_id').attr('disabled', false);
+            //jQuery('#gmc_id').attr('disabled', false);
             //jQuery('#tiktok_id').attr('disabled', false);
             jQuery('#target_country').attr('disabled', false);
             jQuery('#autoSyncIntvl').attr('disabled', false);
@@ -1087,8 +1203,11 @@ $data = unserialize(get_option('ee_options'));
                 return false;
             }
 
-            if (!jQuery('#gmc_id').is(":checked") && !jQuery('#tiktok_id').is(":checked") && !jQuery(
-                    '#fb_id').is(':checked')) {
+            if (!jQuery('#gmc_id').is(":checked") &&
+                !jQuery('#tiktok_id').is(":checked") &&
+                !jQuery('#fb_id').is(':checked') &&
+                !jQuery('#mmc_id').is(":checked")) {
+
                 jQuery('.errorChannel').not(':disabled').css('border', '1px solid red');
                 return false;
             }
@@ -1104,6 +1223,9 @@ $data = unserialize(get_option('ee_options'));
             jQuery('.errorChannel').css('border', '');
         });
         jQuery(document).on('click', '#fb_id', function(e) {
+            jQuery('.errorChannel').css('border', '');
+        });
+        jQuery(document).on('click', '#mmc_id', function(e) {
             jQuery('.errorChannel').css('border', '');
         });
         /********************Modal POP up validation on click remove end **********************************/
@@ -1176,6 +1298,7 @@ $data = unserialize(get_option('ee_options'));
     /*************************************Restrict Zero  End*************************************************************************/
     /*************************************Save Feed Data Start*************************************************************************/
     function save_feed_data(google_merchant_center_id, catalog_id) {
+        console.log('saving from 1295 line'); // woow 1295
         var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
         let edit = jQuery('#edit').val();
         var data = {
@@ -1184,6 +1307,7 @@ $data = unserialize(get_option('ee_options'));
             google_merchant_center: jQuery('input#gmc_id').is(':checked') ? '1' : '',
             fb_catalog_id: jQuery('input#fb_id').is(':checked') ? '2' : '',
             tiktok_id: jQuery('input#tiktok_id').is(':checked') ? '3' : '',
+            microsoft_merchant_center: jQuery('input#mmc_id').is(':checked') ? '4' : '',
             tiktok_catalog_id: jQuery('input#tiktok_id').is(':checked') ? jQuery('input#tiktok_id').val() : '',
             autoSync: jQuery('input#autoSync').is(':checked') ? '1' : '0',
             autoSyncIntvl: '25',
@@ -1276,10 +1400,13 @@ $data = unserialize(get_option('ee_options'));
                 jQuery('.tiktok_catalog_id').empty();
                 jQuery('#fb_id').prop("checked", false);
                 jQuery('#fb_id').attr('disabled', false);
+                jQuery('#mmc_id').prop("checked", false);
+                jQuery('#mmc_id').attr('disabled', false);
                 //jQuery('#fb_id').prop("checked", false);
                 var tiktok_business_account = "<?php echo esc_js($tiktok_business_account) ?>";
                 var google_merchant_center_id = "<?php echo esc_js($google_merchant_center_id) ?>";
                 var facebook_business_account = "<?php echo esc_js($facebook_business_account) ?>";
+                var microsoft_merchant_center_id = "<?php echo esc_js($microsoft_merchant_center_id) ?>";
                 if (tiktok_business_account == "") {
                     jQuery('#tiktok_id').attr('disabled', true);
                     jQuery('#tiktok_id').attr('checked', false);
@@ -1291,6 +1418,10 @@ $data = unserialize(get_option('ee_options'));
                 if (facebook_business_account == "") {
                     jQuery('#fb_id').attr('disabled', true);
                     jQuery('#fb_id').attr('checked', false);
+                }
+                if (microsoft_merchant_center_id == "") {
+                    jQuery('#mmc_id').attr('disabled', true);
+                    jQuery('#mmc_id').attr('checked', false);
                 }
                 channel_id = response[0].channel_ids.split(",");
                 jQuery.each(channel_id, function(index, val) {
@@ -1305,10 +1436,15 @@ $data = unserialize(get_option('ee_options'));
                     if (val == '2') {
                         jQuery('#fb_id').prop("checked", true);
                     }
+                    if (val === '4') {
+                        jQuery('#mmc_id').prop("checked", true);
+                    }
                 });
                 if (response[0].is_mapping_update == '1') {
                     jQuery('#gmc_id').attr('disabled', true);
+                    jQuery('#fb_id').attr('disabled', true);
                     jQuery('#tiktok_id').attr('disabled', true);
+                    jQuery('#mmc_id').attr('disabled', true);
                     jQuery('#target_country').attr('disabled', true);
                 }
                 jQuery('#edit').val(response[0].id);
@@ -1570,12 +1706,12 @@ $data = unserialize(get_option('ee_options'));
 
         const gridItems = document.querySelector('#conv_grid_list_box').children;
         const rows = Array.from(gridItems).reduce((rows, item, index) => {
-            const rowIndex = Math.floor(index / 3);
+            const rowIndex = Math.floor(index / 4); // 4 columns
             rows[rowIndex] = rows[rowIndex] || [];
             rows[rowIndex].push(item);
             return rows;
         }, []);
-
+        //console.log(rows); 4 columns
         rows.forEach((row) => {
             const maxHeight = Math.max(...row.map((item) => item.children[0].offsetHeight));
             row.forEach((item) => {

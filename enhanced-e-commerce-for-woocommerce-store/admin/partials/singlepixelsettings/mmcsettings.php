@@ -4,25 +4,29 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 
+$microsoft_ads_manager_id = isset($ee_options['microsoft_ads_manager_id']) ? $ee_options['microsoft_ads_manager_id'] : "";
+$microsoft_ads_subaccount_id = isset($ee_options['microsoft_ads_subaccount_id']) ? $ee_options['microsoft_ads_subaccount_id'] : "";
+$microsoft_merchant_center_id = isset($ee_options['microsoft_merchant_center_id']) ? $ee_options['microsoft_merchant_center_id'] : "";
+$ms_catalog_id = isset($ee_options['ms_catalog_id']) ? $ee_options['ms_catalog_id'] : "";
+
+$store_country = get_option('woocommerce_default_country');
+$store_country = explode(":", $store_country);
+if ($store_country[0]) {
+    $country = $store_country[0];
+} else {
+    $country = '';
+}
+
 $is_sel_disable = 'disabled';
-$google_merchant_center_id = "";
-if (isset($googleDetail->google_merchant_center_id) === TRUE && $googleDetail->google_merchant_center_id !== "") {
-    $google_merchant_center_id = $googleDetail->google_merchant_center_id;
+
+$microsoft_ads_pixel_id = "";
+if (isset($googleDetail->microsoft_ads_pixel_id) === TRUE && $googleDetail->microsoft_ads_pixel_id !== "") {
+    $microsoft_ads_pixel_id = $googleDetail->microsoft_ads_pixel_id;
 }
 
-$microsoft_merchant_center_id = "";
-if (isset($googleDetail->microsoft_merchant_center_id) === TRUE && $googleDetail->microsoft_merchant_center_id !== "") {
-    $microsoft_merchant_center_id = $googleDetail->microsoft_merchant_center_id;
-}
-
-$google_ads_id = "";
-if (isset($googleDetail->google_ads_id) === TRUE && $googleDetail->google_ads_id !== "") {
-    $google_ads_id = $googleDetail->google_ads_id;
-}
-
-$cust_g_email = "";
-if (isset($tvc_data['g_mail']) === TRUE && esc_attr($subscriptionId) !== '') {
-    $cust_g_email = esc_attr($tvc_data['g_mail']);
+$cust_ms_email = "";
+if (isset($tvc_data['microsoft_mail']) === TRUE && esc_attr($subscriptionId) !== '') {
+    $cust_ms_email = esc_attr($tvc_data['microsoft_mail']);
 }
 
 $is_domain_claim = "";
@@ -44,6 +48,7 @@ global $wp_filesystem;
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
+$required_bing = false;
 ?>
 <style>
     .tooltip-inner {
@@ -67,7 +72,17 @@ $contData = json_decode($getCountris);
         display: none;
     }
 </style>
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm">
+
+<?php if ( empty($microsoft_ads_manager_id) || empty($microsoft_ads_subaccount_id) || empty($microsoft_ads_pixel_id) ) { $required_bing = true; ?>
+<div class="alert alert-danger mb-3 d-flex align-items-center justify-content-end fs-6">
+    <span>Please connect your Microsoft Bing Ads account with all properties.</span>
+    <a href="<?php echo esc_url( admin_url() . 'admin.php?page=conversios-google-analytics&subpage=bingsettings' ); ?>" class="btn btn-soft-primary float-end ms-2 fs-14 fw-500 ">
+        <?php esc_html_e("Connect You Bing Ads", "enhanced-e-commerce-for-woocommerce-store"); ?>
+    </a>
+</div>
+<?php } ?>
+
+<div class="convcard p-4 mt-0 rounded-3 shadow-sm <?php echo $required_bing ? 'disabledsection' : ''; ?>">
     <?php if (isset($pixel_settings_arr[$subpage]['topnoti']) === TRUE && $pixel_settings_arr[$subpage]['topnoti'] !== "") { ?>
         <div class="alert d-flex align-items-cente p-0" role="alert">
             <div class="text-light conv-success-bg rounded-start d-flex">
@@ -81,39 +96,98 @@ $contData = json_decode($getCountris);
         </div>
     <?php } ?>
     <?php
-    $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-shopping-feed', "gmcsettings");
-    require_once "googlesignin.php";
+    $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-shopping-feed', "mmcsettings");
+    
+    // not needed for now as addd in ms-signin.php $confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=mmcsettings"; // return to page after login success
+    require_once "ms-signin.php";
     ?>
 
-    <form id="gmcsetings_form" class="convpixsetting-inner-box mt-4">
+    <form id="mmcsetings_form" class="convpixsetting-inner-box mt-4">
         <div id="analytics_box_UA" class="py-1">
-            <label class="text-dark fw-bold-500">
-                <?php esc_html_e("Select Google Merchant Center Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
-            </label>
-            <div class="row pt-2 conv-gmcsettings">
+            <div class="row">
                 <div class="col-6">
-                    <select id="google_merchant_center_id" name="google_merchant_center_id" class="form-select form-select-lg mb-3 selecttwo valtoshow_inpopup_this" style="width: 100%" <?php echo esc_attr($is_sel_disable); ?>>
-                        <?php if (!empty($google_merchant_center_id)) { ?>
-                            <option value="<?php echo esc_attr($google_merchant_center_id); ?>" selected>
-                                <?php echo esc_attr($google_merchant_center_id); ?>
-                            </option>
+                    <label class="text-dark fw-bold-500">
+                        <?php esc_html_e("Select Microsoft Merchant Center Store", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </label>
+                    <div class="row pt-2 conv-mmcsettings">
+                        <div class="col-10">
+                            <select id="microsoft_merchant_center_id" name="microsoft_merchant_center_id" class="form-select form-select-lg mb-3 selecttwo valtoshow_inpopup_this" style="width: 100%" <?php echo esc_attr($is_sel_disable); ?>>
+                                <?php if (!empty($microsoft_merchant_center_id)) { ?>
+                                    <option value="<?php echo esc_attr($microsoft_merchant_center_id); ?>" selected>
+                                        <?php echo esc_attr($microsoft_merchant_center_id); ?>
+                                    </option>
+                                <?php } ?>
+                                <option value="">Select Microsoft Merchant Center Store</option>
+                            </select>
+                        </div>
+                        <div class="col-2 conv-enable-selection conv-link-blue">
+                            <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
+                        </div>
+                    </div>
+                    <label class="text-dark fw-bold-500 mt-4">
+                        <?php esc_html_e("Select Microsoft Merchant Catalog Id", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </label>
+                    <div class="row pt-2 conv-mc-settings <?php echo !empty($microsoft_merchant_center_id) ? '' : 'disabledsection' ?>">
+                        <div class="col-10">
+                            <select id="ms_catalog_id" name="ms_catalog_id" class="form-select form-select-lg mb-3 selecttwo valtoshow_inpopup_this" style="width: 100%" <?php echo esc_attr($is_sel_disable); ?>>
+                                <?php if (!empty($ms_catalog_id)) { ?>
+                                    <option value="<?php echo esc_attr($ms_catalog_id); ?>" selected>
+                                        <?php echo esc_attr($ms_catalog_id); ?>
+                                    </option>
+                                <?php } ?>
+                                <option value="">Select Microsoft Merchant Catalog ID</option>
+                            </select>
+                        </div>
+                        <div class="col-2 conv-enable-catalog-selection conv-link-blue">
+                            <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-between align-items-center conv_create_new_bing_card rounded px-3 py-3">
+                    <div class="col-12 py-2">
+                        <!-- Show this after creation -->
+                        <div class="alert-message d-flex">
+                            <div class="alert alert-success text-start d-none after-mmc-acc-creation">
+                                New Microsoft Merchant Center Store With Id: <span id="new_mmc_id"></span> is created
+                                successfully.
+                            </div>
+                        </div>
+                        <?php
+                        if (isset($is_site_verified) === TRUE && $is_site_verified === '1') {  ?>
+                            <!-- <span class="material-symbols-outlined text-success fs-5 site_verified" style="cursor:default">
+                                check_circle
+                            </span> -->
+                        <?php } else { ?>
+                        
+                            <h5 class="p-1 alert alert-danger d-flex align-items-center justify-content-center">
+                                You site is not verified yet!
+                                <span class="material-symbols-outlined text-danger fs-5 site_verified">
+                                    sync_problem
+                                </span>
+                            </h5>
+                            
                         <?php } ?>
-                        <option value="">Select Google Merchant Center Account</option>
-                    </select>
-                </div>
-                <div class="col-2 conv-enable-selection conv-link-blue">
-                    <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
+                        <div class="d-flex justify-content-between align-items-center before-mmc-acc-creation
+                            <?php echo (isset($is_site_verified) === TRUE && $is_site_verified === '1') ? '' : 'disabledsection'; ?>">
+
+                            <div class="pe-2" style="max-width:300px">
+                                <h5 class="text-dark mb-0">Do not have an store?</h5>
+                                <span class="text-dark fs-12">
+                                    By using Pmax Campaign and Feed Sync with a Microsoft Bing Ads account, you can simplify campaign management, improve conversions, and increase product visibility, ultimately driving more sales and revenue for your business.
+                                </span>
+                            </div>
+                            <div class="align-self-center conv_create_mmc_new_when_notexist <?php echo !empty($microsoft_merchant_center_id) ? 'disabledsection' : '' ?>" bis_skin_checked="1">
+                                <a id="conv_create_mmc_new_btn" class="btn btn-primary px-5" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#conv_create_new_bing">
+                                    <?php esc_html_e("Create New", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-12 flex-row pt-3">
-                <div class="col-12 py-2">
-                    <label>Do not have an account?</label>
-                    <a id="conv_create_gmc_new_btn" class="" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#conv_create_gmc_new">
-                        <?php esc_html_e("Create New", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </a>
-                </div>
-            </div>
-            <div class="col-12 flex-row pt-3 row">
+            
+
+            <div class="col-12 flex-row pt-3 row d-none for now">
                 <div class="col-5">
                     <label class="text-dark">Site Verified</label>
                     <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you verify your website, you let Google know that you're the owner of the website. You're the website owner if you have the ability to make edits to your website content. Not the website owner? Work together with your website owner or admin to verify the website.">
@@ -134,7 +208,7 @@ $contData = json_decode($getCountris);
                     ?>
                 </div>
             </div>
-            <div class="col-12 flex-row pt-3 row domain_claimDiv">
+            <div class="col-12 flex-row pt-3 row domain_claimDiv  d-none for now">
                 <div class="col-5">
                     <label class="text-dark">Domain Claim</label>
                     <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you claim your website, it gives you the right to use your website in connection with your Merchant Center account. First you need to verify your website and then you can claim it. Only the user who verified the website can claim it.">
@@ -159,8 +233,8 @@ $contData = json_decode($getCountris);
         </div>
     </form>
 
-    <input type="hidden" id="valtoshow_inpopup" value="Google Merchant Center Account:" />
-    <input type="hidden" id="ads-account" value="<?php echo esc_attr($google_ads_id); ?>" />
+    <input type="hidden" id="valtoshow_inpopup" value="Microsoft Merchant Center Store:" />
+    <input type="hidden" id="ads-account" value="<?php echo esc_attr($microsoft_ads_pixel_id); ?>" />
     <input type="hidden" id="conversios_onboarding_nonce" value="<?php echo esc_attr(wp_create_nonce('conversios_onboarding_nonce')); ?>" />
     <input type="hidden" id="feedType" name="feedType" value="<?php echo isset($_GET['feedType']) && $_GET['feedType'] != '' ? esc_attr(sanitize_text_field(wp_unslash($_GET['feedType']))) : '' ?>" />
 
@@ -168,157 +242,77 @@ $contData = json_decode($getCountris);
 
 
 <!-- Create New Ads Account Modal -->
-<div class="modal fade" id="conv_create_gmc_new" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 9999;">
+<div class="modal fade" id="conv_create_new_bing" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 9999;">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-body text-start">
-                <div class="row">
-                    <div class="col-7 pe-4">
-                        <div id="before_gadsacccreated_text" class="mb-1 fs-6 before-gmc-acc-creation">
-                            <h5 class="modal-title my-3" id="staticBackdropLabel">
-                                <span id="before_gadsacccreated_title">
-                                    <?php esc_html_e("Create New Google Merchant Center Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                </span>
-                                <span id="after_gadsacccreated_title" class="d-none after-ads-acc-creation">
-                                    <?php esc_html_e("New Google Merchant Center Account Created", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                </span>
-                            </h5>
-                            <div class="alert d-flex align-items-cente p-0" role="alert">
-                                <div class="text-light conv-info-bg rounded-start d-flex">
-                                    <span class="p-2 material-symbols-outlined align-self-center">info</span>
-                                </div>
-
-                                <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
-                                    <span>
-                                        <?php esc_html_e("To upload your product data, it is necessary to go through a process of verifying and claiming your store's website URL. This step of claiming your website URL links it with your Google Merchant Center Account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+            <form id="conv_form_new_bing">
+                <div class="modal-body text-start">
+                    <div class="row">
+                        <div class="col-12 pe-4">
+                            <div id="before_gadsacccreated_text" class="mb-1 fs-6 before-bing-acc-creation">
+                                <h5 class="modal-title my-3" id="staticBackdropLabel">
+                                    <span id="before_gadsacccreated_title">
+                                        <?php esc_html_e("Create New Microsoft Merchant Center Store", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </span>
+                                    <span id="after_gadsacccreated_title" class="d-none after-ads-acc-creation">
+                                        <?php esc_html_e("New Microsoft Merchant Center Store Created", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    </span>
+                                </h5>
+                                <div id="create_bing_error" class="alert alert-danger d-none" role="alert">
+                                    <small></small>
                                 </div>
-                            </div>
-                            <div id="create_gmc_error" class="alert alert-danger d-none" role="alert">
-                                <small></small>
-                            </div>
-                            <form id="conv_form_new_gmc">
+                                
                                 <div class="mb-3">
-                                    <input class="form-control mb-4" type="text" id="gmc_website_url" name="website_url" value="<?php echo esc_attr($tvc_data['user_domain']); ?>" placeholder="Enter Website" required>
-
-                                    <input class="form-control mb-4" type="text" id="gmc_email_address" name="email_address" value="<?php echo isset($tvc_data['g_mail']) === TRUE ? esc_attr($tvc_data['g_mail']) : ""; ?>" placeholder="Enter email address" required>
-
-                                    <div class="form-check mb-4">
-                                        <input class="form-check-input" type="checkbox" id="gmc_adult_content" name="adult_content" value="1" style="float:none">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            <?php esc_html_e("My site contain", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            <b>
-                                                <?php esc_html_e("Adult Content", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            </b>
-                                        </label>
+                                    <div class="form-group mt-2">
+                                        <span class="inner-text">Store Name</span> <span class="text-danger">*</span>
+                                        <input class="form-control mb-2" type="text" id="store_name" name="store_name" value="" placeholder="" required>
                                     </div>
 
-                                    <input class="form-control mb-0" type="text" id="gmc_store_name" name="store_name" value="" placeholder="Enter Store Name" required>
-                                    <small class="mb-4">
-                                        <?php esc_html_e("This name will appear in your Shopping Ads.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </small>
-
-                                    <div class="mb-3" id="conv_create_gmc_selectthree">
-                                        <select id="gmc_country" name="country" class="form-select form-select-lg mb-3 selectthree" style="width: 100%" placeholder="Select Country" required>
-                                            <option value="">Select Country</option>
-                                            <?php
-                                            //$getCountris = file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
-                                            global $wp_filesystem;
-                                            $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
-
-                                            $contData = json_decode($getCountris);
-                                            foreach ($contData as $key => $value) {
-                                            ?>
-                                                <option value="<?php echo esc_attr($value->code) ?>" <?php echo $tvc_data['user_country'] === $value->code ? 'selected = "selecetd"' :
-                                                                                                            '' ?>>
-                                                    <?php echo esc_attr($value->name) ?>
-                                                </option>"
-                                            <?php
-                                            }
-
-                                            ?>
-                                        </select>
+                                    <div class="form-group mt-3">
+                                        <span class="inner-text">Notification E-mail</span> <span class="text-danger">*</span>
+                                        <input class="form-control mb-2" type="text" id="notification_email" name="notification_email" value="<?php echo esc_attr($cust_ms_email); ?>" placeholder="" required>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <span class="inner-text">Store URL</span> <span class="text-danger">*</span>
+                                        <input class="form-control mb-0" readonly type="text" id="store_url" name="store_url" value="<?php echo esc_url(home_url()); ?>" required>
                                     </div>
 
-                                    <div class="form-check mb-4">
-                                        <input id="gmc_concent" name="concent" class="form-check-input" type="checkbox" value="1" required style="float:none">
-                                        <label class="form-check-label" for="concent">
+                                    <input type="hidden" id="notification_language" name="notification_language" value="en-US" required>
+                                    
+                                    <div class="form-group mt-3">
+                                        <input id="bing_concent" name="concent" class="form-check-input" type="checkbox" value="1" required style="float:none">
+                                        <label class="form-check-label fs-12" for="concent">
                                             <?php esc_html_e("I accept the", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            <a target="_blank" href="<?php echo esc_url("
-                                                https://support.google.com/merchants/answer/160173?hl=en"); ?>">
-                                                <?php esc_html_e("terms & conditions", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                            </a>
+                                            <a class="fs-14" target="_blank" href="<?php echo esc_url("https://www.microsoft.com/en-gb/servicesagreement"); ?>"><?php esc_html_e("terms & conditions", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+                                            <span class="text-danger"> *</span>
                                         </label>
                                     </div>
 
                                 </div>
 
-                            </form>
-                        </div>
-
-                        <!-- Show this after creation -->
-                        <div class="onbrdpp-body alert alert-primary text-start d-none after-gmc-acc-creation">
-                            New Google Merchant Center Account With Id: <span id="new_gmc_id"></span> is created
-                            successfully.
-                        </div>
-
-
-                    </div>
-                    <div class="col-5 ps-4 border-start">
-                        <div>
-                            <h6>
-                                <?php esc_html_e("To use Google Shopping, your website must meet these requirements:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </h6>
-                            <ul class="p-0">
-                                <li><a target="_blank" href="<?php echo esc_url("
-                                        https://support.google.com/merchants/answer/6149970?hl=en"); ?>">
-                                        <?php esc_html_e("Google Shopping ads policies", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </a>
-                                </li>
-                                <li><a target="_blank" href="<?php echo esc_url("
-                                        https://support.google.com/merchants/answer/6150127"); ?>">
-                                        <?php esc_html_e("Accurate Contact Information", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </a>
-                                </li>
-                                <li><a target="_blank" href="<?php echo esc_url("
-                                        https://support.google.com/merchants/answer/6150122"); ?>">
-                                        <?php esc_html_e("Secure collection of process and personal data", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </a>
-                                </li>
-                                <li><a target="_blank" href="<?php echo esc_url("
-                                        https://support.google.com/merchants/answer/6150127"); ?>">
-                                        <?php esc_html_e("Return Policy", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </a>
-                                </li>
-                                <li><a target="_blank" href="<?php echo esc_url("
-                                        https://support.google.com/merchants/answer/6150127"); ?>">
-                                        <?php esc_html_e("Billing terms & conditions", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </a>
-                                </li>
-                                <li><a target="_blank" href="<?php echo esc_url("
-                                        https://support.google.com/merchants/answer/6150118"); ?>">
-                                        <?php esc_html_e("Complete checkout process", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </a>
-                                </li>
-                            </ul>
+                            </div>
+                            <!-- Show this after creation -->
+                            <div class="onbrdpp-body alert alert-primary text-start d-none after-bing-acc-creation">
+                                New Microsoft Bing Ads Account With Id: <span id="new_bing_id"></span> is created
+                                successfully.
+                            </div>
                         </div>
                     </div>
                 </div>
 
-            </div>
+                <div class="modal-footer">
+                    <div class="me-auto">
+                        <button id="create_merchant_account_new" class="btn conv-blue-bg text-white before-mmc-acc-creation me-auto">
+                            <span id="gadsinviteloader" class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
+                            <?php esc_html_e("Create", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </button>
 
-            <div class="modal-footer">
-                <div class="me-auto">
-                    <button id="create_merchant_account_new" class="btn conv-blue-bg text-white before-gmc-acc-creation me-auto">
-                        <span id="gadsinviteloader" class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
-                        <?php esc_html_e("Create", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </button>
-
-                    <button type="button" class="ms-3 btn btn-secondary me-auto" data-bs-dismiss="modal" id="model_close_gmc_creation">
-                        <?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </button>
+                        <button type="button" class="ms-3 btn btn-secondary me-auto" data-bs-dismiss="modal" id="model_close_mmc_creation">
+                            <?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -330,17 +324,7 @@ $contData = json_decode($getCountris);
 
             </div>
             <div class="modal-body text-center p-0">
-                <?php echo wp_kses(
-                    enhancad_get_plugin_image('/admin/images/logos/error_logo.png', '', '', 'width:184px;'),
-                    array(
-                        'img' => array(
-                            'src' => true,
-                            'alt' => true,
-                            'class' => true,
-                            'style' => true,
-                        ),
-                    )
-                ); ?>
+                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
                 <h3 class="fw-normal pt-3">Error</h3>
                 <span id="conv_save_error_txt" class="mb-1 lh-lg"></span>
             </div>
@@ -357,17 +341,7 @@ $contData = json_decode($getCountris);
             <div class="modal-header border-0 pb-0">
             </div>
             <div class="modal-body text-center p-0">
-                <?php echo wp_kses(
-                    enhancad_get_plugin_image('/admin/images/logos/successImg.png', '', '', 'width:184px;'),
-                    array(
-                        'img' => array(
-                            'src' => true,
-                            'alt' => true,
-                            'class' => true,
-                            'style' => true,
-                        ),
-                    )
-                ); ?>
+                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>">
                 <h3 class="fw-normal pt-3 created_success">
                     <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>
@@ -386,17 +360,7 @@ $contData = json_decode($getCountris);
             <div class="modal-header border-0 pb-0">
                 <div class="connection-box">
                     <div class="items">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/popup_woocommerce_logo.png', '', '', 'width:35px;'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
+                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
                         <span> <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     </div>
                     <div class="items">
@@ -405,18 +369,8 @@ $contData = json_decode($getCountris);
                         </span>
                     </div>
                     <div class="items">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/popup_gmc_logo.png', '', '', 'width:35px;'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <span><?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
+                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms_channel_logo.svg'); ?>">
+                        <span><?php esc_html_e("Microsoft Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     </div>
                 </div>
 
@@ -424,11 +378,11 @@ $contData = json_decode($getCountris);
             <div class="modal-body text-center p-4">
                 <div class="connected-content">
                     <h4><?php esc_html_e("Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
-                    <p><span class="fw-bolder">Google Merchant Center Account -</span> <span class="gmcAccount fw-bolder"></span>
+                    <p><span class="fw-bolder">Microsoft Merchant Center Store -</span> <span class="mmcAccount fw-bolder"></span>
                         Has Been Saved Successfully</p>
-                    <p class="my-3"><?php esc_html_e("By this step you have expanded your product presence on Google Search, Google
+                    <p class="my-3"><?php esc_html_e("By this step you have expanded your product presence on Microsoft Search, Microsoft
                         Shopping,
-                        Google Images, YouTube, Google Maps, and more, you're maximizing your reach and unlocking new
+                        Microsoft Images, YouTube, Microsoft Maps, and more, you're maximizing your reach and unlocking new
                         potential for increased visibility and sales.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
                 </div>
                 <div>
@@ -437,17 +391,7 @@ $contData = json_decode($getCountris);
                             <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/logos/Manage_feed.png', '', '', 'width:35px;'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>
+                                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/Manage_feed.png'); ?>">
                                     </div>
                                     <div class="attribute-content para">
                                         <h3><?php esc_html_e("Manage Feeds", "enhanced-e-commerce-for-woocommerce-store"); ?></h3>
@@ -461,13 +405,8 @@ $contData = json_decode($getCountris);
                                     </div>
                                 </div>
                             </div>
-                            <span>
-                                <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>">Connect
-                                    to TikTok Business Account | </a>
-                                <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>">Connect
-                                    to Facebook Business Account</a>
-                            </span>
-
+                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>">Connect
+                                to TikTok Business Account</a>
                         </div>
                     </div>
                 </div>
@@ -476,6 +415,11 @@ $contData = json_decode($getCountris);
     </div>
 </div>
 <?php
+$google_merchant_center_id = '';
+if (isset($googleDetail->google_merchant_center_id) === TRUE && $googleDetail->google_merchant_center_id !== '') {
+    $google_merchant_center_id = esc_html($googleDetail->google_merchant_center_id);
+}
+
 $tiktok_business_account = '';
 if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $googleDetail->tiktok_setting->tiktok_business_id !== '') {
     $tiktok_business_account = $googleDetail->tiktok_setting->tiktok_business_id;
@@ -577,23 +521,23 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-check-custom">
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php //printf( '%s', esc_html( $googleDetail->microsoft_merchant_center_id ) ); ?>" id="mmc_id" name="mmc_id" checked>
+                            <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
+                                <?php esc_html_e("Microsoft Merchant Center Store :", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </label>
+                            <label class="col-form-label fs-14 pt-0 fw-400 modal_microsoft_merchant_center_id">
+                                <?php echo esc_html( $microsoft_merchant_center_id ); ?>
+                            </label>
+                        </div>
+                        <div class="form-check form-check-custom">
                             <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" 
                             value="<?php echo $google_merchant_center_id !== '' ? esc_html($google_merchant_center_id) : '' ?>" 
                             id="gmc_id" name="gmc_id" <?php echo $google_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
-                                <?php esc_html_e("Google Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <?php esc_html_e("Google Merchant Center Store :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
-                            <label class="woow-585 col-form-label fs-14 pt-0 fw-400 modal_google_merchant_center_id">
-                                <?php echo $google_merchant_center_id !== '' ? esc_html($google_merchant_center_id)  : '' ?>
-                            </label>
-                        </div>
-                        <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="mmc_id" name="mmc_id" <?php echo $microsoft_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
-                            <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
-                                <?php esc_html_e("Microsft Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </label>
-                            <label class="col-form-label fs-14 pt-0 fw-400 microsoft_merchant_center_id">
-                                <?php echo $microsoft_merchant_center_id !== '' ? esc_html($microsoft_merchant_center_id)  : '' ?>
+                            <label class="col-form-label fs-14 pt-0 fw-400 modal_google_merchant_center_id">
+                                <?php echo isset($googleDetail->google_merchant_center_id) ? esc_html( $googleDetail->google_merchant_center_id ) : ''; ?>
                             </label>
                         </div>
                         <div class="form-check form-check-custom">
@@ -606,12 +550,13 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             </label>
                         </div>
                         <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="fb_id" name="fb_id" <?php echo $fb_catalog_id !== '' ? "checked" : 'disabled' ?>>
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value=""
+                                id="fb_id" name="fb_id" <?php echo $fb_catalog_id !== '' ? "checked" : 'disabled' ?>>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("Facebook Catalog Id :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <label class="col-form-label fs-14 pt-0 fw-400 fb_id">
-                                <?php echo $fb_catalog_id !== '' ? esc_html($fb_catalog_id)  : '' ?>
+                                <?php echo esc_html($fb_catalog_id) ?>
                             </label>
                         </div>
                     </div>
@@ -657,17 +602,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             <div class="col-xl-6 col-lg-6 col-md-6 col-6">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/Campaign-Management.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>
+                                        <img style="width:35px;filter: drop-shadow(3px 3px 3px #ccc);" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/Campaign-Management.svg'); ?>">
                                     </div>
                                     <div class="attribute-content para">
                                         <h3>
@@ -686,17 +621,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             <div class="col-xl-6 col-lg-6 col-md-6 col-6">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/Integrations.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>
+                                        <img style="width:35px;filter: drop-shadow(3px 3px 3px #ccc);" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/Integrations.svg'); ?>">
                                     </div>
                                     <div class="attribute-content para">
                                         <h3>
@@ -721,13 +646,19 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
 <!--------------------------------super_feed_modal End -------------------------------------->
 <script>
     var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field(wp_unslash($_GET['subscription_id']))) : '' ?>";
-    var gmc_id = "<?php echo esc_html($google_merchant_center_id) ?>";
     var mmc_id = "<?php echo esc_html($microsoft_merchant_center_id) ?>";
+    let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
 
+    jQuery(document).on('select2:select', '#microsoft_merchant_center_id', function(e) {
+        if (jQuery(this).val() != "" && jQuery(this).val() != undefined) {
+            conv_change_loadingbar("show");
+            list_microsoft_catalog_account();
+        } 
+    });
     /**
-     * Get Google Merchant Center List
+     * Get Microsoft Merchant Center List
      */
-    function list_google_merchant_account(tvc_data, selelement, new_gmc_id = "", new_merchant_id = "") {
+    function list_microsoft_merchant_account(tvc_data, selelement, new_mmc_id = "", new_merchant_id = "") {
         conv_change_loadingbar("show");
         jQuery(".conv-enable-selection").addClass('hidden');
         var selectedValue = '0';
@@ -737,120 +668,172 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             dataType: "json",
             url: tvc_ajax_url,
             data: {
-                action: "list_google_merchant_account",
+                action: "list_microsoft_merchant_account",
                 tvc_data: tvc_data,
+                account_id: '<?php echo esc_js($microsoft_ads_manager_id); ?>',
+                subaccount_id: '<?php echo esc_js($microsoft_ads_subaccount_id); ?>',
+                subscription_id: subscription_id,
                 conversios_onboarding_nonce: conversios_onboarding_nonce
             },
             success: function(response) {
-                var btn_cam = 'gmc_list';
+                var btn_cam = 'mmc_list';
                 if (response.error === false) {
                     var error_msg = 'null';
-                    jQuery('#google_merchant_center_id').empty();
-                    // jQuery('#google_merchant_center_id').append(jQuery('<option>', {
+                    jQuery('#microsoft_merchant_center_id').empty();
+                    // jQuery('#microsoft_merchant_center_id').append(jQuery('<option>', {
                     //     value: "",
-                    //     text: "Select Google Merchant Center Account"
+                    //     text: "Select Microsoft Merchant Center Store"
                     // }));
                     if (response.data.length > 0) {
                         jQuery.each(response.data, function(key, value) {
-                            if (selectedValue == value.account_id) {
-                                jQuery('#google_merchant_center_id').append(jQuery('<option>', {
-                                    value: value.account_id,
-                                    "data-merchant_id": value.merchant_id,
-                                    text: value.account_id,
-                                    selected: "selected"
-                                }));
-                            } else {
-                                if (selectedValue == "" && key == 0) {
-                                    jQuery('#google_merchant_center_id').append(jQuery('<option>', {
-                                        value: value.account_id,
-                                        "data-merchant_id": value.merchant_id,
-                                        text: value.account_id,
-                                        selected: "selected"
-                                    }));
-                                } else {
-                                    jQuery('#google_merchant_center_id').append(jQuery('<option>', {
-                                        value: value.account_id,
-                                        "data-merchant_id": value.merchant_id,
-                                        text: value.account_id,
-                                    }));
-                                }
-                            }
+
+                            jQuery('#microsoft_merchant_center_id').append(jQuery('<option>', {
+                                value: value.merchantId,
+                                "data-merchant_id": value.merchantId,
+                                text: value.storeName+' ('+value.merchantId+')',
+                                selected: "selected"
+                            }));
+
                         });
+                        jQuery(".conv-mc-settings").removeClass("disabledsection");
+                        list_microsoft_catalog_account();
 
-                        if (new_gmc_id != "" && new_gmc_id != undefined) {
-                            jQuery('#google_merchant_center_id').append(jQuery('<option>', {
-                                value: new_gmc_id,
-                                "data-merchant_id": new_merchant_id,
-                                text: new_gmc_id,
-                                selected: "selected"
-                            }));
-
-                            jQuery(".conv-btn-connect").removeClass("conv-btn-connect-disabled");
-                            jQuery(".conv-btn-connect").removeClass("conv-btn-disconnect");
-                            jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled-gmc");
-                        }
-
-                        jQuery('#tvc-gmc-acc-edit').hide();
+                        //jQuery('#tvc-mmc-acc-edit').hide();
                     } else {
-                        if (new_gmc_id != "" && new_gmc_id != undefined) {
-                            jQuery('#google_merchant_center_id').append(jQuery('<option>', {
-                                value: new_gmc_id,
-                                "data-merchant_id": new_merchant_id,
-                                text: new_gmc_id,
+                        if (new_mmc_id != "" && new_mmc_id != undefined) {
+                            jQuery('#microsoft_merchant_center_id').append(jQuery('<option>', {
+                                value: new_mmc_id,
+                                "data-merchant_id": new_mmc_id,
+                                text: storeName+' ('+new_mmc_id+')',
                                 selected: "selected"
                             }));
+                            jQuery(".conv-mc-settings").removeClass("disabledsection");
+                            list_microsoft_catalog_account()
+                            
+                        }else{
+                            jQuery(".conv_create_mmc_new_when_notexist").removeClass("disabledsection");
+                            getAlertMessageAll(
+                                'info',
+                                'Error',
+                                message = 'There are no Microsoft merchant center stores associated with email.',
+                                icon = 'info',
+                                buttonText = 'Ok',
+                                buttonColor = '#FCCB1E',
+                                iconImageSrc =
+                                '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                            );
+                            console.log("error", "There are no Microsoft merchant center stores associated with email.");
                         }
-                        //add_message("error", "There are no Google merchant center accounts associated with email.");
-                        // console.log("error",
-                        //     "There are no Google merchant center accounts associated with email.");
                     }
 
                 } else {
                     var error_msg = response.errors;
-                    //add_message("error", "There are no Google merchant center accounts associated with email.");
+                    console.log("error", error_msg);
+                    //add_message("error", "There are no Microsoft merchant center stores associated with email.");
                     // console.log("error",
-                    //     "There are no Google merchant center  accounts associated with email.");
+                    //     "There are no Microsoft merchant center  stores associated with email.");
                 }
-                jQuery('#google_merchant_center_id').select2();
+                jQuery('#microsoft_merchant_center_id').select2();
                 setTimeout(function() {}, 2000);
-                jQuery('#google_merchant_center_id').prop('disabled', false);
+                jQuery('#microsoft_merchant_center_id').prop('disabled', false);
                 conv_change_loadingbar("hide");
             }
         });
     }
 
-    function link_google_Ads_to_merchant_center(link_data, tvc_data, subscription_id) {
+    /**
+     * Get Microsoft Merchant Center List
+     */
+    function list_microsoft_catalog_account() {
+        conv_change_loadingbar("show");
+        jQuery(".conv-enable-catalog-selection").addClass('hidden');
+        var selectedValue = '0';
+        var conversios_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
         jQuery.ajax({
             type: "POST",
             dataType: "json",
             url: tvc_ajax_url,
-            data: link_data,
-            beforeSend: function() {},
+            data: {
+                action: "list_microsoft_catalog_account",
+                account_id: '<?php echo esc_js($microsoft_ads_manager_id); ?>',
+                subaccount_id: '<?php echo esc_js($microsoft_ads_subaccount_id); ?>',
+                microsoft_merchant_center_id: jQuery('#microsoft_merchant_center_id').val(),
+                subscription_id: subscription_id,
+                conversios_onboarding_nonce: conversios_onboarding_nonce
+            },
             success: function(response) {
-                if (response.error === false) {} else if (response.error == true && response.errors != undefined) {} else {
-                    // console.log("error", "There was an error while link account");
+
+                if (response.error === false) {
+                    var error_msg = 'null';
+                    jQuery('#ms_catalog_id').empty();
+                    // jQuery('#ms_catalog_id').append(jQuery('<option>', {
+                    //     value: "",
+                    //     text: "Select Microsoft Merchant Catalog Id"
+                    // }));
+                    if (response.data.length > 0) {
+                        jQuery.each(response.data, function(key, value) {
+
+                            jQuery('#ms_catalog_id').append(jQuery('<option>', {
+                                value: value.id,
+                                "data-merchant_id": value.id,
+                                text: value.name+' ('+value.id+')',
+                                selected: "selected"
+                            }));
+
+                        });
+
+                        jQuery(".conv-btn-connect").removeClass("conv-btn-connect-disabled");
+                        jQuery(".conv-btn-connect").removeClass("conv-btn-disconnect");
+                        jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled-mmc");
+
+                        //jQuery('#tvc-mmc-acc-edit').hide();
+                    } else {
+
+                        getAlertMessageAll(
+                            'info',
+                            'Error',
+                            message = 'There are no Microsoft merchant catalog associated with email.',
+                            icon = 'info',
+                            buttonText = 'Ok',
+                            buttonColor = '#FCCB1E',
+                            iconImageSrc =
+                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        );
+                        console.log("error", "There are no Microsoft merchant catalog associated with email.");
+                        
+                    }
+
+                } else {
+                    var error_msg = response.errors;
+                    //add_message("error", "There are no Microsoft merchant center stores associated with email.");
+                    // console.log("error",
+                    //     "There are no Microsoft merchant center  stores associated with email.");
                 }
+                jQuery('#ms_catalog_id').select2();
+                setTimeout(function() {}, 2000);
+                jQuery('#ms_catalog_id').prop('disabled', false);
+                conv_change_loadingbar("hide");
             }
         });
     }
 
-    function save_merchant_data(google_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, is_skip =
+    function save_merchant_data(microsoft_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, is_skip =
         fals) {
-        if (google_merchant_center_id || is_skip == true) {
+        if (microsoft_merchant_center_id || is_skip == true) {
             var conversios_onboarding_nonce = jQuery("#conversios_onboarding_nonce").val();
             var website_url = "<?php echo esc_url(site_url()); ?>";
             var customer_id = "<?php echo esc_html($googleDetail->customer_id); ?>";
-            let google_ads_id = jQuery('#ads-account').val();
+            let microsoft_ads_pixel_id = jQuery('#ads-account').val();
             var data = {
                 action: "save_merchant_data",
                 subscription_id: subscription_id,
-                google_merchant_center: google_merchant_center_id,
-                account_id: google_merchant_center_id,
+                google_merchant_center: microsoft_merchant_center_id,
+                store_id: microsoft_merchant_center_id,
                 merchant_id: merchant_id,
                 website_url: website_url,
                 customer_id: customer_id,
                 tvc_data: tvc_data,
-                adwords_id: google_ads_id,
+                adwords_id: microsoft_ads_pixel_id,
                 conversios_onboarding_nonce: conversios_onboarding_nonce
             };
             return jQuery.ajax({
@@ -864,7 +847,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 }
             });
         } else {
-            //add_message("warning", "Missing Google Merchant Center account.");
+            //add_message("warning", "Missing Microsoft Merchant Center store.");
         }
     }
 
@@ -924,7 +907,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
-        jQuery('#google_merchant_center_id').select2();
+        jQuery('#microsoft_merchant_center_id').select2();
         //override back button link to GMC Channel Configuration 
         jQuery('.hreflink').attr('href', 'admin.php?page=conversios-google-shopping-feed&tab=gaa_config_page');
 
@@ -935,16 +918,16 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         let app_id = "<?php echo esc_attr(CONV_APP_ID); ?>";
         let bagdeVal = "yes";
         let convBadgeVal = "<?php echo esc_attr($convBadgeVal); ?>";
-        let google_merchant_center_id = "<?php echo esc_attr($google_merchant_center_id); ?>";
+        let microsoft_merchant_center_id = "<?php echo esc_attr($microsoft_merchant_center_id); ?>";
 
 
-        jQuery(document).on('show.bs.modal', '#conv_create_gmc_new', function() {
+        jQuery(document).on('show.bs.modal', '#conv_create_new_bing', function() {
             jQuery.fn.modal.Constructor.prototype.enforceFocus = function() {};
             jQuery.fn.modal.Constructor.prototype._enforceFocus = function() {};
 
             jQuery(".selectthree").select2({
                 minimumResultsForSearch: 5,
-                dropdownParent: jQuery('#conv_create_gmc_selectthree'),
+                dropdownParent: jQuery('#conv_create_mmc_selectthree'),
                 placeholder: function() {
                     jQuery(this).data('placeholder');
                 }
@@ -955,19 +938,29 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         jQuery(".conv-enable-selection").click(function() {
             conv_change_loadingbar("show");
             jQuery(".conv-enable-selection").addClass('hidden');
-            var selele = jQuery(".conv-enable-selection").closest(".conv-gmcsettings").find(
-                "select.google_merchant_center_id");
-            var currele = jQuery(this).closest(".conv-gmcsettings").find(
-                "select.google_merchant_center_id");
-            list_google_merchant_account(tvc_data, selele);
+
+            var selele = jQuery(".conv-enable-selection").closest(".conv-mmcsettings").find(
+                "select.microsoft_merchant_center_id");
+
+            list_microsoft_merchant_account(tvc_data, selele);            
+        });
+
+        jQuery(".conv-enable-catalog-selection").click(function() {
+            conv_change_loadingbar("show");
+            jQuery(".conv-enable-catalog-selection").addClass('hidden');
+
+            var selele = jQuery(".conv-enable-catalog-selection").closest(".conv-mc-settings").find(
+                "select.microsoft_merchant_center_id");
+
+            list_microsoft_catalog_account(tvc_data, selele);            
         });
 
 
-        jQuery(document).on("change", "form#gmcsetings_form", function() {
-            <?php if ($cust_g_email !== "") { ?>
+        jQuery(document).on("change", "form#mmcsetings_form", function() {
+            <?php if ($cust_ms_email !== "") { ?>
                 jQuery(".conv-btn-connect").removeClass("conv-btn-connect-disabled");
                 jQuery(".conv-btn-connect").removeClass("conv-btn-disconnect");
-                jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled-gmc");
+                jQuery(".conv-btn-connect").addClass("conv-btn-connect-enabled-mmc");
                 jQuery(".conv-btn-connect").addClass("btn-primary");
                 jQuery(".conv-btn-connect").text('Save');
             <?php } else { ?>
@@ -975,37 +968,43 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             <?php } ?>
         });
 
-        <?php if ($cust_g_email === "") { ?>
-            jQuery("#conv_create_gmc_new_btn").addClass("disabled");
+        <?php if ($cust_ms_email === "") { ?>
+            jQuery("#conv_create_mmc_new_btn").addClass("disabled");
             jQuery(".conv-enable-selection").addClass("d-none");
         <?php } ?>
 
-
-        <?php if ((isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field(wp_unslash($_GET['subscription_id']))) !== '') || (empty($google_merchant_center_id) && !empty($cust_g_email))) { ?>
-            list_google_merchant_account(tvc_data);
+        <?php if ( (isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field(wp_unslash($_GET['subscription_id']))) !== '') || 
+                ( empty($microsoft_merchant_center_id) && 
+                !empty($cust_ms_email) && 
+                !empty($microsoft_ads_manager_id) && 
+                !empty($microsoft_ads_subaccount_id) && 
+                !empty($microsoft_ads_pixel_id) ) ) { ?>
+            
+            list_microsoft_merchant_account(tvc_data);
         <?php } ?>
 
         //Save GMC id
-        jQuery(document).on("click", ".conv-btn-connect-enabled-gmc", function() {
+        jQuery(document).on("click", ".conv-btn-connect-enabled-mmc", function() {
             var feedType = jQuery('#feedType').val();
             var valtoshow_inpopup = jQuery("#valtoshow_inpopup").val() + " " + jQuery(
                 ".valtoshow_inpopup_this").val();
             var selected_vals = {};
             selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
 
-            jQuery('form#gmcsetings_form select').each(function() {
+            jQuery('form#mmcsetings_form select').each(function() {
                 selected_vals[jQuery(this).attr("name")] = jQuery(this).val();
             });
-            var merchant_idd = jQuery('#google_merchant_center_id').find(':selected').data('merchant_id');
-            selected_vals["google_merchant_id"] = jQuery("#google_merchant_center_id").val();
-            selected_vals["google_merchant_center_id"] = jQuery("#google_merchant_center_id").val();
-            selected_vals["merchant_id"] = merchant_idd;
+            //var merchant_idd = jQuery('#microsoft_merchant_center_id').find(':selected').data('merchant_id');
+            selected_vals["ms_catalog_id"] = jQuery("#ms_catalog_id").val();
+            selected_vals["microsoft_merchant_center_id"] = jQuery("#microsoft_merchant_center_id").val();
+            //////selected_vals["merchant_id"] = merchant_idd;
             selected_vals["website_url"] = "<?php echo esc_url(get_site_url()); ?>";
-            let google_ads_id = jQuery('#ads-account').val();
-            if (google_ads_id !== '') {
+            let microsoft_ads_pixel_id = jQuery('#ads-account').val();
+            if (microsoft_ads_pixel_id !== '') {
                 selected_vals["ga_GMC"] = 1;
-                selected_vals["google_ads_id"] = google_ads_id;
+                selected_vals["microsoft_ads_pixel_id"] = microsoft_ads_pixel_id;
             }
+            console.log("selected_vals", selected_vals);
             jQuery.ajax({
                 type: "POST",
                 dataType: "json",
@@ -1018,26 +1017,26 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 },
                 beforeSend: function() {
                     conv_change_loadingbar("show");
-                    jQuery(".conv-btn-connect-enabled-gmc").text("Saving...");
-                    jQuery(".conv-btn-connect-enabled-gmc").addClass('disabled');
+                    jQuery(".conv-btn-connect-enabled-mmc").text("Saving...");
+                    jQuery(".conv-btn-connect-enabled-mmc").addClass('disabled');
                 },
                 success: function(response) {
                     var user_modal_txt =
                         "Congratulations, you have successfully connected your <br>" +
                         valtoshow_inpopup;
                     if (response == "0" || response == "1") {
-                        let google_merchant_center_id = jQuery('#google_merchant_center_id').val();
-                        let merchant_id = jQuery('#google_merchant_center_id').find(':selected').data('merchant_id');
-                        // save_merchant_data(google_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, true).then((res) => {
-                        // if (feedType !== '') {
-                        //    // createSuperAIFeed();
-                        // } else {
-                        conv_change_loadingbar("hide");
-                        jQuery(".conv-btn-connect-enabled-gmc").text("Save");
-                        jQuery(".conv-btn-connect-enabled-gmc").removeClass('disabled');
-                        jQuery('.gmcAccount').html(selected_vals["google_merchant_id"])
-                        jQuery("#conv_save_success_modal_cta").modal("show");
-                        // }
+                        let microsoft_merchant_center_id = jQuery('#microsoft_merchant_center_id').val();
+                        let merchant_id = jQuery('#microsoft_merchant_center_id').find(':selected').data('merchant_id');
+                        // save_merchant_data(microsoft_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, true).then((res) => {
+                            // if (feedType !== '') {
+                            //    // createSuperAIFeed();
+                            // } else {
+                                conv_change_loadingbar("hide");
+                                jQuery(".conv-btn-connect-enabled-mmc").text("Save");
+                                jQuery(".conv-btn-connect-enabled-mmc").removeClass('disabled');
+                                jQuery('.mmcAccount').html(selected_vals["ms_catalog_id"])
+                                jQuery("#conv_save_success_modal_cta").modal("show");
+                            // }
                         // });
                     }
                 }
@@ -1045,102 +1044,82 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             });
         });
 
-        jQuery("#create_merchant_account_new").on("click", function() {
-            var is_valide = true;
+        jQuery("#conv_form_new_bing").on('submit', function(e) {
+            e.preventDefault();
 
-            var website_url = jQuery("#gmc_website_url").val();
-            var email_address = jQuery("#gmc_email_address").val();
-            var store_name = jQuery("#gmc_store_name").val();
-            var country = jQuery("#gmc_country").val();
-            var customer_id = '<?php echo esc_html($googleDetail->customer_id); ?>';
-            var adult_content = jQuery("#gmc_adult_content").is(':checked');
+            var store_name = jQuery("#store_name").val();
+            var store_url = jQuery("#store_url").val();
+            var notification_email = jQuery("#notification_email").val();
+            var notification_language = jQuery("#mmnotification_languagec_country").val();
+            
+            var data = {
+                action: "create_microsoft_merchant_center_account",
+                store_name: store_name,
+                store_url: store_url,
+                notification_email: notification_email,
+                notification_language: notification_language,
+                account_id: '<?php echo esc_js($microsoft_ads_manager_id); ?>',
+                subaccount_id: '<?php echo esc_js($microsoft_ads_subaccount_id); ?>',
+                subscription_id: subscription_id,
+                //tvc_data: tvc_data,
+                conversios_onboarding_nonce: "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>"
+            };
 
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: tvc_ajax_url,
+                data: data,
+                beforeSend: function() {
+                    jQuery('#gadsinviteloader').removeClass('d-none');
+                },
+                success: function(response, status) { //console.log(response);
+                    jQuery('#model_close_mmc_creation, .closeButton').removeClass('disabled')
+                    if (response.error === true) {
+                        jQuery("#conv_create_new_bing").modal('hide');
 
-            if (website_url == "") {
-                jQuery("#create_gmc_error").removeClass("d-none");
-                jQuery("#create_gmc_error small").text("Missing value of website url");
-                //add_message("error", "Missing value of website url.");
-                is_valide = false;
-            } else if (email_address == "") {
-                jQuery("#create_gmc_error").removeClass("d-none");
-                jQuery("#create_gmc_error small").text("Missing value of email address.");
-                //add_message("error", "Missing value of email address.");
-                is_valide = false;
-            } else if (store_name == "") {
-                jQuery("#create_gmc_error").removeClass("d-none");
-                jQuery("#create_gmc_error small").text("Missing value of store name.");
-                //add_message("error", "Missing value of store name.");
-                is_valide = false;
-            } else if (country == "") {
-                jQuery("#create_gmc_error").removeClass("d-none");
-                jQuery("#create_gmc_error small").text("Missing value of country.");
-                //add_message("error", "Missing value of country.");
-                is_valide = false;
-            } else if (jQuery('#gmc_concent').prop('checked') == false) {
-                jQuery("#create_gmc_error").removeClass("d-none");
-                jQuery("#create_gmc_error small").text("Please accept the terms and conditions.");
-                //add_message("error", "Please I accept the terms and conditions.");
-                is_valide = false;
-            }
+                        var error_msg = "There was error to create merchant center store:" + response.errors;
 
-            if (is_valide == true) {
-                var data = {
-                    action: "create_google_merchant_center_account",
-                    website_url: website_url,
-                    email_address: email_address,
-                    store_name: store_name,
-                    country: country,
-                    concent: 1,
-                    customer_id: "<?php echo esc_html($googleDetail->customer_id); ?>",
-                    adult_content: adult_content,
-                    tvc_data: tvc_data,
-                    conversios_onboarding_nonce: "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>"
-                };
-                jQuery.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: tvc_ajax_url,
-                    data: data,
-                    beforeSend: function() {
-                        //loaderSection(true);
-                    },
-                    success: function(response, status) {
-                        jQuery('#model_close_gmc_creation, .closeButton').removeClass('disabled')
-                        if (response.error === true) {
-                            var error_msg = 'Check your inputs!!!';
-                            jQuery("#create_gmc_error").removeClass("d-none");
-                            jQuery('#create_gmc_error small').text(error_msg)
-                            jQuery('#create_merchant_account_new').removeClass('disabled')
-                        } else if (response.account.id) {
-                            jQuery("#new_gmc_id").text(response.account.id);
-                            jQuery(".before-gmc-acc-creation").addClass("d-none");
-                            jQuery(".after-gmc-acc-creation").removeClass("d-none");
-                            jQuery("#model_close_gmc_creation").text("Ok, close");
-                            var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
-                            list_google_merchant_account(tvc_data, "", response.account.id, response.merchant_id);
-                        } else if (response.error === true) {
-                            const errors = JSON.parse(response.errors[0]);
-                            var error_msg = response.errors;
-                        } else {
-                            //add_message("error", "There was error to create merchant center account");
-                        }
+                        getAlertMessageAll(
+                            'info',
+                            'Error',
+                            message = error_msg,
+                            icon = 'info',
+                            buttonText = 'Ok',
+                            buttonColor = '#FCCB1E',
+                            iconImageSrc =
+                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        );
+                        
+                    } else {
+                        jQuery("#conv_create_new_bing").modal('hide');
 
+                        jQuery("#new_mmc_id").text(response.data.merchantId);
+                        jQuery(".before-mmc-acc-creation").addClass("d-none");
+                        jQuery(".after-mmc-acc-creation").removeClass("d-none");
+                        jQuery("#model_close_mmc_creation").text("Created, close now");
+                        var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
+                        list_microsoft_merchant_account(tvc_data, "", response.data.merchantId, response.data.storeName);
                     }
-                });
 
-            }
+                },
+                complete: function() {
+                    jQuery('#gadsinviteloader').addClass('d-none');
+                }
+            });
+
         });
 
         jQuery(".createFeed").on("click", function() {
             jQuery("#conv_save_success_modal_cta").modal("hide");
             jQuery('#autoSyncIntvl').attr('disabled', false);
-            jQuery('#gmc_id').attr('disabled', false);
+            jQuery('#mmc_id').attr('disabled', false);
             jQuery('#target_country').attr('disabled', false);
             jQuery("#feedForm")[0].reset();
             jQuery('#feedType').text('Create New Feed');
             jQuery('#edit').val('');
-            jQuery('.modal_google_merchant_center_id').html(jQuery("#google_merchant_center_id").val())
-            jQuery('#gmc_id').val(jQuery("#google_merchant_center_id").val());
+            jQuery('.modal_microsoft_merchant_center_id').html(jQuery("#microsoft_merchant_center_id").val())
+            jQuery('#mmc_id').val(jQuery("#microsoft_merchant_center_id").val());
             jQuery('#convCreateFeedModal').modal('show');
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -1190,7 +1169,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 return false;
             }
 
-            if (!jQuery('#gmc_id').is(":checked") && !jQuery('#mmc_id').is(":checked") && !jQuery('#tiktok_id').is(":checked") && !jQuery('#fb_id').is(":checked")) {
+            if (!jQuery('#gmc_id').is(":checked") && !jQuery('#tiktok_id').is(":checked") && !jQuery('#fb_id').is(":checked") && !jQuery('#mmc_id').is(":checked")) {
                 jQuery('.errorChannel').css('border', '1px solid red');
                 return false;
             }
@@ -1199,22 +1178,13 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         });
 
         /****************Submit Feed call end***********************************/
-        jQuery(document).on('click', '#gmc_id', function(e) {
-            jQuery('.errorChannel').css('border', '');
-        });
-        jQuery(document).on('click', '#mmc_id', function (e) {
-            jQuery('.errorChannel').css('border', '');
-        });
-        jQuery(document).on('click', '#tiktok_id', function (e) {
-            jQuery('.errorChannel').css('border', '');
-        });
-        jQuery(document).on('click', '#fb_id', function(e) {
+        jQuery(document).on('click', '#gmc_id, #tiktok_id, #fb_id, #mmc_id', function (e) {
             jQuery('.errorChannel').css('border', '');
         });
     });
     /*************************************Save Feed Data Start*************************************************************************/
     function save_feed_data() {
-        console.log('saving from 1217 line'); // woow 1217
+        console.log('saving from 1128 line'); // woow 1128
         var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
         let edit = jQuery('#edit').val()
         var planid = "<?php echo esc_attr($plan_id); ?>";
@@ -1222,9 +1192,9 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             action: "save_feed_data",
             feedName: jQuery('#feedName').val(),
             google_merchant_center: jQuery('input#gmc_id').is(':checked') ? '1' : '',
-            microsoft_merchant_center: jQuery('input#mmc_id').is(':checked') ? '4' : '',
             fb_catalog_id:jQuery('input#fb_id').is(':checked') ? '2' : '',
             tiktok_id: jQuery('input#tiktok_id').is(':checked') ? '3' : '',
+            microsoft_merchant_center: jQuery('input#mmc_id').is(':checked') ? '4' : '',
             tiktok_catalog_id: jQuery('input#tiktok_id').is(':checked') ? jQuery('input#tiktok_id').val() : '',
             autoSync: jQuery('input#autoSync').is(':checked') ? '1' : '0',
             autoSyncIntvl: jQuery('#autoSyncIntvl').val(),
@@ -1250,13 +1220,13 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery("#conv_save_error_txt").html('Error occured.');
                 jQuery("#conv_save_error_modal").modal("show");
             },
-            success: function(response) {
+            success: function(response) { 
                 if (response.id) {
                     jQuery('#convCreateFeedModal').modal('hide');
                     jQuery("#conv_save_success_txt_").html("Great job! Your product feed is ready! The next step is to select the products you want to sync and expand your reach across multiple channels.");
                     jQuery("#conv_save_success_modal_").modal("show");
                     setTimeout(function() {
-                        window.location.replace("<?php echo esc_url_raw($site_url . 'product_list&id='); ?>" + response.id);
+                        window.location.replace("<?php echo esc_url_raw($site_url . 'product_list&id='); ?>" + response.id); 
                     }, 100);
                 } else if (response.errorType === 'tiktok') {
                     jQuery('.tiktok_catalog_id').empty();
@@ -1299,7 +1269,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             success: function(response) {
                 conv_change_loadingbar("hide");
                 if (response.status == 'success') {
-                    jQuery('.syncSuccessMessage').html('Your latest ' + response.total_product + ' products are synced to your Google Merchant Center account.')
+                    jQuery('.syncSuccessMessage').html('Your latest ' + response.total_product + ' products are synced to your Microsoft Merchant Center store.')
                     jQuery("#conv_super_feed_modal").modal("show");
                 }
             },
@@ -1336,13 +1306,13 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
     jQuery(".common-btn").on("click", function() {
         jQuery("#conv_save_success_modal_cta").modal("hide");
         jQuery('#autoSyncIntvl').attr('disabled', false);
-        jQuery('#gmc_id').attr('disabled', false);
+        jQuery('#mmc_id').attr('disabled', false);
         jQuery('#target_country').attr('disabled', false);
         jQuery("#feedForm")[0].reset();
         jQuery('#feedType').text('Create New Feed');
         jQuery('#edit').val('');
-        jQuery('.modal_google_merchant_center_id').html(jQuery("#google_merchant_center_id").val())
-        jQuery('#gmc_id').val(jQuery("#google_merchant_center_id").val());
+        jQuery('.modal_microsoft_merchant_center_id').html(jQuery("#microsoft_merchant_center_id").val())
+        jQuery('#mmc_id').val(jQuery("#microsoft_merchant_center_id").val());
         jQuery('.tiktok_catalog_id').empty();
         jQuery('.tiktok_catalog_id').removeClass('text-danger');
         jQuery('#convCreateFeedModal').modal('show');
@@ -1388,10 +1358,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
     });
     /****************Feed Name error dismissed end**************************/
     /********************Modal POP up validation on click remove**********************************/
-    jQuery(document).on('click', '#gmc_id', function(e) {
-        jQuery('.errorChannel').css('border', '');
-    });
-    jQuery(document).on('click', '#tiktok_id', function(e) {
+    jQuery(document).on('click', '#mmc_id, #tiktok_id, #fb_id, #mmc_id', function(e) {
         jQuery('.errorChannel').css('border', '');
     });
     /********************Modal POP up validation on click remove end **********************************/

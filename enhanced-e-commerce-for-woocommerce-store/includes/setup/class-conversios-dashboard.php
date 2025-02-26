@@ -79,7 +79,7 @@ if (class_exists('Conversios_Dashboard') === FALSE) {
                     if (!empty($conv_onboarding_done) || ($gm_id != "" || $google_ads_id != "" || $google_merchant_id != "")) {
                         $conv_oldredi = admin_url('admin.php?page=conversios-analytics-reports');
                         echo "<script> location.href='" . esc_js($conv_oldredi) . "'; </script>";
-                        exit();
+                        
                     }
                 }
             }

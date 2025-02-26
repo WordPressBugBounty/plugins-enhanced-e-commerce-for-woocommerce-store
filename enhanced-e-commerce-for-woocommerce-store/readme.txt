@@ -5,12 +5,12 @@ Author: Conversios
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.3
-Stable tag: 7.2.2
-Version: 7.2.2
+Stable tag: 7.2.3
+Version: 7.2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Conversios: Pixel and Conversion tracking for WooCommerce & Wordpres, Google Analytics GA4, GTM, Google Ads, TikTok, Microsoft Clarity & more!
+Conversios: Pixel and Conversion tracking for WooCommerce & Wordpress, Google Analytics GA4, GTM, Google Ads, TikTok, Microsoft Clarity & more!
 
 == Description ==
 
@@ -235,6 +235,9 @@ Yes! Conversios tracks lead interactions like form submissions, phone clicks, em
 Yes, Conversios is fully compatible with WooCommerce’s HPOS, ensuring seamless event tracking.
 
 == Changelog ==
+
+= 7.2.3 – 26/02/2025 =
+* **Microsoft Bing Marketing Integration:** integrate your WooCommerce store with Microsoft Bing and Microsoft Merchant Center to showcase your products across the Microsoft network.
 
 = 7.2.1 – 03/02/2025 =
 * **WordPress Event Tracking:** Enhanced user engagement tracking with scroll depth, file downloads, blog author interactions, user login, and signup events, ensuring comprehensive website activity monitoring.

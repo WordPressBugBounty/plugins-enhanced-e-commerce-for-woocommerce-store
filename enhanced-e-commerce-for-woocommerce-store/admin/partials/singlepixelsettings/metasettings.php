@@ -5,6 +5,11 @@ require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 $is_sel_disable = 'disabled';
 $google_merchant_center_id = (isset($googleDetail->google_merchant_center_id) && $googleDetail->google_merchant_center_id != "") ? $googleDetail->google_merchant_center_id : "";
+$microsoft_merchant_center_id = "";
+if (isset($googleDetail->microsoft_merchant_center_id) === TRUE && $googleDetail->microsoft_merchant_center_id !== "") {
+    $microsoft_merchant_center_id = $googleDetail->microsoft_merchant_center_id;
+}
+
 $site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
 $store_country = get_option('woocommerce_default_country');
 $store_country = explode(":", $store_country);
@@ -221,7 +226,7 @@ $contData = json_decode($getCountris);
                             )
                         ); ?>
                         <span>
-                            <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            <?php esc_html_e("WooCommerce", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </span>
                     </div>
                     <div class="items">
@@ -410,7 +415,9 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php echo $google_merchant_center_id !== '' ? esc_html($google_merchant_center_id) : '' ?>" id="gmc_id" name="gmc_id" <?php echo $google_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" 
+                            value="<?php echo $google_merchant_center_id !== '' ? esc_html($google_merchant_center_id) : '' ?>" 
+                            id="gmc_id" name="gmc_id" <?php echo $google_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("Google Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
@@ -419,13 +426,23 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
                             </label>
                         </div>
                         <div class="form-check form-check-custom">
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" 
+                            value="<?php echo $microsoft_merchant_center_id !== '' ? esc_attr($microsoft_merchant_center_id) : '' ?>" 
+                            id="mmc_id" name="mmc_id" <?php echo $microsoft_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
+                            <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
+                                <?php esc_html_e("Microsft Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </label>
+                            <label class="col-form-label fs-14 pt-0 fw-400 microsoft_merchant_center_id">
+                                <?php echo $microsoft_merchant_center_id !== '' ? esc_html($microsoft_merchant_center_id)  : '' ?>
+                            </label>
+                        </div>
+                        <div class="form-check form-check-custom">
                             <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="tiktok_id" name="tiktok_id" <?php echo $tiktok_business_account !== '' ? "checked" : 'disabled' ?>>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("TikTok Catalog Id :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <label class="col-form-label fs-14 pt-0 fw-400 tiktok_catalog_id">
-                                <?php //echo isset($tiktok_catalog_id) && $tiktok_catalog_id !== '' ? $tiktok_catalog_id : '' 
-                                ?>
+                            <?php echo $tiktok_business_account !== '' ? esc_html($tiktok_business_account)  : '' ?>
                             </label>
                         </div>
                         <div class="form-check form-check-custom">
@@ -434,7 +451,7 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
                                 <?php esc_html_e("Facebook Catalog Id :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <label class="col-form-label fs-14 pt-0 fw-400 fb_id">
-
+                            <?php echo $fb_catalog_id !== '' ? esc_html($fb_catalog_id)  : '' ?>
                             </label>
                         </div>
                     </div>
@@ -664,7 +681,7 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
             return false;
         }
 
-        if (!jQuery('#gmc_id').is(":checked") && !jQuery('#tiktok_id').is(":checked") && !jQuery('#fb_id').is(':checked')) {
+        if (!jQuery('#gmc_id').is(":checked") && !jQuery('#tiktok_id').is(":checked") && !jQuery('#fb_id').is(':checked') && !jQuery('#mmc_id').is(':checked')) {
             jQuery('.errorChannel').not(':disabled').css('border', '1px solid red');
             return false;
         }
@@ -681,12 +698,14 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
     }
     /*************************************Save Feed Data Start*************************************************************************/
     function save_feed_data() {
+        console.log('saving from 684 line'); // woow 684
         var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
         var planid = "<?php echo esc_attr($plan_id); ?>";
         var data = {
             action: "save_feed_data",
             feedName: jQuery('#feedName').val(),
             google_merchant_center: jQuery('input#gmc_id').is(':checked') ? '1' : '',
+            microsoft_merchant_center: jQuery('input#mmc_id').is(':checked') ? '4' : '',
             fb_catalog_id: jQuery('input#fb_id').is(':checked') ? '2' : '',
             tiktok_id: jQuery('input#tiktok_id').is(':checked') ? '3' : '',
             tiktok_catalog_id: jQuery('input#tiktok_id').is(':checked') ? jQuery('input#tiktok_id').val() : '',

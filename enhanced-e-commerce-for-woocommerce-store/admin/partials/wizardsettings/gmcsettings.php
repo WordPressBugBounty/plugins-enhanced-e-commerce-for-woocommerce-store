@@ -81,13 +81,6 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                 </div>
             </div>
 
-            <?php if (!CONV_IS_WC) { ?>
-                <div class="mt-1 fw-bold">
-                    <?php esc_html_e("This feature is exclusively for WooCommerce websites.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </div>
-            <?php } ?>
-
-
 
             <ul class="conv-green-checklis list-unstyled mt-3">
                 <li class="d-flex">
@@ -170,7 +163,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                     <?php if ($g_email !== "") { ?>
 
                         <span class="fs-14">&nbsp; Or &nbsp;</span>
-                        <div class="createNewGMC btn btn-primary px-5">Create New</div>
+                        <div class="createNewGMC btn btn-outline-success px-5 shadow">Create New</div>
 
                     <?php } ?>
                 </div>
@@ -234,7 +227,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                                             <?php esc_html_e("Real-time product sync to GMC, Facebook, and TikTok only with our solution", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                         </li>
                                     </ul>
-                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=onboarding&amp;utm_campaign=gadseet&amp;plugin_name=aio" class="align-middle px-4 btn btn-sm btn-primary fw-bold-500">
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=onboarding&amp;utm_campaign=gadseet&amp;plugin_name=aio" class="align-middle px-4 btn btn-sm btn-outline-success fw-bold-500">
                                         Buy Now </a>
                                 </div>
                             </div>

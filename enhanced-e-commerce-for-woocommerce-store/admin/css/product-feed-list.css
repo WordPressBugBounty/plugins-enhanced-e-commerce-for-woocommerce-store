@@ -73,7 +73,7 @@ table.dataTable td [data-status] {
   box-shadow: 0 .025rem .025rem rgba(0, 0, 0, .15);
   text-wrap: nowrap;
 }
-table.dataTable td [data-status=enabled] {
+table.dataTable td [data-status=enabled], table.dataTable td [data-status=active] {
   background-color: #d1f6d1;
   color: #4ca64c;
 }
@@ -173,7 +173,7 @@ a.paginate_button.disabled {
   border: 1px solid #f0f0f0 !important;
   cursor: default;
 }
-#campaignTabContent .carousel-ind.active:after {
+#carouselCampainDesk .carousel-ind.active:after, #carouselCampainMobi .carousel-ind.active:after {
   content: "";
   border-bottom: 2px solid white;
   position: absolute;
@@ -188,20 +188,23 @@ a.paginate_button.disabled {
 #carouselCampainDesk .carousel-item.desk-display img{
   max-width: 250px;
 }
-#carouselCampainDesk .carousel-item {
+#carouselCampainDesk .carousel-item, #carouselCampainMobi .carousel-item {
   min-height: 450px;
-  vertical-align: middle;
-  padding: 40px;
 }
-#campaignTabContent .tab-pane { padding-bottom: 150px; }
-#campaignTabContent .carousel-indicators [data-bs-target] {
+#campaignTabContent .carousel-item {
+  vertical-align: middle;
+}
+#carouselCampainDesk .tab-pane,#carouselCampainMobi .tab-pane { 
+  padding-bottom: 150px;
+}
+#carouselCampainDesk .carousel-indicators [data-bs-target],#carouselCampainMobi .carousel-indicators [data-bs-target] {
   text-indent: initial;
   opacity: 1;
 }
 #campaignTabContent .carousel-indicators {
-  bottom: -150px;
+  bottom: -60px;
 }
-#campaignTabContent .carousel-ind {
+#carouselCampainDesk .carousel-ind, #carouselCampainMobi .carousel-ind {
   position: relative;
   width: 100px;
   min-width: 55px;
@@ -225,6 +228,7 @@ a.paginate_button.disabled {
   border-radius: 20px;
   border: 1px solid white;
   color: white;
+  padding: 5px 10px;
 }
 #campaignTab .nav-link.active {
   color:#333
@@ -240,6 +244,10 @@ a.paginate_button.disabled {
 #campaignTab #desktop-tab:before{content: "\f472";}
 #campaignTab {
   border: 0;
+}
+.microsoft-camp .carousel-item img {
+  padding: 15px;
+  background: white;
 }
 .campaign-go-back {
   color: #333;

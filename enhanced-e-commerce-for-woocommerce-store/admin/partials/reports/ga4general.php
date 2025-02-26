@@ -346,6 +346,23 @@
 <?php if (!$ga4_measurement_id == "") { ?>
 
     <script>
+
+        jQuery(document).ready(function($) {
+            // Check if the bar has been closed before using localStorage
+            if (!localStorage.getItem('feedbackConvBarClosed')) {
+                setTimeout(function() {
+                    $('#feedback-bar').addClass('show');
+                    console.log('show');
+                }, 5000); 
+            }
+
+            // Close the bar and never show again
+            $('#close-feedback-bar').click(function() {
+                $('#feedback-bar').removeClass('show'); // Hide the bar
+                localStorage.setItem('feedbackConvBarClosed', 'true'); // Store the close action
+            });
+        });
+
         jQuery('#conv_reporttab_pill').on('show.bs.tab', function() {
             let tabid = event.target.id;
 

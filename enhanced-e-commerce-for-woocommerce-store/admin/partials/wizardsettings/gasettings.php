@@ -23,7 +23,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
 <div class="mt-3">
     <div class="alert alert-primary mb-5 d-flex" role="alert">
         <?php echo wp_kses(
-            enhancad_get_plugin_image('/admin/images/logos/conv_gtm_logo.png','','me-2 align-self-center'),
+            enhancad_get_plugin_image('/admin/images/logos/conv_gtm_logo.png', '', 'me-2 align-self-center'),
             array(
                 'img' => array(
                     'src' => true,
@@ -50,7 +50,7 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
             <div class="convwizlogotitle">
                 <div class="d-flex flex-row align-items-center">
                     <?php echo wp_kses(
-                        enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png','','conv_channel_logo me-2 align-self-center'),
+                        enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         array(
                             'img' => array(
                                 'src' => true,
@@ -236,6 +236,51 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
 
 </div>
 
+<div class="modal fade" id="nogaaccfound" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="nogaaccfoundLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="col-12 flex-row pt-3">
+                    <div class="d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3">
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'conv_channel_logo me-4 align-self-start'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>
+                        <div class="div">
+                            <h6 class="text-dark mb-3">
+                                <?php esc_html_e("No Google Analytics account was found linked to this email.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </h6>
+                            <div class="text-dark mb-3">
+                                Please log in with the email that has admin access to your Google Analytics account
+                            </div>
+                            <div class="text-dark">
+                                <?php esc_html_e("To get the most out of this plugin, you need to connect Google Analytics. It helps you track your users' actions and understand their journey on your site.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="https://analytics.google.com/" target="_blank" class="d-flex btn btn-primary align-items-center">
+                    Create new Google Analytics Account
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // get list of google analytics account
     function list_analytics_account(tvc_data, selelement, currele, page = 1) {
@@ -252,6 +297,8 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                 conversios_onboarding_nonce: conversios_onboarding_nonce
             },
             success: function(response) {
+                jQuery('#ga4_analytic_account_id, #ga4_property_id').html('<option value="">Select Google Analytics accounts</option>');
+                jQuery("#save_gahotclcr").addClass("disabledsection");
                 if (response && response.error == false) {
                     var error_msg = 'null';
                     if (response?.data?.items.length > 0) {
@@ -265,75 +312,22 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                         jQuery('#ga4_analytic_account_id').append(AccOptions); //GA4 
                         jQuery('#ga4_analytic_account_id').prop("disabled", false);
                     } else {
-                        // console.log("error1", "There are no Google Analytics accounts associated with this email.");
-                        getAlertMessageAll(
-                            'info',
-                            'Error',
-                            message = 'There are no Google Analytics accounts associated with this email.',
-                            icon = 'info',
-                            buttonText = 'Ok',
-                            buttonColor = '#FCCB1E',
-                            iconImageSrc = '<?php echo wp_kses(
-                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
-                                                array(
-                                                    'img' => array(
-                                                        'src' => true,
-                                                        'alt' => true,
-                                                        'class' => true,
-                                                        'style' => true,
-                                                    ),
-                                                )
-                                            ); ?>'
-                        );
+                        jQuery("#nogaaccfound").modal('show');
                     }
 
                 } else if (response && response.error == true && response.error != undefined) {
                     const errors = response.errors[0];
-                    getAlertMessageAll(
-                        'info',
-                        'Error',
-                        message = response.errors,
-                        icon = 'info',
-                        buttonText = 'Ok',
-                        buttonColor = '#FCCB1E',
-                        iconImageSrc = '<?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>'
-                    );
-                    var error_msg = errors;
+                    jQuery("#nogaaccfound").modal('show');
                 } else {
-                    getAlertMessageAll(
-                        'info',
-                        'Error',
-                        message = 'There are no Google Analytics accounts associated with this email.',
-                        icon = 'info',
-                        buttonText = 'Ok',
-                        buttonColor = '#FCCB1E',
-                        iconImageSrc = '<?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>'
-                    );
+                    jQuery("#nogaaccfound").modal('show');
                 }
                 jQuery("#tvc-ga4-acc-edit-acc_box")?.removeClass('tvc-disable-edits');
                 conv_change_loadingbar("hide");
                 jQuery(".conv-enable-selection_ga").removeClass('disabled');
-                //jQuery('#ga4_analytic_account_id').select2('open');
+                setTimeout(function() {
+                    jQuery("#ga4_analytic_account_id").select2('open');
+                }, 1000);
+
             }
         });
     }
@@ -373,7 +367,8 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                             });
                             jQuery('#ga4_property_id').append(streamOptions);
                             jQuery('#both_ga4_property_id').append(streamOptions);
-                            jQuery('.event-setting-row_ga').addClass("convdisabledbox")
+                            jQuery('.event-setting-row_ga').addClass("convdisabledbox");
+                            jQuery("#save_gahotclcr").removeClass("disabledsection"); // added new line
                         } else {
                             var streamOptions = '<option value="">No GA4 Property Found</option>';
                             jQuery('#ga3_property_id').append(streamOptions);
@@ -450,7 +445,10 @@ $use_your_gtm_id = isset($ee_options['use_your_gtm_id']) ? $ee_options['use_your
                 }
                 conv_change_loadingbar("hide");
                 jQuery("#ga4_property_id").prop("disabled", false);
-                jQuery('.event-setting-row_ga').addClass("convdisabledbox")
+                jQuery('.event-setting-row_ga').addClass("convdisabledbox");
+                setTimeout(function() {
+                    jQuery("#ga4_property_id").select2('open');
+                }, 1000);
             }
         });
     }

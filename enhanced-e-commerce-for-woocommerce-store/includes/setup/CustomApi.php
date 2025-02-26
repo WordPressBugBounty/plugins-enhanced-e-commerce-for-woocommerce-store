@@ -27,8 +27,14 @@ class CustomApi
         $response_body = json_decode(wp_remote_retrieve_body($request));
 
         if ((isset($response_body->error) && $response_body->error == '')) {
-          return new WP_REST_Response($response_body->data);
-        } else {
+          if( isset($response_body->data) && $response_body->data != '' ) {
+            return new WP_REST_Response($response_body->data);
+          }elseif( isset($response_body->message) && $response_body->message != '' ){
+            return new WP_REST_Response($response_body->message);
+          }else{
+            return new WP_REST_Response($response_body);
+          }
+        } else { 
           return new WP_Error($response_code, $response_message, $response_body);
         }
       }
@@ -1092,6 +1098,7 @@ class CustomApi
           'body' => wp_json_encode($data)
         );
         $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        //echo '<pre>'; print_r($args); print_r($result); echo '</pre>'; exit('wow'); // woow on syncu propduct status (ee_get_product_status())
         return $result;
       }
     } catch (Exception $e) {
@@ -1185,14 +1192,14 @@ class CustomApi
       return $e->getMessage();
     }
   }
-  public function feed_wise_products_sync($postData)
+  public function feed_wise_products_sync($postData,$callby='no-reference-give')
   {
     $TVC_Admin_Helper = new TVC_Admin_Helper();
     $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if (!empty($postData)) {
         foreach ($postData as $key => $value) {
-          if (in_array($key, array("merchant_id", "account_id", "subscription_id", "store_feed_id", "is_on_gmc", "is_on_facebook", "is_on_tiktok"))) {
+          if (in_array($key, array("merchant_id", "account_id", "subscription_id", "store_feed_id", "is_on_gmc", "is_on_microsoft", "is_on_facebook", "is_on_tiktok"))) {
             $postData[$key] = sanitize_text_field($value);
           }
         }
@@ -1210,6 +1217,9 @@ class CustomApi
       );
       $request = wp_remote_post(esc_url_raw($url), $args);
 
+      //echo '<pre>'.$callby; print_r(json_decode(wp_remote_retrieve_body($request))); echo '</pre>'; // 
+      
+
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
@@ -1219,6 +1229,8 @@ class CustomApi
         $return->error = false;
         return $return;
       } else {
+
+        $TVC_Admin_Helper->plugin_log("woow 1232 error-feed_wise_products_sync():" . json_encode($response), 'product_sync');
         $return->error = true;
         $return->arges =  $args;
         if (isset($response->errors)) {
@@ -1405,6 +1417,29 @@ class CustomApi
     }
   }
 
+  public function createPmaxCampaign_ms($postData)
+  { 
+    try {
+      if ($postData != "") {
+        $url = $this->apiDomain . '/microsoft/createCampaign';
+        $header = array(
+          'Authorization' => "Bearer MTIzNA==",
+          "Content-Type" => "application/json"
+        );
+
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
   public function pMaxRetailStatus($data)
   {
     try {
@@ -1524,6 +1559,29 @@ class CustomApi
       return $e->getMessage();
     }
   }
+  public function updateMicrosoftDetail($data)
+  {
+    try {
+      if (isset($data)) {
+        $url = $this->apiDomain . '/microsoft/updateMicrosoftDetail';
+        $header = array(
+          "Authorization: Bearer " . $this->token,
+          "Content-Type" => "application/json"
+        );
+
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+  
 
   public function ads_checkMcc($subscription_id, $ads_accountId)
   {

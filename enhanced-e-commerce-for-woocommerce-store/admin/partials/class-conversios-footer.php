@@ -20,7 +20,45 @@ if (!class_exists('Conversios_Footer')) {
         {
 ?>
             <div class="tvc_footer_links">
+
+                <?php if ( isset($_GET['page']) && $_GET['page'] != 'conversios-analytics-reports' ) : ?>
+                    <div id="feedback-bar" class="common___feedback alert alert-info text-center shadow-lg d-flex justify-content-center align-items-center" role="alert">
+                        <div>
+                            <?php
+                            $start_year = 2019;
+                            $current_year = date('Y');
+                            $total_hours = ($current_year - $start_year + 1) * 5 * 52 * 8;
+                            ?>
+                            <strong>😊 <?php echo esc_html($total_hours.'+ hours,'); ?></strong>
+                            <?php esc_html_e(" Development time: | ", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            <a target="_blank" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" class="" ><u><?php esc_html_e("Leave a review. It helps a lot.", "enhanced-e-commerce-for-woocommerce-store"); ?><span class="dashicons dashicons-external" style="font-size: 16px; line-height: 18px; width: 17px; height: 17px;"></span></u></a>
+                        </div>
+                        <button class="close btn p-0" id="close-feedback-bar" aria-label="">
+                                <span aria-hidden="true" style="font-size: 30px;line-height: normal;">×</span>
+                        </button>
+                    </div>
+                    <script>
+                        jQuery(document).ready(function($) {
+                            // Check if the bar has been closed before using localStorage
+                            if (!localStorage.getItem('feedbackConvBarClosed')) {
+                                setTimeout(function() {
+                                    $('#feedback-bar').addClass('show');
+                                    console.log('show');
+                                }, 5000); // 5000 mean seconds
+                            }
+
+                            // Close the bar and never show again
+                            $('#close-feedback-bar').click(function() {
+                                $('#feedback-bar').removeClass('show'); // Hide the bar
+                                localStorage.setItem('feedbackConvBarClosed', 'true'); // Store the close action
+                            });
+                        });
+                    </script>
+                <?php endif; ?>
+
             </div>
+            
+
             <?php
             $licenceInfoArr = array(
                 "Plan Type:" => "Free",

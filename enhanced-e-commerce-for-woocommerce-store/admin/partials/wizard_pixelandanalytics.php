@@ -78,11 +78,22 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
 //check last login for check RefreshToken
 $g_mail = get_option('ee_customer_gmail');
 $cust_g_email = $g_mail;
-
 $tvc_data['g_mail'] = "";
 if ($g_mail) {
     $tvc_data['g_mail'] = sanitize_email($g_mail);
 }
+
+// for microsoft
+$microsoft_mail = get_option('ee_customer_msmail');
+$cust_ms_email = $microsoft_mail;
+$tvc_data['microsoft_mail'] = "";
+if ($microsoft_mail) {
+    $tvc_data['microsoft_mail'] = sanitize_email($microsoft_mail);
+}
+
+
+
+
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 
 //get account settings from the api
@@ -542,7 +553,7 @@ require_once ENHANCAD_PLUGIN_DIR . 'admin/partials/singlepixelsettings/googlesig
         });
 
         jQuery('.pawizard_tab_but').on('shown.bs.tab', function(e) {
-
+            jQuery(".convexitwizard").removeClass('d-none');
             jQuery(".convdott").addClass('d-none');
             jQuery(".pawizard_tab_but.active .convdott").removeClass('d-none');
 
@@ -558,10 +569,12 @@ require_once ENHANCAD_PLUGIN_DIR . 'admin/partials/singlepixelsettings/googlesig
             if (jQuery(e.target).attr('aria-controls') == "webpixbox") {
                 jQuery("#webpixbox-tab").addClass("convtab_blue");
                 jQuery("#myTabContent").find(".progress-bar").css("width", "15%");
+                jQuery(".convexitwizard").addClass('d-none');
             }
             if (jQuery(e.target).attr('aria-controls') == "webadsbox") {
                 jQuery("#webpixbox-tab, #webpixbox-tab").addClass("convtab_blue");
                 jQuery("#myTabContent").find(".progress-bar").css("width", "25%");
+                jQuery(".convexitwizard").addClass('d-none');
             }
             if (jQuery(e.target).attr('aria-controls') == "webgmcbox") {
                 jQuery("#webpixbox-tab, #webpixbox-tab, #webadsbox-tab").addClass("convtab_blue");

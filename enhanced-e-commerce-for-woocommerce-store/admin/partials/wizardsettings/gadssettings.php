@@ -2,6 +2,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+global $wp_filesystem;
 // Exit if accessed directly
 $is_sel_disable_gads = 'disabled';
 $cust_g_email_gads = (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : "";
@@ -120,7 +121,6 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                             <!-- GAds Acc Selection -->
                             <div id="analytics_box_ads" class="py-1 row">
                                 <?php
-                                global $wp_filesystem;
                                 $countries = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json"));
                                 $credit = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/country_reward.json"));
                                 $off_country = "";
@@ -180,9 +180,27 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                                         </ul>
                                     </div>
 
+                                <?php } else { ?>
+                                    <div class="col-6 conv-border-box mx-3 mt-3">
+                                        <ul class="ps-0">
+                                            <li class="d-flex align-items-center my-2">
+                                                <div class="inlist_text_pre" conversion_name="SUBMIT_LEAD_FORM">
+                                                    <h5 class="mb-0"><?php esc_html_e("Form Submit Conversion Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
+                                                    <div class="inlist_text_notconnected">
+                                                        <?php esc_html_e("Set to measure & optimize the Google Campaign ROAS", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                    </div>
+                                                    <div class="inlist_text_connected d-flex d-none">
+                                                        <div class="text-success pe-2"><?php esc_html_e("Connected :", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                                        <div class="inlist_text_connected_convid"></div>
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-outline-primary btn-sm ms-auto conv_con_modal_opener px-4 py-2" conversion_name="SUBMIT_LEAD_FORM">
+                                                    <?php esc_html_e("Enable Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 <?php } ?>
-
-
 
                                 <div id="conv_mcc_alert" class="my-3 mx-2 alert alert-danger fs-8 d-none col-11" role="alert">
                                     <?php esc_html_e("You have selected a MCC account OR account is in unsupported state(Cancelled, In Progress, Suspended). Please select other google ads account to proceed further.", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -195,33 +213,31 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                                     </h5>
                                     <div class="d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3">
 
-                                        <?php if ($off_credit_amt != "") { ?>
-                                            <div class="amtbtn">
-                                                <?php echo esc_html($off_credit_amt); ?>
-                                            </div>
-                                            <div class="div">
-                                                <h5 class="text-dark mb-0">
-                                                    <?php
-                                                    $credit_message = "Your " . $off_credit_amt . " in Ads Credit is ready to be claimed";
-                                                    echo esc_html($credit_message);
-                                                    ?>
-                                                </h5>
-                                                <span class="text-dark fs-12">
-                                                    <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                                    <br>
-                                                    <?php esc_html_e("your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                                    <a href="https://www.google.com/intl/en_in/ads/coupons/terms/cyoi/" class="" target="_blank">
-                                                        <u><?php esc_html_e("Terms and conditions apply.", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        <?php } else { ?>
-                                            <div class="d-flex">
-                                                <span class="text-dark d-flex align-items-center">
-                                                    <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                                </span>
-                                            </div>
-                                        <?php } ?>
+                                        <?php
+                                        if ($off_credit_amt == "") {
+                                            $off_credit_amt = 'USD 500.00';
+                                        }
+                                        ?>
+                                        <div class="amtbtn">
+                                            <?php echo esc_html($off_credit_amt); ?>
+                                        </div>
+                                        <div class="div">
+                                            <h5 class="text-dark mb-0">
+                                                <?php
+                                                $credit_message = "Your " . $off_credit_amt . " in Ads Credit is ready to be claimed";
+                                                echo esc_html($credit_message);
+                                                ?>
+                                            </h5>
+                                            <span class="text-dark fs-12">
+                                                <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                <br>
+                                                <?php esc_html_e("your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                                <a href="https://www.google.com/intl/en_in/ads/coupons/terms/cyoi/" class="" target="_blank">
+                                                    <u><?php esc_html_e("Terms and conditions apply.", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+                                                </a>
+                                            </span>
+                                        </div>
+
 
                                         <div class="align-self-center">
                                             <button id="conv_create_gads_new_btn" type="button" class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#conv_create_gads_new">
@@ -276,7 +292,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                                                         <a href="https://support.google.com/google-ads/answer/3124536" class="ps-2 text-primary" target="_blank">Learn More</a>
                                                     </li>
                                                 </ul>
-                                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=onboarding&amp;utm_campaign=gadseet&amp;plugin_name=aio" class="align-middle px-4 btn btn-sm btn-primary fw-bold-500">
+                                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=onboarding&amp;utm_campaign=gadseet&amp;plugin_name=aio" class="align-middle px-4 btn btn-sm btn-outline-success fw-bold-500">
                                                     Buy Now </a>
                                             </div>
                                         </div>
@@ -318,11 +334,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                 <?php esc_html_e('Save & Next', "enhanced-e-commerce-for-woocommerce-store"); ?>
             </button>
 
-            <?php if (!CONV_IS_WC) { ?>
-                <button id="conv_skip_gads" class="btn btn-outline-primary ms-3 conv_skip_gads">
-                    <?php esc_html_e('Skip & Next', "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </button>
-            <?php } ?>
+
         </div>
 
     </div>
@@ -330,8 +342,8 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 
 
 <!-- Create New Ads Account Modal -->
-<div class="modal fade" id="conv_create_gads_new" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="conv_create_gads_new" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">
@@ -340,18 +352,106 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-start">
+            <div class="modal-body text-start pt-0">
                 <span id="before_gadsacccreated_text" class="mb-1 lh-lg fs-6 before-ads-acc-creation">
-                    <ol>
+                    <?php if (!CONV_IS_WC) { ?>
+                        <div class="col-12 flex-row pt-3">
+                            <div class="d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3">
+
+                                <?php
+                                if ($off_credit_amt == "") {
+                                    $off_credit_amt = 'USD 500.00';
+                                }
+                                ?>
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'me-2 align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
+                                <div class="div">
+                                    <h5 class="text-dark mb-0">
+                                        <?php
+                                        $credit_message = "Your " . $off_credit_amt . " in Ads Credit is ready to be claimed";
+                                        echo esc_html($credit_message);
+                                        ?>
+                                    </h5>
+                                    <div class="text-dark fs-12 pt-2">
+                                        <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        <a href="https://www.google.com/intl/en_in/ads/coupons/terms/cyoi/" class="" target="_blank">
+                                            <u><?php esc_html_e("Terms and conditions apply.", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="pt-3 col-6">
+                                <label for="gads_country" class="form-label mb-0" id="gads_country_lbl">
+                                    <small>
+                                        Select Your Country
+                                        <span class="text-danger">*</span>
+                                        <span class="text-danger d-none newgads_error">Required</span>
+                                    </small>
+                                </label>
+                                <select class="selectthree form-select" name="gads_country" id="gads_country">
+                                    <option value="">Select Country</option>
+                                    <?php
+                                    $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+                                    $contData = json_decode($getCountris);
+                                    foreach ($contData as $key => $value) {
+                                    ?>
+                                        <option value="<?php echo esc_attr($value->code) ?>">
+                                            <?php echo esc_html($value->name) ?></option>"
+                                    <?php
+                                    }
+
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="pt-3 col-6">
+                                <label for="gads_currency" class="form-label mb-0" id="gads_currency_lbl">
+                                    <small>
+                                        Select Your Currency
+                                        <span class="text-danger">*</span>
+                                        <span class="text-danger d-none newgads_error">Required</span>
+                                    </small>
+                                </label>
+                                <select class="selectthree form-select" name="gads_currency" id="gads_currency">
+                                    <option value="">Select Currency</option>
+                                    <?php
+                                    $getCurrency = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/currency.json");
+                                    $currencyData = json_decode($getCurrency);
+                                    foreach ($currencyData as $key => $value) {
+                                    ?>
+                                        <option value="<?php echo esc_attr($key) ?>" isothreeval="<?php echo esc_attr($value) ?>">
+                                            <?php echo esc_html($value) ?>
+                                        </option>
+                                    <?php
+                                    }
+
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <h5 class="pt-3 text-primary">Accept Google Ads Invitation & Claim Your Offer - </h5>
+                    <ol class="ms-0 ps-3">
                         <li>
-                            <strong>Using Popup:</strong>
+                            <h6>Using Popup:</h6>
                             <p>If popups are enabled, a window will appear. Just click <strong>"Accept"</strong> to access the account.</p>
                         </li>
-                        <li class="text-center" style="list-style: none;">
+                        <li class="text-center my-0 py-0 lh-1" style="list-style: none;">
                             <strong>OR</strong>
                         </li>
                         <li>
-                            <strong>Using Email (if popup is blocked):</strong>
+                            <h6>Using Email (if popup is blocked):</h6>
                             <p>Check your email for an invitation from <strong>webdev@conversios.io </strong>. Click <strong>"Accept Invitation"</strong> in the email and sign in to confirm access.</p>
                         </li>
                     </ol>
@@ -386,7 +486,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 
             </div>
             <div class="modal-footer">
-                <button id="ads-continue" class="btn conv-blue-bg m-auto text-white before-ads-acc-creation">
+                <button id="ads-continue" class="btn btn-success w-50 m-auto text-white before-ads-acc-creation">
                     <span id="gadsinviteloader" class="spinner-border text-light spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                     <?php esc_html_e("Send Invite", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
@@ -508,6 +608,18 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
         //     showGAdsModalPopUpNew("https://www.conversios.io/");
         // });
 
+        jQuery(".selectthree").select2({
+            dropdownParent: jQuery("#conv_create_gads_new"),
+            placeholder: function() {
+                jQuery(this).data('placeholder');
+            }
+        });
+
+        jQuery("#gads_country").change(function() {
+            let concontry = jQuery(this).val();
+            jQuery("#gads_currency").val(concontry).trigger('change');
+        });
+
         jQuery("#conv_skip_gads").click(function() {
             changeTabBox("webgmcbox-tab");
         });
@@ -590,26 +702,8 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                 if (response.error === false) {
                     var error_msg = 'null';
                     if (response.data.length == 0) {
-                        getAlertMessageAll(
-                            'info',
-                            'Error',
-                            message = 'No Google Ads Account Found please create a new account by clicking on Create Now.',
-                            icon = 'info',
-                            buttonText = 'Ok',
-                            buttonColor = '#FCCB1E',
-                            iconImageSrc = '<?php echo wp_kses(
-                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
-                                                array(
-                                                    'img' => array(
-                                                        'src' => true,
-                                                        'alt' => true,
-                                                        'class' => true,
-                                                        'style' => true,
-                                                    ),
-                                                )
-                                            ); ?>'
-                        );
                         //showtoastdynamically("There are no Google ads accounts associated with email.");
+                        jQuery('#conv_create_gads_new').modal('show');
                     } else {
                         if (response.data.length > 0) {
                             var AccOptions = '';
@@ -634,25 +728,7 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                     }
                 } else {
                     var error_msg = response.errors;
-                    getAlertMessageAll(
-                        'info',
-                        'Error',
-                        message = 'No Google Ads Account Found Please create a new account by clicking on Create Now.',
-                        icon = 'info',
-                        buttonText = 'Ok',
-                        buttonColor = '#FCCB1E',
-                        iconImageSrc = '<?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>'
-                    );
+                    jQuery('#conv_create_gads_new').modal('show');
                 }
                 jQuery('#ads-account').prop('disabled', false);
                 conv_change_loadingbar_popup("hide");
@@ -729,6 +805,31 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
         var btn_cam = 'create_new';
         var ename = 'conversios_onboarding';
         var event_label = 'ads';
+
+        <?php if (!CONV_IS_WC) { ?>
+            jQuery(".newgads_error").addClass('d-none');
+            var decodedString = tvc_data.replace(/&quot;/g, '"');
+            var jsonObject = JSON.parse(decodedString);
+
+            if (jQuery("#gads_country").val() == "") {
+                jQuery("#gads_country_lbl .newgads_error").removeClass('d-none');
+                return false;
+            }
+            if (jQuery("#gads_currency").val() == "") {
+                jQuery("#gads_currency_lbl .newgads_error").removeClass('d-none');
+                return false;
+            }
+
+            jsonObject['user_country'] = jQuery("#gads_country").val();
+            var gads_currency_val = jQuery("#gads_currency").val();
+            jsonObject['currency_code'] = jQuery("#gads_currency").find(":selected").attr("isothreeval");
+
+            var tvc_data_json = JSON.stringify(jsonObject);
+            tvc_data = tvc_data_json.replace(/"/g, "&quot;");
+
+        <?php } ?>
+
+
         //user_tracking_data(btn_cam, error_msg,ename,event_label);
         jQuery.ajax({
             type: "POST",

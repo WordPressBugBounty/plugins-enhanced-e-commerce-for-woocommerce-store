@@ -57,28 +57,27 @@ if (class_exists('Conversios_Header') === FALSE) {
 		 */
 		public function header_notices()
 		{
+
 			?>
 				<!--- Promotion box start -->
-				<div id="conversioshead_notice" class="promobandtop">
+					<div id="conversioshead_notice" class="promobandtop">
+						<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
+							<div class="promoleft">
+								<div class="promobandmsg text-white text-center fs-6 d-flex align-items-center">
+									<span class="fs-3 px-3">
+										📢
+									</span>
+									<div class="text-white">
+										Boost
+										<u><span class="px-1" style="color: #ffc700;">Conversions by 30% with CAPI</span></u>
+										for Facebook, Snapchat, and TikTok Ads with our Professional Plan
+										<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn btn-sm text-white fw-normal" style="background: #07BB4F">Buy Now</a>
+									</div>
 
-					<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
-						<div class="promoleft">
-							<div class="promobandmsg text-white text-center fs-6 d-flex align-items-center">
-								<span class="fs-3 px-3">
-									📢
-								</span>
-								<div class="text-white">
-									Boost
-									<u><span class="px-1" style="color: #ffc700;">Conversions by 30% with CAPI</span></u>
-									for Facebook, Snapchat, and TikTok Ads with our Professional Plan
-									<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn btn-sm text-white fw-normal" style="background: #07BB4F">Buy Now</a>
 								</div>
-
 							</div>
 						</div>
 					</div>
-
-				</div>
 				<!--- Promotion box end -->
 				<?php
 				echo esc_attr($this->call_tvc_site_verified_and_domain_claim());
@@ -208,7 +207,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 										<ul class="navbar-nav me-auto mb-lg-0">
 											<?php
 											foreach ($menu_list as $key => $value) {
-												$value['title'] = str_replace(array(" & Insights", " & Analytics", " Management"), " ", $value['title']);
+												$value['title'] = str_replace(array(" & Insights", " Management"), " ", $value['title']);
 												if (isset($value['title']) && $value['title']) {
 													$is_active = $this->is_active_menu($key);
 													$active = $is_active != 'secondary' ? 'rich-blue' : '';

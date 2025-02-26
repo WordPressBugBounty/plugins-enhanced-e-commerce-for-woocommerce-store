@@ -29,7 +29,7 @@ $pixel_settings_arr = array(
     ),
     "bingclaritysettings" => array(
         "logo" => "/admin/images/logos/conv_clarity_logo.png",
-        "title" => "Microsoft Clarity (Bing)",
+        "title" => "Microsoft Clarity",
     ),
     "twittersettings" => array(
         "logo" => "/admin/images/logos/conv_twitter_logo.png",
@@ -60,6 +60,11 @@ $pixel_settings_arr = array(
         "title" => "Google Merchant Center Account",
         "topnoti" => "Product feed to Google Merchant Center helps you improve your product's visibility in Google search results and helps to optimize your Google Campaigns resulting in high ROAS."
     ),
+    "mmcsettings" => array(
+        "logo" => "/admin/images/logos/ms-logo.png",
+        "title" => "Microsoft Merchant Center Account",
+        "topnoti" => "Product feed to Microsoft Merchant Center helps you improve your product's visibility in Microsoft search results and helps to optimize your Microsoft Campaigns resulting in high ROAS."
+    ),
     "tiktokBusinessSettings" => array(
         "logo" => "/admin/images/logos/conv_tiktok_logo.png",
         "title" => "TikTok Business Account",
@@ -79,6 +84,8 @@ $pixel_settings_arr = array(
         "title" => "Crazyegg Pixel",
     ),
 );
+
+//$mmcsettings = ''; // mmcsettings.php
 
 $subpage = (isset($_GET["subpage"]) && $_GET["subpage"] != "") ? esc_attr(sanitize_text_field(wp_unslash($_GET['subpage']))) : "";
 $version = PLUGIN_TVC_VERSION;
@@ -105,17 +112,37 @@ $is_refresh_token_expire = false;
 $convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
 $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 
+// for google
 $g_mail = get_option('ee_customer_gmail');
 $tvc_data['g_mail'] = "";
 if ($g_mail) {
     $tvc_data['g_mail'] = sanitize_email($g_mail);
 }
 
+// for microsoft
+$microsoft_mail = get_option('ee_customer_msmail');
+$tvc_data['microsoft_mail'] = "";
+if ($microsoft_mail) {
+    $tvc_data['microsoft_mail'] = sanitize_email($microsoft_mail);
+}
+
 //check if redirected from the authorization
 if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
+
     $subscriptionId = sanitize_text_field(wp_unslash($_GET['subscription_id']));
+    
+    // for google
     if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
         $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
+        $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
+        $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
+        $is_refresh_token_expire = false;
+    }
+
+    // for microsoft    
+    if (isset($_GET['microsoft_mail']) && sanitize_email(wp_unslash($_GET['microsoft_mail']))) {
+        $tvc_data['microsoft_mail'] = sanitize_email(wp_unslash($_GET['microsoft_mail']));
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
         $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
@@ -296,7 +323,7 @@ if ($subscriptionId != "") {
 
         // Client side pixel id validations
         jQuery(document).on("input",
-            "#fb_pixel_id, #microsoft_ads_pixel_id, #twitter_ads_pixel_id, #pinterest_ads_pixel_id, #snapchat_ads_pixel_id, #tiKtok_ads_pixel_id, #hotjar_pixel_id, #crazyegg_pixel_id, #msclarity_pixel_id",
+            "#fb_pixel_id, #twitter_ads_pixel_id, #pinterest_ads_pixel_id, #snapchat_ads_pixel_id, #tiKtok_ads_pixel_id, #hotjar_pixel_id, #crazyegg_pixel_id",
             function() {
                 var ele_id = this.id;
                 var ele_val = jQuery(this).val();

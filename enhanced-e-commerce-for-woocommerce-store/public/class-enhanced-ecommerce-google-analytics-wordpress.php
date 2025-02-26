@@ -60,9 +60,9 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
       $user_id = $current_user->ID;
       $current_user_type = 'register_user';
     }
-    if (!session_id()) {
-      session_start();
-    }
+    // if (!session_id()) {
+    //   session_start();
+    // }
     $this->tvc_options = array(
       "local_time" => esc_js(time()),
       "is_admin" => esc_attr(is_admin()),
@@ -97,7 +97,7 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
     add_action('wp_footer', array($this, 'wp_login_datalayer'));
     add_action('wp_footer', array($this, 'file_download_datalayer'));
     add_action('wp_logout', array($this, 'delete_datalayer_cookie_on_logout'));
-    add_action('user_register', array($this, 'track_signup_event'), 10, 1);
+    //add_action('user_register', array($this, 'track_signup_event'), 10, 1);
     add_action('wp_head', array($this, 'add_author_tracking_to_datalayer'));
   }
 
@@ -132,17 +132,18 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
     </script>
     <?php
   }
-  public function track_signup_event($user_id)
-  {
-    if ($user_id) {
-      // Set a session flag to indicate a signup just happened
-      $_SESSION['conv_user_signed_up'] = true;
-    }
-  }
+  // public function track_signup_event($user_id)
+  // {
+  //   if ($user_id) {
+  //     // Set a session flag to indicate a signup just happened
+  //     $_SESSION['conv_user_signed_up'] = true;
+  //   }
+  // }
   public function wp_login_datalayer()
   {
     if (is_user_logged_in() && !isset($_COOKIE['datalayer_login_fired'])) {
-      $is_signup = isset($_SESSION['conv_user_signed_up']) && $_SESSION['conv_user_signed_up'] === true;
+      //$is_signup = isset($_SESSION['conv_user_signed_up']) && $_SESSION['conv_user_signed_up'] === true;
+      $is_signup = false;
     ?>
       <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
         let expires = "";
@@ -172,9 +173,9 @@ class Enhanced_Ecommerce_Google_Analytics_Wordpress extends Con_Settings
         document.cookie = name + "=" + encodeURIComponent(value || "") + expires + "; path=/";
       </script>
       <?php
-      if ($is_signup) {
-        unset($_SESSION['conv_user_signed_up']);
-      }
+      // if ($is_signup) {
+      //   unset($_SESSION['conv_user_signed_up']);
+      // }
     }
   }
 
@@ -716,7 +717,7 @@ class Con_GTM_WP_Tracking extends Con_Settings
 
 
     if (!isset($googleDetail->conv_track_signin)) {
-      $googleDetail->conv_track_signin = '1';
+      $dataLayer["conv_track_signin"] = "1";
     }
     if (isset($googleDetail->conv_track_signin) && ($googleDetail->conv_track_signin === '1')) {
       $dataLayer["conv_track_signin"] = "1";

@@ -36,9 +36,21 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
 
       //google_merchant
       add_action('wp_ajax_list_google_merchant_account', array($this, 'list_google_merchant_account'));
+      add_action('wp_ajax_list_microsoft_merchant_account', array($this, 'list_microsoft_merchant_account'));
+      add_action('wp_ajax_list_microsoft_catalog_account', array($this, 'list_microsoft_catalog_account'));
       add_action('wp_ajax_create_google_merchant_center_account', array($this, 'create_google_merchant_center_account'));
+      add_action('wp_ajax_create_microsoft_merchant_center_account', array($this, 'create_microsoft_merchant_center_account'));
       add_action('wp_ajax_save_merchant_data', array($this, 'save_merchant_data'));
       add_action('wp_ajax_link_google_ads_to_merchant_center', array($this, 'link_google_ads_to_merchant_center'));
+
+      //microsoft ads
+      add_action('wp_ajax_list_microsoft_ads_account', array($this, 'list_microsoft_ads_account'));
+      add_action('wp_ajax_create_microsoft_ads_account', array($this, 'create_microsoft_ads_account'));
+      add_action('wp_ajax_list_microsoft_ads_subaccount', array($this, 'list_microsoft_ads_subaccount'));
+      add_action('wp_ajax_list_microsoft_ads_get_UET_tag', array($this, 'list_microsoft_ads_get_UET_tag'));
+      add_action('wp_ajax_create_microsoft_ads_UET_tag', array($this, 'create_microsoft_ads_UET_tag'));
+      add_action('wp_ajax_conv_create_bing_account', array($this, 'conv_create_bing_account'));
+      
 
       //get subscription details
       add_action('wp_ajax_get_subscription_details', array($this, 'get_subscription_details'));
@@ -183,6 +195,122 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
       }
     }
     /**
+     * Ajax code for list Microsoft manager ads account.
+     * @since    4.0.2
+     */
+    public function list_microsoft_ads_account()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
+        $tvc_data =  json_decode(str_replace("&quot;", "\"", $data));
+      
+        /*customApiObj = new CustomApi();
+        $google_detail = $customApiObj->getGoogleAnalyticDetail($tvc_data->subscription_id);
+        $access_token = isset($google_detail->data->access_token) ? base64_encode($google_detail->data->access_token) : '';
+        $refresh_token = isset($google_detail->data->refresh_token) ? base64_encode($google_detail->data->refresh_token) : '';*/
+        
+        $api_obj = new Conversios_Onboarding_ApiCall();
+        echo wp_json_encode($api_obj->getMicrosoftAdsAccountList((array)$tvc_data));
+
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+    /**
+     * Ajax code for list Microsoft ads Sub accounts.
+     * @since    4.0.2
+     */
+    public function list_microsoft_ads_subaccount()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : "";
+        $tvc_data =  json_decode(str_replace("&quot;", "\"", $data));
+      
+        /*customApiObj = new CustomApi();
+        $google_detail = $customApiObj->getGoogleAnalyticDetail($tvc_data->subscription_id);
+        $access_token = isset($google_detail->data->access_token) ? base64_encode($google_detail->data->access_token) : '';
+        $refresh_token = isset($google_detail->data->refresh_token) ? base64_encode($google_detail->data->refresh_token) : '';*/
+        
+        $api_obj = new Conversios_Onboarding_ApiCall();
+        echo wp_json_encode($api_obj->getMicrosoftAdsSubAccountList((array)$tvc_data,$account_id));
+
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+    public function list_microsoft_ads_get_UET_tag()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : "";
+        $subaccount_id = isset($_POST['subaccount_id']) ? sanitize_text_field(wp_unslash($_POST['subaccount_id'])) : "";
+        $tvc_data =  json_decode(str_replace("&quot;", "\"", $data));
+      
+        /*customApiObj = new CustomApi();
+        $google_detail = $customApiObj->getGoogleAnalyticDetail($tvc_data->subscription_id);
+        $access_token = isset($google_detail->data->access_token) ? base64_encode($google_detail->data->access_token) : '';
+        $refresh_token = isset($google_detail->data->refresh_token) ? base64_encode($google_detail->data->refresh_token) : '';*/
+        
+        $api_obj = new Conversios_Onboarding_ApiCall();
+        echo wp_json_encode($api_obj->getMicrosoftAdsGetUET((array)$tvc_data,$account_id, $subaccount_id));
+
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+    public function create_microsoft_ads_UET_tag()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : "";
+        $subaccount_id = isset($_POST['subaccount_id']) ? sanitize_text_field(wp_unslash($_POST['subaccount_id'])) : "";
+        
+        $api_obj = new Conversios_Onboarding_ApiCall();
+        echo wp_json_encode($api_obj->CreateMicrosoftAdsUET($subscription_id, $account_id, $subaccount_id));
+
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+    public function conv_create_bing_account()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
+        $account_name = isset($_POST['account_name']) ? sanitize_text_field(wp_unslash($_POST['account_name'])) : "";
+        $currency_code = isset($_POST['currency_code']) ? sanitize_text_field(wp_unslash($_POST['currency_code'])) : "";
+        $time_zone = isset($_POST['time_zone']) ? sanitize_text_field(wp_unslash($_POST['time_zone'])) : "";
+        $tax_info_key = isset($_POST['tax_info_key']) ? sanitize_text_field(wp_unslash($_POST['tax_info_key'])) : "";
+        $tax_info_val = isset($_POST['tax_info_val']) ? sanitize_text_field(wp_unslash($_POST['tax_info_val'])) : "";
+        $sub_account_name = isset($_POST['sub_account_name']) ? sanitize_text_field(wp_unslash($_POST['sub_account_name'])) : "";
+        $market_country = isset($_POST['market_country']) ? sanitize_text_field(wp_unslash($_POST['market_country'])) : "";
+        $market_language = isset($_POST['market_language']) ? sanitize_text_field(wp_unslash($_POST['market_language'])) : "";
+        $bussiness_name = isset($_POST['bussiness_name']) ? sanitize_text_field(wp_unslash($_POST['bussiness_name'])) : "";
+        $address_1 = isset($_POST['line1']) ? sanitize_text_field(wp_unslash($_POST['line1'])) : "";
+        $address_2 = isset($_POST['line2']) ? sanitize_text_field(wp_unslash($_POST['line2'])) : "";
+        $city = isset($_POST['city']) ? sanitize_text_field(wp_unslash($_POST['city'])) : "";
+        $state = isset($_POST['state']) ? sanitize_text_field(wp_unslash($_POST['state'])) : "";
+        $postal_code = isset($_POST['postal_code']) ? sanitize_text_field(wp_unslash($_POST['postal_code'])) : "";
+        
+        $api_obj = new Conversios_Onboarding_ApiCall();
+        echo wp_json_encode($api_obj->CreateMicrosoftAdsAccount($subscription_id, $account_name, $currency_code, $time_zone, $tax_info_key, $tax_info_val, $sub_account_name, $market_country, $market_language, $bussiness_name, $address_1, $address_2, $city, $state, $postal_code));
+
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+
+    /**
      * Ajax code for create google ads account.
      * @since    4.0.2
      */
@@ -260,6 +388,46 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
       }
     }
     /**
+     * Ajax code for list microsoft merchant account.
+     * @since    4.0.2
+     */
+    public function list_microsoft_merchant_account()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        $data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : "";
+        $subaccount_id = isset($_POST['subaccount_id']) ? sanitize_text_field(wp_unslash($_POST['subaccount_id'])) : "";
+        $api_obj = new Conversios_Onboarding_ApiCall("", "");
+        echo wp_json_encode($api_obj->listMerchantCenterAccountMicrosoft($subaccount_id,$account_id, $subscription_id));
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+    /**
+     * Ajax code for list microsoft merchant catalog.
+     * @since    4.0.2
+     */
+    public function list_microsoft_catalog_account()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : "";
+        $subaccount_id = isset($_POST['subaccount_id']) ? sanitize_text_field(wp_unslash($_POST['subaccount_id'])) : "";
+        $microsoft_merchant_center_id = isset($_POST['microsoft_merchant_center_id']) ? sanitize_text_field(wp_unslash($_POST['microsoft_merchant_center_id'])) : "";
+        $api_obj = new Conversios_Onboarding_ApiCall("", "");
+        echo wp_json_encode($api_obj->listMerchantCatalogAccountMicrosoft($subaccount_id,$account_id, $subscription_id, $microsoft_merchant_center_id));
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+    /**
      * Ajax code for link analytic to ads account.
      * @since    4.0.2
      */
@@ -281,6 +449,33 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
           "email_address" => isset($_POST['email_address']) ? sanitize_text_field(wp_unslash($_POST['email_address'])) : ''
         );
         echo wp_json_encode($api_obj->createMerchantAccount($from_data));
+        wp_die();
+      } else {
+        echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
+      }
+    }
+
+    public function create_microsoft_merchant_center_account()
+    {
+      $nonce = (isset($_POST['conversios_onboarding_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_onboarding_nonce'])) : "";
+      if ($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')) {
+        //$data = isset($_POST['tvc_data']) ? sanitize_text_field(wp_unslash($_POST['tvc_data'])) : "";
+        //$tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        /*$customApiObj = new CustomApi();
+        $google_detail = $customApiObj->getGoogleAnalyticDetail($tvc_data->subscription_id);
+        $access_token = isset($google_detail->data->access_token) ? base64_encode($google_detail->data->access_token) : '';
+        $refresh_token = isset($google_detail->data->refresh_token) ? base64_encode($google_detail->data->refresh_token) : '';*/
+        $api_obj = new Conversios_Onboarding_ApiCall("","");
+        $from_data = array(
+          "customer_subscription_id" => isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : '',
+          "customer_id" => isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : '',
+          "account_id" => isset($_POST['subaccount_id']) ? sanitize_text_field(wp_unslash($_POST['subaccount_id'])) : '',
+          "store_name" => isset($_POST['store_name']) ? sanitize_text_field(wp_unslash($_POST['store_name'])) : '',
+          "store_url" => isset($_POST['store_url']) ? sanitize_text_field(wp_unslash($_POST['store_url'])) : '',
+          "notification_email" => isset($_POST['notification_email']) ? sanitize_text_field(wp_unslash($_POST['notification_email'])) : '',
+          "notification_language" => isset($_POST['notification_language']) ? sanitize_text_field(wp_unslash($_POST['notification_language'])) : '',
+        );
+        echo wp_json_encode($api_obj->createMerchantAccountMicrosoft($from_data));
         wp_die();
       } else {
         echo esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store");
@@ -529,6 +724,9 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
          */
         if (property_exists($tvc_data, "g_mail") && sanitize_email($tvc_data->g_mail)) {
           update_option('ee_customer_gmail', $tvc_data->g_mail);
+        }
+        if (property_exists($tvc_data, "microsoft_mail") && sanitize_email($tvc_data->microsoft_mail)) {
+          update_option('ee_customer_msmail', $tvc_data->microsoft_mail);
         }
         //is not work for existing user && $ee_additional_data['con_created_at'] != "" 
         if (isset($ee_additional_data['con_created_at'])) {
@@ -852,6 +1050,251 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
         return $e->getMessage();
       }
     }
+    
+    public function getMicrosoftAdsAccountList( $postData = array() )
+    {
+      
+      try {
+        
+        $url = $this->apiDomain . '/microsoft/getManagerAccounts';
+        //$refresh_token = sanitize_text_field(base64_decode($this->refresh_token));
+        $data = [
+          'customer_subscription_id' => sanitize_text_field((isset($postData['subscription_id'])) ? $postData['subscription_id'] : ''),
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => array(
+            'Authorization' => "Bearer MTIzNA==",
+            'Content-Type' => 'application/json',
+            //'RefreshToken' => $refresh_token
+          ),
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if (isset($response->error) && $response->error == '') {
+          $return->status = $response_code;
+          $return->data = $response->data;
+          $return->error = false;
+          return $return;
+        } else {
+          $return->error = true;
+          //$return->data = $response->data;
+          $return->status = $response_code;
+          $return->errors = wp_json_encode($response->errors);
+          return $return;
+        }
+
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+    public function getMicrosoftAdsGetUET( $postData, $account_id, $subaccount_id )
+    {
+      
+      try {
+        
+        $url = $this->apiDomain . '/microsoft/getUetTagsByIds';
+        //$refresh_token = sanitize_text_field(base64_decode($this->refresh_token));
+        $data = [
+          'customer_subscription_id' => sanitize_text_field((isset($postData['subscription_id'])) ? $postData['subscription_id'] : ''),
+          'customer_id' => sanitize_text_field($account_id),
+          'account_id' => sanitize_text_field($subaccount_id)
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => array(
+            'Authorization' => "Bearer MTIzNA==",
+            'Content-Type' => 'application/json',
+            //'RefreshToken' => $refresh_token
+          ),
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if (isset($response->error) && $response->error == '') {
+          $return->status = $response_code;
+          $return->data = $response->data;
+          $return->error = false;
+          return $return;
+        } else {
+          $return->error = true;
+          //$return->data = $response->data;
+          $return->status = $response_code;
+          $return->errors = wp_json_encode($response->errors);
+          return $return;
+        }
+
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+    public function CreateMicrosoftAdsUET( $subscription_id, $account_id, $subaccount_id )
+    {
+      
+      try {
+        
+        $url = $this->apiDomain . '/microsoft/createUetTags';
+        //$refresh_token = sanitize_text_field(base64_decode($this->refresh_token));
+        $data = [
+          'customer_subscription_id' => sanitize_text_field($subscription_id),
+          'customer_id' => sanitize_text_field($account_id),
+          'account_id' => sanitize_text_field($subaccount_id)
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => array(
+            'Authorization' => "Bearer MTIzNA==",
+            'Content-Type' => 'application/json',
+            //'RefreshToken' => $refresh_token
+          ),
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if (isset($response->error) && $response->error == '') {
+          $return->status = $response_code;
+          $return->data = $response->data;
+          $return->error = false;
+          return $return;
+        } else {
+          $return->error = true;
+          //$return->data = $response->data;
+          $return->status = $response_code;
+          $return->errors = wp_json_encode($response->errors);
+          return $return;
+        }
+
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+    public function CreateMicrosoftAdsAccount( $subscription_id, $account_name, $currency_code, $time_zone, $tax_info_key, $tax_info_val, $sub_account_name, $market_country, $market_language, $bussiness_name, $address_1, $address_2, $city, $state, $postal_code )
+    {
+      
+      try {
+        
+        $url = $this->apiDomain . '/microsoft/customerSignup';
+        //$refresh_token = sanitize_text_field(base64_decode($this->refresh_token));
+        $data = [
+          'customer_subscription_id' => sanitize_text_field($subscription_id),
+          'account' => [
+              'name' => sanitize_text_field($account_name),
+              'currency_code' => sanitize_text_field($currency_code),
+              'time_zone' => sanitize_text_field($time_zone),
+              'tax_info_key' => sanitize_text_field($tax_info_key),
+              'tax_info_val' => sanitize_text_field($tax_info_val),
+          ],
+          'customer' => [
+              'name' => sanitize_text_field($sub_account_name),
+              'market_country' => sanitize_text_field($market_country),
+              'market_language' => sanitize_text_field($market_language)
+          ],
+          'address' => [
+              'name' => sanitize_text_field($bussiness_name),
+              'line1' => sanitize_text_field($address_1),
+              'line2' => sanitize_text_field($address_2),
+              'city' => sanitize_text_field($city),
+              'state' => sanitize_text_field($state),
+              'postal_code' => sanitize_text_field($postal_code),
+              'country_code' => sanitize_text_field($market_country)
+          ]
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => array(
+            'Authorization' => "Bearer MTIzNA==",
+            'Content-Type' => 'application/json',
+            //'RefreshToken' => $refresh_token
+          ),
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_post(esc_url($url), $args);
+
+        //echo '<pre>'; print_r($data); echo '</pre>';
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if (isset($response->error) && $response->error == '') {
+          $return->status = $response_code;
+          $return->data = $response->data;
+          $return->error = false;
+          return $return;
+        } else {
+          $return->error = true;
+          //$return->data = $response->data;
+          $return->status = $response_code;
+          $return->errors = wp_json_encode($response->errors);
+          return $return;
+        }
+
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+
+    public function getMicrosoftAdsSubAccountList( $postData, $account_id )
+    {
+      
+      try {
+        
+        $url = $this->apiDomain . '/microsoft/getAccounts';
+        //$refresh_token = sanitize_text_field(base64_decode($this->refresh_token));
+        $data = [
+          'customer_subscription_id' => sanitize_text_field((isset($postData['subscription_id'])) ? $postData['subscription_id'] : ''),
+          'customer_id' => sanitize_text_field($account_id),
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => array(
+            'Authorization' => "Bearer MTIzNA==",
+            'Content-Type' => 'application/json',
+            //'RefreshToken' => $refresh_token
+          ),
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if (isset($response->error) && $response->error == '') {
+          $return->status = $response_code;
+          $return->data = $response->data;
+          $return->error = false;
+          return $return;
+        } else {
+          $return->error = true;
+          //$return->data = $response->data;
+          $return->status = $response_code;
+          $return->errors = wp_json_encode($response->errors);
+          return $return;
+        }
+
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
 
     public function listMerchantCenterAccount()
     {
@@ -870,15 +1313,86 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
         );
         $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
         $return = new \stdClass();
-        if ($result->status == 200) {
+        if ( isset($result->status) && $result->status == 200) {
+          $return->status = $result->status;
+          $return->data = isset($result->data) ? $result->data : '';
+          $return->error = false;
+          return $return;
+        } else {
+          $return->error = true;
+          $return->data = isset($result->data) ? $result->data : '';
+          $return->status = isset($result->status) ? $result->status : '';
+          $return->errors = wp_json_encode($result->errors);
+          return $return;
+        }
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+
+    public function listMerchantCenterAccountMicrosoft($account_id, $subaccount_id, $subscription_id)
+    {
+      try {
+        $url = $this->apiDomain . '/microsoft/getStores';
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
+        $data = [
+          'customer_subscription_id' => sanitize_text_field($subscription_id),
+          'customer_id' => sanitize_text_field($subaccount_id),
+          'account_id' => sanitize_text_field($account_id)
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
+        $return = new \stdClass();
+        if ( isset($result->status) && $result->status == 200) {
           $return->status = $result->status;
           $return->data = $result->data;
           $return->error = false;
           return $return;
         } else {
           $return->error = true;
-          $return->data = $result->data;
+          $return->data = isset($result->data) ? $result->data : '';
+          $return->status = isset($result->status) ? $result->status : '';
+          $return->errors = wp_json_encode($result->errors);
+          return $return;
+        }
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+
+    public function listMerchantCatalogAccountMicrosoft($account_id, $subaccount_id, $subscription_id, $microsoft_merchant_center_id)
+    {
+      try {
+        $url = $this->apiDomain . '/microsoft/getCatalogs';
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
+        $data = [
+          'customer_subscription_id' => sanitize_text_field($subscription_id),
+          'customer_id' => sanitize_text_field($subaccount_id),
+          'account_id' => sanitize_text_field($account_id),
+          'merchant_id' => sanitize_text_field($microsoft_merchant_center_id)
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
+        $return = new \stdClass();
+        if ( isset($result->status) && $result->status == 200) {
           $return->status = $result->status;
+          $return->data = isset($result->data) ? $result->data : '';
+          $return->error = false;
+          return $return;
+        } else {
+          $return->error = true;
+          $return->data = isset($result->data) ? $result->data : '';
+          $return->status = isset($result->status) ? $result->status : '';
           $return->errors = wp_json_encode($result->errors);
           return $return;
         }
@@ -933,6 +1447,8 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'body' => wp_json_encode($formatted_data)
         );
         $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
+
+
         $return = new \stdClass();
         return $return;
       } catch (Exception $e) {
@@ -962,6 +1478,8 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'method' => 'POST',
           'body' => wp_json_encode($data)
         );
+        
+        
         $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
         $return = new \stdClass();
         if ($result->status == 200) {
@@ -1043,6 +1561,66 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           $return = new \stdClass();
           $return->error = true;
           $return->errors = isset($response_code->errors) ? wp_json_encode($response_code->errors) : '';
+          //$return->data = $result->data;
+          $return->status = $response_code;
+          return $return;
+          //return new WP_Error($response_code, $response_message, $response_body);
+        }
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+    public function createMerchantAccountMicrosoft($postData)
+    {
+      try {
+        $url = $this->apiDomain . '/microsoft/createStore';
+        $header = array(
+          "Authorization: Bearer MTIzNA==",
+          "Content-Type" => "application/json"
+        );
+        $data = [
+          'customer_subscription_id' => isset($postData['customer_subscription_id']) ? sanitize_text_field($postData['customer_subscription_id']) : '',
+          'customer_id' => isset($postData['customer_id']) ? sanitize_text_field($postData['customer_id']) : '',
+          'account_id' => isset($postData['account_id']) ? sanitize_text_field($postData['account_id']) : '',
+          'store_name' => isset($postData['store_name']) ? sanitize_text_field($postData['store_name']) : '',
+          'store_url' => isset($postData['store_url']) ? sanitize_url($postData['store_url'], array( 'http', 'https' )) : '',
+          'notification_email' => isset($postData['notification_email']) ? sanitize_text_field($postData['notification_email']) : '',
+          'country' => isset($postData['country']) ? sanitize_text_field($postData['country']) : '',
+        ];
+        $args = array(
+          'timeout' => 300,
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $args['timeout'] = "1000";
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response_body = json_decode(wp_remote_retrieve_body($request));
+
+        //echo '<pre>'; print_r($args); print_r($response_body); echo '</pre>';
+
+        if ((isset($response_body->error) && $response_body->error == '')) {
+          //create merchant account admin notices
+          $TVC_Admin_Helper = new TVC_Admin_Helper();
+          $link_title = "Create Microsoft Ads - Performance max campaign now.";
+          $content = "";
+          $status = "1";
+          $created_merchant_id = isset($response_body->data->merchantId) ? $response_body->data->merchantId : null;
+          $link = "admin.php?page=conversios-pmax&campaign=microsoft";
+          $TVC_Admin_Helper->tvc_add_admin_notice("created_merchant_account", $content, $status, $link_title, $link, $created_merchant_id, "", "7", "created_merchant_account");
+          return $response_body;
+        } else {
+          $return = new \stdClass();
+          $return->error = true;
+          if( isset($response_body->errors) ) {
+            $return->errors = wp_json_encode($response_body->errors);
+          }else{
+            $return->errors = isset($response_code->errors) ? wp_json_encode($response_code->errors) : '';
+          }
           //$return->data = $result->data;
           $return->status = $response_code;
           return $return;

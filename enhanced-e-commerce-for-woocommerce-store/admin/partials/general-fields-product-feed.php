@@ -768,7 +768,7 @@ body {
                                         <?php echo esc_html($value->name) ?></option>"
                                     <?php
                             }
-
+                            //echo '<pre>'; print_r($data); echo '</pre>';
                             ?>
                                 </select>
                             </div>
@@ -786,7 +786,7 @@ body {
                         <?php if(isset($data['google_merchant_id']) === TRUE && $data['google_merchant_id'] !== '') { ?>
                         <div class="mb-3">
                             <div class="form-check form-check-custom">
-                                <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value=""
+                                <input class="form-check-input check-height fs-14 woow-789 errorChannel" type="checkbox" value=""
                                     id="gmc_id" name="gmc_id"
                                     <?php echo isset($data['google_merchant_id']) === TRUE ? 'checked' : '' ?>>
                                 <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
@@ -1191,6 +1191,7 @@ jQuery(document).on('click', '#submitFeed', function(e) {
 /**************************Submit Feed call end*******************************************************************************/
 /*************************************Save Feed Data Start*************************************************************************/
 function save_feed_data(google_merchant_center_id, catalog_id) {
+    console.log('saving feed from 1194 line'); // woow 1194
     var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>"
     let edit = jQuery('#edit').val();
     var data = {

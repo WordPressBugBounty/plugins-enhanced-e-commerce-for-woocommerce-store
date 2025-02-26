@@ -151,10 +151,10 @@ if (!class_exists('TVCProductSyncHelper')) {
 								if ($fixed_key == "shipping" && $formArray[$fixed_key] != "") {
 									$temp_product[$fixed_key]['price']['value'] = sanitize_text_field($formArray[$fixed_key]);
 									$temp_product[$fixed_key]['price']['currency'] = sanitize_text_field($tvc_currency);
-									$temp_product[$fixed_key]['country'] = sanitize_text_field($formArray['target_country']);
+									$temp_product[$fixed_key]['country'] = (isset($formArray['target_country'])) ? sanitize_text_field($formArray['target_country']) : '';
 								} else if ($fixed_key == "tax" && $formArray[$fixed_key] != "") {
 									$temp_product['taxes']['rate'] = sanitize_text_field($formArray[$fixed_key]);
-									$temp_product['taxes']['country'] = sanitize_text_field($formArray['target_country']);
+									$temp_product['taxes']['country'] = isset($formArray['target_country']) ? sanitize_text_field($formArray['target_country']) : '';
 								} else if ($formArray[$fixed_key] != "") {
 									$temp_product[$fixed_key] = sanitize_text_field($formArray[$fixed_key]);
 								}
@@ -601,12 +601,15 @@ if (!class_exists('TVCProductSyncHelper')) {
 								'subscription_id' => sanitize_text_field($subscriptionId),
 								'store_feed_id' => sanitize_text_field($feedId),
 								'is_on_gmc' => strpos($result[0]['channel_ids'], '1') !== false ? true : false,
+								'is_on_microsoft' => strpos($result[0]['channel_ids'], '4') !== false ? true : false,
 								'is_on_tiktok' => strpos($result[0]['channel_ids'], '3') !== false ? true : false,
 								'tiktok_catalog_id' => $result[0]['tiktok_catalog_id'],
 								'tiktok_business_id' => sanitize_text_field($this->TVC_Admin_Helper->get_tiktok_business_id()),
 								'is_on_facebook' => strpos($result[0]['channel_ids'], '2') !== false ? true : false,
 								'business_id' =>  strpos($result[0]['channel_ids'], '2') !== false ? $ee_options['facebook_setting']['fb_business_id'] : '',
 								'catalog_id' =>  strpos($result[0]['channel_ids'], '2') !== false ? $ee_options['facebook_setting']['fb_catalog_id'] : '',
+								'ms_catalog_id' =>  strpos($result[0]['channel_ids'], '4') !== false ? $ee_options['ms_catalog_id'] : '',
+								'ms_store_id' =>  strpos($result[0]['channel_ids'], '4') !== false ? $ee_options['microsoft_merchant_center_id'] : '',
 								'entries' => $p_map_attribute['items']
 							];
 
@@ -727,10 +730,10 @@ if (!class_exists('TVCProductSyncHelper')) {
 								if ($fixed_key == "shipping" && $formArray[$fixed_key] != "") {
 									$temp_product[$fixed_key]['price']['value'] = sanitize_text_field($formArray[$fixed_key]);
 									$temp_product[$fixed_key]['price']['currency'] = sanitize_text_field($tvc_currency);
-									$temp_product[$fixed_key]['country'] = sanitize_text_field($formArray['target_country']);
+									$temp_product[$fixed_key]['country'] = isset($formArray['target_country']) ? sanitize_text_field($formArray['target_country']) : '';
 								} else if ($fixed_key == "tax" && $formArray[$fixed_key] != "") {
 									$temp_product['taxes']['rate'] = sanitize_text_field($formArray[$fixed_key]);
-									$temp_product['taxes']['country'] = sanitize_text_field($formArray['target_country']);
+									$temp_product['taxes']['country'] = isset($formArray['target_country']) ? sanitize_text_field($formArray['target_country']) : '';
 								} else if ($formArray[$fixed_key] != "") {
 									$temp_product[$fixed_key] = sanitize_text_field($formArray[$fixed_key]);
 								}
@@ -1144,8 +1147,10 @@ if (!class_exists('TVCProductSyncHelper')) {
 								$allResult[]['ID'] = get_the_ID();
 								// array_push($allResult, get_the_ID());                    
 							}          
-						}						
+						}
+						
 					} else {
+						
 						$TVC_Admin_Helper->plugin_log("Only include product", 'product_sync'); // Add logs               
 						foreach ($include as $val) {
 							$allResult[]['ID'] = $val;
@@ -1155,6 +1160,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 					$TVC_Admin_Helper->plugin_log("Empty result for feed id = " . $feedId, 'product_sync'); // Add logs 
 				}
 				if (!empty($allResult)) {
+					$TVC_Admin_Helper->plugin_log("woow 103", 'product_sync');
 					$all_cat = [];
 					if($categories) {
 						foreach ($categories as $cat_key => $cat_val) {
@@ -1199,29 +1205,34 @@ if (!class_exists('TVCProductSyncHelper')) {
 					$TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
 					$TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db_batch_wise($p_map_attribute['valid_products'], $feedId);
 					if (!empty($p_map_attribute) && isset($p_map_attribute['items']) && !empty($p_map_attribute['items'])) {
+						$TVC_Admin_Helper->plugin_log("woow 108", 'product_sync');
 						$data = [
 							'merchant_id' => sanitize_text_field($accountId),
 							'account_id' => sanitize_text_field($merchantId),
 							'subscription_id' => sanitize_text_field($subscriptionId),
 							'store_feed_id' => sanitize_text_field($feedId),
 							'is_on_gmc' => strpos($result[0]['channel_ids'], '1') !== false ? true : false,
+							'is_on_microsoft' => strpos($result[0]['channel_ids'], '4') !== false ? true : false,
 							'is_on_tiktok' => strpos($result[0]['channel_ids'], '3') !== false ? true : false,
 							'tiktok_catalog_id' => $result[0]['tiktok_catalog_id'],
 							'tiktok_business_id' => sanitize_text_field($TVC_Admin_Helper->get_tiktok_business_id()),
 							'is_on_facebook' => strpos($result[0]['channel_ids'], '2') !== false ? true : false,
 							'business_id' =>  strpos($result[0]['channel_ids'], '2') !== false ? $ee_options['facebook_setting']['fb_business_id'] : '',
 							'catalog_id' =>  strpos($result[0]['channel_ids'], '2') !== false ? $ee_options['facebook_setting']['fb_catalog_id'] : '',
+							'ms_catalog_id' =>  strpos($result[0]['channel_ids'], '4') !== false ? $ee_options['ms_catalog_id'] : '',
+							'ms_store_id' =>  strpos($result[0]['channel_ids'], '4') !== false ? $ee_options['microsoft_merchant_center_id'] : '',
 							'entries' => $p_map_attribute['items']
 						];
 						/**************************** API Call to GMC ****************************************************************************/
 						$CustomApi = new CustomApi();
-						$response = $CustomApi->feed_wise_products_sync($data);
+						$response = $CustomApi->feed_wise_products_sync($data,'call_by-includes/setup/class-tvc-product-sync-helper.php 1224');
 						$endTime = new DateTime();
 						$startTime = new DateTime();
 						$diff = $endTime->diff($startTime);
 						$responseData['time_duration'] = $diff;
 						update_option("ee_prod_response", serialize($response));
 						if ($response->error == false) {
+							$TVC_Admin_Helper->plugin_log("woow 109 success", 'product_sync');
 							$feed_data = array(
 								"product_sync_alert" => NULL,
 								"total_product" => $totProduct,
@@ -1231,18 +1242,34 @@ if (!class_exists('TVCProductSyncHelper')) {
 								'status' => 1
 							);
 							$TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_data", $syn_data, array("feedId" => $feedId));
-							$sync_message = esc_html__("Initiated, products are being synced to Merchant Center.Do not refresh.", "enhanced-e-commerce-for-woocommerce-store");
+							$sync_message = esc_html__("By API Initiated, products are being synced to Merchant Center.Do not refresh.", "enhanced-e-commerce-for-woocommerce-store");
 							$sync_message = esc_html( $sync_message );
 							$sync_progressive_data = array("sync_message" => $sync_message);
 							return array('status' => 'success', "sync_progressive_data" => $sync_progressive_data);
 							exit;
 						} else {
-							return array('error' => true, 'message' => esc_attr('Error in Sync...'));
+
+							if ( is_string($response->message) ){
+								$message = $response->message;
+							}else {
+								$message = 'Error in Sync:' . json_encode($response->message);
+							}
+
+							if( strpos( $message, 'limit' ) !== false && strpos( $message, 'maximum' ) !== false ) {
+								//Your maximum limit to add product is over.
+								update_option( 'ee_conv_total_synced_product_count', 101 );
+							}
+
+							$TVC_Admin_Helper->plugin_log("Error in sync 1010:" . $message , 'product_sync');
+
+							return array('status' => 'error', "message" => $message);
 							exit;
 						}
 					}
 				}
+				$TVC_Admin_Helper->plugin_log("woow 104 success", 'product_sync');
 			} catch (Exception $e) {
+				
 				$feed_data = array(
 					"product_sync_alert" => $e->getMessage(),
 					"is_mapping_update" => false,
@@ -1323,12 +1350,15 @@ if (!class_exists('TVCProductSyncHelper')) {
 						'subscription_id' => sanitize_text_field($subscriptionId),
 						'store_feed_id' => sanitize_text_field($feedId),
 						'is_on_gmc' => strpos($result[0]['channel_ids'], '1') !== false ? true : false,
+						'is_on_microsoft' => strpos($result[0]['channel_ids'], '4') !== false ? true : false,
 						'is_on_tiktok' => strpos($result[0]['channel_ids'], '3') !== false ? true : false,
 						'tiktok_catalog_id' => $result[0]['tiktok_catalog_id'],
 						'tiktok_business_id' => sanitize_text_field($TVC_Admin_Helper->get_tiktok_business_id()),
 						'is_on_facebook' => strpos($result[0]['channel_ids'], '2') !== false ? true : false,
 						'business_id' =>  strpos($result[0]['channel_ids'], '2') !== false ? $ee_options['facebook_setting']['fb_business_id'] : '',
 						'catalog_id' =>  strpos($result[0]['channel_ids'], '2') !== false ? $ee_options['facebook_setting']['fb_catalog_id'] : '',
+						'ms_catalog_id' =>  strpos($result[0]['channel_ids'], '4') !== false ? $ee_options['ms_catalog_id'] : '',
+						'ms_store_id' =>  strpos($result[0]['channel_ids'], '4') !== false ? $ee_options['microsoft_merchant_center_id'] : '',
 						'entries' => $p_map_attribute['items']
 					];
 
@@ -1350,7 +1380,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 							'status' => 1
 						);
 						$TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_data", $syn_data, array("feedId" => $feedId));
-						$sync_message = esc_html__("Initiated, products are being synced to Merchant Center. Do not refresh.", "enhanced-e-commerce-for-woocommerce-store");
+						$sync_message = esc_html__("Via API Initiated, products are being synced to Merchant Center. Do not refresh.", "enhanced-e-commerce-for-woocommerce-store");
 						$sync_message = esc_html( $sync_message );
 						$sync_progressive_data = array("sync_message" => $sync_message);
 						$TVC_Admin_Helper->plugin_log(count($p_map_attribute['items']).' Product Synced', 'product_sync');

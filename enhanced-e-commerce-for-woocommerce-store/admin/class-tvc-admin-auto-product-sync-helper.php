@@ -132,10 +132,15 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
         if ($resultfb == '') {
           $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `fb_status` varchar(200) NULL  AFTER `tiktok_status`", $tablename));
         }
+        $queryms = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%'.$wpdb->esc_like('ms_status').'%');
+        $resultms = $wpdb->get_var($queryms);
+        if ($resultms == '') {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `ms_status` varchar(200) NULL  AFTER `fb_status`", $tablename));
+        }
       } else {
         $sql_create = "CREATE TABLE `$tablename` (  `id` int(11) NOT NULL AUTO_INCREMENT,
                                                       `feed_name` varchar(200) NOT NULL,
-                                                      `channel_ids` varchar(200) NOT NULL COMMENT '1 GMC, 2 FB',
+                                                      `channel_ids` varchar(200) NOT NULL COMMENT '1 GMC, 2 FB, 3 TK, 4 MMC',
                                                       `auto_sync_interval` varchar(200) NOT NULL,
                                                       `auto_schedule` int(11) NOT NULL COMMENT '0 Inactive, 1 Active',
                                                       `categories` LONGTEXT DEFAULT NULL,
@@ -148,6 +153,7 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
                                                       `last_sync_date` datetime DEFAULT NULL,
                                                       `next_schedule_date` datetime NULL,
                                                       `total_product` int(11) Null,
+                                                      `total_synced_product_count` int(11) Null,
                                                       `status` varchar(200) NOT NULL,
                                                       `is_mapping_update` int(11) Null,
                                                       `is_process_start` int(11) Null,
@@ -162,6 +168,7 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
                                                       `tiktok_catalog_id` varchar(100) DEFAULT NULL,
                                                       `tiktok_status` varchar(200) DEFAULT NULL,
                                                       `fb_status` varchar(200) DEFAULT NULL,
+                                                      `ms_status` varchar(200) DEFAULT NULL,
                                                       PRIMARY KEY (`id`) );";
         if (maybe_create_table($tablename, $sql_create)) {
         }
@@ -190,7 +197,7 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
           'last_sync_date' => esc_sql(isset($last_sync['last_sync']) === TRUE ? $last_sync['last_sync'] : NULL),
           'next_schedule_date' => esc_sql(isset($last_sync['next_sync']) === TRUE ? $last_sync['next_sync'] : NULL),
           'total_product' => esc_sql($result->count),
-          'status' => esc_sql('Synced'),
+          'status' => esc_sql('Draft'), // woow - its was before Synced default.
           'is_mapping_update' => esc_sql($conv_additional_data['is_mapping_update']),
           'is_default' => esc_sql('1'),
         );

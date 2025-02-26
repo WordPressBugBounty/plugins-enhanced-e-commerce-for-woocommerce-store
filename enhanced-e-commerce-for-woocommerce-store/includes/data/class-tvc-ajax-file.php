@@ -80,8 +80,11 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('wp_ajax_conv_create_ec_row', array($this, 'conv_create_ec_row'));
       add_action('wp_ajax_conv_create_ec_row_update', array($this, 'conv_create_ec_row_update'));
       add_action('wp_ajax_ee_createPmaxCampaign', [$this, 'ee_createPmaxCampaign']);
+      add_action('wp_ajax_ee_createPmaxCampaign_ms', [$this, 'ee_createPmaxCampaign_ms']);
       add_action('wp_ajax_ee_editPmaxCampaign', [$this, 'ee_editPmaxCampaign']);
+      add_action('wp_ajax_ee_editPmaxCampaign_ms', [$this, 'ee_editPmaxCampaign_ms']);
       add_action('wp_ajax_ee_update_PmaxCampaign', [$this, 'ee_update_PmaxCampaign']);
+      add_action('wp_ajax_ee_update_PmaxCampaign_ms', [$this, 'ee_update_PmaxCampaign_ms']);
 
       add_action('wp_ajax_conv_get_conversion_list_gads_bycat', [$this, 'conv_get_conversion_list_gads_bycat']);
       add_action('wp_ajax_conv_create_gads_conversion', [$this, 'conv_create_gads_conversion']);
@@ -354,15 +357,13 @@ if (!class_exists('TVC_Ajax_File')) :
         }
         if (isset($_POST['conv_options_data']['non_woo_tracking']) || isset($_POST['conv_options_data']['conv_track_page_scroll']) || isset($_POST['conv_options_data']['conv_track_file_download']) || isset($_POST['conv_options_data']['conv_track_author']) || isset($_POST['conv_options_data']['conv_track_signup']) || isset($_POST['conv_options_data']['conv_track_signin'])) {
           $data = array();
-          $ee_api_data_all = maybe_unserialize(get_option("ee_api_data"));
-          if (!isset($ee_api_data_all['setting'])) {
-            $ee_api_data_all['setting'] = new stdClass(); // Avoids undefined property error
-          }
-          $data['conv_track_page_scroll'] = $ee_api_data_all['setting']->conv_track_page_scroll;
-          $data['conv_track_file_download'] = $ee_api_data_all['setting']->conv_track_file_download;
-          $data['conv_track_author'] = $ee_api_data_all['setting']->conv_track_author;
-          $data['conv_track_signin'] = $ee_api_data_all['setting']->conv_track_signin;
-          $data['conv_track_signup'] = $ee_api_data_all['setting']->conv_track_signup;
+          $TVC_Admin_Helper = new TVC_Admin_Helper();
+          $google_detail = $TVC_Admin_Helper->get_ee_options_settings();
+          $data['conv_track_page_scroll'] = $google_detail['conv_track_page_scroll'];
+          $data['conv_track_file_download'] = $google_detail['conv_track_file_download'];
+          $data['conv_track_author'] = $google_detail['conv_track_author'];
+          $data['conv_track_signin'] = $google_detail['conv_track_signin'];
+          $data['conv_track_signup'] = $google_detail['conv_track_signup'];
           $api_obj = new Conversios_Onboarding_ApiCall();
           $api_obj->additional_dimensions($data);
         }
@@ -384,6 +385,26 @@ if (!class_exists('TVC_Ajax_File')) :
         if (isset($_POST['conv_options_type']) && in_array("facebookcatalog", $_POST['conv_options_type'])) {
           $this->conv_save_facebookcatalog($_POST);
         }
+        if (isset($_POST['conv_options_data']) && 
+          ( 
+            array_key_exists("microsoft_ads_manager_id", $_POST['conv_options_data']) 
+            || array_key_exists("microsoft_ads_subaccount_id", $_POST['conv_options_data']) 
+            || array_key_exists("microsoft_ads_pixel_id", $_POST['conv_options_data']) 
+            || array_key_exists("microsoft_merchant_center_id", $_POST['conv_options_data']) 
+            || array_key_exists("ms_catalog_id", $_POST['conv_options_data']) 
+          ) 
+          &&
+          ( 
+            !empty($_POST['conv_options_data']['microsoft_ads_manager_id']) 
+            || !empty($_POST['conv_options_data']['microsoft_ads_subaccount_id']) 
+            || !empty($_POST['conv_options_data']['microsoft_ads_pixel_id']) 
+            || !empty($_POST['conv_options_data']['microsoft_merchant_center_id']) 
+            || !empty($_POST['conv_options_data']['ms_catalog_id']) 
+          ) 
+        ) {
+          $this->conv_save_microsoft($_POST['conv_options_data']);
+        }
+        
 
         if (isset($_POST['conv_options_type']) && in_array("eeconvnotice", $_POST['conv_options_type'])) {
           $this->conv_save_eeconvnotice($post);
@@ -1432,6 +1453,8 @@ if (!class_exists('TVC_Ajax_File')) :
           "catalog_id" => isset($_POST['catalog_id']) ? sanitize_text_field(wp_unslash($_POST['catalog_id'])) : '',
           "tiktok_business_id" => isset($_POST['tiktok_business_id']) ? sanitize_text_field(wp_unslash($_POST['tiktok_business_id'])) : '',
           "tiktok_catalog_id" => isset($_POST['tiktok_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['tiktok_catalog_id'])) : '',
+          "ms_store_id" => isset($_POST['ms_store_id']) ? sanitize_text_field(wp_unslash($_POST['ms_store_id'])) : '',
+          "ms_catalog_id" => isset($_POST['ms_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['ms_catalog_id'])) : '',
         );
         if (!isset($_POST['product_list']) || (isset($_POST['product_list']) && sanitize_text_field(wp_unslash($_POST['product_list']))) == '') {
           echo wp_json_encode('Product does not exists');
@@ -1471,6 +1494,9 @@ if (!class_exists('TVC_Ajax_File')) :
         }
         if (isset($_POST['fb_catalog_id']) && $_POST['fb_catalog_id'] == 2) {
           $channel_id['fb_catalog_id'] = sanitize_text_field(wp_unslash($_POST['fb_catalog_id']));
+        }
+        if (isset($_POST['microsoft_merchant_center']) && $_POST['microsoft_merchant_center'] == 4) {
+          $channel_id['microsoft_merchant_center'] = sanitize_text_field(wp_unslash($_POST['microsoft_merchant_center']));
         }
 
         $channel_ids = implode(',', $channel_id);
@@ -1556,15 +1582,16 @@ if (!class_exists('TVC_Ajax_File')) :
 
           if (isset($_POST['is_mapping_update']) && $_POST['is_mapping_update'] != 1) {
             $profile_data['status'] = strpos($channel_ids, '1') !== false ? esc_sql('Draft') : '';
-            $profile_data['tiktok_status'] = strpos($channel_ids, '3') !== false ? esc_sql('Draft') : '';
             $profile_data['fb_status'] = strpos($channel_ids, '2') !== false ? esc_sql('Draft') : '';
+            $profile_data['tiktok_status'] = strpos($channel_ids, '3') !== false ? esc_sql('Draft') : '';
+            $profile_data['ms_status'] = strpos($channel_ids, '4') !== false ? esc_sql('Draft') : '';
           }
           $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => sanitize_text_field(wp_unslash($_POST['edit']))));
           $result = array(
             'id' => sanitize_text_field(wp_unslash($_POST['edit'])),
           );
           echo wp_json_encode($result);
-        } else {
+        } else { 
           $profile_data = array(
             'feed_name' => isset($_POST['feedName']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['feedName']))) : '',
             'channel_ids' => isset($channel_ids) ? esc_sql(sanitize_text_field($channel_ids)) : '',
@@ -1574,10 +1601,11 @@ if (!class_exists('TVC_Ajax_File')) :
             'status' => isset($channel_ids) && strpos(sanitize_text_field($channel_ids), '1') !== false ? esc_sql('Draft') : '',
             'target_country' => isset($_POST['target_country']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['target_country']))) : '',
             'tiktok_catalog_id' => isset($tiktok_catalog_id) ? esc_sql(sanitize_text_field($tiktok_catalog_id)) : '',
-            'tiktok_status' => isset($channel_ids) && strpos(sanitize_text_field($channel_ids), '3') !== false ? esc_sql('Draft') : '',
             'fb_status' => isset($channel_ids) && strpos($channel_ids, '2') !== false ? esc_sql('Draft') : '',
+            'tiktok_status' => isset($channel_ids) && strpos(sanitize_text_field($channel_ids), '3') !== false ? esc_sql('Draft') : '',
+            'ms_status' => isset($channel_ids) && strpos($channel_ids, '4') !== false ? esc_sql('Draft') : '',
           );
-          $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s"));
+          $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s"));
           $result = $TVC_Admin_DB_Helper->tvc_get_last_row("ee_product_feed", array("id"));
           echo wp_json_encode($result);
         }
@@ -1696,9 +1724,9 @@ if (!class_exists('TVC_Ajax_File')) :
           echo wp_json_encode(array("error" => true, "message" => esc_html__("Id is missing.", "enhanced-e-commerce-for-woocommerce-store")));
           exit;
         }
-        $filed = array('exclude_product', 'status', 'include_product', 'tiktok_status', 'fb_status', 'is_mapping_update');
+        $filed = array('exclude_product', 'status', 'include_product', 'tiktok_status', 'fb_status', 'ms_status', 'is_mapping_update');
         $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
-        // if ($result[0]['status'] === 'Synced' || $result[0]['tiktok_status'] === 'Synced' || $result[0]['fb_status'] === 'Synced' ) {
+        // if ($result[0]['status'] === 'Synced' || $result[0]['tiktok_status'] === 'Synced' || $result[0]['fb_status'] === 'Synced' || $result[0]['ms_status'] === 'Synced' ) {
         if (isset($_POST['id'])) {
           as_unschedule_all_actions('init_feed_wise_product_sync_process_scheduler_ee', array("feedId" => sanitize_text_field(wp_unslash($_POST['id']))));
         }
@@ -1718,7 +1746,7 @@ if (!class_exists('TVC_Ajax_File')) :
         $response = $CustomApi->delete_from_channels($data);
         $TVC_Admin_Helper->plugin_log("Delete Feed from GMC" . wp_json_encode($response), 'product_sync');
         // }
-        $soft_delete_id = array('status' => 'Deleted', 'tiktok_status' => 'Deleted', 'fb_status' => 'Deleted', 'is_delete' => esc_sql(1), 'auto_schedule' => 0);
+        $soft_delete_id = array('status' => 'Deleted', 'tiktok_status' => 'Deleted', 'fb_status' => 'Deleted', 'ms_status' => 'Deleted', 'is_delete' => esc_sql(1), 'auto_schedule' => 0);
         if (isset($_POST['id'])) {
           $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $soft_delete_id, array("id" => sanitize_text_field(wp_unslash($_POST['id']))));
         }
@@ -2264,6 +2292,7 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     function ee_feed_wise_product_sync_batch_wise()
     {
+      $w_cat_id = $g_cat_id = '';
       if (isset($_POST['conv_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'conv_nonce', FILTER_UNSAFE_RAW), 'conv_ajax_product_sync_bantch_wise-nonce')) {
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $TVC_Admin_Helper->plugin_log("Start", 'product_sync');
@@ -2378,12 +2407,15 @@ if (!class_exists('TVC_Ajax_File')) :
           }
           $TVCProductSyncHelper = new TVCProductSyncHelper();
 
+          $TVC_Admin_Helper->plugin_log("wooww 2411 Update Product Feed Table", 'product_sync');
           //Update Product Feed Table          
           $key = "id";
           $val = isset($_POST['feedId']) ? sanitize_text_field(wp_unslash($_POST['feedId'])) : '';
           if ($TVC_Admin_DB_Helper->tvc_check_row("ee_product_feed", $key, $val)) {
             /***Single product sync for already synced product feed ******/
             if (isset($_POST['inculdeExtraProduct']) && $_POST['inculdeExtraProduct'] != '') {
+
+              $TVC_Admin_Helper->plugin_log("woow 2419 Single product sync for already synced product feed", 'product_sync');
               $feed_datas = array(
                 "attributes" => wp_json_encode($mappedAttrs),
               );
@@ -2428,16 +2460,21 @@ if (!class_exists('TVC_Ajax_File')) :
                   'subscription_id' => sanitize_text_field($subscriptionId),
                   'store_feed_id' => isset($_POST['feedId']) ? sanitize_text_field(wp_unslash($_POST['feedId'])) : '',
                   'is_on_gmc' => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '1') !== false ? true : false,
+                  'is_on_microsoft' => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '4') !== false ? true : false,
                   'is_on_tiktok' => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '3') !== false ? true : false,
                   'tiktok_catalog_id' => isset($_POST['tiktok_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['tiktok_catalog_id'])) : '',
                   'tiktok_business_id' => sanitize_text_field($tiktok_business_id),
                   'is_on_facebook' => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '2') !== false ? true : false,
                   'business_id' =>  isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '2') !== false ? sanitize_text_field($ee_options['facebook_setting']['fb_business_id']) : '',
                   'catalog_id' =>  isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '2') !== false ? sanitize_text_field($ee_options['facebook_setting']['fb_catalog_id']) : '',
+                  'ms_catalog_id' =>  strpos($_POST['channel_ids'], '4') !== false ? $ee_options['ms_catalog_id'] : '',
+								  'ms_store_id' =>  strpos($_POST['channel_ids'], '4') !== false ? $ee_options['microsoft_merchant_center_id'] : '',
                   'entries' => $p_map_attribute['items']
                 ];
                 /**************************** API Call to GMC ****************************************************************************/
-                $response = $CustomApi->feed_wise_products_sync($data);
+                
+                $response = $CustomApi->feed_wise_products_sync($data, 'call_by_includes/data/class-tvc-ajax-file.php 2447');
+                $TVC_Admin_Helper->plugin_log("woow 2477 callback-feed_wise_products_sync()", 'product_sync');
 
                 $endTime = new DateTime();
                 $startTime = new DateTime();
@@ -2445,6 +2482,7 @@ if (!class_exists('TVC_Ajax_File')) :
                 $responseData['time_duration'] = $diff;
                 update_option("ee_prod_response", serialize($responseData));
 
+                //echo '<pre>'; print_r($response); echo '</pre>';
                 if ($response->error == false) {
                   if (isset($_POST['feedId'])) {
                     $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['feedId'])));
@@ -2471,16 +2509,22 @@ if (!class_exists('TVC_Ajax_File')) :
                   if (isset($_POST['feedId'])) {
                     $TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_data", $syn_data, array("feedId" => sanitize_text_field(wp_unslash($_POST['feedId']))));
                   }
-                  $sync_message = esc_html__("Initiated, products are being synced to Merchant Center.Do not refresh..", "enhanced-e-commerce-for-woocommerce-store");
+                  $sync_message = esc_html__("By ajax Initiated, products are being synced to Merchant Center. Do not refresh..", "enhanced-e-commerce-for-woocommerce-store");
                   $sync_message = sprintf(esc_html('%s'), esc_html($sync_message));
                   $sync_progressive_data = array("sync_message" => $sync_message);
                   echo wp_json_encode(array('status' => 'success', "sync_progressive_data" => $sync_progressive_data));
                   exit;
                 } else {
+                  $TVC_Admin_Helper->plugin_log("woow 2518 Error in Sync", 'product_sync');
                   return wp_json_encode(array('error' => true, 'message' => esc_attr('Error in Sync...')));
                 }
+              }else{
+                $TVC_Admin_Helper->plugin_log("woow 2522 Error in Sync", 'product_sync');
+                return wp_json_encode(array('error' => true, 'message' => esc_attr('Error in Sync woow-2523...')));
               }
             } else {
+
+              $TVC_Admin_Helper->plugin_log("woow 2527 Update feed data in DB start", 'product_sync');
               /*******Update feed data in DB start**********************/
               $feed_data = array(
                 "categories" => wp_json_encode($feed_MappedCat),
@@ -2496,11 +2540,17 @@ if (!class_exists('TVC_Ajax_File')) :
                 "product_sync_alert" => sanitize_text_field("Product sync settings updated successfully"),
                 "status" => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '1') !== false ? esc_sql('In Progress') : null,
                 "is_default" => esc_sql(0),
-                "tiktok_status" => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '3') !== false ? esc_sql('In Progress') : null,
                 "fb_status" => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '2') !== false ? esc_sql('In Progress') : null,
+                "tiktok_status" => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '3') !== false ? esc_sql('In Progress') : null,
+                "ms_status" => isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '4') !== false ? esc_sql('In Progress') : null,
               );
               $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $feed_data, array("id" => sanitize_text_field(wp_unslash($_POST['feedId']))));
               /*******Update feed data in DB end**********************/
+
+              // if $feed_MappedCat['condition'] is not set then set 'new' as default
+              if (!isset($feed_MappedCat['condition'])) {
+                $feed_MappedCat['condition'] = 'new';
+              }
 
               /*******Update feed data in laravel start**********************/
               $feed_data_api = array(
@@ -2515,7 +2565,11 @@ if (!class_exists('TVC_Ajax_File')) :
                 "interval" => isset($_POST['autoSyncInterval']) ? sanitize_text_field(wp_unslash($_POST['autoSyncInterval'])) : '',
                 "tiktok_catalog_id" => isset($_POST['tiktok_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['tiktok_catalog_id'])) : '',
               );
+
+              
+
               $TVC_Admin_Helper->plugin_log("mapping saved and product sync process scheduled", 'product_sync'); // Add logs
+              $TVC_Admin_Helper->plugin_log("sending data to api".wp_json_encode($feed_data_api), 'feed_data_api');
               $CustomApi = new CustomApi();
               $CustomApi->ee_create_product_feed($feed_data_api);
               /*******Update feed data in laravel End *********************/
@@ -2561,8 +2615,10 @@ if (!class_exists('TVC_Ajax_File')) :
                   "is_auto_sync_start" => false,
                   "is_mapping_update" => false,
                 );
-                $TVC_Admin_Helper->plugin_log("error", 'product_sync'); // Add logs
+                $TVC_Admin_Helper->plugin_log("error-1", 'product_sync'); // Add logs
                 $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $feed_data, array("id" => sanitize_text_field(wp_unslash($_POST['feedId']))));
+                echo wp_json_encode(array("error" => true, "message" =>  $isSyncComplete['message'] ));
+                exit;
               }
 
               /********Manual Product sync End ******************/
@@ -2571,12 +2627,13 @@ if (!class_exists('TVC_Ajax_File')) :
             echo wp_json_encode(array("error" => true, "message" => esc_html__("Feed data is missing.", "enhanced-e-commerce-for-woocommerce-store")));
             exit;
           }
-          $sync_message = esc_html__("Initiated, products are being synced to Merchant Center.Do not refresh..", "enhanced-e-commerce-for-woocommerce-store");
+          $sync_message = esc_html__("Via Ajax Initiated, products are being synced to Merchant Center, Do not refresh..", "enhanced-e-commerce-for-woocommerce-store");
           $sync_message = sprintf(esc_html('%s'), esc_html($sync_message));
           $sync_progressive_data = array("sync_message" => $sync_message);
           echo wp_json_encode(array('status' => 'success', "sync_progressive_data" => $sync_progressive_data));
           exit;
         } catch (Exception $e) {
+          $TVC_Admin_Helper->plugin_log("woow 2627 catch method", 'product_sync');
           $conv_additional_data['product_sync_alert'] = $e->getMessage();
           $TVC_Admin_Helper->set_ee_additional_data($conv_additional_data);
           $TVC_Admin_Helper->plugin_log($e->getMessage(), 'product_sync');
@@ -2627,8 +2684,9 @@ if (!class_exists('TVC_Ajax_File')) :
             "is_auto_sync_start" => false,
             "is_mapping_update" => false,
             "status" => strpos($result[0]['channel_ids'], '1') !== false ? esc_sql('Draft') : null,
-            "tiktok_status" => strpos($result[0]['channel_ids'], '3') !== false ? esc_sql('Draft') : null,
             "fb_status" => strpos($result[0]['channel_ids'], '2') !== false ? esc_sql('Draft') : null,
+            "tiktok_status" => strpos($result[0]['channel_ids'], '3') !== false ? esc_sql('Draft') : null,
+            "ms_status" => strpos($result[0]['channel_ids'], '4') !== false ? esc_sql('Draft') : null,
           );
           $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $feed_data, array("id" => $feedId));
           $TVC_Admin_Helper->plugin_log('GMC Id missing', 'product_sync');
@@ -3136,7 +3194,7 @@ if (!class_exists('TVC_Ajax_File')) :
         $TVC_Admin_Helper->plugin_log('Call laravel API', 'product_sync');
         $isSyncComplete = $TVCProductSyncHelper->superFeedProductSync($result['id']);
         $totalProduct = 0;
-        if ($isSyncComplete['status'] == 'success') {
+        if (isset($isSyncComplete['status']) && $isSyncComplete['status'] == 'success') {
           $last_sync_date = gmdate('Y-m-d H:i:s', current_time('timestamp'));
           $next_schedule_date = NULL;
 
@@ -3162,7 +3220,7 @@ if (!class_exists('TVC_Ajax_File')) :
             "is_auto_sync_start" => false,
             "is_mapping_update" => false,
           );
-          $TVC_Admin_Helper->plugin_log("error", 'product_sync'); // Add logs
+          $TVC_Admin_Helper->plugin_log("error-2", 'product_sync'); // Add logs
           $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $feed_data, array("id" => $result['id']));
           echo wp_json_encode(array('status' => 'error', 'message' => 'Error in Product Sync'));
         }
@@ -3464,6 +3522,107 @@ if (!class_exists('TVC_Ajax_File')) :
       }
       exit;
     }
+
+    public function ee_createPmaxCampaign_ms()
+    {
+      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+        if (isset($_POST['subscription_id']) && sanitize_text_field(wp_unslash($_POST['subscription_id'])) == '') {
+          echo wp_json_encode(array("error" => true, "message" => esc_html__("Subscription Id is missing. Contact plugin Admin", "enhanced-e-commerce-for-woocommerce-store")));
+          exit;
+        }
+        /*if (!isset($_POST['ms_catalog_id']) || $_POST['ms_catalog_id'] == '') {
+          echo wp_json_encode(array("error" => true, "message" => esc_html__("Google Merchant Id is missing. Please map Google Merchant Id.", "enhanced-e-commerce-for-woocommerce-store")));
+          exit;
+        }*/
+        if (!isset($_POST['microsoft_ads_id']) || $_POST['microsoft_ads_id'] == '') {
+          echo wp_json_encode(array("error" => true, "message" => esc_html__("Microsoft Ads Id is missing!", "enhanced-e-commerce-for-woocommerce-store")));
+          exit;
+        }
+        if (isset($_POST['productSource']) === TRUE && $_POST['productSource'] == 'All Product') { 
+
+          $customObj = new CustomApi();
+          $post = array(
+            "name" => isset($_POST['campaign_name']) ? sanitize_text_field(wp_unslash($_POST['campaign_name'])) : '',
+            "daily_budget" => isset($_POST['budget']) ? sanitize_text_field(wp_unslash($_POST['budget'])) : '',
+            "budget_type" => "DailyBudgetStandard",
+            "campaign_type" => "PerformanceMax",
+            "languages" => ['English'],
+            "time_zone" => "",
+            //"target_country" => isset($_POST['target_country']) ? sanitize_text_field(wp_unslash($_POST['target_country'])) : '',
+            //"start_date" => isset($_POST['start_date']) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : '',
+            //"end_date" => isset($_POST['end_date']) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : '',
+            //"target_roas" => isset($_POST['target_roas']) ? sanitize_text_field(sanitize_text_field(wp_unslash($_POST['target_roas']))) : '',
+            "status" => isset($_POST['status']) ? sanitize_text_field(wp_unslash($_POST['status'])) : '',
+            "customer_subscription_id" => isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : '',
+            //"ms_catalog_id" => isset($_POST['ms_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['ms_catalog_id'])) : '',
+            "customer_id" => isset($_POST['microsoft_ads_id']) ? sanitize_text_field(wp_unslash($_POST['microsoft_ads_id'])) : '',
+            "account_id" => isset($_POST['microsoft_ads_sub_id']) ? sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])) : '',
+            //"sync_item_ids" => isset($_POST['sync_item_ids']) ? sanitize_text_field(wp_unslash($_POST['sync_item_ids'])) : '',
+            //"sync_type" => isset($_POST['sync_type']) ? sanitize_text_field(wp_unslash($_POST['sync_type'])) : '',
+          );
+          //$post['customer_id'] = 252077508; // 
+          //$post['account_id'] = 180741369; // 
+          $result = $customObj->createPmaxCampaign_ms($post);
+
+          if (isset($result->data) && $result->data !== '') {
+            if (isset($result->data) && $result->data != "") {
+              echo wp_json_encode(array('error' => false, 'data' => $result->data));
+            } else {
+              echo wp_json_encode(array('error' => true, 'message' => wp_json_encode($result)));
+            }
+          } else {
+            if (isset($result->error_data) && $result->error_data != "") {
+              echo wp_json_encode(array('error' => true, 'message' => wp_json_encode($result->error_data)));
+            } else {
+              echo wp_json_encode(array('error' => true, 'message' => wp_json_encode($result)));
+            }
+          }
+        } else { 
+          $customObj = new CustomApi();
+          $post = array(
+            "campaign_name" => isset($_POST['campaign_name']) ? sanitize_text_field(wp_unslash($_POST['campaign_name'])) : '',
+            "budget" => isset($_POST['budget']) ? sanitize_text_field(wp_unslash($_POST['budget'])) : '',
+            //"target_country" => isset($_POST['target_country']) ? sanitize_text_field(wp_unslash($_POST['target_country'])) : '',
+            //"start_date" => isset($_POST['start_date']) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : '',
+            //"end_date" => isset($_POST['end_date']) ? sanitize_text_field(wp_unslash($_POST['end_date'])) : '',
+            //"target_roas" => isset($_POST['target_roas']) ? sanitize_text_field(sanitize_text_field(wp_unslash($_POST['target_roas']))) : '',
+            "status" => isset($_POST['status']) ? sanitize_text_field(wp_unslash($_POST['status'])) : '',
+            "customer_subscription_id" => isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : '',
+            //"ms_catalog_id" => isset($_POST['ms_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['ms_catalog_id'])) : '',
+            "microsoft_ads_id" => isset($_POST['microsoft_ads_id']) ? sanitize_text_field(wp_unslash($_POST['microsoft_ads_id'])) : '',
+            "microsoft_ads_sub_id" => isset($_POST['microsoft_ads_sub_id']) ? sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])) : '',
+            "sync_item_ids" => isset($_POST['sync_item_ids']) ? sanitize_text_field(wp_unslash($_POST['sync_item_ids'])) : '',
+            //"sync_type" => isset($_POST['sync_type']) ? sanitize_text_field(wp_unslash($_POST['sync_type'])) : '',
+          );
+          $result = $customObj->createPmaxCampaign_ms($post);
+          if (isset($result->data) && $result->data !== '') {
+            
+            /*$values = array();
+            $place_holders = array();
+            global $wpdb;
+            $ee_pmax_campaign = esc_sql($wpdb->prefix . "ee_pmax_campaign");
+            $place_holders[] = "('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+            array_push($values, isset($_POST['campaign_name']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['campaign_name']))) : '', isset($_POST['budget']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['budget']))) : '', isset($_POST['target_country']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['target_country']))) : '', isset($_POST['target_roas']) ? esc_sql(sanitize_text_field(sanitize_text_field(wp_unslash($_POST['target_roas'])))) : '', isset($_POST['start_date']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['start_date']))) : '', isset($_POST['end_date']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['end_date']))) : '', isset($_POST['status']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['status']))) : '', isset($_POST['sync_item_ids']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['sync_item_ids']))) : '', isset($result->data->request_id) ? esc_sql(sanitize_text_field($result->data->request_id)) : '', gmdate('Y-m-d H:i:s', current_time('timestamp')));
+            //Insert Campaign data into db
+            $query = "INSERT INTO `$ee_pmax_campaign` (campaign_name, daily_budget, target_country_campaign, target_roas, start_date, end_date, status, feed_id, request_id, created_date) VALUES ";
+            $query .= implode(', ', $place_holders);
+            $wpdb->query($wpdb->prepare($query, $values));*/
+
+            if (isset($result->data) && $result->data != "") {
+              echo wp_json_encode(array('error' => false, 'data' => $result->data));
+            } else {
+              echo wp_json_encode(array('error' => true, 'message' => wp_json_encode($result)));
+            }
+          } else {
+            echo wp_json_encode(array('error' => true, 'message' => wp_json_encode($result)));
+          }
+
+        }
+      } else {
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+      }
+      exit;
+    }
     public function get_pf_accordian_data()
     {
       if (isset($_POST['conv_licence_nonce']) && is_admin() && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['conv_licence_nonce'])), 'conv_lic_nonce')) {
@@ -3489,6 +3648,22 @@ if (!class_exists('TVC_Ajax_File')) :
             case 'all_product':
               $total_products = (new WP_Query(['post_type' => 'product', 'post_status' => 'publish']))->found_posts;
               echo wp_json_encode($total_products);
+              break;
+            case 'total_synced_product_count':
+              $total_products = get_option( 'ee_conv_total_synced_product_count' );
+              if (empty($total_products)) {
+                global $wpdb;
+                $table = 'ee_product_feed';
+                $tablename = esc_sql($wpdb->prefix . $table);
+                $sql = "select SUM(total_synced_product_count) AS total_synced_products from `$tablename` WHERE status = 'Synced'";
+                $results =  $wpdb->get_results($sql);
+                if (isset($results[0])) {
+                    $total_products = $results[0]->total_synced_products;
+                } else {
+                    $total_products = 0; // if no data found then say limit is over
+                }
+              }
+              echo json_encode($total_products);
               break;
             case "getAllChannel":
               $arrData = array();
@@ -4047,13 +4222,16 @@ if (!class_exists('TVC_Ajax_File')) :
         if (isset($_POST['google_merchant_center']) && $_POST['google_merchant_center'] == 1) {
           $channel_id['google_merchant_center'] = sanitize_text_field(wp_unslash($_POST['google_merchant_center']));
         }
-        if (isset($_POST['tiktok_id']) && $_POST['tiktok_id'] == 3) {
-          $channel_id['tiktok_id'] = sanitize_text_field(wp_unslash($_POST['tiktok_id']));
-        }
-
         if (isset($_POST['fb_catalog_id']) && $_POST['fb_catalog_id'] == 2) {
           $channel_id['fb_catalog_id'] = sanitize_text_field(wp_unslash($_POST['fb_catalog_id']));
         }
+        if (isset($_POST['tiktok_id']) && $_POST['tiktok_id'] == 3) {
+          $channel_id['tiktok_id'] = sanitize_text_field(wp_unslash($_POST['tiktok_id']));
+        }
+        if (isset($_POST['microsoft_merchant_center']) && $_POST['microsoft_merchant_center'] == 4) {
+          $channel_id['microsoft_merchant_center'] = sanitize_text_field(wp_unslash($_POST['microsoft_merchant_center']));
+        }
+
         $channel_ids = implode(',', $channel_id);
 
         $tiktok_catalog_id = '';
@@ -4156,15 +4334,16 @@ if (!class_exists('TVC_Ajax_File')) :
           'categories' => $categories !== false ? wp_json_encode($categories) : null,
           'attributes' => $mappedAttrs !== false ? wp_json_encode($mappedAttrs) : $mappedAttrs,
           'filters' => wp_json_encode($filters),
+          'fb_status' => strpos($channel_ids, '2') !== false ? esc_sql('Draft') : '',
           'tiktok_catalog_id' => esc_sql($tiktok_catalog_id),
           'tiktok_status' => strpos($channel_ids, '3') !== false ? esc_sql('Draft') : '',
           'is_mapping_update' => isset($_POST['product_selection']) && ($_POST['product_selection'] == 'all_product' || $_POST['product_selection'] == 'filter_product') ? true : false,
           'is_process_start' => false,
           'is_auto_sync_start' => false,
           'product_sync_batch_size' => esc_sql(100),
-          'fb_status' => strpos($channel_ids, '2') !== false ? esc_sql('Draft') : '',
+          'ms_status' => strpos($channel_ids, '4') !== false ? esc_sql('Draft') : '',
         );
-        $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%d", "%s", "%s"));
+        $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%d", "%s", "%s", "%s"));
         $result = $TVC_Admin_DB_Helper->tvc_get_last_row("ee_product_feed", array("id"));
         $profile_data = array("profile_title" => esc_sql("Default"), "g_attribute_mapping" => wp_json_encode($mappedAttrs), "update_date" => gmdate('Y-m-d'));
         if ($TVC_Admin_DB_Helper->tvc_row_count("ee_product_sync_profile") == 0) {
@@ -4224,7 +4403,7 @@ if (!class_exists('TVC_Ajax_File')) :
                   "is_auto_sync_start" => false,
                   "is_mapping_update" => false,
                 );
-                $TVC_Admin_Helper->plugin_log("error", 'product_sync'); // Add logs
+                $TVC_Admin_Helper->plugin_log("error-3", 'product_sync'); // Add logs
                 $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $feed_data, array("id" => $result['id']));
               }
 
@@ -4300,6 +4479,42 @@ if (!class_exists('TVC_Ajax_File')) :
       }
     }
 
+    public function conv_save_microsoft($post)
+    { 
+      $customer_data = [];
+      if ( isset($post['microsoft_ads_manager_id']) && $post['microsoft_ads_manager_id'] !== '' ) {
+        $customer_data['customer_id'] = sanitize_text_field(wp_unslash($post['microsoft_ads_manager_id']));
+      }
+      if ( isset($post['microsoft_ads_subaccount_id']) && $post['microsoft_ads_subaccount_id'] !== '' ) {
+        $customer_data['account_id'] = sanitize_text_field(wp_unslash($post['microsoft_ads_subaccount_id']));
+      }
+      if ( isset($post['microsoft_ads_pixel_id']) && $post['microsoft_ads_pixel_id'] !== '' ) {
+        $customer_data['pixel_id'] = sanitize_text_field(wp_unslash($post['microsoft_ads_pixel_id']));
+      }
+      if ( isset($post['microsoft_merchant_center_id']) && $post['microsoft_merchant_center_id'] !== '' ) {
+        $customer_data['mmc_id'] = sanitize_text_field(wp_unslash($post['microsoft_merchant_center_id']));
+      }
+      if ( isset($post['ms_catalog_id']) && $post['ms_catalog_id'] !== '' ) {
+        $customer_data['catalog_id'] = sanitize_text_field(wp_unslash($post['ms_catalog_id']));
+      }
+
+      if ( !empty($customer_data) ) {
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+
+        $customObj = new CustomApi();
+
+        if ( isset($post['subscription_id']) && $post['subscription_id'] !== '' ) {
+          $customer_data['customer_subscription_id'] = sanitize_text_field(wp_unslash($post['subscription_id']));
+        }
+        if ( isset($google_detail['setting']->store_id) && $google_detail['setting']->store_id !== '' ) {
+          $customer_data['store_id'] = sanitize_text_field(wp_unslash($google_detail['setting']->store_id));
+        }
+        $result = $customObj->updateMicrosoftDetail($customer_data);
+        return $result;
+      }
+    }
+
     public function ee_editPmaxCampaign()
     {
       if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {
@@ -4352,6 +4567,60 @@ if (!class_exists('TVC_Ajax_File')) :
       }
       exit;
     }
+
+    public function ee_editPmaxCampaign_ms()
+    {
+      if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {
+        if (!class_exists('Conversios_PMax_Helper')) {
+          require_once(ENHANCAD_PLUGIN_DIR . 'admin/helper/class-pmax-helper.php');
+        }
+        $PMax_Helper = new Conversios_PMax_Helper();
+        if (isset($_POST['microsoft_ads_id']) && isset($_POST['id'])) {
+          $rs = $PMax_Helper->campaign_pmax_detail_ms(
+            sanitize_text_field(wp_unslash($_POST['subscription_id'])),
+            sanitize_text_field(wp_unslash($_POST['microsoft_ads_id'])),
+            sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])), 
+            sanitize_text_field(wp_unslash($_POST['id']))
+          );
+        }
+        if (isset($rs->data)) {
+
+          if (isset($rs->data)) {
+            $campaign = $rs->data[0];
+          }
+
+          //$sale_country = isset($campaign->shoppingSetting->feedLabel) ? $campaign->shoppingSetting->feedLabel : "";
+          $budget =$campaign->DailyBudget;
+          //$maximizeconversionvalue = isset($campaign->maximizeConversionValue) ? $campaign->maximizeConversionValue : "";
+          //$target_roas = $this->object_value($maximizeconversionvalue, "targetRoas") * 100;
+          //$startDate = $this->object_value($campaign, "startDate");
+          //$endDate = $this->object_value($campaign, "endDate");
+          $status = $campaign->Status;
+          //$resourceName = $campaign->resourceName;
+          //$campaignBudget = $campaign->campaignBudget;
+          $campaignName = $campaign->Name;
+          $data = array(
+            'campaignName' => $campaignName,
+            'budget' => $budget,
+            //'sale_country' => $sale_country,
+            //'target_roas' => $target_roas,
+            //'startDate' => $startDate,
+            //'endDate' => $endDate,
+            'status' => $status,
+            //'resourceName' => $resourceName,
+            //'campaignBudget' => $campaignBudget,
+            'id' => $campaign->Id
+          );
+          echo wp_json_encode(array("error" => false, "result" => $data));
+        } else {
+          echo wp_json_encode(array("error" => true, "message" => esc_html__("No record found for the selected Campaign.", "enhanced-e-commerce-for-woocommerce-store")));
+        }
+      } else {
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+      }
+      exit;
+    }
+
     public function object_value($obj, $key)
     {
       if (!empty($obj) && $key && isset($obj->$key)) {
@@ -4424,6 +4693,42 @@ if (!class_exists('TVC_Ajax_File')) :
         }
       } else {
         echo wp_json_encode(array('error' => true, 'message' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+      }
+      exit;
+    }
+
+    public function ee_update_PmaxCampaign_ms()
+    {
+      if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {
+        if (!class_exists('Conversios_PMax_Helper')) {
+          require_once(ENHANCAD_PLUGIN_DIR . 'admin/helper/class-pmax-helper.php');
+        }
+        $PMax_Helper = new Conversios_PMax_Helper();
+        if (isset($_POST['microsoft_ads_id']) && isset($_POST['campaign_id'])) {
+          $rs = $PMax_Helper->update_campaign_pmax_detail_ms(
+            sanitize_text_field(wp_unslash($_POST['subscription_id'])),
+            sanitize_text_field(wp_unslash($_POST['microsoft_ads_id'])),
+            sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])), 
+            sanitize_text_field(wp_unslash($_POST['campaign_id'])),
+            sanitize_text_field(wp_unslash($_POST['daily_budget'])),
+            sanitize_text_field(wp_unslash($_POST['status'])),
+          );
+          if (isset($rs->error) && $rs->error == false) {
+            echo wp_json_encode(array("error" => false, "message" => esc_html__("Campaign updated successfully.", "enhanced-e-commerce-for-woocommerce-store")));
+          } else {
+            if (isset($rs->errors)) {
+              echo wp_json_encode(array("error" => true, "message" => wp_json_encode($rs->errors)));
+            }else {
+              echo wp_json_encode(array("error" => true, "message" => esc_html__("No record found for the selected Campaign.", "enhanced-e-commerce-for-woocommerce-store")));
+            }
+          }
+        }else{
+          echo wp_json_encode(array("error" => true, "message" => esc_html__("Parameters are missing.", "enhanced-e-commerce-for-woocommerce-store")));
+        }
+        
+        
+      } else {
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
       exit;
     }

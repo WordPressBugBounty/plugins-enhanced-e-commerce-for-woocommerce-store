@@ -29,6 +29,9 @@ if(!class_exists('Conversios_PMax_Helper')){
 			add_action('wp_ajax_get_pmax_campaign_list', array($this,'get_pmax_campaign_list') );
 			add_action('wp_ajax_create_pmax_campaign', array($this,'create_pmax_campaign') );
 			add_action('wp_ajax_edit_pmax_campaign', array($this,'edit_pmax_campaign') );
+      add_action('wp_ajax_campaign_pmax_detail', array($this,'campaign_pmax_detail') );
+      add_action('wp_ajax_campaign_pmax_detail_ms', array($this,'campaign_pmax_detail_ms') );
+      add_action('wp_ajax_update_campaign_pmax_detail_ms', array($this,'update_campaign_pmax_detail_ms') );
 		}
 
 		public function req_int(){
@@ -270,10 +273,105 @@ if(!class_exists('Conversios_PMax_Helper')){
           return $e->getMessage();
       }
     }
+
+    public function campaign_pmax_detail_ms($subscription_id, $customer_id, $account_id, $campaign_id) {
+      try {
+        $url = $this->apiDomain . '/microsoft/getCampaignDetail';        
+        $data = [
+          'customer_subscription_id' => $subscription_id,
+          'customer_id' => $customer_id,
+          'account_id' => $account_id,
+          'campaign_id' => $campaign_id
+        ];
+        $header = array(
+          "Authorization: Bearer $this->token",
+          "Content-Type" => "application/json",
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $args = array(
+        	'timeout' => 300,
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        // Send remote request
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $result = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+
+        if( isset($result->error) && isset($result->data) && $result->error == '' ) {
+          $return->data = (isset($result->data))?$result->data:"";
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = (isset($result->data))?$result->data:"";
+          $return->errors = $result->errors;
+          $return->status = $response_code;
+          return $return;
+        }
+
+      } catch (Exception $e) {
+          return $e->getMessage();
+      }
+    }
+
+    public function update_campaign_pmax_detail_ms($subscription_id, $customer_id, $account_id, $campaign_id, $daily_budget, $status) {
+      try {
+        $url = $this->apiDomain . '/microsoft/updateCampaign';        
+        $data = [
+          'customer_subscription_id' => $subscription_id,
+          'customer_id' => $customer_id,
+          'account_id' => $account_id,
+          'campaign_id' => $campaign_id,
+          'daily_budget' => $daily_budget,
+          'status' => $status
+        ];
+        $header = array(
+          "Authorization: Bearer $this->token",
+          "Content-Type" => "application/json"
+        );
+        $args = array(
+        	'timeout' => 300,
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        // Send remote request
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_message = wp_remote_retrieve_response_message($request);
+        $result = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        
+        
+       
+        if( isset($result->error) && isset($result->data) && $result->error == '' ) {
+          $return->data = (isset($result->data))?$result->data:"";          
+          $return->error = false;          
+        }else{
+          $return->error = true;
+          $return->data = (isset($result->data))?$result->data:"";
+          $return->errors = $result->errors;
+          $return->status = $response_code;
+        }
+        return $return;
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
+    }
+
 		public function campaign_pmax_list($customer_id, $page_size, $page_token, $page) {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       try {
+        
         $url = $this->apiDomain . '/pmax/list';        
         $data = [
           'customer_id' => $customer_id,
@@ -282,6 +380,7 @@ if(!class_exists('Conversios_PMax_Helper')){
           'store_id' => $google_detail['setting']->store_id,
           'subscription_id' => $google_detail['setting']->id
         ];
+        
         $header = array(
           "Authorization: Bearer $this->token",
           "Content-Type" => "application/json"
@@ -294,7 +393,57 @@ if(!class_exists('Conversios_PMax_Helper')){
         );
 
         $return = new \stdClass();
+      
         if( empty($data['customer_id'])) {
+          $return->error = true;
+          $return->data = "";
+          return $return;
+        }
+
+        $request = wp_remote_post(esc_url($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $result = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if( isset($result->error) && isset($result->data) && $result->error == '' ) {
+          $return->data = (isset($result->data))?$result->data:"";          
+          $return->error = false;          
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = (isset($result->data))?$result->data:"";
+          $return->errors = $result->error;
+          $return->status = $response_code;
+          return $return;
+        }
+          
+      } catch (Exception $e) {
+          return $e->getMessage();
+      }
+    }
+
+    public function campaign_pmax_list_microsoft($microsoft_ads_manager_id, $microsoft_ads_subaccount_id,$subscription_id) {
+      try {
+        $url = $this->apiDomain . '/microsoft/getCampaigns';        
+        $data = [
+          'customer_subscription_id' => $subscription_id,
+          'customer_id' => $microsoft_ads_manager_id,
+          'account_id' => $microsoft_ads_subaccount_id,
+        ];
+        $header = array(
+          "Authorization: Bearer $this->token",
+          "Content-Type" => "application/json"
+        );
+        $args = array(
+        	'timeout' => 300,
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $return = new \stdClass();
+        if( empty($data['customer_id']) || empty($data['account_id']) ) {
           $return->error = true;
           $return->data = "";
           return $return;
