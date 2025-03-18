@@ -1194,7 +1194,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery('.errorChannel').css('border', '1px solid red');
                 return false;
             }
-
+            jQuery('#submitFeed').addClass("disabledsection");
             save_feed_data();
         });
 

@@ -261,7 +261,7 @@ $required_bing = false;
                                 <div id="create_bing_error" class="alert alert-danger d-none" role="alert">
                                     <small></small>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <div class="form-group mt-2">
                                         <span class="inner-text">Store Name</span> <span class="text-danger">*</span>
@@ -278,7 +278,7 @@ $required_bing = false;
                                     </div>
 
                                     <input type="hidden" id="notification_language" name="notification_language" value="en-US" required>
-                                    
+
                                     <div class="form-group mt-3">
                                         <input id="bing_concent" name="concent" class="form-check-input" type="checkbox" value="1" required style="float:none">
                                         <label class="form-check-label fs-12" for="concent">
@@ -324,7 +324,17 @@ $required_bing = false;
 
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/error_logo.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/error_logo.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>;
                 <h3 class="fw-normal pt-3">Error</h3>
                 <span id="conv_save_error_txt" class="mb-1 lh-lg"></span>
             </div>
@@ -341,7 +351,17 @@ $required_bing = false;
             <div class="modal-header border-0 pb-0">
             </div>
             <div class="modal-body text-center p-0">
-                <img style="width:184px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>">
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/successImg.png', '', '', 'width:184px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>;
                 <h3 class="fw-normal pt-3 created_success">
                     <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h3>
@@ -360,7 +380,17 @@ $required_bing = false;
             <div class="modal-header border-0 pb-0">
                 <div class="connection-box">
                     <div class="items">
-                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/popup_woocommerce_logo.png'); ?>">
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/popup_woocommerce_logo.png', '', '', 'width:35px;'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>;
                         <span> <?php esc_html_e("Woo Commerce", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     </div>
                     <div class="items">
@@ -369,7 +399,17 @@ $required_bing = false;
                         </span>
                     </div>
                     <div class="items">
-                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms_channel_logo.svg'); ?>">
+                        <?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/ms_channel_logo.svg', '', '', 'width:35px;'),
+                            array(
+                                'img' => array(
+                                    'src' => true,
+                                    'alt' => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>;
                         <span><?php esc_html_e("Microsoft Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     </div>
                 </div>
@@ -391,7 +431,17 @@ $required_bing = false;
                             <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <img style="width:35px;" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/Manage_feed.png'); ?>">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/Manage_feed.png', '', '', 'width:35px;'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>;
                                     </div>
                                     <div class="attribute-content para">
                                         <h3><?php esc_html_e("Manage Feeds", "enhanced-e-commerce-for-woocommerce-store"); ?></h3>
@@ -521,12 +571,13 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php //printf( '%s', esc_html( $googleDetail->microsoft_merchant_center_id ) ); ?>" id="mmc_id" name="mmc_id" checked>
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php //printf( '%s', esc_html( $googleDetail->microsoft_merchant_center_id ) ); 
+                                                                                                                    ?>" id="mmc_id" name="mmc_id" checked>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("Microsoft Merchant Center Store :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <label class="col-form-label fs-14 pt-0 fw-400 modal_microsoft_merchant_center_id">
-                                <?php echo esc_html( $microsoft_merchant_center_id ); ?>
+                                <?php echo esc_html($microsoft_merchant_center_id); ?>
                             </label>
                         </div>
                         <div class="form-check form-check-custom">
@@ -537,7 +588,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                                 <?php esc_html_e("Google Merchant Center Store :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <label class="col-form-label fs-14 pt-0 fw-400 modal_google_merchant_center_id">
-                                <?php echo isset($googleDetail->google_merchant_center_id) ? esc_html( $googleDetail->google_merchant_center_id ) : ''; ?>
+                                <?php echo isset($googleDetail->google_merchant_center_id) ? esc_html($googleDetail->google_merchant_center_id) : ''; ?>
                             </label>
                         </div>
                         <div class="form-check form-check-custom">
@@ -602,7 +653,17 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             <div class="col-xl-6 col-lg-6 col-md-6 col-6">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <img style="width:35px;filter: drop-shadow(3px 3px 3px #ccc);" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/Campaign-Management.svg'); ?>">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/Campaign-Management.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>;
                                     </div>
                                     <div class="attribute-content para">
                                         <h3>
@@ -621,7 +682,17 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             <div class="col-xl-6 col-lg-6 col-md-6 col-6">
                                 <div class="attribute-box mb-3">
                                     <div class="attribute-icon">
-                                        <img style="width:35px;filter: drop-shadow(3px 3px 3px #ccc);" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/Integrations.svg'); ?>">
+                                        <?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/Integrations.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>;
                                     </div>
                                     <div class="attribute-content para">
                                         <h3>
@@ -690,7 +761,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             jQuery('#microsoft_merchant_center_id').append(jQuery('<option>', {
                                 value: value.merchantId,
                                 "data-merchant_id": value.merchantId,
-                                text: value.storeName+' ('+value.merchantId+')',
+                                text: value.storeName + ' (' + value.merchantId + ')',
                                 selected: "selected"
                             }));
 
@@ -704,7 +775,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             jQuery('#microsoft_merchant_center_id').append(jQuery('<option>', {
                                 value: new_mmc_id,
                                 "data-merchant_id": new_mmc_id,
-                                text: storeName+' ('+new_mmc_id+')',
+                                text: storeName + ' (' + new_mmc_id + ')',
                                 selected: "selected"
                             }));
                             jQuery(".conv-mc-settings").removeClass("disabledsection");
@@ -719,8 +790,17 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                                 icon = 'info',
                                 buttonText = 'Ok',
                                 buttonColor = '#FCCB1E',
-                                iconImageSrc =
-                                '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                                iconImageSrc = '<?php echo wp_kses(
+                                                    enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                                                    array(
+                                                        'img' => array(
+                                                            'src' => true,
+                                                            'alt' => true,
+                                                            'class' => true,
+                                                            'style' => true,
+                                                        ),
+                                                    )
+                                                ); ?>'
                             );
                             console.log("error", "There are no Microsoft merchant center stores associated with email.");
                         }
@@ -776,7 +856,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             jQuery('#ms_catalog_id').append(jQuery('<option>', {
                                 value: value.id,
                                 "data-merchant_id": value.id,
-                                text: value.name+' ('+value.id+')',
+                                text: value.name + ' (' + value.id + ')',
                                 selected: "selected"
                             }));
 
@@ -796,11 +876,20 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             icon = 'info',
                             buttonText = 'Ok',
                             buttonColor = '#FCCB1E',
-                            iconImageSrc =
-                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                            iconImageSrc = '<?php echo wp_kses(
+                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                                                array(
+                                                    'img' => array(
+                                                        'src' => true,
+                                                        'alt' => true,
+                                                        'class' => true,
+                                                        'style' => true,
+                                                    ),
+                                                )
+                                            ); ?>'
                         );
                         console.log("error", "There are no Microsoft merchant catalog associated with email.");
-                        
+
                     }
 
                 } else {
@@ -942,7 +1031,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             var selele = jQuery(".conv-enable-selection").closest(".conv-mmcsettings").find(
                 "select.microsoft_merchant_center_id");
 
-            list_microsoft_merchant_account(tvc_data, selele);            
+            list_microsoft_merchant_account(tvc_data, selele);
         });
 
         jQuery(".conv-enable-catalog-selection").click(function() {
@@ -952,7 +1041,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             var selele = jQuery(".conv-enable-catalog-selection").closest(".conv-mc-settings").find(
                 "select.microsoft_merchant_center_id");
 
-            list_microsoft_catalog_account(tvc_data, selele);            
+            list_microsoft_catalog_account(tvc_data, selele);
         });
 
 
@@ -1028,15 +1117,15 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                         let microsoft_merchant_center_id = jQuery('#microsoft_merchant_center_id').val();
                         let merchant_id = jQuery('#microsoft_merchant_center_id').find(':selected').data('merchant_id');
                         // save_merchant_data(microsoft_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, true).then((res) => {
-                            // if (feedType !== '') {
-                            //    // createSuperAIFeed();
-                            // } else {
-                                conv_change_loadingbar("hide");
-                                jQuery(".conv-btn-connect-enabled-mmc").text("Save");
-                                jQuery(".conv-btn-connect-enabled-mmc").removeClass('disabled');
-                                jQuery('.mmcAccount').html(selected_vals["ms_catalog_id"])
-                                jQuery("#conv_save_success_modal_cta").modal("show");
-                            // }
+                        // if (feedType !== '') {
+                        //    // createSuperAIFeed();
+                        // } else {
+                        conv_change_loadingbar("hide");
+                        jQuery(".conv-btn-connect-enabled-mmc").text("Save");
+                        jQuery(".conv-btn-connect-enabled-mmc").removeClass('disabled');
+                        jQuery('.mmcAccount').html(selected_vals["ms_catalog_id"])
+                        jQuery("#conv_save_success_modal_cta").modal("show");
+                        // }
                         // });
                     }
                 }
@@ -1051,7 +1140,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             var store_url = jQuery("#store_url").val();
             var notification_email = jQuery("#notification_email").val();
             var notification_language = jQuery("#mmnotification_languagec_country").val();
-            
+
             var data = {
                 action: "create_microsoft_merchant_center_account",
                 store_name: store_name,
@@ -1087,10 +1176,19 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                             icon = 'info',
                             buttonText = 'Ok',
                             buttonColor = '#FCCB1E',
-                            iconImageSrc =
-                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                            iconImageSrc = '<?php echo wp_kses(
+                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                                                array(
+                                                    'img' => array(
+                                                        'src' => true,
+                                                        'alt' => true,
+                                                        'class' => true,
+                                                        'style' => true,
+                                                    ),
+                                                )
+                                            ); ?>'
                         );
-                        
+
                     } else {
                         jQuery("#conv_create_new_bing").modal('hide');
 
@@ -1173,7 +1271,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery('.errorChannel').css('border', '1px solid red');
                 return false;
             }
-
+            jQuery('#submitFeed').addClass("disabledsection");
             save_feed_data();
         });
 
@@ -1220,7 +1318,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery("#conv_save_error_txt").html('Error occured.');
                 jQuery("#conv_save_error_modal").modal("show");
             },
-            success: function(response) { 
+            success: function(response) {
                 if (response.id) {
                     jQuery('#convCreateFeedModal').modal('hide');
                     jQuery("#conv_save_success_txt_").html("Great job! Your product feed is ready! The next step is to select the products you want to sync and expand your reach across multiple channels.");

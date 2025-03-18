@@ -19,46 +19,6 @@ if (!class_exists('Conversios_Footer')) {
         public function before_end_footer()
         {
 ?>
-            <div class="tvc_footer_links">
-
-                <?php if ( isset($_GET['page']) && $_GET['page'] != 'conversios-analytics-reports' ) : ?>
-                    <div id="feedback-bar" class="common___feedback alert alert-info text-center shadow-lg d-flex justify-content-center align-items-center" role="alert">
-                        <div>
-                            <?php
-                            $start_year = 2019;
-                            $current_year = date('Y');
-                            $total_hours = ($current_year - $start_year + 1) * 5 * 52 * 8;
-                            ?>
-                            <strong>😊 <?php echo esc_html($total_hours.'+ hours,'); ?></strong>
-                            <?php esc_html_e(" Development time: | ", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            <a target="_blank" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" class="" ><u><?php esc_html_e("Leave a review. It helps a lot.", "enhanced-e-commerce-for-woocommerce-store"); ?><span class="dashicons dashicons-external" style="font-size: 16px; line-height: 18px; width: 17px; height: 17px;"></span></u></a>
-                        </div>
-                        <button class="close btn p-0" id="close-feedback-bar" aria-label="">
-                                <span aria-hidden="true" style="font-size: 30px;line-height: normal;">×</span>
-                        </button>
-                    </div>
-                    <script>
-                        jQuery(document).ready(function($) {
-                            // Check if the bar has been closed before using localStorage
-                            if (!localStorage.getItem('feedbackConvBarClosed')) {
-                                setTimeout(function() {
-                                    $('#feedback-bar').addClass('show');
-                                    console.log('show');
-                                }, 5000); // 5000 mean seconds
-                            }
-
-                            // Close the bar and never show again
-                            $('#close-feedback-bar').click(function() {
-                                $('#feedback-bar').removeClass('show'); // Hide the bar
-                                localStorage.setItem('feedbackConvBarClosed', 'true'); // Store the close action
-                            });
-                        });
-                    </script>
-                <?php endif; ?>
-
-            </div>
-            
-
             <?php
             $licenceInfoArr = array(
                 "Plan Type:" => "Free",
@@ -113,60 +73,6 @@ if (!class_exists('Conversios_Footer')) {
             </div>
 
 
-            <!-- new feature notes modal start -->
-            <?php $user_id = get_current_user_id(); ?>
-            <div class="modal fade" id="convnewfeaturemodal" data-userdata="<?php echo esc_attr(get_option('conv_popup_newfeature')); ?>" tabindex="-1" aria-labelledby="convnewfeaturemodalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
-                    <div class="modal-content">
-                        <div class="modal-header align-items-baseline">
-                            <div>
-                                <h3 class="modal-title" id="convnewfeaturemodalLabel">
-                                    <?php esc_html_e("Exciting New Features!", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                </h3>
-                                <p class="m-0">In your updated plugin
-                                    version:<code><?php echo esc_html(PLUGIN_TVC_VERSION) ?></code></p>
-                            </div>
-                            <button type="button" id="conv_close_popup" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" style=" background: ghostwhite;">
-                            <h5 class="" style="font-weight: 500; color: #09BD83; ">We're excited to announce new features to help
-                                you better track user interactions on your website.</h5>
-                            <h4 style="color: #6c757d;">GA4 E-Commerce Tracking:</h4>
-                            <ul class="flex-wrap mb-3 d-flex" style="list-style: circle;">
-                                <li class="flex-fill w-50">page_view</li>
-                                <li class="flex-fill w-50">view_item_list</li>
-                                <li class="flex-fill w-50">select_item</li>
-                                <li class="flex-fill w-50">view_item</li>
-                                <li class="flex-fill w-50">add_to_cart</li>
-                                <li class="flex-fill w-50">view_cart</li>
-                                <li class="flex-fill w-50">remove_from_cart</li>
-                                <li class="flex-fill w-50">begin_checkout</li>
-                                <li class="flex-fill w-50">add_shipping_info</li>
-                                <li class="flex-fill w-50">add_payment_info</li>
-                                <li class="flex-fill w-50">purchase</li>
-                            </ul>
-                            <h4 style="color: #6c757d;">Lead Generation Tracking:</h4>
-                            <ul class="flex-wrap d-flex" style="list-style: circle;">
-                                <li class="flex-fill w-50">form_lead_submit</li>
-                                <li class="flex-fill w-50">phone_click</li>
-                                <li class="flex-fill w-50">email_click</li>
-                                <li class="flex-fill w-50">address_click</li>
-                            </ul>
-                        </div>
-                        <div class="modal-footer">
-                            <p>Take advantage of these powerful features to optimize your tracking and enhance your insights!</p>
-                            <button type="button" id="conv_dont_show_popup" class="btn btn-secondary btn-sm">
-                                <?php esc_html_e("Don't remind again", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </button>
-                            <a href="<?php echo esc_url_raw('admin.php?page=conversios&wizard=pixelandanalytics&onboarding=1'); ?>" class="btn btn-success btn-sm">
-                                <?php esc_html_e("Setup Now ", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- new feature notes modal end -->
-
             <!-- Upgrade to PRO modal -->
             <div class="modal fade" id="upgradetopromodal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -177,7 +83,7 @@ if (!class_exists('Conversios_Footer')) {
                             </div>
                             <div class="modal-body">
                                 <?php echo wp_kses(
-                                    enhancad_get_plugin_image('/admin/images/uptopro_2024.png','','m-auto d-block'),
+                                    enhancad_get_plugin_image('/admin/images/uptopro_2024.png', '', 'm-auto d-block'),
                                     array(
                                         'img' => array(
                                             'src' => true,
@@ -222,26 +128,6 @@ if (!class_exists('Conversios_Footer')) {
                     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                         return new bootstrap.Tooltip(tooltipTriggerEl)
                     });
-                    jQuery('#conv_close_popup').click(function() {
-                        // Set cookie to expire in 24 hours
-                        document.cookie = "conv_popup_newfeature=true; expires=" + new Date(Date.now() + 24 * 60 * 60 *
-                            1000).toUTCString() + "; path=/";
-                        jQuery("#convnewfeaturemodal").modal('hide');
-                    });
-                    jQuery('#conv_dont_show_popup').click(function() {
-                        jQuery("#convnewfeaturemodal").modal('hide');
-                        jQuery.ajax({
-                            type: "POST",
-                            dataType: "json",
-                            url: tvc_ajax_url,
-                            data: {
-                                action: "conv_convnewfeaturemodal_ajax",
-                                wp_nonce: "<?php echo esc_js(wp_create_nonce('convnewfeaturemodal_nonce')); ?>",
-                            }
-                        });
-                    });
-
-
                 });
             </script>
             <script type="text/javascript">
@@ -340,8 +226,8 @@ if (!class_exists('Conversios_Footer')) {
             <?php
             $is_wizard = isset($_GET['wizard']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) : "";
             ?>
-         
-            
+
+
 <?php
         }
     }

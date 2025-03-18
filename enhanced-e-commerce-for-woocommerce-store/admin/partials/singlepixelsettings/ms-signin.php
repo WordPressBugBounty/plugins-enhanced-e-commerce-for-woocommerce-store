@@ -119,7 +119,17 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                 <div class="tvc_microsoft_signinbtn_box">
                     <div class="tvc_microsoft_signinbtn microsoft-btn d-flex align-items-center">
                         <div class="microsoft-icon-wrapper">
-                            <img class="microsoft-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" />
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/ms-logo.png', '', 'microsoft-icon', ''),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
                         </div>
                         <div class="btn-text"><b><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
                     </div>
@@ -135,7 +145,19 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
     <div class="onbrdppmain" role="document">
         <div class="onbrdnpp-cntner acccretppcntnr">
             <div class="onbrdnpp-hdr">
-                <div class="ppclsbtn clsbtntrgr"><img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/close-icon.png'); ?>" alt="" /></div>
+                <div class="ppclsbtn clsbtntrgr">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/close-icon.png', '', 'ppclsbtn clsbtntrgr', ''),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
+                </div>
             </div>
             <div class="onbrdpp-body">
                 <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
@@ -157,7 +179,17 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                                 <span>Change</span>
                             <?php } else { ?>
                                 <div class="microsoft-icon-wrapper">
-                                    <img class="microsoft-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/ms-logo.png', '', 'microsoft-icon', ''),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                 </div>
                                 <div class="btn-text"><b><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
                             <?php } ?>
@@ -167,14 +199,34 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                             <p class="alert alert-primary"><?php esc_html_e("It seems the token to access your Microsoft accounts is expired. Sign in again to continue.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
                             <div class="microsoft_connect_url microsoft-btn d-flex align-items-center" onclick='window.open("<?php echo esc_js(esc_url($microsoft_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'>
                                 <div class="microsoft-icon-wrapper">
-                                    <img class="microsoft-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/ms-logo.png', '', 'microsoft-icon', ''),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                 </div>
                                 <div class="btn-text"><b><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
                             </div>
                         <?php } else { ?>
                             <div class="microsoft_connect_url microsoft-btn d-flex align-items-center" onclick='window.open("<?php echo esc_js(esc_url($microsoft_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'>
                                 <div class="microsoft-icon-wrapper">
-                                    <img class="microsoft-icon" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" />
+                                    <?php echo wp_kses(
+                                        enhancad_get_plugin_image('/admin/images/logos/ms-logo.png', '', 'microsoft-icon', ''),
+                                        array(
+                                            'img' => array(
+                                                'src' => true,
+                                                'alt' => true,
+                                                'class' => true,
+                                                'style' => true,
+                                            ),
+                                        )
+                                    ); ?>
                                 </div>
                                 <div class="btn-text"><b><?php esc_html_e("Reauthorize Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
                             </div>

@@ -500,7 +500,7 @@ function editCampaign(id) {
             jQuery('.topNavBar').removeClass('loading-row')
             jQuery('#campaignName').val(response.result['campaignName'].replace(/\\/g, '')).attr('readonly', true)
             jQuery('#daily_budget').val(response.result['budget'])
-            jQuery('#target_country_campaign').val(response.result['sale_country']).attr('disabled', true)
+            jQuery('#target_country_campaign').val(response.result['sale_country']).trigger('change').attr('disabled', true)
             jQuery('#edit_country_campaign').val(response.result['sale_country'])
             jQuery('#target_roas').val(response.result['target_roas'])
             jQuery('#start_date').val(response.result['startDate']).attr('readonly', true)

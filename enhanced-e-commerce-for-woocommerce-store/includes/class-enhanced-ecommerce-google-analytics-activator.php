@@ -37,7 +37,7 @@ class Enhanced_Ecommerce_Google_Analytics_Activator
 
         $subscriptionId = (isset($ee_options_settings['subscription_id'])) ? $ee_options_settings['subscription_id'] : "";
 
-        $apiDomain = "https://connect.tatvic.com/laravelapi/public/api";
+        $apiDomain = TVC_API_CALL_URL;
 
         $header = array(
             "Authorization: Bearer 'MTIzNA=='",

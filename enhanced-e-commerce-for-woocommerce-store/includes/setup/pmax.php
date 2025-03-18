@@ -26,8 +26,8 @@ if (isset($_GET['campaign']) && $_GET['campaign'] == 'google' || !isset($_GET['c
     $results = $PMax_Helper->campaign_pmax_list($google_ads_id, '10000', '', '');
 }
 // when viewing microsoft campaign
-else{
-    $results = $PMax_Helper->campaign_pmax_list_microsoft($microsoft_ads_manager_id, $microsoft_ads_subaccount_id,$subscription_id);
+else {
+    $results = $PMax_Helper->campaign_pmax_list_microsoft($microsoft_ads_manager_id, $microsoft_ads_subaccount_id, $subscription_id);
     //$results = $PMax_Helper->campaign_pmax_list_microsoft(252077508, 180741369,$subscription_id); 
     //echo '<pre>'; print_r($results); echo '</pre>';
 }
@@ -35,7 +35,7 @@ else{
 if (isset($results) && is_object($results) && isset($results->error) && empty($results->error)) {
     if (isset($results->data) && is_object($results->data) && isset($results->data->results) && is_array($results->data->results)) {
         $allresult = $results->data->results;
-    }elseif (isset($results->data) && is_array($results->data)) {
+    } elseif (isset($results->data) && is_array($results->data)) {
         $allresult = $results->data;
     }
 }
@@ -161,13 +161,33 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
     <ul class="nav nav-tabs" id="parentTabs" role="tablist">
         <li class="nav-item m-0" role="presentation">
             <a class="nav-link d-flex align-items-center <?php echo (isset($_GET['campaign']) && $_GET['campaign'] == 'google' || !isset($_GET['campaign'])) ? 'active' : ''; ?>" href="<?php echo esc_url('admin.php?page=conversios-pmax&campaign=google'); ?>" role="tab" aria-controls="home" aria-selected="true">
-                <img class="align-self-center me-2" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gmc_logo.png'); ?>" style="width: 24px;" />
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/conv_gmc_logo.png', '', 'align-self-center me-2', 'width: 24px;'),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h4 class="m-0">Google PMAX (GMC)</h4>
             </a>
         </li>
         <li class="nav-item m-0" role="presentation">
             <a class="nav-link d-flex align-items-center <?php echo (isset($_GET['campaign']) && $_GET['campaign'] == 'microsoft') ? 'active' : ''; ?>" href="<?php echo esc_url('admin.php?page=conversios-pmax&campaign=microsoft'); ?>" role="tab" aria-controls="home" aria-selected="true">
-                <img class="align-self-center me-2" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" /> 
+                <?php echo wp_kses(
+                    enhancad_get_plugin_image('/admin/images/logos/ms-logo.png', '', 'align-self-center me-2', ''),
+                    array(
+                        'img' => array(
+                            'src' => true,
+                            'alt' => true,
+                            'class' => true,
+                            'style' => true,
+                        ),
+                    )
+                ); ?>
                 <h4 class="m-0">Microsoft PMAX (MMC)</h4>
             </a>
         </li>
@@ -227,27 +247,31 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                         <?php
                         if (isset($_GET['campaign']) && $_GET['campaign'] == 'google' || !isset($_GET['campaign'])) {
                             if (empty($google_ads_id))
-                            $redirect_to_auth = 'admin.php?page=conversios-google-analytics&subpage=gadssettings&redirectBack=googleCamp';
+                                $redirect_to_auth = 'admin.php?page=conversios-google-analytics&subpage=gadssettings&redirectBack=googleCamp';
                             else
-                            $redirect_to_auth = 'admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings&redirectBack=googleCamp';
+                                $redirect_to_auth = 'admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings&redirectBack=googleCamp';
 
                             if (empty($google_ads_id)) {
-                                esc_html_e('Google Ads ID required !', 'enhanced-e-commerce-for-woocommerce-store'); echo '<br>';
+                                esc_html_e('Google Ads ID required !', 'enhanced-e-commerce-for-woocommerce-store');
+                                echo '<br>';
                             }
                             if (empty($google_merchant_id)) {
-                                esc_html_e('Google Merchant ID required !', 'enhanced-e-commerce-for-woocommerce-store'); echo '<br>';
+                                esc_html_e('Google Merchant ID required !', 'enhanced-e-commerce-for-woocommerce-store');
+                                echo '<br>';
                             }
                         } else {
                             if (empty($microsoft_ads_manager_id) || empty($microsoft_ads_subaccount_id))
-                            $redirect_to_auth = 'admin.php?page=conversios-google-analytics&subpage=bingsettings&redirectBack=microsoftCamp';
+                                $redirect_to_auth = 'admin.php?page=conversios-google-analytics&subpage=bingsettings&redirectBack=microsoftCamp';
                             else
-                            $redirect_to_auth = 'admin.php?page=conversios-google-shopping-feed&subpage=mmcsettings&redirectBack=microsoftCamp';
+                                $redirect_to_auth = 'admin.php?page=conversios-google-shopping-feed&subpage=mmcsettings&redirectBack=microsoftCamp';
 
                             if (empty($microsoft_ads_manager_id)) {
-                                esc_html_e('Microsoft Ads Manager ID required !', 'enhanced-e-commerce-for-woocommerce-store'); echo '<br>';
+                                esc_html_e('Microsoft Ads Manager ID required !', 'enhanced-e-commerce-for-woocommerce-store');
+                                echo '<br>';
                             }
                             if (empty($microsoft_ads_subaccount_id)) {
-                                esc_html_e('Microsoft Ads Sub Account ID required !', 'enhanced-e-commerce-for-woocommerce-store'); echo '<br>';
+                                esc_html_e('Microsoft Ads Sub Account ID required !', 'enhanced-e-commerce-for-woocommerce-store');
+                                echo '<br>';
                             }
                         }
                         ?>
@@ -358,14 +382,14 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
             jQuery('#submitCampaign').text('Create New Campaign');
             jQuery('.createCampaignDiv').removeClass('d-none');
             jQuery('.campaignTableDiv').addClass('d-none');
-            
+
             setTimeout(function() {
-                <?php if ( (empty($google_ads_id) || empty($google_merchant_id) ) && (isset($_GET['campaign']) && $_GET['campaign'] == 'google' || !isset($_GET['campaign'])) ) { ?>
+                <?php if ((empty($google_ads_id) || empty($google_merchant_id)) && (isset($_GET['campaign']) && $_GET['campaign'] == 'google' || !isset($_GET['campaign']))) { ?>
                     jQuery('#warningModal').modal("show");
-                <?php } elseif ( (empty($microsoft_ads_manager_id) || empty($microsoft_ads_subaccount_id)) && (isset($_GET['campaign']) && $_GET['campaign'] == 'microsoft') ) { ?>
+                <?php } elseif ((empty($microsoft_ads_manager_id) || empty($microsoft_ads_subaccount_id)) && (isset($_GET['campaign']) && $_GET['campaign'] == 'microsoft')) { ?>
                     jQuery('#warningModal').modal("show");
                 <?php } ?>
-            },3000);
+            }, 3000);
 
         })
 

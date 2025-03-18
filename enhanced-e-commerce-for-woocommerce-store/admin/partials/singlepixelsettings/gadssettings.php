@@ -89,7 +89,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                         </button>
                     </div>
                     <div id="conv_mcc_alert" class="my-3 mx-2 alert alert-danger d-none" role="alert">
-                        <?php esc_html_e("You have selected a MCC account. Please select other google ads account to proceed further.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <?php esc_html_e("You have selected a MCC account OR account is in unsupported state(Cancelled, In Progress, Suspended). Please select other google ads account to proceed further.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </div>
                     <div class="col-12 flex-row pt-1">
                         <h5 class="fw-normal mb-1 text-dark">
@@ -387,7 +387,95 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
             <div class="modal-body text-start">
                 <span id="before_gadsacccreated_text" class="mb-1 lh-lg fs-6 before-ads-acc-creation">
                     <?php esc_html_e("You’ll receive an invite from Google on your email. Accept the invitation to enable your Google Ads Account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <?php if (!CONV_IS_WC) { ?>
+                        <div class="col-12 flex-row pt-3">
+                            <div class="d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3">
+
+                                <?php
+                                if ($off_credit_amt == "") {
+                                    $off_credit_amt = 'USD 500.00';
+                                }
+                                ?>
+                                <?php echo wp_kses(
+                                    enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'me-2 align-self-center'),
+                                    array(
+                                        'img' => array(
+                                            'src' => true,
+                                            'alt' => true,
+                                            'class' => true,
+                                            'style' => true,
+                                        ),
+                                    )
+                                ); ?>
+                                <div class="div">
+                                    <h5 class="text-dark mb-0">
+                                        <?php
+                                        $credit_message = "Your " . $off_credit_amt . " in Ads Credit is ready to be claimed";
+                                        echo esc_html($credit_message);
+                                        ?>
+                                    </h5>
+                                    <div class="text-dark fs-12 pt-2">
+                                        <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to your account.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        <a href="https://www.google.com/intl/en_in/ads/coupons/terms/cyoi/" class="" target="_blank">
+                                            <u><?php esc_html_e("Terms and conditions apply.", "enhanced-e-commerce-for-woocommerce-store"); ?></u>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="pt-3 col-6">
+                                <label for="gads_country" class="form-label mb-0" id="gads_country_lbl">
+                                    <small>
+                                        Select Your Country
+                                        <span class="text-danger">*</span>
+                                        <span class="text-danger d-none newgads_error">Required</span>
+                                    </small>
+                                </label>
+                                <select class="selectthree form-select" name="gads_country" id="gads_country">
+                                    <option value="">Select Country</option>
+                                    <?php
+                                    $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
+                                    $contData = json_decode($getCountris);
+                                    foreach ($contData as $key => $value) {
+                                    ?>
+                                        <option value="<?php echo esc_attr($value->code) ?>">
+                                            <?php echo esc_html($value->name) ?></option>"
+                                    <?php
+                                    }
+
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="pt-3 col-6">
+                                <label for="gads_currency" class="form-label mb-0" id="gads_currency_lbl">
+                                    <small>
+                                        Select Your Currency
+                                        <span class="text-danger">*</span>
+                                        <span class="text-danger d-none newgads_error">Required</span>
+                                    </small>
+                                </label>
+                                <select class="selectthree form-select" name="gads_currency" id="gads_currency">
+                                    <option value="">Select Currency</option>
+                                    <?php
+                                    $getCurrency = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/currency.json");
+                                    $currencyData = json_decode($getCurrency);
+                                    foreach ($currencyData as $key => $value) {
+                                    ?>
+                                        <option value="<?php echo esc_attr($key) ?>" isothreeval="<?php echo esc_attr($value) ?>">
+                                            <?php echo esc_html($value) ?>
+                                        </option>
+                                    <?php
+                                    }
+
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </span>
+
 
                 <div class="onbrdpp-body alert alert-primary text-start d-none after-ads-acc-creation" id="new_google_ads_section">
                     <p>
@@ -544,6 +632,18 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
 </script>
 
 <script>
+    jQuery(".selectthree").select2({
+        dropdownParent: jQuery("#conv_create_gads_new"),
+        placeholder: function() {
+            jQuery(this).data('placeholder');
+        }
+    });
+
+    jQuery("#gads_country").change(function() {
+        let concontry = jQuery(this).val();
+        jQuery("#gads_currency").val(concontry).trigger('change');
+    });
+
     function clearallcheck() {
         jQuery("#checkboxes_box input.form-check-input").prop('checked', false);
         jQuery("#checkboxes_box input.form-check-input").removeAttr('checked');
@@ -596,8 +696,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                             icon = 'info',
                             buttonText = 'Ok',
                             buttonColor = '#FCCB1E',
-                            iconImageSrc =
-                            '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                            iconImageSrc = '<?php echo wp_kses(
+                                                enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                                                array(
+                                                    'img' => array(
+                                                        'src' => true,
+                                                        'alt' => true,
+                                                        'class' => true,
+                                                        'style' => true,
+                                                    ),
+                                                )
+                                            ); ?>'
                         );
                     } else {
                         if (response.data.length > 0) {
@@ -694,6 +803,29 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
         var ename = 'conversios_onboarding';
         var event_label = 'ads';
         //user_tracking_data(btn_cam, error_msg,ename,event_label);   
+        <?php if (!CONV_IS_WC) { ?>
+            jQuery(".newgads_error").addClass('d-none');
+            console.log("Before", tvc_data);
+            var decodedString = tvc_data.replace(/&quot;/g, '"');
+            var jsonObject = JSON.parse(decodedString);
+
+            if (jQuery("#gads_country").val() == "") {
+                jQuery("#gads_country_lbl .newgads_error").removeClass('d-none');
+                return false;
+            }
+            if (jQuery("#gads_currency").val() == "") {
+                jQuery("#gads_currency_lbl .newgads_error").removeClass('d-none');
+                return false;
+            }
+
+            jsonObject['user_country'] = jQuery("#gads_country").val();
+            var gads_currency_val = jQuery("#gads_currency").val();
+            jsonObject['currency_code'] = jQuery("#gads_currency").find(":selected").attr("isothreeval");
+            //console.log(jsonObject);
+            var tvc_data_json = JSON.stringify(jsonObject);
+            tvc_data = tvc_data_json.replace(/"/g, "&quot;");
+
+        <?php } ?>
         jQuery.ajax({
             type: "POST",
             dataType: "json",
@@ -738,8 +870,17 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                 }
                 //user_tracking_data(btn_cam, error_msg,ename,event_label);   

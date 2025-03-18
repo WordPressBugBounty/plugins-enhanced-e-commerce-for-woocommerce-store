@@ -1287,35 +1287,35 @@ class TVC_Admin_Helper
     }
   }
 
-  public function validate_pixels()
-  {
-    $errors = array();
-    if (isset($_POST["fb_pixel_id"]) && $_POST["fb_pixel_id"] != "" && !$this->is_facebook_pixel_id(sanitize_text_field(wp_unslash($_POST["fb_pixel_id"])))) {
-      unset($_POST["fb_pixel_id"]);
-      $errors[] = array("error" => true, "message" => esc_html__("You entered wrong facebook pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
-    }
-    if (isset($_POST["microsoft_ads_pixel_id"]) && $_POST["microsoft_ads_pixel_id"] != "" && !$this->is_bing_uet_tag_id(sanitize_text_field(wp_unslash($_POST["microsoft_ads_pixel_id"])))) {
-      unset($_POST["microsoft_ads_pixel_id"]);
-      $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong microsoft ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
-    }
-    if (isset($_POST["twitter_ads_pixel_id"]) && $_POST["twitter_ads_pixel_id"] != "" && !$this->is_twitter_pixel_id(sanitize_text_field(wp_unslash($_POST["twitter_ads_pixel_id"])))) {
-      unset($_POST["twitter_ads_pixel_id"]);
-      $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong twitter ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
-    }
-    if (isset($_POST["pinterest_ads_pixel_id"]) && $_POST["pinterest_ads_pixel_id"] != "" && !$this->is_pinterest_pixel_id(sanitize_text_field(wp_unslash($_POST["pinterest_ads_pixel_id"])))) {
-      unset($_POST["pinterest_ads_pixel_id"]);
-      $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong pinterest ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
-    }
-    if (isset($_POST["snapchat_ads_pixel_id"]) && $_POST["snapchat_ads_pixel_id"] != "" && !$this->is_snapchat_pixel_id(sanitize_text_field(wp_unslash($_POST["snapchat_ads_pixel_id"])))) {
-      unset($_POST["snapchat_ads_pixel_id"]);
-      $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong napchat ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
-    }
-    if (isset($_POST["tiKtok_ads_pixel_id"]) && $_POST["tiKtok_ads_pixel_id"] != "" && !$this->is_tiktok_pixel_id(sanitize_text_field(wp_unslash($_POST["tiKtok_ads_pixel_id"])))) {
-      unset($_POST["tiKtok_ads_pixel_id"]);
-      $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong tiKtok ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
-    }
-    return $errors;
-  }
+  // public function validate_pixels()
+  // {
+  //   $errors = array();
+  //   if (isset($_POST["fb_pixel_id"]) && $_POST["fb_pixel_id"] != "" && !$this->is_facebook_pixel_id(sanitize_text_field(wp_unslash($_POST["fb_pixel_id"])))) {
+  //     unset($_POST["fb_pixel_id"]);
+  //     $errors[] = array("error" => true, "message" => esc_html__("You entered wrong facebook pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
+  //   }
+  //   if (isset($_POST["microsoft_ads_pixel_id"]) && $_POST["microsoft_ads_pixel_id"] != "" && !$this->is_bing_uet_tag_id(sanitize_text_field(wp_unslash($_POST["microsoft_ads_pixel_id"])))) {
+  //     unset($_POST["microsoft_ads_pixel_id"]);
+  //     $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong microsoft ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
+  //   }
+  //   if (isset($_POST["twitter_ads_pixel_id"]) && $_POST["twitter_ads_pixel_id"] != "" && !$this->is_twitter_pixel_id(sanitize_text_field(wp_unslash($_POST["twitter_ads_pixel_id"])))) {
+  //     unset($_POST["twitter_ads_pixel_id"]);
+  //     $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong twitter ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
+  //   }
+  //   if (isset($_POST["pinterest_ads_pixel_id"]) && $_POST["pinterest_ads_pixel_id"] != "" && !$this->is_pinterest_pixel_id(sanitize_text_field(wp_unslash($_POST["pinterest_ads_pixel_id"])))) {
+  //     unset($_POST["pinterest_ads_pixel_id"]);
+  //     $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong pinterest ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
+  //   }
+  //   if (isset($_POST["snapchat_ads_pixel_id"]) && $_POST["snapchat_ads_pixel_id"] != "" && !$this->is_snapchat_pixel_id(sanitize_text_field(wp_unslash($_POST["snapchat_ads_pixel_id"])))) {
+  //     unset($_POST["snapchat_ads_pixel_id"]);
+  //     $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong napchat ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
+  //   }
+  //   if (isset($_POST["tiKtok_ads_pixel_id"]) && $_POST["tiKtok_ads_pixel_id"] != "" && !$this->is_tiktok_pixel_id(sanitize_text_field(wp_unslash($_POST["tiKtok_ads_pixel_id"])))) {
+  //     unset($_POST["tiKtok_ads_pixel_id"]);
+  //     $errors[] =  array("error" => true, "message" => esc_html__("You entered wrong tiKtok ads pixel ID.", "enhanced-e-commerce-for-woocommerce-store"));
+  //   }
+  //   return $errors;
+  // }
   /*
   * Add Plugin logs
   */

@@ -20,16 +20,10 @@ $is_sel_disable = 'disabled';
                                 info
                             </span> -->
                         </h5>
-                        <select id="msclarity_pixel_id" name="msclarity_pixel_id" class="form-select form-select-lg mb-3 selecttwo msclarity_pixel_id" style="width: 100%" <?php echo esc_attr($is_sel_disable); ?>>
-                            <?php if (!empty($msclarity_pixel_id)) { ?>
-                                <option value="<?php echo esc_attr($msclarity_pixel_id); ?>" selected><?php echo esc_attr($msclarity_pixel_id); ?></option>
-                            <?php } ?>
-                            <option value="">Select Microsoft Clarity ID</option>
-                        </select>
-                        <!-- <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id"
+                        <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id"
                             class="form-control valtoshow_inpopup_this"
-                            value="<?php //echo esc_attr($msclarity_pixel_id); ?>" placeholder="e.g. ij312itarj"
-                            popuptext="Microsoft Clarity ID:"> -->
+                            value="<?php echo esc_attr($msclarity_pixel_id); ?>" placeholder="e.g. ij312itarj"
+                            popuptext="Microsoft Clarity ID:">
                     </div>
                 </div>
             </div>

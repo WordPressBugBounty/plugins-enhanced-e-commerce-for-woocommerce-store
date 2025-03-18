@@ -134,6 +134,8 @@ class Enhanced_Ecommerce_Google_Analytics
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-reports-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-pmax-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-conversios-admin.php';
+    require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-customer-segment-helper.php';
+
     /**
      * End New conversios UI file list
      */
@@ -197,7 +199,7 @@ class Enhanced_Ecommerce_Google_Analytics
 
 
     if (is_admin()) {
-      new TVC_Survey(esc_html__("Enhanced ecommerce google analytics plugin for woocommerce","enhanced-e-commerce-for-woocommerce-store"), ENHANCAD_PLUGIN_NAME);
+      new TVC_Survey(esc_html__("Enhanced ecommerce google analytics plugin for woocommerce", "enhanced-e-commerce-for-woocommerce-store"), ENHANCAD_PLUGIN_NAME);
     }
   }
 
@@ -209,8 +211,8 @@ class Enhanced_Ecommerce_Google_Analytics
    * @access   private
    */
   public function define_public_hooks()
-  { 
-    
+  {
+
     new Enhanced_Ecommerce_Google_Analytics_Wordpress($this->get_plugin_name(), $this->get_version());
 
     if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
@@ -226,16 +228,15 @@ class Enhanced_Ecommerce_Google_Analytics
   public function run()
   {
     $this->loader->run();
-    if ( is_plugin_active_for_network( 'woocommerce/woocommerce.php') || in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ){
-        add_action('woocommerce_init' , function (){
-            $this->loader->run();
-        });
-    }
-    else{
-      include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-      if ( is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active_for_network( 'woocommerce/woocommerce.php') ) {
+    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+      add_action('woocommerce_init', function () {
         $this->loader->run();
-      }else if( is_admin() && !is_network_admin() && is_plugin_active( 'enhanced-e-commerce-for-woocommerce-store/enhanced-ecommerce-google-analytics.php' ) ){
+      });
+    } else {
+      include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+      if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_network('woocommerce/woocommerce.php')) {
+        $this->loader->run();
+      } else if (is_admin() && !is_network_admin() && is_plugin_active('enhanced-e-commerce-for-woocommerce-store/enhanced-ecommerce-google-analytics.php')) {
         $this->loader->run();
       }
     }

@@ -5,8 +5,8 @@ Author: Conversios
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.3
-Stable tag: 7.2.3
-Version: 7.2.3
+Stable tag: 7.2.4
+Version: 7.2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,9 +18,15 @@ Conversios: Pixel and Conversion tracking for WooCommerce & Wordpress, Google An
 
 With Conversios, managing analytics and marketing for your WooCommerce store has never been easier. We believe that businesses grow when they have accurate insights and the tools to act on them. 
 
-Our Plugin integrates seamlessly with Google Analytics GA4, Google Ads, and major ad platforms like Facebook, TikTok, Snapchat, Pinterest, Microsoft Ads, and more, giving you the power to make data-driven decisions.
+Our Plugin integrates effortlessly with Google Analytics GA4, Google Ads, Microsoft (Bing) Ads, and major ad platforms like Facebook, TikTok, Snapchat, Pinterest, and more, giving you the power to make data-driven decisions.
 
-Unlike other plugins, Conversios doesn’t just track events—it simplifies setup, reporting, and product feed management with automation. Whether you're tracking conversions, optimizing ad campaigns, or syncing product feeds, Conversios delivers powerful features to help you grow.
+Unlike other plugins, Conversios simplifies campaign creation and product feed management for platforms like Google Merchant Center, Meta Catalog, TikTok Catalog, and now Microsoft Merchant Center (Bing Shopping Ads). Whether you’re tracking conversions, optimizing ad performance, or syncing product feeds, Conversios delivers automation and efficiency to help you grow.
+
+**Grow your business with $500 in Google Ads credit**
+
+To help you get started running campaigns, you can get $500 in ad credit when you spend your first $500 on Google Ads within 60 days.
+
+*Terms and conditions apply.*
 
 ⭐⭐⭐⭐⭐"Very helpful support!"
 
@@ -34,7 +40,7 @@ Unlike other plugins, Conversios doesn’t just track events—it simplifies set
 
 * **Ecommerce Tracking:** Track 15+ Google Analytics 4 (GA4) eCommerce events like purchases, add-to-cart, and form submissions.
 
-* **Automated Product Feeds:** Sync WooCommerce products with Google Merchant Center, Meta Catalog, and TikTok Catalog in real time.
+* **Automated Product Feeds:** Sync WooCommerce products with Google Merchant Center, Meta Catalog, TikTok Catalog, and Microsoft Merchant Center (Bing Shopping Ads) in real time.
 
 * **Actionable Reporting:** Generate detailed insights for GA4, Google Ads, and more. Export professional PDF report for easy sharing.
 
@@ -42,8 +48,7 @@ Unlike other plugins, Conversios doesn’t just track events—it simplifies set
 
 **Why Choose Conversios?**
 
-Conversios makes it simple for businesses to grow with accurate tracking and easy setup—no technical skills needed. Connect seamlessly with Google Analytics, Google Ads, Facebook, TikTok, and more. 
-Stay ahead with server-side tagging for reliable data tracking, even in privacy-focused environments.
+Conversios makes it simple for businesses to grow with accurate tracking and easy setup—no technical skills needed. Connect seamlessly with Google Analytics, Google Ads, Facebook, TikTok, and more. Stay ahead with server-side tracking for reliable data tracking, even in privacy-focused environments.
 
 **"Trusted by over 60,000+ businesses worldwide, Conversios delivers powerful analytics and marketing solutions that drive revenue growth."**
 
@@ -54,14 +59,15 @@ Stay ahead with server-side tagging for reliable data tracking, even in privacy-
 * Google Ads Pixel
 * Facebook Pixel
 * Google Enhanced Conversion Tracking  ([PRO](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=aioreadme))
+* Microsoft Ads (Bing) Pixel
+* LinkedIn Pixel
 * TikTok Pixel
 * Pinterest Pixel
 * Snapchat Pixel
-* Microsoft Pixel
-* LinkedIn Pixel
 * Hotjar Pixel
 * Microsoft Clarity Pixel
 * CrazyEgg Pixel
+* Microsoft Merchant Center Product Sync
 
 <strong>Free Features</strong>
 
@@ -77,7 +83,7 @@ Stay ahead with server-side tagging for reliable data tracking, even in privacy-
 
   * Form submissions
   * Click tracking for email, phone, and address
-  * Scroll depth, cross-domain tracking, and file downloads
+  * Scroll depth, file downloads
   * Author interactions, user login, and signup events
 
 * **Multi-Channel Pixel and Conversion Tracking**:
@@ -86,14 +92,17 @@ Stay ahead with server-side tagging for reliable data tracking, even in privacy-
   * TikTok
   * Snapchat
   * Pinterest
-  * Microsoft Bing
+  * Microsoft (Bing) Ads
   * Twitter (X)
   * LinkedIn
 
 * **Session Recording Integration:** Integrate Microsoft Clarity, Hotjar, and Crazy Egg for advanced user behavior insights.
 
+* **Microsoft Consent Mode:** Honor user preferences and privacy regulations when tracking with Microsoft Ads, ensuring transparent and compliant data collection.
+
 * **Real-Time Product Sync**: Seamlessly sync your product catalog with:
-  * Google Merchant Center
+  * Google Merchant Center (Google Shopping Ads)
+  * Microsoft Merchant Center (Bing Shopping Ads)
   * Facebook Meta Catalog
   * TikTok Catalog
 
@@ -107,19 +116,22 @@ Stay ahead with server-side tagging for reliable data tracking, even in privacy-
 
 * **Enhanced Conversion Tracking for Google Ads**: 
   
-    Boost campaign performance with advanced conversion data for improved targeting and optimization.
+    Boost campaign performance with advanced conversion data for improved targeting and optimization. [Learn more about Enhanced Conversions(https://support.google.com/google-ads/answer/9888656).
 
 * **Server-Side Tagging**:  
   * Unlock advanced tracking capabilities via server-side implementation for enhanced data accuracy.  
-  * Improve site speed by 7% and boost customer conversions by 40%, delivering a faster, more engaging user experience.
+  * 90% increase in Meta Ads Conversions and 50% uplift in Google Ads Conversions.
+
+ As showcased in the [Global Paint Manufacturer Case Study](https://www.conversios.io/blog/conversios-server-side-tracking-boost-90-lift-in-meta-ads-conversions-for-a-global-paint-manufacturer/), server-side tagging drives significant improvements in insights and conversions.
 
   **Interested in enhancing your tracking with Server-Side Tagging?**
 
-  Get started with our [Server-Side Tagging solution](https://www.conversios.io/server-side-tagging-for-woocommerce/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=aioreadme) for just **$499 yearly**, and enjoy all the benefits of server-side tracking and advanced analytics for your WooCommerce store!
+  Get started with our [Server-Side Tagging solution](https://www.conversios.io/server-side-tagging/) for just **$499 yearly**, and enjoy all the benefits of server-side tracking and advanced analytics for your WooCommerce store!
 
 * **Unlimited Product Sync Across Channels:** 
   Effortlessly sync your entire product catalog on multiple platforms:
-    – Google Merchant Center
+   – Google Merchant Center
+   – Microsoft Merchant Center
    – Facebook
    – TikTok
 
@@ -142,6 +154,10 @@ Have a look at the full feature list over [here](https://www.conversios.io/all-i
 
 Are you interested in buying the [Pro version](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=aioreadme)? Come and visit us [here](https://www.conversios.io/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=aioreadme).
 
+<strong>Documentation</strong>
+
+Get started with our step-by-step guides: [View Documentation](https://www.conversios.io/docs-category/woocommerce/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=aioreadme)
+
 <strong>Support</strong>
 
 We’re here to help you get the most out of Conversios! Whether you’re setting up the plugin or troubleshooting an issue, our support team is ready to assist.
@@ -162,7 +178,7 @@ We’re here to help you get the most out of Conversios! Whether you’re settin
 * **White-Labeled Report** Need branded report? We’ll show you how to export them like a pro. 
 
 <strong>Privacy Policy</strong>
-You can view our detailed privacy policy [here](https://www.conversios.io/privacy-policy/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=aioreadme).
+You can view our detailed privacy policy [here](https://www.conversios.io/privacy-policy).
 
 <strong>Compatibility</strong>
 Conversios is compatible with the following major plugins:
@@ -177,12 +193,16 @@ Conversios is compatible with the following major plugins:
 * Lead generation plugins like Contact Form 7, Ninja Forms, Formidable, Wp Forms, Gravity Form
 
 == Screenshots ==
-1. Set Up Google Analytics 4
-2. Set Up Google Ads and Enhanced Conversion ID
-3. Top Pixel Manager Screento Enhanced Conversion tracking & Audience Building.
-4. Mutli Product Feed Channels and Feed Management by Channel-Wise
-5. Google Analytics 4 Reporting Dashboard Screen.
-6. Google Analytics 4 Reporting Dashboard
+1. This is the Integration Screen, which displays all the Pixel and Analytics configurations we provide and that you have connected.
+2. This is the Google Tag Manager screen, it provides pre-built tags and trigger automations.
+3. This is the Facebook Pixel & Facebook Conversions API (Meta) screen.
+4. This is the Google Ads Remarketing and Dynamic Remarketing Conversion Tracking Screen, which helps you track everything from Conversions to Enhanced Conversion tracking & Audience Building.
+5. This is the General Reports screen where we provide reports such as sessions, new users, average session duration, bounce rate, Audience report & Top pages reports.
+6. This is the screen where we show device breakdown, top countries, top cities, Real-time reports & daily visitors report.
+7. This is the Channel Configuration Screen for product feed manager; we have Google Merchant Center, TikTok, and Facebook feed creation available.
+8. This is the Attribute Mapping screen in Product Feed Manager.
+9. This is the Category Mapping screen in Product Feed Manager.
+10. This is the Product Feed Management Screen where you can manage and create your feeds.
 
 == Frequently Asked Questions ==
 
@@ -235,6 +255,9 @@ Yes! Conversios tracks lead interactions like form submissions, phone clicks, em
 Yes, Conversios is fully compatible with WooCommerce’s HPOS, ensuring seamless event tracking.
 
 == Changelog ==
+
+= 7.2.4 – 18/03/2025 =
+* **Google Ads Customer Match List:** Introduced the ability to upload and manage customer data for advanced segmentation and targeted campaigns.
 
 = 7.2.3 – 26/02/2025 =
 * **Microsoft Bing Marketing Integration:** integrate your WooCommerce store with Microsoft Bing and Microsoft Merchant Center to showcase your products across the Microsoft network.

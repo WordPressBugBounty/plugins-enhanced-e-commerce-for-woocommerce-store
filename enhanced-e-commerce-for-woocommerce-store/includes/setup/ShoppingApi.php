@@ -324,7 +324,6 @@ class ShoppingApi
                 return $return;
             } else {
                 $return->error = true;
-                $return->data = $result->data;
                 $return->errors = $result->errors;
                 $return->status = $response_code;
                 return $return;
@@ -368,7 +367,6 @@ class ShoppingApi
                 return $return;
             } else {
                 $return->error = true;
-                $return->data = $result->data;
                 $return->errors = $result->errors;
                 $return->status = $response_code;
                 return $return;
@@ -415,7 +413,6 @@ class ShoppingApi
                 return $return;
             } else {
                 $return->error = true;
-                $return->data = $result->data;
                 $return->errors = $result->errors;
                 $return->status = $response_code;
                 return $return;
@@ -462,7 +459,6 @@ class ShoppingApi
                 return $return;
             } else {
                 $return->error = true;
-                $return->data = $result->data;
                 $return->errors = $result->errors;
                 $return->status = $response_code;
                 return $return;
@@ -511,7 +507,6 @@ class ShoppingApi
                 return $return;
             } else {
                 $return->error = true;
-                $return->data = $result->data;
                 $return->errors = $result->errors;
                 $return->status = $response_code;
                 return $return;
@@ -558,7 +553,6 @@ class ShoppingApi
                 return $return;
             } else {
                 $return->error = true;
-                // $return->data = $result->data;
                 $return->errors = $result->errors;
                 $return->status = $response_code;
                 return $return;
@@ -609,7 +603,6 @@ class ShoppingApi
                 return $return;
             } else {
                 $return->error = true;
-                $return->data = $result->data;
                 $return->errors = $result->errors;
                 $return->status = $response_code;
                 return $return;

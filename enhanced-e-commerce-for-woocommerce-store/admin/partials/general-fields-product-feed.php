@@ -1184,7 +1184,7 @@ jQuery(document).on('click', '#submitFeed', function(e) {
         jQuery('.errorChannel').css('border', '1px solid red');
         return false;
     }
-
+    jQuery('#submitFeed').addClass("disabledsection");
     save_feed_data();
 });
 

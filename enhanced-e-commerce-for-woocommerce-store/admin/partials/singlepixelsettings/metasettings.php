@@ -685,7 +685,7 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
             jQuery('.errorChannel').not(':disabled').css('border', '1px solid red');
             return false;
         }
-
+        jQuery('#submitFeed').addClass("disabledsection");
         save_feed_data();
     });
 

@@ -263,6 +263,11 @@ if (class_exists('Conversios_Admin') === FALSE) {
           // Enqueue Moment.js only if it's not already enqueued
           wp_enqueue_script('conversios-moment-js', ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js', array(), '2.22.1', false);
         }
+      } else if (isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios-audience-manager") {
+        wp_register_style('tvc-customer-segment-css', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/css/customer-segment.css'));
+        wp_enqueue_style('tvc-customer-segment-css');
+        wp_enqueue_script('tvc-ee-dataTables-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.dataTables.min.js'), array('jquery'), esc_attr($this->version), false);
+        wp_enqueue_script('tvc-ee-dataTables-v5-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/dataTables.bootstrap5.min.js'), array('jquery'), esc_attr($this->version), false);
       }
     }
 
@@ -345,6 +350,17 @@ if (class_exists('Conversios_Admin') === FALSE) {
           'conversios-google-shopping-feed',
           array($this, 'showPage'),
           3
+        );
+
+
+        add_submenu_page(
+          CONV_MENU_SLUG,
+          esc_html__('Audience Manager', 'enhanced-e-commerce-for-woocommerce-store'),
+          '<span class="product_feed_menu"> Audience Manager </span>',
+          'manage_options',
+          'conversios-audience-manager',
+          array($this, 'showPage'),
+          5
         );
       } else { // When no wc
 
@@ -432,19 +448,16 @@ if (class_exists('Conversios_Admin') === FALSE) {
       do_action('add_conversios_header');
 ?>
       <div style="position:relative;">
-        <div class="card coming-soon-card shadow-lg"
-          style="position: fixed; top: 25%; left: 40%; z-index: 999;max-width: 400px; margin: 2rem auto; text-align: center;">
+        <div class="card coming-soon-card shadow-lg" style="position: fixed; top: 25%; left: 40%; z-index: 999;max-width: 400px; margin: 2rem auto; text-align: center;">
           <div class="card-body" style="padding: 2rem;">
             <h5 class="card-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Feature Coming Soon</h5>
             <p class="card-text" style="font-size: 1rem; margin-bottom: 1.5rem;">We're working hard to bring this
               feature to you. Stay tuned!</p>
-            <a target="_blank"
-              href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list"
-              class="btn btn-primary">Learn More</a>
+            <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list" class="btn btn-primary">Learn More</a>
           </div>
         </div>
         <?php echo wp_kses(
-          enhancad_get_plugin_image('/admin/images/web-reports-placeholder.png','reports','','filter:opacity(0.7) blur(2px); margin-top:20px;'),
+          enhancad_get_plugin_image('/admin/images/web-reports-placeholder.png', 'reports', '', 'filter:opacity(0.7) blur(2px); margin-top:20px;'),
           array(
             'img' => array(
               'src' => true,
@@ -573,6 +586,24 @@ if (class_exists('Conversios_Admin') === FALSE) {
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/tatvic-category-wrapper.php';
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
       require_once 'partials/feedwise-product-list.php';
+    }
+
+    public function conversios_audience_manager()
+    {
+      $action_tab = (isset($_GET['tab'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'tab'))) : "";
+      if ($action_tab != "") {
+        //$this->$action_tab();
+        require_once 'partials/customermatch/export.php';
+        require_once 'partials/customermatch/batch_exporter.php';
+        require_once 'partials/customermatch/html.php';
+        require_once 'partials/customermatch/settings.php';
+        Conv_Exporter::conv_enqueue();
+        Conv_Exporter::conv_admin_gui();
+        Conv_Exporter::conv_styles();
+        new Conv_Exporter();
+      } else {
+        require_once 'partials/customermatch/customer-match.php';
+      }
     }
   }
 }

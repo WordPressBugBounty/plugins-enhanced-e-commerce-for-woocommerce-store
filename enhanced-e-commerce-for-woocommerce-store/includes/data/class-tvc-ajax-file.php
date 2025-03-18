@@ -32,13 +32,13 @@ if (!class_exists('TVC_Ajax_File')) :
       //add_action('wp_ajax_tvcajax-custom-metrics-dimension', array($this, 'tvcajax_custom_metrics_dimension'));
       add_action('wp_ajax_tvcajax-store-time-taken', array($this, 'tvcajax_store_time_taken'));
 
-      add_action('wp_ajax_tvc_call_api_sync', array($this, 'tvc_call_api_sync'));
-      add_action('wp_ajax_tvc_call_import_gmc_product', array($this, 'tvc_call_import_gmc_product'));
+      // add_action('wp_ajax_tvc_call_api_sync', array($this, 'tvc_call_api_sync'));
+      // add_action('wp_ajax_tvc_call_import_gmc_product', array($this, 'tvc_call_import_gmc_product'));
       add_action('wp_ajax_tvc_call_domain_claim', array($this, 'tvc_call_domain_claim'));
       add_action('wp_ajax_tvc_call_site_verified', array($this, 'tvc_call_site_verified'));
-      add_action('wp_ajax_tvc_call_notice_dismiss', array($this, 'tvc_call_notice_dismiss'));
-      add_action('wp_ajax_tvc_call_notice_dismiss_trigger', array($this, 'tvc_call_notice_dismiss_trigger'));
-      add_action('wp_ajax_tvc_call_notification_dismiss', array($this, 'tvc_call_notification_dismiss'));
+      // add_action('wp_ajax_tvc_call_notice_dismiss', array($this, 'tvc_call_notice_dismiss'));
+      // add_action('wp_ajax_tvc_call_notice_dismiss_trigger', array($this, 'tvc_call_notice_dismiss_trigger'));
+      // add_action('wp_ajax_tvc_call_notification_dismiss', array($this, 'tvc_call_notification_dismiss'));
       add_action('wp_ajax_auto_product_sync_setting', array($this, 'auto_product_sync_setting'));
       add_action('wp_ajax_con_get_conversion_list', array($this, 'con_get_conversion_list'));
       add_action('wp_ajax_tvc_call_active_licence', array($this, 'tvc_call_active_licence'));
@@ -57,7 +57,7 @@ if (!class_exists('TVC_Ajax_File')) :
       // For new UIUX
       add_action('wp_ajax_conv_save_pixel_data', array($this, 'conv_save_pixel_data'));
       add_action('wp_ajax_conv_save_googleads_data', array($this, 'conv_save_googleads_data'));
-      add_action('wp_ajax_conv_get_conversion_list_gads', array($this, 'conv_get_conversion_list_gads'));
+      // add_action('wp_ajax_conv_get_conversion_list_gads', array($this, 'conv_get_conversion_list_gads'));
       add_action('wp_ajax_save_category_mapping', [$this, 'save_category_mapping']);
       add_action('wp_ajax_save_attribute_mapping', [$this, 'save_attribute_mapping']);
       add_action('wp_ajax_save_feed_data', [$this, 'save_feed_data']);
@@ -78,7 +78,7 @@ if (!class_exists('TVC_Ajax_File')) :
 
       // For EC
       add_action('wp_ajax_conv_create_ec_row', array($this, 'conv_create_ec_row'));
-      add_action('wp_ajax_conv_create_ec_row_update', array($this, 'conv_create_ec_row_update'));
+      // add_action('wp_ajax_conv_create_ec_row_update', array($this, 'conv_create_ec_row_update'));
       add_action('wp_ajax_ee_createPmaxCampaign', [$this, 'ee_createPmaxCampaign']);
       add_action('wp_ajax_ee_createPmaxCampaign_ms', [$this, 'ee_createPmaxCampaign_ms']);
       add_action('wp_ajax_ee_editPmaxCampaign', [$this, 'ee_editPmaxCampaign']);
@@ -98,14 +98,18 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('wp_ajax_get_fb_catalog_data', array($this, 'get_fb_catalog_data'));
       add_action('wp_ajax_conv_checkMcc', [$this, 'conv_checkMcc']);
       add_action('wp_ajax_conv_send_email', array($this, 'conv_send_email'));
-      add_action('wp_ajax_conv_convnewfeaturemodal_ajax', array($this, 'conv_convnewfeaturemodal_ajax'));
+      //add_action('wp_ajax_conv_convnewfeaturemodal_ajax', array($this, 'conv_convnewfeaturemodal_ajax'));
+      require_once(ENHANCAD_PLUGIN_DIR . 'admin/partials/customermatch/export.php');
+      $exporter = new Conv_Exporter();
+      add_action('wp_ajax_conv_export_users_csv', array($exporter, 'conv_export_users_csv'));
     }
 
     public function conv_create_ec_row()
     {
       if (
-        isset($_POST['pix_sav_nonce'])
-        && $this->safe_ajax_call(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')
+        isset($_POST['pix_sav_nonce']) &&
+        wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val') &&
+        $this->safe_ajax_call(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')
       ) {
         $customObj = new CustomApi();
         $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
@@ -122,8 +126,12 @@ if (!class_exists('TVC_Ajax_File')) :
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $customApiObj = new CustomApi();
 
-        $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
-        $ads_accountId = isset($_POST['ads_accountId']) ? sanitize_text_field(wp_unslash($_POST['ads_accountId'])) : "";
+        if (isset($_POST['CONVNonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['CONVNonce'])), 'conv_checkMcc-nonce')) {
+          $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
+          $ads_accountId = isset($_POST['ads_accountId']) ? sanitize_text_field(wp_unslash($_POST['ads_accountId'])) : "";
+
+          // Proceed with processing only after nonce verification
+        }
 
         if ($subscription_id != "" && $ads_accountId != "") {
           $response = $customApiObj->ads_checkMcc($subscription_id, $ads_accountId);
@@ -157,34 +165,8 @@ if (!class_exists('TVC_Ajax_File')) :
       }
       die();
     }
-    public function conv_convnewfeaturemodal_ajax()
-    {
-      if (isset($_POST['wp_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wp_nonce'])), 'convnewfeaturemodal_nonce')) {
-        update_option('conv_popup_newfeature', 'yes');
-        wp_send_json(array('save' => 'success'));
-      } else {
-        wp_send_json(array('save' => 'failed'));
-      }
-      die();
-    }
 
-    public function conv_create_ec_row_update()
-    {
-      $customObj = new CustomApi();
-      $datadump_main = isset($_POST['convReportData']) ? wp_json_encode(json_decode(stripslashes(sanitize_text_field(wp_unslash($_POST['convReportData']))), true)) : '';
-      $is_generate = isset($_POST['is_generate']) && $_POST['is_generate'] == 1 ? 1 : 0;
-      $subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
-      $ec_token = isset($_POST['ec_token']) ? sanitize_text_field(wp_unslash($_POST['ec_token'])) : "";
-      $formdata = array(
-        "subscription_id" => $subscription_id,
-        "ec_token" => $ec_token,
-        "report_data" => $datadump_main,
-        "is_generate" => $is_generate
-      );
-      //echo '<pre>'; print_r($formdata); echo '</pre>';
-      echo wp_json_encode($customObj->conv_create_ec_row_apicall($formdata));
-      die();
-    }
+
 
     // Save data in ee_options
     public function conv_save_data_eeoption($data)
@@ -299,7 +281,10 @@ if (!class_exists('TVC_Ajax_File')) :
     // All new functions for new UIUX
     public function conv_save_pixel_data()
     {
-      if (isset($_POST['pix_sav_nonce']) && $this->safe_ajax_call(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')) {
+      if (
+        isset($_POST['pix_sav_nonce']) &&
+        wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')
+      ) {
         $post = array(
           "conv_options_data" => "",
           "conv_options_type" => "",
@@ -385,26 +370,27 @@ if (!class_exists('TVC_Ajax_File')) :
         if (isset($_POST['conv_options_type']) && in_array("facebookcatalog", $_POST['conv_options_type'])) {
           $this->conv_save_facebookcatalog($_POST);
         }
-        if (isset($_POST['conv_options_data']) && 
-          ( 
-            array_key_exists("microsoft_ads_manager_id", $_POST['conv_options_data']) 
-            || array_key_exists("microsoft_ads_subaccount_id", $_POST['conv_options_data']) 
-            || array_key_exists("microsoft_ads_pixel_id", $_POST['conv_options_data']) 
-            || array_key_exists("microsoft_merchant_center_id", $_POST['conv_options_data']) 
-            || array_key_exists("ms_catalog_id", $_POST['conv_options_data']) 
-          ) 
+        if (
+          isset($_POST['conv_options_data']) &&
+          (
+            array_key_exists("microsoft_ads_manager_id", $_POST['conv_options_data'])
+            || array_key_exists("microsoft_ads_subaccount_id", $_POST['conv_options_data'])
+            || array_key_exists("microsoft_ads_pixel_id", $_POST['conv_options_data'])
+            || array_key_exists("microsoft_merchant_center_id", $_POST['conv_options_data'])
+            || array_key_exists("ms_catalog_id", $_POST['conv_options_data'])
+          )
           &&
-          ( 
-            !empty($_POST['conv_options_data']['microsoft_ads_manager_id']) 
-            || !empty($_POST['conv_options_data']['microsoft_ads_subaccount_id']) 
-            || !empty($_POST['conv_options_data']['microsoft_ads_pixel_id']) 
-            || !empty($_POST['conv_options_data']['microsoft_merchant_center_id']) 
-            || !empty($_POST['conv_options_data']['ms_catalog_id']) 
-          ) 
+          (
+            !empty($_POST['conv_options_data']['microsoft_ads_manager_id'])
+            || !empty($_POST['conv_options_data']['microsoft_ads_subaccount_id'])
+            || !empty($_POST['conv_options_data']['microsoft_ads_pixel_id'])
+            || !empty($_POST['conv_options_data']['microsoft_merchant_center_id'])
+            || !empty($_POST['conv_options_data']['ms_catalog_id'])
+          )
         ) {
           $this->conv_save_microsoft($_POST['conv_options_data']);
         }
-        
+
 
         if (isset($_POST['conv_options_type']) && in_array("eeconvnotice", $_POST['conv_options_type'])) {
           $this->conv_save_eeconvnotice($post);
@@ -423,7 +409,10 @@ if (!class_exists('TVC_Ajax_File')) :
     // Save google ads settings
     public function conv_save_googleads_data()
     {
-      if (isset($_POST['pix_sav_nonce']) && $this->safe_ajax_call(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')) {
+      if (
+        isset($_POST['pix_sav_nonce']) &&
+        wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')
+      ) {
         $conv_options_data = isset($_POST['conv_options_data']) && is_array($_POST['conv_options_data']) ? array_map('sanitize_text_field', wp_unslash($_POST['conv_options_data'])) : (isset($_POST['conv_options_data']) ? sanitize_text_field(wp_unslash($_POST['conv_options_data'])) : '');
         $googleDetail_setting = array();
         if (isset($conv_options_data['remarketing_tags'])) {
@@ -511,8 +500,8 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function cov_save_badge_settings()
     {
-      $nonce = (isset($_POST['conv_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conv_nonce'])) : "";
-      if ($this->safe_ajax_call($nonce, 'conv_nonce_val')) {
+      $nonce = isset($_POST['conv_nonce']) ? sanitize_text_field(wp_unslash($_POST['conv_nonce'])) : '';
+      if (wp_verify_nonce($nonce, 'conv_nonce_val')) {
 
         $val = isset($_POST['bagdeVal']) ? sanitize_text_field(wp_unslash($_POST['bagdeVal'])) : "no";
         $data = array();
@@ -530,7 +519,8 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function update_user_tracking_data()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'update_user_tracking_data-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'update_user_tracking_data-nonce')) {
         $event_name = isset($_POST['event_name']) ? sanitize_text_field(wp_unslash($_POST['event_name'])) : "";
         $screen_name = isset($_POST['screen_name']) ? sanitize_text_field(wp_unslash($_POST['screen_name'])) : "";
         $error_msg = isset($_POST['error_msg']) ? sanitize_text_field(wp_unslash($_POST['error_msg'])) : "";
@@ -821,7 +811,9 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function con_get_conversion_list()
     {
-      if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'con_get_conversion_list-nonce')) {
+      $nonce = isset($_POST['TVCNonce']) ? filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW) : '';
+
+      if ($nonce && wp_verify_nonce($nonce, 'con_get_conversion_list-nonce')) {
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $this->customApiObj = new CustomApi();
         $this->current_customer_id = $TVC_Admin_Helper->get_currentCustomerId();
@@ -848,38 +840,41 @@ if (!class_exists('TVC_Ajax_File')) :
       wp_die(0);
     }
 
-    public function conv_get_conversion_list_gads()
-    {
-      if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'con_get_conversion_list-nonce')) {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $this->customApiObj = new CustomApi();
-        $current_customer_id = isset($_POST['gads_id']) ? sanitize_text_field(wp_unslash($_POST['gads_id'])) : '';
-        if ($current_customer_id != "") {
-          $response = $this->customApiObj->get_conversion_list($current_customer_id);
-          if (property_exists($response, "error") && $response->error == false) {
-            if (property_exists($response, "data") && $response->data != "" && !empty($response->data)) {
-              $selected_conversio_send_to = get_option('ee_conversio_send_to');
-              $conversion_label = array();
-              foreach ($response->data as $key => $value) {
-                $con_string = $value->tagSnippets;
-                $conversion_label_check = $TVC_Admin_Helper->get_conversion_label($con_string);
-                if ($conversion_label_check != "" && $conversion_label_check != null) {
-                  $conversion_label[] = $TVC_Admin_Helper->get_conversion_label($con_string);
-                }
-              }
-              echo wp_json_encode($conversion_label);
-              exit;
-            }
-          }
-        }
-      }
-      // IMPORTANT: don't forget to exit
-      wp_die(0);
-    }
+    // public function conv_get_conversion_list_gads()
+    // {
+    //   if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'con_get_conversion_list-nonce')) 
+    //   {
+    //     $TVC_Admin_Helper = new TVC_Admin_Helper();
+    //     $this->customApiObj = new CustomApi();
+    //     $current_customer_id = isset($_POST['gads_id']) ? sanitize_text_field(wp_unslash($_POST['gads_id'])) : '';
+    //     if ($current_customer_id != "") {
+    //       $response = $this->customApiObj->get_conversion_list($current_customer_id);
+    //       if (property_exists($response, "error") && $response->error == false) {
+    //         if (property_exists($response, "data") && $response->data != "" && !empty($response->data)) {
+    //           $selected_conversio_send_to = get_option('ee_conversio_send_to');
+    //           $conversion_label = array();
+    //           foreach ($response->data as $key => $value) {
+    //             $con_string = $value->tagSnippets;
+    //             $conversion_label_check = $TVC_Admin_Helper->get_conversion_label($con_string);
+    //             if ($conversion_label_check != "" && $conversion_label_check != null) {
+    //               $conversion_label[] = $TVC_Admin_Helper->get_conversion_label($con_string);
+    //             }
+    //           }
+    //           echo wp_json_encode($conversion_label);
+    //           exit;
+    //         }
+    //       }
+    //     }
+    //   }
+    //   // IMPORTANT: don't forget to exit
+    //   wp_die(0);
+    // }
 
     public function conv_get_conversion_list_gads_bycat()
     {
-      if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'con_get_conversion_list-nonce')) {
+      $nonce = isset($_POST['TVCNonce']) ? filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW) : '';
+
+      if ($nonce && wp_verify_nonce($nonce, 'con_get_conversion_list-nonce')) {
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $customApiObj = new CustomApi();
 
@@ -914,8 +909,9 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function conv_create_gads_conversion()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'con_get_conversion_list-nonce')) {
-        //$TVC_Admin_Helper = new TVC_Admin_Helper();
+      $nonce = filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'con_get_conversion_list-nonce')) {        //$TVC_Admin_Helper = new TVC_Admin_Helper();
         $customApiObj = new CustomApi();
 
         $current_customer_id = isset($_POST['gads_id']) ? sanitize_text_field(wp_unslash($_POST['gads_id'])) : '';
@@ -936,7 +932,9 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function conv_save_gads_conversion()
     {
-      if (isset($_POST['CONVNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'CONVNonce', FILTER_UNSAFE_RAW), 'conv_save_gads_conversion-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'CONVNonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_save_gads_conversion-nonce')) {
         $ee_options = unserialize(get_option('ee_options'));
         if (isset($_POST['cleargadsconversions']) && sanitize_text_field(wp_unslash($_POST['cleargadsconversions'])) == "yes") {
           unset($ee_options["gads_conversions"]);
@@ -987,101 +985,102 @@ if (!class_exists('TVC_Ajax_File')) :
       }
     }
 
-    public function tvc_call_notification_dismiss()
-    {
-      if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'tvc_call_notification_dismiss-nonce')) {
-        $ee_dismiss_id = isset($_POST['data']['ee_dismiss_id']) ? sanitize_text_field(wp_unslash($_POST['data']['ee_dismiss_id'])) : "";
-        if ($ee_dismiss_id != "") {
-          $TVC_Admin_Helper = new TVC_Admin_Helper();
-          $ee_msg_list = $TVC_Admin_Helper->get_ee_msg_nofification_list();
-          if (isset($ee_msg_list[$ee_dismiss_id])) {
-            unset($ee_msg_list[$ee_dismiss_id]);
-            $ee_msg_list[$ee_dismiss_id]["active"] = 0;
-            $TVC_Admin_Helper->set_ee_msg_nofification_list($ee_msg_list);
-            echo wp_json_encode(array('status' => 'success', 'message' => ""));
-          }
-        }
-      } else {
-        echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
-      }
-      // IMPORTANT: don't forget to exit
-      exit;
-    }
-    public function tvc_call_notice_dismiss()
-    {
-      if (isset($_POST['apiNoticDismissNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiNoticDismissNonce', FILTER_UNSAFE_RAW), 'tvc_call_notice_dismiss-nonce')) {
-        $ee_notice_dismiss_id = isset($_POST['data']['ee_notice_dismiss_id']) ? sanitize_text_field(wp_unslash($_POST['data']['ee_notice_dismiss_id'])) : "";
-        $ee_notice_dismiss_id = sanitize_text_field($ee_notice_dismiss_id);
-        if ($ee_notice_dismiss_id != "") {
-          $TVC_Admin_Helper = new TVC_Admin_Helper();
-          $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
-          $ee_additional_data['dismissed_' . $ee_notice_dismiss_id] = 1;
-          $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
-          echo wp_json_encode(array('status' => 'success', 'message' => $ee_additional_data));
-        }
-      } else {
-        echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
-      }
-      // IMPORTANT: don't forget to exit
-      exit;
-    }
+    // public function tvc_call_notification_dismiss()
+    // {
+    //   if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'tvc_call_notification_dismiss-nonce')) {
+    //     $ee_dismiss_id = isset($_POST['data']['ee_dismiss_id']) ? sanitize_text_field(wp_unslash($_POST['data']['ee_dismiss_id'])) : "";
+    //     if ($ee_dismiss_id != "") {
+    //       $TVC_Admin_Helper = new TVC_Admin_Helper();
+    //       $ee_msg_list = $TVC_Admin_Helper->get_ee_msg_nofification_list();
+    //       if (isset($ee_msg_list[$ee_dismiss_id])) {
+    //         unset($ee_msg_list[$ee_dismiss_id]);
+    //         $ee_msg_list[$ee_dismiss_id]["active"] = 0;
+    //         $TVC_Admin_Helper->set_ee_msg_nofification_list($ee_msg_list);
+    //         echo wp_json_encode(array('status' => 'success', 'message' => ""));
+    //       }
+    //     }
+    //   } else {
+    //     echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+    //   }
+    //   // IMPORTANT: don't forget to exit
+    //   exit;
+    // }
+    // public function tvc_call_notice_dismiss()
+    // {
+    //   if (isset($_POST['apiNoticDismissNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiNoticDismissNonce', FILTER_UNSAFE_RAW), 'tvc_call_notice_dismiss-nonce')) {
+    //     $ee_notice_dismiss_id = isset($_POST['data']['ee_notice_dismiss_id']) ? sanitize_text_field(wp_unslash($_POST['data']['ee_notice_dismiss_id'])) : "";
+    //     $ee_notice_dismiss_id = sanitize_text_field($ee_notice_dismiss_id);
+    //     if ($ee_notice_dismiss_id != "") {
+    //       $TVC_Admin_Helper = new TVC_Admin_Helper();
+    //       $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+    //       $ee_additional_data['dismissed_' . $ee_notice_dismiss_id] = 1;
+    //       $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
+    //       echo wp_json_encode(array('status' => 'success', 'message' => $ee_additional_data));
+    //     }
+    //   } else {
+    //     echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+    //   }
+    //   // IMPORTANT: don't forget to exit
+    //   exit;
+    // }
 
-    public function tvc_call_notice_dismiss_trigger()
-    {
-      if (isset($_POST['apiNoticDismissNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiNoticDismissNonce', FILTER_UNSAFE_RAW), 'tvc_call_notice_dismiss-nonce')) {
-        $ee_notice_dismiss_id_trigger = isset($_POST['data']['ee_notice_dismiss_id_trigger']) ? sanitize_text_field(wp_unslash($_POST['data']['ee_notice_dismiss_id_trigger'])) : "";
-        $ee_notice_dismiss_id_trigger = sanitize_text_field($ee_notice_dismiss_id_trigger);
-        if ($ee_notice_dismiss_id_trigger != "") {
-          $TVC_Admin_Helper = new TVC_Admin_Helper();
-          $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
-          $slug = $ee_notice_dismiss_id_trigger;
-          $title = "";
-          $content = "";
-          $status = "0";
-          $TVC_Admin_Helper->tvc_dismiss_admin_notice($slug, $content, $status, $title);
-        }
-      } else {
-        echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
-      }
-      // IMPORTANT: don't forget to exit
-      exit;
-    }
-    public function tvc_call_import_gmc_product()
-    {
-      if (isset($_POST['apiSyncupNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiSyncupNonce', FILTER_UNSAFE_RAW), 'tvc_call_api_sync-nonce')) {
-        $next_page_token = isset($_POST['next_page_token']) ? sanitize_text_field(wp_unslash($_POST['next_page_token'])) : "";
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $api_rs = $TVC_Admin_Helper->update_gmc_product_to_db($next_page_token);
-        if (isset($api_rs['error'])) {
-          echo wp_json_encode($api_rs);
-        } else {
-          echo wp_json_encode(array('error' => true, 'message' => esc_html__("Please try after some time.", "enhanced-e-commerce-for-woocommerce-store")));
-        }
-      } else {
-        echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
-      }
-      // IMPORTANT: don't forget to exit
-      exit;
-    }
-    public function tvc_call_api_sync()
-    {
-      if (isset($_POST['apiSyncupNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiSyncupNonce', FILTER_UNSAFE_RAW), 'tvc_call_api_sync-nonce')) {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $api_rs = $TVC_Admin_Helper->set_update_api_to_db();
-        if (isset($api_rs['error']) && isset($api_rs['message']) && sanitize_text_field($api_rs['message'])) {
-          echo wp_json_encode($api_rs);
-        } else {
-          echo wp_json_encode(array('error' => true, 'message' => esc_html__("Please try after some time.", "enhanced-e-commerce-for-woocommerce-store")));
-        }
-      } else {
-        echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
-      }
-      // IMPORTANT: don't forget to exit
-      exit;
-    }
+    // public function tvc_call_notice_dismiss_trigger()
+    // {
+    //   if (isset($_POST['apiNoticDismissNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiNoticDismissNonce', FILTER_UNSAFE_RAW), 'tvc_call_notice_dismiss-nonce')) {
+    //     $ee_notice_dismiss_id_trigger = isset($_POST['data']['ee_notice_dismiss_id_trigger']) ? sanitize_text_field(wp_unslash($_POST['data']['ee_notice_dismiss_id_trigger'])) : "";
+    //     $ee_notice_dismiss_id_trigger = sanitize_text_field($ee_notice_dismiss_id_trigger);
+    //     if ($ee_notice_dismiss_id_trigger != "") {
+    //       $TVC_Admin_Helper = new TVC_Admin_Helper();
+    //       $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+    //       $slug = $ee_notice_dismiss_id_trigger;
+    //       $title = "";
+    //       $content = "";
+    //       $status = "0";
+    //       $TVC_Admin_Helper->tvc_dismiss_admin_notice($slug, $content, $status, $title);
+    //     }
+    //   } else {
+    //     echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+    //   }
+    //   // IMPORTANT: don't forget to exit
+    //   exit;
+    // }
+    // public function tvc_call_import_gmc_product()
+    // {
+    //   if (isset($_POST['apiSyncupNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiSyncupNonce', FILTER_UNSAFE_RAW), 'tvc_call_api_sync-nonce')) {
+    //     $next_page_token = isset($_POST['next_page_token']) ? sanitize_text_field(wp_unslash($_POST['next_page_token'])) : "";
+    //     $TVC_Admin_Helper = new TVC_Admin_Helper();
+    //     $api_rs = $TVC_Admin_Helper->update_gmc_product_to_db($next_page_token);
+    //     if (isset($api_rs['error'])) {
+    //       echo wp_json_encode($api_rs);
+    //     } else {
+    //       echo wp_json_encode(array('error' => true, 'message' => esc_html__("Please try after some time.", "enhanced-e-commerce-for-woocommerce-store")));
+    //     }
+    //   } else {
+    //     echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+    //   }
+    //   // IMPORTANT: don't forget to exit
+    //   exit;
+    // }
+    // public function tvc_call_api_sync()
+    // {
+    //   if (isset($_POST['apiSyncupNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'apiSyncupNonce', FILTER_UNSAFE_RAW), 'tvc_call_api_sync-nonce')) {
+    //     $TVC_Admin_Helper = new TVC_Admin_Helper();
+    //     $api_rs = $TVC_Admin_Helper->set_update_api_to_db();
+    //     if (isset($api_rs['error']) && isset($api_rs['message']) && sanitize_text_field($api_rs['message'])) {
+    //       echo wp_json_encode($api_rs);
+    //     } else {
+    //       echo wp_json_encode(array('error' => true, 'message' => esc_html__("Please try after some time.", "enhanced-e-commerce-for-woocommerce-store")));
+    //     }
+    //   } else {
+    //     echo wp_json_encode(array('status' => 'error', "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+    //   }
+    //   // IMPORTANT: don't forget to exit
+    //   exit;
+    // }
     public function tvc_call_site_verified()
     {
-      if (isset($_POST['SiteVerifiedNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'SiteVerifiedNonce', FILTER_UNSAFE_RAW), 'tvc_call_site_verified-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'SiteVerifiedNonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'tvc_call_site_verified-nonce')) {
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $tvc_rs = [];
         $tvc_rs = $TVC_Admin_Helper->call_site_verified();
@@ -1439,7 +1438,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_get_product_status()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_licence_nonce', FILTER_UNSAFE_RAW), 'conv_licence-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_licence_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_licence-nonce')) {
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $google_detail = $TVC_Admin_Helper->get_ee_options_data();
         $merchantId = $TVC_Admin_Helper->get_merchantId();
@@ -1483,7 +1484,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function save_feed_data()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
         $channel_id = array();
         if (isset($_POST['google_merchant_center']) && $_POST['google_merchant_center'] == 1) {
@@ -1591,7 +1594,7 @@ if (!class_exists('TVC_Ajax_File')) :
             'id' => sanitize_text_field(wp_unslash($_POST['edit'])),
           );
           echo wp_json_encode($result);
-        } else { 
+        } else {
           $profile_data = array(
             'feed_name' => isset($_POST['feedName']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['feedName']))) : '',
             'channel_ids' => isset($channel_ids) ? esc_sql(sanitize_text_field($channel_ids)) : '',
@@ -1623,7 +1626,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function get_feed_data_by_id()
     {
-      if (isset($_POST['conv_onboarding_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
         if (isset($_POST['id'])) {
           $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['id'])));
@@ -1659,7 +1664,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_duplicate_feed_data_by_id()
     {
-      if (isset($_POST['conv_onboarding_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
         if (isset($_POST['id'])) {
           $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['id'])));
@@ -1716,7 +1723,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_delete_feed_data_by_id()
     {
-      if (isset($_POST['conv_onboarding_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
         if (isset($_POST['id'])) {
           $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['id'])));
@@ -1766,7 +1775,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_delete_feed_gmc()
     {
-      if (isset($_POST['conv_onboarding_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         $CONV_Admin_DB_Helper = new TVC_Admin_DB_Helper();
         if (isset($_POST['feed_id'])) {
           $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['feed_id'])));
@@ -1833,7 +1844,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_get_product_details_for_table()
     {
-      if (isset($_POST['product_details_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'product_details_nonce', FILTER_UNSAFE_RAW), 'conv_product_details-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'product_details_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_product_details-nonce')) {
         $products_per_page = isset($_POST['length']) ? sanitize_text_field(absint($_POST['length'])) : 10;
         $page_number = isset($_POST['start']) ? sanitize_text_field(absint($_POST['start'])) : 1;
         $search = isset($_POST['searchName']) ? sanitize_text_field(wp_unslash($_POST['searchName'])) : '';
@@ -2081,7 +2094,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_syncProductCategory()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_syncprodcat_nonce', FILTER_UNSAFE_RAW), 'conv_syncprodcat')) {
+      $nonce = filter_input(INPUT_POST, 'conv_syncprodcat_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_syncprodcat')) {
         $search = isset($_POST['searchName']) ? sanitize_text_field(wp_unslash($_POST['searchName'])) : '';
         $productSearch = isset($_POST['productData']) ? explode(',', sanitize_text_field(wp_unslash($_POST['productData']))) : array();
         $conditionSearch = isset($_POST['conditionData']) ? explode(',', sanitize_text_field(wp_unslash($_POST['conditionData']))) : array();
@@ -2293,7 +2308,8 @@ if (!class_exists('TVC_Ajax_File')) :
     function ee_feed_wise_product_sync_batch_wise()
     {
       $w_cat_id = $g_cat_id = '';
-      if (isset($_POST['conv_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'conv_nonce', FILTER_UNSAFE_RAW), 'conv_ajax_product_sync_bantch_wise-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_nonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'conv_ajax_product_sync_bantch_wise-nonce')) {
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $TVC_Admin_Helper->plugin_log("Start", 'product_sync');
         $conv_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
@@ -2468,11 +2484,11 @@ if (!class_exists('TVC_Ajax_File')) :
                   'business_id' =>  isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '2') !== false ? sanitize_text_field($ee_options['facebook_setting']['fb_business_id']) : '',
                   'catalog_id' =>  isset($_POST['channel_ids']) && strpos(sanitize_text_field(wp_unslash($_POST['channel_ids'])), '2') !== false ? sanitize_text_field($ee_options['facebook_setting']['fb_catalog_id']) : '',
                   'ms_catalog_id' =>  strpos($_POST['channel_ids'], '4') !== false ? $ee_options['ms_catalog_id'] : '',
-								  'ms_store_id' =>  strpos($_POST['channel_ids'], '4') !== false ? $ee_options['microsoft_merchant_center_id'] : '',
+                  'ms_store_id' =>  strpos($_POST['channel_ids'], '4') !== false ? $ee_options['microsoft_merchant_center_id'] : '',
                   'entries' => $p_map_attribute['items']
                 ];
                 /**************************** API Call to GMC ****************************************************************************/
-                
+
                 $response = $CustomApi->feed_wise_products_sync($data, 'call_by_includes/data/class-tvc-ajax-file.php 2447');
                 $TVC_Admin_Helper->plugin_log("woow 2477 callback-feed_wise_products_sync()", 'product_sync');
 
@@ -2518,7 +2534,7 @@ if (!class_exists('TVC_Ajax_File')) :
                   $TVC_Admin_Helper->plugin_log("woow 2518 Error in Sync", 'product_sync');
                   return wp_json_encode(array('error' => true, 'message' => esc_attr('Error in Sync...')));
                 }
-              }else{
+              } else {
                 $TVC_Admin_Helper->plugin_log("woow 2522 Error in Sync", 'product_sync');
                 return wp_json_encode(array('error' => true, 'message' => esc_attr('Error in Sync woow-2523...')));
               }
@@ -2566,10 +2582,10 @@ if (!class_exists('TVC_Ajax_File')) :
                 "tiktok_catalog_id" => isset($_POST['tiktok_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['tiktok_catalog_id'])) : '',
               );
 
-              
+
 
               $TVC_Admin_Helper->plugin_log("mapping saved and product sync process scheduled", 'product_sync'); // Add logs
-              $TVC_Admin_Helper->plugin_log("sending data to api".wp_json_encode($feed_data_api), 'feed_data_api');
+              $TVC_Admin_Helper->plugin_log("sending data to api" . wp_json_encode($feed_data_api), 'feed_data_api');
               $CustomApi = new CustomApi();
               $CustomApi->ee_create_product_feed($feed_data_api);
               /*******Update feed data in laravel End *********************/
@@ -2617,7 +2633,7 @@ if (!class_exists('TVC_Ajax_File')) :
                 );
                 $TVC_Admin_Helper->plugin_log("error-1", 'product_sync'); // Add logs
                 $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $feed_data, array("id" => sanitize_text_field(wp_unslash($_POST['feedId']))));
-                echo wp_json_encode(array("error" => true, "message" =>  $isSyncComplete['message'] ));
+                echo wp_json_encode(array("error" => true, "message" =>  $isSyncComplete['message']));
                 exit;
               }
 
@@ -3240,7 +3256,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     function get_tiktok_business_account()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW), 'conversios_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_onboarding_nonce')) {
         if (isset($_POST['subscriptionId']) === TRUE && $_POST['subscriptionId'] !== '') {
           $customer_subscription_id['customer_subscription_id'] = sanitize_text_field(wp_unslash($_POST['subscriptionId']));
           $customObj = new CustomApi();
@@ -3308,8 +3326,9 @@ if (!class_exists('TVC_Ajax_File')) :
 
     function get_tiktok_user_catalogs()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW), 'conversios_onboarding_nonce')) {
-        // Initialize as an array instead of a string
+      $nonce = filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_onboarding_nonce')) {        // Initialize as an array instead of a string
         $customer_subscription_id = [];
 
         // Get sanitized input fields
@@ -3355,12 +3374,18 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function conv_save_tiktokmiddleware($post)
     {
-      if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && $post['conv_options_data']['tiktok_setting']['tiktok_business_id'] !== '') {
-        $customer_subscription_id['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
-        $customer_subscription_id['business_id'] = $post['conv_options_data']['tiktok_setting']['tiktok_business_id'];
-        $customObj = new CustomApi();
-        $result = $customObj->store_business_center($customer_subscription_id);
-        return $result;
+      $nonce = filter_input(INPUT_POST, 'pix_sav_nonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'pix_sav_nonce_val')) {
+        if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && $post['conv_options_data']['tiktok_setting']['tiktok_business_id'] !== '') {
+          $customer_subscription_id['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+          $customer_subscription_id['business_id'] = $post['conv_options_data']['tiktok_setting']['tiktok_business_id'];
+          $customObj = new CustomApi();
+          $result = $customObj->store_business_center($customer_subscription_id);
+          return $result;
+        }
+      } else {
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+        wp_die();
       }
     }
     public function conv_save_tiktokcatalog($post)
@@ -3388,19 +3413,27 @@ if (!class_exists('TVC_Ajax_File')) :
       $query = "INSERT INTO `$ee_tiktok_catalog` (country, catalog_id, catalog_name, created_date) VALUES ";
       $query .= implode(', ', $place_holders);
       $wpdb->query($wpdb->prepare($query, $values));
-      if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && $post['conv_options_data']['tiktok_setting']['tiktok_business_id'] !== '') {
-        $customer_subscription_id['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
-        $customer_subscription_id['business_id'] = $post['conv_options_data']['tiktok_setting']['tiktok_business_id'];
-        $customer_subscription_id['catalogs'] = $catArr;
-        $customObj = new CustomApi();
-        $result = $customObj->store_user_catalog($customer_subscription_id);
-        return $result;
+      $nonce = filter_input(INPUT_POST, 'pix_sav_nonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'pix_sav_nonce_val')) {
+        if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && $post['conv_options_data']['tiktok_setting']['tiktok_business_id'] !== '') {
+          $customer_subscription_id['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+          $customer_subscription_id['business_id'] = $post['conv_options_data']['tiktok_setting']['tiktok_business_id'];
+          $customer_subscription_id['catalogs'] = $catArr;
+          $customObj = new CustomApi();
+          $result = $customObj->store_user_catalog($customer_subscription_id);
+          return $result;
+        }
+      } else {
+        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+        wp_die();
       }
     }
 
     public function ee_getCatalogId()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_country_nonce', FILTER_UNSAFE_RAW), 'conv_country_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_country_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_country_nonce')) {
         if (isset($_POST['countryCode']) === TRUE && $_POST['countryCode'] !== '') {
           $country_code = sanitize_text_field(wp_unslash($_POST['countryCode']));
           global $wpdb;
@@ -3428,7 +3461,9 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_createPmaxCampaign()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         if (isset($_POST['subscription_id']) && sanitize_text_field(wp_unslash($_POST['subscription_id'])) == '') {
           echo wp_json_encode(array("error" => true, "message" => esc_html__("Subscription Id is missing. Contact plugin Admin", "enhanced-e-commerce-for-woocommerce-store")));
           exit;
@@ -3525,7 +3560,9 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function ee_createPmaxCampaign_ms()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         if (isset($_POST['subscription_id']) && sanitize_text_field(wp_unslash($_POST['subscription_id'])) == '') {
           echo wp_json_encode(array("error" => true, "message" => esc_html__("Subscription Id is missing. Contact plugin Admin", "enhanced-e-commerce-for-woocommerce-store")));
           exit;
@@ -3538,7 +3575,7 @@ if (!class_exists('TVC_Ajax_File')) :
           echo wp_json_encode(array("error" => true, "message" => esc_html__("Microsoft Ads Id is missing!", "enhanced-e-commerce-for-woocommerce-store")));
           exit;
         }
-        if (isset($_POST['productSource']) === TRUE && $_POST['productSource'] == 'All Product') { 
+        if (isset($_POST['productSource']) === TRUE && $_POST['productSource'] == 'All Product') {
 
           $customObj = new CustomApi();
           $post = array(
@@ -3577,7 +3614,7 @@ if (!class_exists('TVC_Ajax_File')) :
               echo wp_json_encode(array('error' => true, 'message' => wp_json_encode($result)));
             }
           }
-        } else { 
+        } else {
           $customObj = new CustomApi();
           $post = array(
             "campaign_name" => isset($_POST['campaign_name']) ? sanitize_text_field(wp_unslash($_POST['campaign_name'])) : '',
@@ -3596,7 +3633,7 @@ if (!class_exists('TVC_Ajax_File')) :
           );
           $result = $customObj->createPmaxCampaign_ms($post);
           if (isset($result->data) && $result->data !== '') {
-            
+
             /*$values = array();
             $place_holders = array();
             global $wpdb;
@@ -3616,7 +3653,6 @@ if (!class_exists('TVC_Ajax_File')) :
           } else {
             echo wp_json_encode(array('error' => true, 'message' => wp_json_encode($result)));
           }
-
         }
       } else {
         echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
@@ -3637,7 +3673,8 @@ if (!class_exists('TVC_Ajax_File')) :
     }
     public function get_category_for_filter()
     {
-      if (isset($_POST['get_category_for_filter']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'get_category_for_filter', FILTER_UNSAFE_RAW), 'get_category_for_filter-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'get_category_for_filter', FILTER_UNSAFE_RAW);
+      if (isset($_POST['get_category_for_filter']) && ($nonce && wp_verify_nonce($nonce, 'get_category_for_filter-nonce'))) {
         if (isset($_POST['type'])) {
           switch ($_POST['type']) {
             case 'category':
@@ -3650,7 +3687,7 @@ if (!class_exists('TVC_Ajax_File')) :
               echo wp_json_encode($total_products);
               break;
             case 'total_synced_product_count':
-              $total_products = get_option( 'ee_conv_total_synced_product_count' );
+              $total_products = get_option('ee_conv_total_synced_product_count');
               if (empty($total_products)) {
                 global $wpdb;
                 $table = 'ee_product_feed';
@@ -3658,9 +3695,9 @@ if (!class_exists('TVC_Ajax_File')) :
                 $sql = "select SUM(total_synced_product_count) AS total_synced_products from `$tablename` WHERE status = 'Synced'";
                 $results =  $wpdb->get_results($sql);
                 if (isset($results[0])) {
-                    $total_products = $results[0]->total_synced_products;
+                  $total_products = $results[0]->total_synced_products;
                 } else {
-                    $total_products = 0; // if no data found then say limit is over
+                  $total_products = 0; // if no data found then say limit is over
                 }
               }
               echo json_encode($total_products);
@@ -4112,7 +4149,9 @@ if (!class_exists('TVC_Ajax_File')) :
     }
     public function get_product_filter_count()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'getFilterCount', FILTER_UNSAFE_RAW), 'getFilterCount-nonce')) {
+      $nonce = filter_input(INPUT_POST, 'getFilterCount', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'getFilterCount-nonce')) {
         global $wpdb;
         $where = array();
         $wherePriJoin = $whereSKUJoin = $conditionprod = $condition = $conditionSKU = $conditionContent = $conditionExcerpt = $conditionPrice = $conditionRegPrice = $whereStockJoin = $conditionStock = '';
@@ -4215,7 +4254,9 @@ if (!class_exists('TVC_Ajax_File')) :
     }
     public function create_dashboard_feed_data()
     {
-      if ($this->safe_ajax_call(filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW), 'conv_onboarding_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         //$this->ee_call_start_feed_wise_product_sync_process(4);
         $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
         $channel_id = array();
@@ -4423,7 +4464,8 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function get_user_businesses()
     {
-      if (isset($_POST['fb_business_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'fb_business_nonce', FILTER_UNSAFE_RAW), 'fb_business_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'fb_business_nonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'fb_business_nonce')) {
         $data = array(
           "customer_subscription_id" => isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '',
         );
@@ -4438,7 +4480,8 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function get_fb_catalog_data()
     {
-      if (isset($_POST['fb_business_nonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'fb_business_nonce', FILTER_UNSAFE_RAW), 'fb_business_nonce')) {
+      $nonce = filter_input(INPUT_POST, 'fb_business_nonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'fb_business_nonce')) {
         $data = array(
           "customer_subscription_id" => isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '',
           "business_id" => isset($_POST['fb_business_id']) ? sanitize_text_field(wp_unslash($_POST['fb_business_id'])) : '',
@@ -4458,56 +4501,62 @@ if (!class_exists('TVC_Ajax_File')) :
     }
     public function conv_save_facebookmiddleware($post)
     {
-      if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && isset($post['conv_options_data']['facebook_setting']['fb_business_id']) && $post['conv_options_data']['facebook_setting']['fb_business_id'] !== '') {
-        $customer_data['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
-        $customer_data['business_id'] = $post['conv_options_data']['facebook_setting']['fb_business_id'];
-        $customObj = new CustomApi();
-        $result = $customObj->storeUserBusiness($customer_data);
-        return $result;
+      $nonce = filter_input(INPUT_POST, 'pix_sav_nonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'pix_sav_nonce_val')) {
+        if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && isset($post['conv_options_data']['facebook_setting']['fb_business_id']) && $post['conv_options_data']['facebook_setting']['fb_business_id'] !== '') {
+          $customer_data['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+          $customer_data['business_id'] = $post['conv_options_data']['facebook_setting']['fb_business_id'];
+          $customObj = new CustomApi();
+          $result = $customObj->storeUserBusiness($customer_data);
+          return $result;
+        }
       }
     }
 
     public function conv_save_facebookcatalog($post)
     {
-      if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && isset($post['conv_options_data']['facebook_setting']['fb_business_id']) && $post['conv_options_data']['facebook_setting']['fb_business_id'] !== '') {
-        $customer_data['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
-        $customer_data['business_id'] = $post['conv_options_data']['facebook_setting']['fb_business_id'];
-        $customer_data['catalog_id'] = $post['conv_options_data']['facebook_setting']['fb_catalog_id'];
-        $customObj = new CustomApi();
-        $result = $customObj->storeUserCatalog($customer_data);
-        return $result;
+      $nonce = filter_input(INPUT_POST, 'pix_sav_nonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'pix_sav_nonce_val')) {
+        if (isset($post['customer_subscription_id']) === TRUE && $post['customer_subscription_id'] !== '' && isset($post['conv_options_data']['facebook_setting']['fb_business_id']) && $post['conv_options_data']['facebook_setting']['fb_business_id'] !== '') {
+          $customer_data['customer_subscription_id'] = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+          $customer_data['business_id'] = $post['conv_options_data']['facebook_setting']['fb_business_id'];
+          $customer_data['catalog_id'] = $post['conv_options_data']['facebook_setting']['fb_catalog_id'];
+          $customObj = new CustomApi();
+          $result = $customObj->storeUserCatalog($customer_data);
+          return $result;
+        }
       }
     }
 
     public function conv_save_microsoft($post)
-    { 
+    {
       $customer_data = [];
-      if ( isset($post['microsoft_ads_manager_id']) && $post['microsoft_ads_manager_id'] !== '' ) {
+      if (isset($post['microsoft_ads_manager_id']) && $post['microsoft_ads_manager_id'] !== '') {
         $customer_data['customer_id'] = sanitize_text_field(wp_unslash($post['microsoft_ads_manager_id']));
       }
-      if ( isset($post['microsoft_ads_subaccount_id']) && $post['microsoft_ads_subaccount_id'] !== '' ) {
+      if (isset($post['microsoft_ads_subaccount_id']) && $post['microsoft_ads_subaccount_id'] !== '') {
         $customer_data['account_id'] = sanitize_text_field(wp_unslash($post['microsoft_ads_subaccount_id']));
       }
-      if ( isset($post['microsoft_ads_pixel_id']) && $post['microsoft_ads_pixel_id'] !== '' ) {
+      if (isset($post['microsoft_ads_pixel_id']) && $post['microsoft_ads_pixel_id'] !== '') {
         $customer_data['pixel_id'] = sanitize_text_field(wp_unslash($post['microsoft_ads_pixel_id']));
       }
-      if ( isset($post['microsoft_merchant_center_id']) && $post['microsoft_merchant_center_id'] !== '' ) {
+      if (isset($post['microsoft_merchant_center_id']) && $post['microsoft_merchant_center_id'] !== '') {
         $customer_data['mmc_id'] = sanitize_text_field(wp_unslash($post['microsoft_merchant_center_id']));
       }
-      if ( isset($post['ms_catalog_id']) && $post['ms_catalog_id'] !== '' ) {
+      if (isset($post['ms_catalog_id']) && $post['ms_catalog_id'] !== '') {
         $customer_data['catalog_id'] = sanitize_text_field(wp_unslash($post['ms_catalog_id']));
       }
 
-      if ( !empty($customer_data) ) {
+      if (!empty($customer_data)) {
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $google_detail = $TVC_Admin_Helper->get_ee_options_data();
 
         $customObj = new CustomApi();
 
-        if ( isset($post['subscription_id']) && $post['subscription_id'] !== '' ) {
+        if (isset($post['subscription_id']) && $post['subscription_id'] !== '') {
           $customer_data['customer_subscription_id'] = sanitize_text_field(wp_unslash($post['subscription_id']));
         }
-        if ( isset($google_detail['setting']->store_id) && $google_detail['setting']->store_id !== '' ) {
+        if (isset($google_detail['setting']->store_id) && $google_detail['setting']->store_id !== '') {
           $customer_data['store_id'] = sanitize_text_field(wp_unslash($google_detail['setting']->store_id));
         }
         $result = $customObj->updateMicrosoftDetail($customer_data);
@@ -4517,7 +4566,8 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function ee_editPmaxCampaign()
     {
-      if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {
+      $nonce = sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce')));
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         if (!class_exists('Conversios_PMax_Helper')) {
           require_once(ENHANCAD_PLUGIN_DIR . 'admin/helper/class-pmax-helper.php');
         }
@@ -4570,7 +4620,8 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function ee_editPmaxCampaign_ms()
     {
-      if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {
+      $nonce = sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce')));
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         if (!class_exists('Conversios_PMax_Helper')) {
           require_once(ENHANCAD_PLUGIN_DIR . 'admin/helper/class-pmax-helper.php');
         }
@@ -4579,7 +4630,7 @@ if (!class_exists('TVC_Ajax_File')) :
           $rs = $PMax_Helper->campaign_pmax_detail_ms(
             sanitize_text_field(wp_unslash($_POST['subscription_id'])),
             sanitize_text_field(wp_unslash($_POST['microsoft_ads_id'])),
-            sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])), 
+            sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])),
             sanitize_text_field(wp_unslash($_POST['id']))
           );
         }
@@ -4590,7 +4641,7 @@ if (!class_exists('TVC_Ajax_File')) :
           }
 
           //$sale_country = isset($campaign->shoppingSetting->feedLabel) ? $campaign->shoppingSetting->feedLabel : "";
-          $budget =$campaign->DailyBudget;
+          $budget = $campaign->DailyBudget;
           //$maximizeconversionvalue = isset($campaign->maximizeConversionValue) ? $campaign->maximizeConversionValue : "";
           //$target_roas = $this->object_value($maximizeconversionvalue, "targetRoas") * 100;
           //$startDate = $this->object_value($campaign, "startDate");
@@ -4630,10 +4681,10 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function ee_update_PmaxCampaign()
     {
-      $nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
+      $nonce = isset($_POST['conversios_nonce']) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
       $return = array();
       $formArry = array();
-      if ($this->safe_ajax_call($nonce, 'conversios_nonce')) {
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_nonce')) {
         foreach ($_POST as $key => $val) {
           if ($key == 'action' || $key == 'conversios_nonce') {
             continue;
@@ -4699,7 +4750,8 @@ if (!class_exists('TVC_Ajax_File')) :
 
     public function ee_update_PmaxCampaign_ms()
     {
-      if ($this->safe_ajax_call(sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce'))), 'conv_onboarding_nonce')) {
+      $nonce = sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce')));
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         if (!class_exists('Conversios_PMax_Helper')) {
           require_once(ENHANCAD_PLUGIN_DIR . 'admin/helper/class-pmax-helper.php');
         }
@@ -4708,7 +4760,7 @@ if (!class_exists('TVC_Ajax_File')) :
           $rs = $PMax_Helper->update_campaign_pmax_detail_ms(
             sanitize_text_field(wp_unslash($_POST['subscription_id'])),
             sanitize_text_field(wp_unslash($_POST['microsoft_ads_id'])),
-            sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])), 
+            sanitize_text_field(wp_unslash($_POST['microsoft_ads_sub_id'])),
             sanitize_text_field(wp_unslash($_POST['campaign_id'])),
             sanitize_text_field(wp_unslash($_POST['daily_budget'])),
             sanitize_text_field(wp_unslash($_POST['status'])),
@@ -4718,15 +4770,13 @@ if (!class_exists('TVC_Ajax_File')) :
           } else {
             if (isset($rs->errors)) {
               echo wp_json_encode(array("error" => true, "message" => wp_json_encode($rs->errors)));
-            }else {
+            } else {
               echo wp_json_encode(array("error" => true, "message" => esc_html__("No record found for the selected Campaign.", "enhanced-e-commerce-for-woocommerce-store")));
             }
           }
-        }else{
+        } else {
           echo wp_json_encode(array("error" => true, "message" => esc_html__("Parameters are missing.", "enhanced-e-commerce-for-woocommerce-store")));
         }
-        
-        
       } else {
         echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }

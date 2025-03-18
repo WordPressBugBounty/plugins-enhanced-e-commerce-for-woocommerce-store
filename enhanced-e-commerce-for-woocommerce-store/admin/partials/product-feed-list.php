@@ -1211,6 +1211,7 @@ $data = unserialize(get_option('ee_options'));
                 jQuery('.errorChannel').not(':disabled').css('border', '1px solid red');
                 return false;
             }
+            jQuery('#submitFeed').addClass("disabledsection");
             save_feed_data();
         });
 

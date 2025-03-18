@@ -458,7 +458,6 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
                     <?php //esc_html_e("You’ll receive an invite from Google on your email. Accept the invitation to enable your Google Ads Account.", "enhanced-e-commerce-for-woocommerce-store"); 
                     ?>
                 </span>
-
                 <div class="onbrdpp-body alert alert-primary text-start d-none after-ads-acc-creation" id="new_google_ads_section">
                     <p>
                         <?php esc_html_e("Your Google Ads Account has been created", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -831,15 +830,17 @@ $google_ads_id = (isset($googleDetail->google_ads_id) && $googleDetail->google_a
 
 
         //user_tracking_data(btn_cam, error_msg,ename,event_label);
+        var is_woocommerce_active = <?php echo (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) ? 'true' : 'false'; ?>;
+        var postData = {
+            action: "create_google_ads_account",
+            tvc_data: tvc_data,
+            conversios_onboarding_nonce: conversios_onboarding_nonce
+        };
         jQuery.ajax({
             type: "POST",
             dataType: "json",
             url: tvc_ajax_url,
-            data: {
-                action: "create_google_ads_account",
-                tvc_data: tvc_data,
-                conversios_onboarding_nonce: conversios_onboarding_nonce
-            },
+            data: postData,
             beforeSend: function() {
                 jQuery("#gadsinviteloader").removeClass('d-none');
                 jQuery("#ads-continue").addClass('disabled');

@@ -123,7 +123,7 @@ if ($store_country[0]) {
                                 </span>
                             </div>
 
-                            <div class="align-self-center <?php echo (isset($tvc_data['microsoft_mail']) && $tvc_data['microsoft_mail'] != "") ? $tvc_data['microsoft_mail'] : 'disabledsection' ?>">
+                            <div class="align-self-center <?php echo (isset($tvc_data['microsoft_mail']) && $tvc_data['microsoft_mail'] != "") ? esc_attr($tvc_data['microsoft_mail']) : 'disabledsection'; ?>">
                                 <button id="conv_create_new_bing_btn" type="button" class="btn btn-primary px-5">
                                     <?php esc_html_e("Create Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </button>
@@ -1006,8 +1006,17 @@ if ($store_country[0]) {
                         icon = 'info',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
-                        iconImageSrc =
-                        '<img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_error_logo.png'); ?>"/ >'
+                        iconImageSrc = '<?php echo wp_kses(
+                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                                            array(
+                                                'img' => array(
+                                                    'src' => true,
+                                                    'alt' => true,
+                                                    'class' => true,
+                                                    'style' => true,
+                                                ),
+                                            )
+                                        ); ?>'
                     );
                 }
                 jQuery('#ads-account').prop('disabled', false);
@@ -1426,58 +1435,6 @@ if ($store_country[0]) {
             }
         });
 
-        /*jQuery("#microsoft_ads_pixel_id").change(function() {
-            if (jQuery(this).hasClass('conv-border-danger') || jQuery(this).val() == "") {
-                jQuery("#msbing_conversion").attr('disabled', true);
-                jQuery("#msbing_conversion").prop("checked", false);
-                jQuery("#msbing_conversion").attr('checked', false);
-            } else {
-                jQuery("#msbing_conversion").removeAttr('disabled');
-            }
-        });*/
-
-        /*jQuery(document).on("change", "#microsoft_ads_pixel_id", function() {
-            if (jQuery("#microsoft_ads_conversion_tracking").is(":checked")) {
-                get_conversion_list();
-            }
-            var selectedAcc = jQuery("#microsoft_ads_pixel_id").val();
-            if (selectedAcc != "") {
-                jQuery("#spinner_mcc_check").removeClass("d-none");
-                jQuery("#conv_mcc_alert").addClass("d-none");
-                //console.log("selected ads acc is "+selectedAcc);
-                var data = {
-                    action: "conv_checkMcc",
-                    ads_accountId: selectedAcc,
-                    subscription_id: "<?php echo esc_attr($subscriptionId); ?>",
-                    CONVNonce: "<?php echo esc_js(wp_create_nonce('conv_checkMcc-nonce')); ?>"
-                };
-                jQuery.ajax({
-                    type: "POST",
-                    url: tvc_ajax_url,
-                    data: data,
-                    success: function(response) {
-                        var newResponse = JSON.parse(response);
-                        if (newResponse.status == 200 && newResponse?.data[0] != "") {
-                            var managerStatus = newResponse.data[0]?.managerStatus;
-                            if (managerStatus) { //mcc true
-                                //console.log("mcc is there");
-                                jQuery("#conv_mcc_alert").removeClass("d-none");
-                                jQuery("#microsoft_ads_pixel_id").val('').trigger('change');
-                                jQuery("#save_gads_finish").addClass("disabledsection");
-                            } else {
-                                jQuery("#save_gads_finish").removeClass("disabledsection");
-                            }
-                        }
-                        jQuery("#spinner_mcc_check").addClass("d-none");
-                        jQuery("#accordionFlushExample .accordion-body").removeClass("disabledsection");
-                    }
-                });
-            } else {
-                jQuery("#accordionFlushExample .accordion-body").addClass("disabledsection");
-                jQuery("#save_gads_finish").addClass("disabledsection");
-            }
-            //cleargadsconversions();
-        });*/
 
         jQuery(document).on("click", ".conv-btn-connect-enabled-microsoft", function(e) {
             e.preventDefault();

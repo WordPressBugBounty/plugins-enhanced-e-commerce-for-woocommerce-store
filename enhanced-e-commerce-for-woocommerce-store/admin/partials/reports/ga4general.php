@@ -477,7 +477,8 @@
                 dataType: "json",
                 url: tvc_ajax_url,
                 data: post_data,
-                success: function(response) { //console.log("grid response",response);
+                success: function(response) { 
+                    console.log("grid response",response);
                     if (response?.error == false) {
 
                         let presentdata = response.data_present[0];

@@ -39,8 +39,8 @@ if (!class_exists('Conversios_Dashboard_Helper')) {
 
 		public function get_google_analytics_reports_dashboard()
 		{
-			$nonce = (isset($_POST['conversios_nonce'])) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
-			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
+			$nonce = isset($_POST['conversios_nonce']) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : "";
+			if ($nonce && wp_verify_nonce($nonce, 'conversios_nonce')) {
 				// $post_data = (object)$_POST;
 				$subscription_id = isset($_POST['subscription_id']) ? sanitize_text_field(wp_unslash($_POST['subscription_id'])) : "";
 				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field(wp_unslash($_POST['start_date'])) : "");
@@ -59,24 +59,24 @@ if (!class_exists('Conversios_Dashboard_Helper')) {
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
 				$return = array();
-				if ($subscription_id != "" ) {
-					$api_rs = "";		
+				if ($subscription_id != "") {
+					$api_rs = "";
 					$data = array(
 						'subscription_id' => sanitize_text_field($subscription_id),
 						'start_date' => $start_date,
 						'end_date' => $end_date
 					);
-					
-					$api_rs = $this->CustomApi->get_google_analytics_reports_ga4($data);	
+
+					$api_rs = $this->CustomApi->get_google_analytics_reports_ga4($data);
 					if (isset($api_rs->error) && $api_rs->error == '') {
 						if (isset($api_rs->data) && $api_rs->data != "") {
 							$return = array('error' => false, 'data' => $api_rs->data, 'errors' => '');
 						}
-					} else {										
+					} else {
 						$return = array('error' => true, 'errors' => isset($api_rs->message) ? $api_rs->message : '');
 					}
 				} else {
-					$return = array('error' => true, 'errors' =>esc_html__("Subscription id is null.", "enhanced-e-commerce-for-woocommerce-store"));
+					$return = array('error' => true, 'errors' => esc_html__("Subscription id is null.", "enhanced-e-commerce-for-woocommerce-store"));
 				}
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
