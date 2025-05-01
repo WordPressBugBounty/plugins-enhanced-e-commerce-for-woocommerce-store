@@ -41,6 +41,7 @@ if (!class_exists('TVC_Ajax_File')) :
       // add_action('wp_ajax_tvc_call_notification_dismiss', array($this, 'tvc_call_notification_dismiss'));
       add_action('wp_ajax_auto_product_sync_setting', array($this, 'auto_product_sync_setting'));
       add_action('wp_ajax_con_get_conversion_list', array($this, 'con_get_conversion_list'));
+      add_action('wp_ajax_conv_get_microsoft_ads_conversion', array($this, 'conv_get_microsoft_ads_conversion'));
       add_action('wp_ajax_tvc_call_active_licence', array($this, 'tvc_call_active_licence'));
       add_action('wp_ajax_tvc_call_add_survey', array($this, 'tvc_call_add_survey'));
       add_action('wp_ajax_cov_save_badge_settings', array($this, 'cov_save_badge_settings'));
@@ -75,6 +76,7 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('wp_ajax_get_tiktok_business_account', [$this, 'get_tiktok_business_account']);
       add_action('wp_ajax_get_tiktok_user_catalogs', [$this, 'get_tiktok_user_catalogs']);
       add_action('wp_ajax_ee_getCatalogId', [$this, 'ee_getCatalogId']);
+      add_action('wp_ajax_update_business_details', [$this, 'update_business_details']);
 
       // For EC
       add_action('wp_ajax_conv_create_ec_row', array($this, 'conv_create_ec_row'));
@@ -88,7 +90,9 @@ if (!class_exists('TVC_Ajax_File')) :
 
       add_action('wp_ajax_conv_get_conversion_list_gads_bycat', [$this, 'conv_get_conversion_list_gads_bycat']);
       add_action('wp_ajax_conv_create_gads_conversion', [$this, 'conv_create_gads_conversion']);
+      add_action('wp_ajax_conv_create_microsoft_ads_conversion', [$this, 'conv_create_microsoft_ads_conversion']);
       add_action('wp_ajax_conv_save_gads_conversion', [$this, 'conv_save_gads_conversion']);
+      add_action('wp_ajax_conv_save_microsoft_ads_conversion', [$this, 'savemicrosoftadsconversions']);
       add_action('wp_ajax_get_pf_accordian_data', array($this, 'get_pf_accordian_data'));
       add_action('wp_ajax_get_category_for_filter', [$this, 'get_category_for_filter']);
       add_action('wp_ajax_get_product_filter_count', [$this, 'get_product_filter_count']);
@@ -99,6 +103,7 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('wp_ajax_conv_checkMcc', [$this, 'conv_checkMcc']);
       add_action('wp_ajax_conv_send_email', array($this, 'conv_send_email'));
       //add_action('wp_ajax_conv_convnewfeaturemodal_ajax', array($this, 'conv_convnewfeaturemodal_ajax'));
+      add_action('wp_ajax_convert_budget_to_local_currency', [$this, 'convert_budget_to_local_currency']);
       require_once(ENHANCAD_PLUGIN_DIR . 'admin/partials/customermatch/export.php');
       $exporter = new Conv_Exporter();
       add_action('wp_ajax_conv_export_users_csv', array($exporter, 'conv_export_users_csv'));
@@ -326,6 +331,7 @@ if (!class_exists('TVC_Ajax_File')) :
           $api_obj = new Conversios_Onboarding_ApiCall();
           $api_obj->gaDimension();
         }
+        //echo '<pre>'; print_r($_POST); echo '</pre>';
         if (isset($_POST['conv_options_data']['non_woo_tracking']) && $_POST['conv_options_data']['non_woo_tracking'] == '1') {
           $non_woo_data = array(
             'conv_track_page_scroll' => '1',
@@ -340,15 +346,13 @@ if (!class_exists('TVC_Ajax_File')) :
           $serialized_data = maybe_serialize($updated_data);
           update_option('ee_options', $serialized_data);
         }
-        if (isset($_POST['conv_options_data']['non_woo_tracking']) || isset($_POST['conv_options_data']['conv_track_page_scroll']) || isset($_POST['conv_options_data']['conv_track_file_download']) || isset($_POST['conv_options_data']['conv_track_author']) || isset($_POST['conv_options_data']['conv_track_signup']) || isset($_POST['conv_options_data']['conv_track_signin'])) {
+        if ( (isset($_POST['conv_options_data']['non_woo_tracking']) || isset($_POST['conv_options_data']['conv_track_page_scroll']) || isset($_POST['conv_options_data']['conv_track_file_download']) || isset($_POST['conv_options_data']['conv_track_author']) || isset($_POST['conv_options_data']['conv_track_signup']) || isset($_POST['conv_options_data']['conv_track_signin'])) ) {
           $data = array();
-          $TVC_Admin_Helper = new TVC_Admin_Helper();
-          $google_detail = $TVC_Admin_Helper->get_ee_options_settings();
-          $data['conv_track_page_scroll'] = $google_detail['conv_track_page_scroll'];
-          $data['conv_track_file_download'] = $google_detail['conv_track_file_download'];
-          $data['conv_track_author'] = $google_detail['conv_track_author'];
-          $data['conv_track_signin'] = $google_detail['conv_track_signin'];
-          $data['conv_track_signup'] = $google_detail['conv_track_signup'];
+          $data['conv_track_page_scroll'] = '1';
+          $data['conv_track_file_download'] = '1';
+          $data['conv_track_author'] = '1';
+          $data['conv_track_signin'] = '1';
+          $data['conv_track_signup'] = '1';
           $api_obj = new Conversios_Onboarding_ApiCall();
           $api_obj->additional_dimensions($data);
         }
@@ -840,6 +844,30 @@ if (!class_exists('TVC_Ajax_File')) :
       wp_die(0);
     }
 
+    public function conv_get_microsoft_ads_conversion()
+    {
+      $nonce = isset($_POST['TVCNonce']) ? filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW) : '';
+
+      if ($nonce && wp_verify_nonce($nonce, 'con_get_conversion_list-nonce')) {
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $customApiObj = new CustomApi();
+        $customer_id = isset($_POST['customer_id']) ? sanitize_text_field(wp_unslash($_POST['customer_id'])) : '';
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : '';
+        $tag_id = isset($_POST['tag_id']) ? sanitize_text_field(wp_unslash($_POST['tag_id'])) : '';
+        if ($customer_id != "") {
+          $response = $customApiObj->get_microsoft_conversion_list($customer_id, $account_id, $tag_id);
+          if (property_exists($response, "error") && $response->error == false) {
+            if (property_exists($response, "data") && $response->data != "" && !empty($response->data)) {
+              echo wp_json_encode($response);
+              exit;
+            }
+          }
+        }
+      }
+      // IMPORTANT: don't forget to exit
+      wp_die(0);
+    }
+
     // public function conv_get_conversion_list_gads()
     // {
     //   if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'con_get_conversion_list-nonce')) 
@@ -888,12 +916,10 @@ if (!class_exists('TVC_Ajax_File')) :
               $selected_conversio_send_to = get_option('ee_conversio_send_to');
               $conversion_label = array();
               foreach ($response->data as $key => $value) {
-                //echo '<pre>'; print_r($value); echo '</pre>';
                 $con_string = $value->tagSnippets;
                 $conversion_label_check = $TVC_Admin_Helper->get_conversion_label($con_string);
                 if ($conversion_label_check != "" && $conversion_label_check != null) {
                   $conversion_label[$value->id . "(" . $value->name . ")"] = $TVC_Admin_Helper->get_conversion_label($con_string);
-                  //$conversion_label[$value->id] = $TVC_Admin_Helper->get_conversion_label($con_string)."(".$value->name.")";
                 }
               }
               echo wp_json_encode($conversion_label);
@@ -919,6 +945,30 @@ if (!class_exists('TVC_Ajax_File')) :
         $conversionName = isset($_POST['conversionName']) ? sanitize_text_field(wp_unslash($_POST['conversionName'])) : '';
         if ($current_customer_id != "") {
           $response = $customApiObj->conv_create_gads_conversion($current_customer_id, $conversionName, $conversionCategory);
+          if (property_exists($response, "error") && $response->error == false) {
+            if (property_exists($response, "data") && $response->data != "" && !empty($response->data)) {
+              echo wp_json_encode($response);
+              exit;
+            }
+          }
+        }
+      }
+    }
+
+    public function conv_create_microsoft_ads_conversion()
+    {
+      $nonce = filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'con_get_conversion_list-nonce')) {        //$TVC_Admin_Helper = new TVC_Admin_Helper();
+        $customApiObj = new CustomApi();
+        $customer_id = isset($_POST['customer_id']) ? sanitize_text_field(wp_unslash($_POST['customer_id'])) : '';
+        $account_id = isset($_POST['account_id']) ? sanitize_text_field(wp_unslash($_POST['account_id'])) : '';
+        $tag_id = isset($_POST['tag_id']) ? sanitize_text_field(wp_unslash($_POST['tag_id'])) : '';
+        $conversionCategory = isset($_POST['conversionCategory']) ? sanitize_text_field(wp_unslash($_POST['conversionCategory'])) : '';
+        $name = isset($_POST['name']) ? sanitize_text_field(wp_unslash($_POST['name'])) : '';
+        $action_value = isset($_POST['action_value']) ? sanitize_text_field(wp_unslash($_POST['action_value'])) : '';
+        if ($customer_id != "") {
+          $response = $customApiObj->conv_create_microsoft_ads_conversion($customer_id, $account_id, $tag_id, $conversionCategory, $name, $action_value);
           if (property_exists($response, "error") && $response->error == false) {
             if (property_exists($response, "data") && $response->data != "" && !empty($response->data)) {
               echo wp_json_encode($response);
@@ -960,7 +1010,6 @@ if (!class_exists('TVC_Ajax_File')) :
             $ee_options_gads_conversions[sanitize_text_field(wp_unslash($_POST['conversion_category']))] = sanitize_text_field(wp_unslash($_POST['conversion_action']));
           }
           $ee_options["gads_conversions"] = $ee_options_gads_conversions;
-          //unset($ee_options["gads_conversions"]);
           update_option('ee_options', serialize($ee_options));
 
           if (isset($_POST['conversion_category']) && $_POST['conversion_category'] == "PURCHASE") {
@@ -985,6 +1034,46 @@ if (!class_exists('TVC_Ajax_File')) :
       }
     }
 
+
+
+    public function savemicrosoftadsconversions()
+    {
+      $nonce = filter_input(INPUT_POST, 'CONVNonce', FILTER_UNSAFE_RAW);
+      if ($nonce && wp_verify_nonce($nonce, 'conv_save_microsoft_ads_conversion-nonce')) {
+        $ee_options = unserialize(get_option('ee_options'));
+        if (isset($_POST['clearmicrosoftadsconversions']) && sanitize_text_field(wp_unslash($_POST['clearmicrosoftadsconversions'])) == "yes") {
+          unset($ee_options["microsoft_ads_conversions"]);
+          update_option('ee_options', serialize($ee_options));
+          $microsoft_ads_conversions_tracking = 0;
+          update_option('microsoft_ads_conversions_tracking', sanitize_text_field($microsoft_ads_conversions_tracking));
+          $googleDetail_setting["microsoft_ads_conversions_tracking"] = sanitize_text_field($microsoft_ads_conversions_tracking);
+        } else {
+          $ee_options_microsoft_ads_conversions = $ee_options["microsoft_ads_conversions"] ?? [];
+
+          if (!empty($_POST['category'])) {
+            $categories = json_decode(stripslashes($_POST['category']), true);
+            if (is_array($categories)) {
+              foreach ($categories as $category => $value) {
+                $cleanCategory = sanitize_text_field(wp_unslash($category));
+                $ee_options_microsoft_ads_conversions[$cleanCategory] = "1";
+              }
+            }
+          }
+
+          $ee_options["microsoft_ads_conversions"] = $ee_options_microsoft_ads_conversions;
+          update_option('ee_options', serialize($ee_options));
+
+          if (!empty($ee_options_microsoft_ads_conversions)) {
+            update_option('microsoft_ads_conversions_tracking', "1");
+          }
+        }
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $TVC_Admin_Helper->update_app_status();
+        die('1');
+      } else {
+        die('Security nonce not matched');
+      }
+    }
     // public function tvc_call_notification_dismiss()
     // {
     //   if (isset($_POST['TVCNonce']) && $this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW), 'tvc_call_notification_dismiss-nonce')) {
@@ -1113,8 +1202,75 @@ if (!class_exists('TVC_Ajax_File')) :
     }
 
     /**
-     * Delete the campaign
+     * Update business details
      */
+    public function update_business_details()
+    {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $nonce = isset($_POST['conversios_nonce']) ? sanitize_text_field(wp_unslash($_POST['conversios_nonce'])) : '';
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_nonce')) {
+        $users = isset($_POST['users']) ? json_decode(stripslashes($_POST['users']), true) : [];
+        $address = isset($_POST['address']) ? json_decode(stripslashes($_POST['address']), true) : [];
+        $customerService = isset($_POST['customerService']) ? json_decode(stripslashes($_POST['customerService']), true) : [];
+
+        $users_sanitized = [];
+        if (!empty($users) && is_array($users)) {
+          foreach ($users as $user) {
+            // Accept both 'email' or 'emailAddress'
+            $email = !empty($user['emailAddress']) ? $user['emailAddress'] : ($user['email'] ?? '');
+            if (!empty($email)) {
+              $users_sanitized[] = [
+                'emailAddress' => sanitize_email($email),
+                'admin' => isset($user['admin']) ? (bool)$user['admin'] : false,
+                'reportingManager' => isset($user['reportingManager']) ? (bool)$user['reportingManager'] : false,
+              ];
+            }
+          }
+        }
+
+
+        if (empty($users_sanitized)) {
+          wp_send_json_error(['message' => esc_html__('No valid users provided.', 'enhanced-e-commerce-for-woocommerce-store')]);
+          exit;
+        }
+
+        $CustomApi = new CustomApi();
+        $response = $CustomApi->update_gmc_business_info([
+          'store_id' => sanitize_text_field($_POST['store_id']),
+          'subscription_id' => sanitize_text_field($_POST['subscription_id']),
+          'account_id' => sanitize_text_field($_POST['account_id']),
+          'name' => sanitize_text_field($_POST['name']),
+          'phoneNumber' => sanitize_text_field($_POST['phoneNumber']),
+          'users' => $users_sanitized,
+          'address' => [
+            'streetAddress' => sanitize_text_field($address['streetAddress']),
+            'locality' => sanitize_text_field($address['locality']),
+            'region' => sanitize_text_field($address['region']),
+            'postalCode' => sanitize_text_field($address['postalCode']),
+            'country' => sanitize_text_field($address['country']),
+          ],
+          'customerService' => [
+            'email' => sanitize_email($customerService['email']),
+            'phoneNumber' => sanitize_text_field($customerService['phoneNumber']),
+            'url' => esc_url_raw($customerService['url']),
+          ]
+        ]);
+
+        if ($response && !isset($response->error)) {
+          wp_send_json_success(['message' => esc_html__('Business details updated successfully', 'enhanced-e-commerce-for-woocommerce-store')]);
+        } else {
+          $error_message = isset($response->message) ? $response->message : esc_html__('Error updating business details', 'enhanced-e-commerce-for-woocommerce-store');
+          wp_send_json_error(['message' => $error_message]);
+        }
+      } else {
+        wp_send_json_error(['message' => esc_html__('Security check failed', 'enhanced-e-commerce-for-woocommerce-store')]);
+      }
+
+      exit;
+    }
+
+
     public function tvcajax_delete_campaign()
     {
       // make sure this call is legal
@@ -3231,7 +3387,7 @@ if (!class_exists('TVC_Ajax_File')) :
           echo wp_json_encode(array('status' => 'success', 'message' => 'Product Sync Done!!!!', 'total_product' => $totalProduct));
         } else {
           $feed_data = array(
-            "product_sync_alert" => $isSyncComplete['message'],
+            "product_sync_alert" => "Super feed has been initiated",
             "is_process_start" => false,
             "is_auto_sync_start" => false,
             "is_mapping_update" => false,
@@ -4781,6 +4937,19 @@ if (!class_exists('TVC_Ajax_File')) :
         echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
       exit;
+    }
+
+    public function convert_budget_to_local_currency()
+    {
+      $nonce = sanitize_text_field(wp_unslash(filter_input(INPUT_POST, 'conv_onboarding_nonce')));
+      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
+        $currency = sanitize_text_field(wp_unslash($_POST['currency']));
+        if ($currency !== '') {
+          $custom_api = new CustomApi();
+          $result = $custom_api->get_local_currency_rate_live($currency);
+          echo wp_json_encode(array("error" => false, "message" => $result));
+        }
+      }
     }
   }
 // End of TVC_Ajax_File_Class

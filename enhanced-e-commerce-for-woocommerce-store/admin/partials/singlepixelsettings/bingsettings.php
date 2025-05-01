@@ -15,7 +15,7 @@ $microsoft_ads_subaccount_id = isset($ee_options['microsoft_ads_subaccount_id'])
 $microsoft_ads_pixel_id = isset($ee_options['microsoft_ads_pixel_id']) ? $ee_options['microsoft_ads_pixel_id'] : "";
 
 $is_sel_disable = 'disabled';
-
+$ms_email = $tvc_data["microsoft_mail"];
 
 $store_country = get_option('woocommerce_default_country');
 $store_country = explode(":", $store_country);
@@ -154,7 +154,7 @@ if ($store_country[0]) {
                                 <?php } ?>
                                 <option value="">Select Account</option>
                             </select>
-                            <button type="button" class="btn btn-sm d-flex conv-enable-selection conv-link-blue align-items-center">
+                            <button type="button" class="btn btn-sm d-flex conv-enable-selection conv-enable-selection-ads-pixel conv-link-blue align-items-center">
                                 <span class="material-symbols-outlined md-18">edit</span>
                                 <span class="px-1">Edit</span>
                             </button>
@@ -177,9 +177,110 @@ if ($store_country[0]) {
     <input type="hidden" id="valtoshow_inpopup" value="Microsoft Ads (Bing) Pixel:" />
 
 </div>
+<!-- Accordion start -->
+<div class="accordion accordion-flush microsoft_ads_conversion_acc disabledsection" id="accordionFlushExample">
 
+    <div class="accordion-item mt-3 rounded-3 shadow-sm">
+        <h2 class="accordion-header" id="flush-headingTwo">
+            <button class="accordion-button collapsed conv-link-blue" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                <?php esc_html_e("Measure Your Campaign Conversion", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                <small class="ms-2 m-0 fw-normal">
+                    <?php esc_html_e("(For microsoft ads conversion tracking)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </small>
+            </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse show row row-x-0" aria-labelledby="flush-headingTwo">
+            <div class="col-7 accordion-body pt-0">
+                <ul class="ps-0">
+                    <li class="<?php echo !CONV_IS_WC ? 'hidden' : 'd-flex align-items-center my-2' ?>">
+                        <div class="inlist_text_pre ms-2" conversion_name="Purchase">
+                            <h5 class="mb-0 d-flex align-items-center"><?php esc_html_e("Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>(Woocommerce)
+                                <span class="material-symbols-outlined text-success ms-1 fs-6 d-none">check_circle</span>
+                                <span class="material-symbols-outlined text-error me-1 fs-16 d-none">cancel</span>
+                            </h5>
+                            <div class="inlist_text_notconnected d-none">
+                                <?php esc_html_e("You can track all the Purchase events by adding the conversion label", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </div>
+                            <div class="inlist_text_connected d-flex d-none">
+                                <div class="text-success"><?php esc_html_e("Connected with Conversion ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                <div class="inlist_text_connected_convid"></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm ms-auto convcon_create_but convcon_create_Purchase px-3 py-1" conversion_name="Purchase">
+                            <?php esc_html_e("Enable now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </button>
+                    </li>
+                    <li class="<?php echo !CONV_IS_WC ? 'hidden' : 'd-flex align-items-center my-2' ?>">
+                        <div class="inlist_text_pre_pro ms-2 disabledsection-no" conversion_name="AddToCart">
+                            <h5 class="mb-0 d-flex align-items-center"><?php esc_html_e("Add to Cart (Woocommerce)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6 d-none">check_circle</span>
+                                <span class="material-symbols-outlined text-error me-1 fs-16 d-none">cancel</span>
+                            </h5>
+                            <div class="inlist_text_notconnected d-none">
+                                <?php esc_html_e("Track 'add to cart' events to evaluate campaign effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </div>
+                            <div class="inlist_text_connected d-flex d-none">
+                                <div class="text-success"><?php esc_html_e("Connected with Conversion ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                <div class="inlist_text_connected_convid ps-2"></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm ms-auto convcon_create_but convcon_create_AddToCart px-3 py-1" conversion_name="AddToCart">
+                            <?php esc_html_e("Enable now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </button>
+                    </li>
+                    <li class="<?php echo !CONV_IS_WC ? 'hidden' : 'd-flex align-items-center my-2' ?>">
+                        <div class="inlist_text_pre_pro ms-2 disabledsection-no" conversion_name="BeginCheckout">
+                            <h5 class="mb-0 d-flex align-items-center"><?php esc_html_e("Begin Checkout (Woocommerce)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6 d-none">check_circle</span>
+                                <span class="material-symbols-outlined text-error me-1 fs-16 d-none">cancel</span>
+                            </h5>
+                            <div class="inlist_text_notconnected d-none">
+                                <?php esc_html_e("Track 'begin checkout' events to evaluate campaign effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </div>
+                            <div class="inlist_text_connected d-flex d-none">
+                                <div class="text-success"><?php esc_html_e("Connected with Conversion ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                <div class="inlist_text_connected_convid ps-2"></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm ms-auto convcon_create_but convcon_create_BeginCheckout px-3 py-1" conversion_name="BeginCheckout">
+                            <?php esc_html_e("Enable now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </button>
+                    </li>
+                    <li class="d-flex align-items-center my-2">
+                        <div class="inlist_text_pre ms-2" conversion_name="SubmitLeadForm">
+                            <h5 class="mb-0 d-flex align-items-center"><?php esc_html_e("Form Lead Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <span class="material-symbols-outlined text-success ms-1 fs-6 d-none">check_circle</span>
+                                <span class="material-symbols-outlined text-error me-1 fs-16 d-none">cancel</span>
+                            </h5>
+                            <div class="inlist_text_notconnected d-none">
+                                <?php esc_html_e("You can track all the Form Submit events by adding the conversion label", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </div>
+                            <div class="inlist_text_connected d-flex d-none">
+                                <div class="text-success"><?php esc_html_e("Connected with Conversion ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                <div class="inlist_text_connected_convid ps-2"></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm ms-auto convcon_create_but convcon_create_SubmitLeadForm px-3 py-1" conversion_name="SubmitLeadForm">
+                            <?php esc_html_e("Enable now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-5 pt-0 p-4 d-flex justify-content-center">
+                <div class="card rounded shadow mt-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Increase Microsoft Ads <br> Conversion Rate by</h5>
+                        <h5 class="h1 text-center text-primary">30%<sup>*</sup></h5>
+                        <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn btn-sm mt-2 btn-primary w-100">Upgrade Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Accordion End -->
 <!--Modal -->
-<div class="modal fade" id="conv_create_new_bing" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="conv_create_new_bing" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <form id="bingForm" onfocus="this.className='focused'">
             <div class="modal-content">
@@ -843,11 +944,110 @@ if ($store_country[0]) {
     </div>
 </div>
 
+<div class="modal fade" id="convmicrosoftadseditconfirm" tabindex="-1" aria-labelledby="convmicrosoftadseditconfirmLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="convmicrosoftadseditconfirmLabel">Change Microsoft Ads Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Changing Microsoft Ads Account will remove selected conversions ID and Labels
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="conv_changemicrosoftadsacc_but" type="button" class="btn btn-primary">
+                    Change Now
+                    <div class="spinner-border spinner-border-sm d-none" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
     let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
     let plan_id = "<?php echo (isset($plan_id)) ? esc_attr($plan_id) : ''; ?>";
     let app_id = "<?php echo esc_attr($app_id); ?>";
+    let selected_microsoft_ads_pixel_id = jQuery("#microsoft_ads_pixel_id").val();
+    jQuery("#conv_changemicrosoftadsacc_but").click(function() {
+        var account_id = jQuery("#microsoft_ads_manager_id").val();
+        var subaccount_id = jQuery("#microsoft_ads_subaccount_id").val();
+        // jQuery("#conv_changemicrosoftadsacc_but").addClass("disabled");
+        // jQuery("#conv_changemicrosoftadsacc_but").find(".spinner-border").removeClass("d-none");
+        conv_change_loadingbar("show");
+        jQuery(".conv-enable-selection").addClass('disabled');
+        list_microsoft_ads_get_UET_tag(account_id, subaccount_id);
+        // clearmicrosoftadsconversions();
+        conv_change_loadingbar("hide");
+    });
+
+    jQuery(".conv-enable-selection-ads-pixel").click(function() {
+        jQuery("#convmicrosoftadseditconfirm").modal('show');
+    });
+
+    jQuery("#microsoft_ads_pixel_id").on("change", function() {
+        clearmicrosoftadsconversions();
+    })
+
+
+    function clearmicrosoftadsconversions() {
+        let microsoft_ads_pixel_id = jQuery("#microsoft_ads_pixel_id").val();
+        let clearconversions = "no";
+        if (microsoft_ads_pixel_id != selected_microsoft_ads_pixel_id) {
+            clearconversions = "yes";
+        }
+        var data = {
+            action: "conv_save_microsoft_ads_conversion",
+            clearmicrosoftadsconversions: clearconversions,
+            CONVNonce: "<?php echo esc_js(wp_create_nonce('conv_save_microsoft_ads_conversion-nonce')); ?>",
+        };
+        jQuery.ajax({
+            type: "POST",
+            url: tvc_ajax_url,
+            data: data,
+            success: function(response) {
+                // jQuery('.inlist_text_pre').find(".inlist_text_notconnected").removeClass("d-none");
+                // jQuery('.inlist_text_pre').find(".inlist_text_connected").addClass("d-none");
+                // jQuery('.inlist_text_pre').find(".inlist_text_connected").find(".inlist_text_connected_convid").html("");
+                // jQuery('.inlist_text_pre').next().html("Add");
+                jQuery("#convmicrosoftadseditconfirm").modal("hide");
+            }
+        });
+    }
+
+    function savemicrosoftadsconversions(category) {
+        let categoryObj = {};
+        if (Array.isArray(category)) {
+            category.forEach(cat => {
+                categoryObj[cat] = 1;
+            });
+        } else {
+            // If category is a single string, convert it to an object
+            categoryObj[category] = 1;
+        }
+        var data = {
+            action: "conv_save_microsoft_ads_conversion",
+            category: JSON.stringify(categoryObj),
+            CONVNonce: "<?php echo esc_js(wp_create_nonce('conv_save_microsoft_ads_conversion-nonce')); ?>"
+        };
+        jQuery.ajax({
+            type: "POST",
+            url: tvc_ajax_url,
+            data: data,
+            success: function(response) {
+                // jQuery('.inlist_text_pre').find(".inlist_text_notconnected").removeClass("d-none");
+                // jQuery('.inlist_text_pre').find(".inlist_text_connected").addClass("d-none");
+                // jQuery('.inlist_text_pre').find(".inlist_text_connected").find(".inlist_text_connected_convid").html("");
+                // jQuery('.inlist_text_pre').next().html("Add");
+                // jQuery("#convmicrosoftadseditconfirm").modal("hide");
+            }
+        });
+    }
+
 
     function list_microsoft_ads_get_UET_tag(account_id, subaccount_id) {
         //uery("#ee_conversio_send_to_static").removeClass("conv-border-danger");
@@ -926,6 +1126,7 @@ if ($store_country[0]) {
                     );
                 }
                 jQuery('#ads-account').prop('disabled', false);
+                jQuery("#convmicrosoftadseditconfirm").modal("hide");
             },
             complete: function() {
                 conv_change_loadingbar("hide");
@@ -936,6 +1137,127 @@ if ($store_country[0]) {
 
         jQuery("#conv_conversion_select").trigger("change");
     }
+
+    jQuery(document).ready(function() {
+        var microsoft_ads_pixel_id = jQuery('#microsoft_ads_pixel_id').val();
+        if (microsoft_ads_pixel_id === "") {
+            jQuery(".microsoft_ads_conversion_acc").addClass('disabledsection');
+        } else {
+            jQuery(".microsoft_ads_conversion_acc").removeClass('disabledsection');
+        }
+    });
+
+    jQuery(document).ready(function() {
+        function fetchMicrosoftAdsConversion() {
+            var pix_id = jQuery('#microsoft_ads_pixel_id').val();
+            jQuery(".convcon_create_Purchase, .convcon_create_AddToCart, .convcon_create_BeginCheckout, .convcon_create_SubmitLeadForm").removeClass('disabledsection');
+            jQuery(".microsoft_ads_conversion_acc").addClass('disabledsection');
+            var data = {
+                action: "conv_get_microsoft_ads_conversion",
+                customer_id: jQuery('#microsoft_ads_manager_id').val(),
+                account_id: jQuery('#microsoft_ads_subaccount_id').val(),
+                tag_id: pix_id,
+                TVCNonce: "<?php echo esc_js(wp_create_nonce('con_get_conversion_list-nonce')); ?>"
+            };
+
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: tvc_ajax_url,
+                data: data,
+                success: function(response) {
+                    if (response.status == "200" && response.data != undefined && response.data != "") {
+                        const conversionGoals = response.data.ConversionGoals.map(goal => goal.Name);
+                        const conversions = {};
+                        conversions[`Conversios_Purchase_${pix_id}`] = ".convcon_create_Purchase";
+                        conversions[`Conversios_AddToCart_${pix_id}`] = ".convcon_create_AddToCart";
+                        conversions[`Conversios_BeginCheckout_${pix_id}`] = ".convcon_create_BeginCheckout";
+                        conversions[`Conversios_SubmitLeadForm_${pix_id}`] = ".convcon_create_SubmitLeadForm";
+                        let conversionTypes = [];
+                        Object.keys(conversions).forEach(name => {
+                            if (conversionGoals.includes(name)) {
+                                jQuery(conversions[name]).removeClass('btn-outline-primary').addClass('pe-none btn-outline-success').text('Enabled');
+                                let conversionType = conversions[name].split('_').pop();
+                                conversionTypes.push(conversionType);
+                            } else {
+                                jQuery(conversions[name])
+                                    .removeClass('pe-none btn-outline-success')
+                                    .addClass('btn-outline-primary')
+                                    .text('Enable now');
+                            }
+                        });
+                        savemicrosoftadsconversions(conversionTypes);
+                        jQuery(".microsoft_ads_conversion_acc").removeClass('disabledsection');
+                    }
+                }
+            });
+        }
+
+        if (jQuery("#microsoft_ads_pixel_id").val() != "") {
+            fetchMicrosoftAdsConversion();
+        }
+
+        jQuery("#microsoft_ads_pixel_id").on('change', function() {
+            fetchMicrosoftAdsConversion();
+        });
+    });
+
+
+    function microsoft_ads_conversion(conversionCategory) {
+        var category = conversionCategory;
+        var pixelid = jQuery('#microsoft_ads_pixel_id').val();
+        var action_value = "";
+        if (category == "Purchase") {
+            action_value = "purchase";
+        } else if (category == "AddToCart") {
+            action_value = "add_to_cart";
+        } else if (category == "BeginCheckout") {
+            action_value = "begin_checkout";
+        } else if (category == "SubmitLeadForm") {
+            action_value = "form_lead_submit";
+        }
+        var data = {
+            action: "conv_create_microsoft_ads_conversion",
+            customer_id: jQuery('#microsoft_ads_manager_id').val(),
+            account_id: jQuery('#microsoft_ads_subaccount_id').val(),
+            tag_id: pixelid,
+            name: `Conversios_${conversionCategory}_${pixelid}`,
+            conversionCategory: conversionCategory,
+            action_value: action_value,
+            TVCNonce: "<?php echo esc_js(wp_create_nonce('con_get_conversion_list-nonce')); ?>"
+        };
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: data,
+            success: function(response) {
+                if (response.status == "200" && response.data != undefined && response.data != "") {
+                    if (category === "Purchase") {
+                        jQuery(".convcon_create_Purchase").removeClass('btn-outline-primary').addClass('pe-none btn-outline-success').text('Enabled');
+                        savemicrosoftadsconversions(category);
+                    }
+                    if (category === "AddToCart") {
+                        jQuery(".convcon_create_AddToCart").removeClass('btn-outline-primary').addClass('pe-none btn-outline-success').text('Enabled');
+                        savemicrosoftadsconversions(category);
+                    }
+                    if (category === "BeginCheckout") {
+                        jQuery(".convcon_create_BeginCheckout").removeClass('btn-outline-primary').addClass('pe-none btn-outline-success').text('Enabled');
+                        savemicrosoftadsconversions(category);
+                    }
+                    if (category === "SubmitLeadForm") {
+                        jQuery(".convcon_create_SubmitLeadForm").removeClass('btn-outline-primary').addClass('pe-none btn-outline-success').text('Enabled');
+                        savemicrosoftadsconversions(category);
+                    }
+                }
+            }
+        });
+    }
+
+    jQuery(".convcon_create_but").click(function() {
+        var conversion_name = jQuery(this).attr("conversion_name");
+        microsoft_ads_conversion(conversion_name);
+    });
 
     function create_uet_tag(e) {
         e.preventDefault();
@@ -1231,7 +1553,7 @@ if ($store_country[0]) {
     }
 
     jQuery(document).ready(function($) {
-        $('#conv_create_new_bing').on('shown.bs.modal', function() {
+        jQuery('#conv_create_new_bing').on('shown.bs.modal', function() {
             jQuery("#bing_country, #timezones, #currency_code, #language").select2({
                 dropdownParent: $("#conv_create_new_bing"),
                 //width: '400px',
@@ -1244,7 +1566,7 @@ if ($store_country[0]) {
     jQuery(function() {
 
 
-        <?php if (isset($_GET['subscription_id']) || !$microsoft_ads_manager_id || strlen($microsoft_ads_manager_id) < 3) { ?>
+        <?php if ((isset($_GET['subscription_id']) || !$microsoft_ads_manager_id || strlen($microsoft_ads_manager_id) < 3) && $ms_email != "") { ?>
             list_microsoft_ads_account(tvc_data);
         <?php } ?>
 
@@ -1274,7 +1596,8 @@ if ($store_country[0]) {
                 var acctype = jQuery(e.target).attr('acctype');
                 var thisselid = e.target.getAttribute('id');
                 // console.log(acctype);
-                list_microsoft_ads_get_UET_tag(account_id, subaccount_id);
+                // list_microsoft_ads_get_UET_tag(account_id, subaccount_id);
+                jQuery("#convmicrosoftadseditconfirm").modal('show');
                 jQuery(".microsoft_ads_subaccount_id").closest(".conv-hideme-gasettings").find("select").prop(
                     "disabled", false);
             } else {
@@ -1426,17 +1749,18 @@ if ($store_country[0]) {
                 var account_id = jQuery("#microsoft_ads_manager_id").val();
                 list_microsoft_ads_subaccount(account_id);
             }
-            if (jQuery(this).parent().find('select').attr('id') == 'microsoft_ads_pixel_id') {
-                var account_id = jQuery("#microsoft_ads_manager_id").val();
-                var subaccount_id = jQuery("#microsoft_ads_subaccount_id").val();
-                if (account_id != "" && subaccount_id != "") {
-                    list_microsoft_ads_get_UET_tag(account_id, subaccount_id);
-                }
-            }
+            // if (jQuery(this).parent().find('select').attr('id') == 'microsoft_ads_pixel_id') {
+            //     var account_id = jQuery("#microsoft_ads_manager_id").val();
+            //     var subaccount_id = jQuery("#microsoft_ads_subaccount_id").val();
+            //     if (account_id != "" && subaccount_id != "") {
+            //         list_microsoft_ads_get_UET_tag(account_id, subaccount_id);
+            //     }
+            // }
         });
 
 
         jQuery(document).on("click", ".conv-btn-connect-enabled-microsoft", function(e) {
+            microsoft_ads_conversion("Purchase");
             e.preventDefault();
             var has_error = 0;
             var selected_vals = {};

@@ -82,6 +82,8 @@ class Con_Settings
     protected $conv_disabled_users;
     protected $google_ads_currency;
 
+    protected $microsoft_ads_conversions;
+
     public function __construct()
     {
         if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
@@ -134,6 +136,11 @@ class Con_Settings
             $gads_conversions = (array) $this->get_option("gads_conversions");
             unset($gads_conversions["PURCHASE"]);
             $this->gads_conversions = $gads_conversions;
+        }
+        $this->microsoft_ads_conversions = [];
+        if (!empty($this->get_option("microsoft_ads_conversions"))) {
+            $microsoft_ads_conversions = (array) $this->get_option("microsoft_ads_conversions");
+            $this->microsoft_ads_conversions = $microsoft_ads_conversions;
         }
         $remarketing = unserialize(get_option('ee_remarketing_snippets'));
         if (!empty($remarketing) && isset($remarketing['snippets']) && esc_attr($remarketing['snippets'])) {

@@ -141,6 +141,12 @@ if (!class_exists('Conversios_Footer')) {
                         user_tracking_data('click', error_msg, screen_name, 'topmenu_' + str_menu);
                     });
 
+
+                    var convpricelink = jQuery('#toplevel_page_<?php echo esc_js(CONV_MENU_SLUG); ?>').find('a[href="admin.php?page=conversios-pricings"]');
+                    if (convpricelink.length) {
+                        convpricelink.attr('href', '<?php echo esc_js("https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro"); ?>');
+                        convpricelink.attr('target', '_blank');
+                    }
                     // Open UpgradetoPro Popup
                     jQuery(".upgradetopro_badge").click(function() {
                         var popupopener = jQuery(this).attr("popupopener");

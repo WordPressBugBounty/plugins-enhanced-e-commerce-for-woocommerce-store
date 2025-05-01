@@ -18,6 +18,8 @@ if (class_exists('Conversios_Header') === FALSE) {
 		// Subcription Data.
 		protected $subscription_data;
 
+		protected $google_ads_id;
+		protected $google_merchant_id;
 		// Plan id.
 		protected $plan_id = 1;
 
@@ -30,7 +32,9 @@ if (class_exists('Conversios_Header') === FALSE) {
 			if (isset($this->subscription_data->plan_id) === TRUE && !in_array($this->subscription_data->plan_id, array("1"))) {
 				$this->plan_id = $this->subscription_data->plan_id;
 			}
-
+			$ee_options = unserialize(get_option('ee_options'));
+			$this->google_ads_id = isset($ee_options['google_ads_id']) ? $ee_options['google_ads_id'] : "";
+			$this->google_merchant_id = isset($ee_options['google_merchant_id']) ? $ee_options['google_merchant_id'] : "";
 			add_action('add_conversios_header', [$this, 'before_start_header']);
 			add_action('add_conversios_header', [$this, 'header_menu']);
 			add_action('add_conversios_header', array($this, 'header_notices'));
@@ -60,24 +64,96 @@ if (class_exists('Conversios_Header') === FALSE) {
 
 			?>
 				<!--- Promotion box start -->
-					<div id="conversioshead_notice" class="promobandtop">
-						<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
-							<div class="promoleft">
-								<div class="promobandmsg text-white text-center fs-6 d-flex align-items-center">
-									<span class="fs-3 px-3">
-										📢
-									</span>
-									<div class="text-white">
-										Boost
-										<u><span class="px-1" style="color: #ffc700;">Conversions by 30% with CAPI</span></u>
-										for Facebook, Snapchat, and TikTok Ads with our Professional Plan
-										<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn btn-sm text-white fw-normal" style="background: #07BB4F">Buy Now</a>
-									</div>
-
+				<div id="conversioshead_notice" class="promobandtop">
+					<div class="d-flex justify-content-between fixedcontainer_conversios_notice align-items-center">
+						<div class="promoleft">
+							<div class="promobandmsg text-white text-center fs-6 d-flex align-items-center">
+								<span class="fs-3 px-3">
+									📢
+								</span>
+								<div class="text-white">
+									Boost
+									<span class="px-1" style="color: #ffc700;">Conversions by 30% with CAPI</span>
+									for Facebook, Snapchat, and TikTok Ads with our Professional Plan
+									<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn btn-sm text-white fw-normal" style="background: #07BB4F">Buy Now</a>
 								</div>
 							</div>
 						</div>
 					</div>
+				</div>
+				<div id="conversiosToast" class="toast align-items-center text-bg-danger border-0 top-1 start-50 position-relative translate-middle-x m-3" style="width: 1100px;" role="alert" aria-live="assertive" aria-atomic="true">
+					<div class="d-flex">
+						<div class="toast-body fw-bold">
+							🚨 Your Google Ads setup is incomplete. Please complete the setup now.
+						</div>
+						<div class="d-flex ms-auto align-items-center px-1">
+							<button type="button" class="btn btn-outline-primary me-3" style="height: 34px;" id="remindLater">Later</button>
+							<a href="admin.php?page=conversios-google-analytics&subpage=gadssettings&from=acc_setup" class="btn btn-primary" style="height: 34px;">View</a>
+							<button type="button" class="btn-close btn-close-black m-auto ps-3 btn-xs" data-bs-dismiss="toast" aria-label="Close"></button>
+						</div>
+					</div>
+				</div>
+
+				<script>
+					jQuery(document).ready(function($) {
+						function getCookie(name) {
+							let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+							return match ? match[2] : null;
+						}
+
+						function setCookie(name, value, days) {
+							let expires = "";
+							if (days) {
+								let date = new Date();
+								date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+								expires = "; expires=" + date.toUTCString();
+							}
+							document.cookie = name + "=" + value + expires + "; path=/";
+						}
+
+						function getQueryParam(param) {
+							let urlParams = new URLSearchParams(window.location.search);
+							return urlParams.get(param);
+						}
+
+						// PHP Variables Passed to JS
+						let gadsSetupIncomplete = <?php echo empty($this->google_ads_id) ? 'true' : 'false'; ?>;
+						let CONV_IS_WC = <?php echo esc_js(CONV_IS_WC); ?>;
+						let googleMerchantIncomplete = <?php echo empty($this->google_merchant_id) ? 'true' : 'false'; ?>;
+						let remindLater = getCookie("gads_remind_later");
+						let fromToastLink = getQueryParam("from");
+						let currentPage = getQueryParam("subpage");
+						let dashboardPage = getQueryParam("page");
+						let toastEl = jQuery("#conversiosToast");
+						let toast = new bootstrap.Toast(toastEl[0], {
+							autohide: false
+						});
+
+						if (!remindLater && fromToastLink !== "acc_setup" && currentPage !== "gadssettings" && currentPage !== "gmcsettings" && dashboardPage !== "conversios") {
+							if (gadsSetupIncomplete) {
+								jQuery("#conversiosToast .toast-body").text("🚨 Your Google Ads setup is incomplete. Please complete the setup now.");
+								jQuery("#conversiosToast .btn-primary").attr("href", "admin.php?page=conversios-google-analytics&subpage=gadssettings&from=acc_setup");
+								toast.show();
+							} else if (googleMerchantIncomplete && CONV_IS_WC) {
+								jQuery("#conversiosToast .toast-body").text("🚨 Your Google Merchant Center setup is incomplete. Please complete the setup now.");
+								jQuery("#conversiosToast .btn-primary").attr("href", "admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings&from=acc_setup");
+								toast.show();
+							}
+						}
+
+						// "Remind Me Later" Button Click
+						jQuery("#remindLater").on("click", function() {
+							setCookie("gads_remind_later", "true", 10); // Hide for 10 days
+							toast.hide();
+						});
+
+						// Close Button Behavior (Just Hides the Toast)
+						jQuery(".btn-close").on("click", function() {
+							toast.hide();
+						});
+					});
+				</script>
+
 				<!--- Promotion box end -->
 				<?php
 				echo esc_attr($this->call_tvc_site_verified_and_domain_claim());
@@ -107,7 +183,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 							),
 							"conversios-analytics-reports" => array(
 								"page" => "conversios-analytics-reports",
-								"title" => "Reports & Insights"
+								"title" => "Analytics Report"
 							),
 							"conversios-google-analytics" => array(
 								"page" => "conversios-google-analytics",
@@ -160,7 +236,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 						),
 						"conversios-analytics-reports" => array(
 							"page" => "conversios-analytics-reports",
-							"title" => "Reports & Insights"
+							"title" => "Analytics Report"
 						),
 						"conversios-google-analytics" => array(
 							"page" => "conversios-google-analytics",
@@ -215,6 +291,13 @@ if (class_exists('Conversios_Header') === FALSE) {
 													if (isset($value['page']) && $value['page'] != "#") {
 														$menu_url = $this->site_url . $value['page'];
 													}
+
+													$openinnew = "";
+													if($key == "conversios-pricings")
+													{
+														$menu_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro";
+														$openinnew = "target='_blank'";
+													}
 													$is_parent_menu = "";
 													$is_parent_menu_link = "";
 													if (isset($value['sub_menus']) && !empty($value['sub_menus'])) {
@@ -223,7 +306,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 											?>
 													<li class="nav-item fs-14 mt-1 fw-400 <?php echo esc_attr($active); ?> <?php echo esc_attr($is_parent_menu); ?>">
 														<?php if ($is_parent_menu == "") { ?>
-															<a class="nav-link text-<?php echo esc_attr($is_active); ?> " aria-current="page" href="<?php echo esc_url($menu_url); ?>">
+															<a class="nav-link text-<?php echo esc_attr($is_active); ?> " aria-current="page" href="<?php echo esc_url($menu_url); ?>" <?php echo $openinnew; ?>>
 																<?php echo esc_attr($value['title']); ?>
 															</a>
 														<?php } else { ?>
@@ -256,7 +339,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 											?>
 											<a class="d-flex align-items-center flex-wrap text-dark" href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" target="_blank">
 												<?php echo wp_kses(
-													enhancad_get_plugin_image('/admin/images/rate-us.png','','','max-width:95px;'),
+													enhancad_get_plugin_image('/admin/images/rate-us.png', '', '', 'max-width:95px;'),
 													array(
 														'img' => array(
 															'src' => true,

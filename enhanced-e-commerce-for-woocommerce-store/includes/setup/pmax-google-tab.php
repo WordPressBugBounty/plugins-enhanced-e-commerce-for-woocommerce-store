@@ -1,3 +1,22 @@
+<?php
+$gads_budget_json = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/Gads-budget.json");
+$ee_options = unserialize(get_option('ee_options'));
+$ecom_reports_gads_currency = isset($ee_options['ecom_reports_gads_currency']) ? sanitize_text_field($ee_options['ecom_reports_gads_currency']) : '';
+$google_ads_id = $ee_options['google_ads_id'];
+if ($ecom_reports_gads_currency == "") {
+    $Conversios_PMax_Helper  = new Conversios_PMax_Helper();
+    $ecomrepogadscurr = $Conversios_PMax_Helper->get_campaign_currency_code($google_ads_id);
+    $ecom_reports_gads_currency = $ecomrepogadscurr->data->currencyCode;
+}
+// $gads_budget_data = json_decode($gads_budget, true);
+// $budget_map = [];
+// foreach ($gads_budget_data as $entry) {
+//     $currency = $entry['currency'];
+//     $country = $entry['country'];
+//     $budget_map[$currency][$country] = $entry['budget_usd'];
+// }
+?>
+
 <div class="w-96 campaignTableDiv <?php echo isset($_GET['cid']) && sanitize_text_field(wp_unslash($_GET['cid'])) != '' ? 'd-none' : '' ?> ">
     <nav class="navbar navbar-light bg-white shadow-sm topNavBar d-none" style="display:none">
         <div class="col-12">
@@ -59,7 +78,8 @@
                         <td class="text-end"><?php echo esc_html($result->metrics->conversions) ?></td>
                         <td class="text-end"><?php echo esc_html($sales) ?></td>
                         <td data-id="<?php echo esc_html($result->campaign->id) ?>" class="text-center">
-                            <span class="d-none"><?php // echo esc_html($result->campaign->id) ?></span>
+                            <span class="d-none"><?php // echo esc_html($result->campaign->id) 
+                                                    ?></span>
                             <label class="text-primary pointer edit-btn" onclick="editCampaign(<?php echo esc_html($result->campaign->id) ?>)">Edit</label>
                         </td>
                     </tr>
@@ -106,7 +126,8 @@
                                 <td class="text-end">NA</td>
                                 <td class="text-end">NA</td>
                                 <td>
-                                    <span class="d-none"><?php // echo esc_html($result->campaign->id) ?></span>
+                                    <span class="d-none"><?php // echo esc_html($result->campaign->id) 
+                                                            ?></span>
                                     <label class="text-primary pointer" onclick="editFailedCampaign(<?php echo esc_html($value->id) ?>)">Edit</label>
                                 </td>
                             </tr>
@@ -159,7 +180,6 @@
                             <div class="col-7">
                                 <select id="selecetdCampaign" multiple="multiple" class="form-control" name="selecetdCampaign[]"
                                     placeholder="Enter Campaign Name" style="width: 100%;" aria-labelledby="dropdownMenuButton" <?php echo isset($_GET['cid']) && sanitize_text_field(wp_unslash($_GET['cid'])) != '' ? '' : 'disabled' ?>>
-
                                     <?php
                                     $selected_cid = isset($_GET['cid']) && sanitize_text_field(wp_unslash($_GET['cid'])) != '' ? explode(',', urldecode(sanitize_text_field(wp_unslash($_GET['cid'])))) : [];
                                     foreach ($feed_results as $row) {
@@ -181,24 +201,26 @@
                                 <input type="text" id="campaignName" name="campaignName" class="form-control flex-grow-1" placeholder="Enter Campaign Name">
                             </div>
                             <div class="col-12 mt-3 d-flex align-items-center">
-                                <span class="fs-14 fw-500 me-2" style="width: 145px">Daily Budget &nbsp;<span class="text-danger fs-16">*</span></span>
-                                <input type="text" id="daily_budget" name="daily_budget" class="form-control" placeholder="Enter Daily Budget">
-                            </div>
-                            <div class="col-12 mt-3 d-flex align-items-center">
                                 <span class="fs-14 fw-500 me-2" style="width: 145px">Country &nbsp;<span class="text-danger fs-16">*</span></span>
                                 <select id="target_country_campaign" name="target_country_campaign" class="form-control" style="width:100%">
                                     <option value="">Select Country</option>
                                     <?php
-                                    $selecetdCountry = $conv_data['user_country'];
                                     foreach ($contData as $country) { ?>
-                                        <option value="<?php echo esc_html($country->code) ?>" <?php echo $selecetdCountry === $country->code ? 'selected = "selecetd"' : '' ?>><?php echo esc_html($country->name) ?></option>
+                                        <option value="<?php echo esc_html($country->code) ?>"><?php echo esc_html($country->name) ?></option>
                                     <?php }
                                     ?>
                                 </select>
                             </div>
                             <div class="col-12 mt-3 d-flex align-items-center">
+                                <span class="fs-14 fw-500 me-2" style="width: 145px">Daily Budget &nbsp;<span class="text-danger fs-16">*</span></span>
+                                <input type="text" id="daily_budget" name="daily_budget" class="form-control" placeholder="Enter Daily Budget">
+                            </div>
+                            <div class="col-12 text-center mt-3">
+                                <span class="recommended-budget text-success fs-8 fw-bold"></span>
+                            </div>
+                            <div class="col-12 mt-3 d-flex align-items-center">
                                 <span class="fs-14 fw-500 me-2" style="width: 145px">ROAS</span>
-                                <span class="fs-10" style="width:100%"><input type="text" id="target_roas" name="target_roas" class="form-control" placeholder="Add Target ROAS (%)">Formula: Conversion value ÷ ad spend x 100% = target ROAS percentage</span>
+                                <span class="fs-10" style="width:100%"><input type="text" id="target_roas" name="target_roas" class="form-control" placeholder="Add Target ROAS (%)">Formula: Conversion value ÷ ad spend x 100% = target ROAS percentage</span>
                             </div>
                             <div class="col-12 mt-3 d-flex align-items-center">
                                 <span class="fs-14 fw-500 me-2" style="width: 145px">Start Date &nbsp;<span class="text-danger fs-16">*</span></span>
@@ -356,249 +378,314 @@
 
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script>
-jQuery(document).ready(function() {
-    jQuery(document).on('click', '#submitCampaign', function() {
-        if (jQuery('#resourceName').val() == '' && jQuery('#campaign_id').val() == '') {
-            submitCampaign();
-        } else {
-            updateCampaign();
-        }
-    });
-});
-function submitCampaign() {
-    let hasError = false;
-    let productSource = jQuery('input[name="productSource"]:checked').val();
-    let feed_ids = '';
-    if (productSource == 'Feeds') {
-        var feed_id = jQuery('#selecetdCampaign option:selected').map(function() {
-            return $(this).val();
-        }).get();
-        feed_ids = feed_id.join(', ');
-        if (feed_ids == '') {
-            jQuery('#selecetdCampaign').next('span').find('.select2-selection--multiple').addClass('errorInput')
-            hasError = true
-        }
-    }
-    let arrValidate = ['campaignName', 'daily_budget', 'target_country_campaign', 'start_date', 'end_date'];
-
-    jQuery.each(arrValidate, function(i, v) {
-        if (jQuery('#' + v).val() == '' && v !== 'target_country_campaign') {
-            jQuery('#' + v).addClass('errorInput');
-            hasError = true
-        }
-        if (v == 'target_country_campaign' && jQuery('select[name="' + v + '"] option:selected').val() == '') {
-            jQuery('select[name="' + v + '"]').addClass('errorInput');
-            jQuery('select[name="' + v + '"]').next('span').find('.select2-selection--single').addClass('errorInput');
-            hasError = true
-        }
-    })
-    var todayDate = new Date();
-    var eDate = new Date(jQuery('#end_date').val());
-    var sDate = new Date(jQuery('#start_date').val());
-    if (new Date(sDate.toDateString()) < new Date(todayDate.toDateString())) {
-        jQuery('#start_date').addClass('errorInput');
-        jQuery(".startDateError").html("Start date is less than today's date.")
-        hasError = true
-    }
-    if (sDate > eDate) {
-        jQuery('#end_date').addClass('errorInput');
-        jQuery('.endDateError').html('Check End Date.')
-        return false;
-    }
-    if (hasError == true) {
-        return false;
-    }
-    let subscriptionId = "<?php echo esc_js($subscription_id) ?>";
-    let google_merchant_center_id = "<?php echo esc_js($google_merchant_id) ?>";
-    let google_ads_id = "<?php echo esc_js($google_ads_id) ?>";
-    let store_id = "<?php echo esc_js($store_id) ?>";
-    var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>";
-    var data = {
-        action: "ee_createPmaxCampaign",
-        campaign_name: jQuery('#campaignName').val(),
-        budget: jQuery('#daily_budget').val(),
-        target_country: jQuery('#target_country_campaign').find(":selected").val(),
-        start_date: jQuery('#start_date').val(),
-        end_date: jQuery('#end_date').val(),
-        target_roas: jQuery('#target_roas').val() == '' ? 0 : jQuery('#target_roas').val(),
-        status: jQuery('input[name=status]:checked').val(),
-        subscription_id: "<?php echo esc_js($subscription_id) ?>",
-        google_merchant_id: "<?php echo esc_js($google_merchant_id) ?>",
-        google_ads_id: "<?php echo esc_js($google_ads_id) ?>",
-        sync_item_ids: feed_ids,
-        domain: "<?php echo esc_js(get_site_url()) ?>",
-        store_id: "<?php echo esc_js($store_id) ?>",
-        productSource: productSource,
-        sync_type: "feed",
-        conv_onboarding_nonce: conv_onboarding_nonce
-    }
-    jQuery.ajax({
-        type: "POST",
-        dataType: "json",
-        url: tvc_ajax_url,
-        data: data,
-        beforeSend: function() {
-            jQuery("#loadingbar_blue_modal_campign").removeClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "none");
-            jQuery('#submitCampaign').attr('disabled', true);
-        },
-        error: function(err, status) {
-            jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "auto");
-            jQuery('#submitCampaign').attr('disabled', false);
-        },
-        success: function(response) {
-            jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "auto");
-            jQuery('#submitCampaign').attr('disabled', false);
-            if (response.error == true) {
-                var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/errorImg.png'); ?>" alt="" style="width:150px; height:150px;">';
-                html += '<div class="text-danger">Failed! Your operation was failed.</div>';
-                html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
-                jQuery('.infoBody').html(html)
-                jQuery('#infoModal').modal('show')
-            } else {
-                var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>" alt="" style="width:150px; height:150px;">';
-                html += '<div class="text-success">Success! Your operation was completed.</div>';
-                html += '<div class="text-dark fs-12 mt-2">Exciting things are happening behind the scenes! We\'re crafting your Pmax campaign for Google Ads with precision. Your products are gearing up to shine. Sit tight, and get ready for an amplified reach and increased sales.</div>';
-
-                jQuery('.infoBody').html(html)
-                jQuery('#infoModal').modal('show')
+    var gads_budget_json = <?php echo $gads_budget_json; ?>;
+    jQuery('#target_country_campaign').on('change', function() {
+        var selectedCountry = jQuery(this).val();
+        var ecom_reports_gads_currency = "<?php echo esc_js($ecom_reports_gads_currency); ?>";
+        var matchingBudget = null;
+        for (var i = 0; i < gads_budget_json.length; i++) {
+            if (gads_budget_json[i].country === selectedCountry && gads_budget_json[i].currency === ecom_reports_gads_currency) {
+                matchingBudget = gads_budget_json[i].budget_usd;
+                break;
             }
         }
+        if (matchingBudget !== null) {
+            var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>";
+            jQuery.ajax({
+                type: "POST",
+                dataType: "text",
+                url: tvc_ajax_url,
+                data: {
+                    action: "convert_budget_to_local_currency",
+                    currency: ecom_reports_gads_currency,
+                    conv_onboarding_nonce: conv_onboarding_nonce
+                },
+                success: function(rawResponse) {
+                    try {
+                        var jsonStr = rawResponse.match(/\{.*\}/);
+                        if (jsonStr) {
+                            var response = JSON.parse(jsonStr[0]);
+                            if (!response.error && response.message && response.message.status == 200) {
+                                if (response.message.rate) {
+                                    var convertedBudget = Math.round(matchingBudget * response.message.rate);
+                                    // if (jQuery('#campaign_id').val() === '') {
+                                    //     jQuery('#daily_budget').val(convertedBudget);
+                                    // }
+                                    jQuery('.recommended-budget').text('To help you get the best results from your Google Ads campaign in ' + selectedCountry + ' we recommend a daily budget of : ' + convertedBudget + ' ' + ecom_reports_gads_currency).addClass('alert alert-info mt-2');
+                                }
+                            } else {
+                                console.error('Failed to update budget:', response);
+                            }
+                        } else {
+                            console.error('No valid JSON found in response');
+                            console.log('Raw response:', rawResponse);
+                        }
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
+                        console.log('Raw response:', rawResponse);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+                }
+            });
+        }
     });
-}
 
-function editCampaign(id) {
-    var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>";
-    var data = {
-        action: "ee_editPmaxCampaign",
-        id: id,
-        google_ads_id: "<?php echo esc_js($google_ads_id) ?>",
-        conv_onboarding_nonce: conv_onboarding_nonce
-    }
-    jQuery.ajax({
-        type: "POST",
-        dataType: "json",
-        url: tvc_ajax_url,
-        data: data,
-        beforeSend: function() {
-            jQuery('td[data-id=' + id + '] label').addClass('loading-row');
-            jQuery("#wpbody").css("pointer-events", "none");
-        },
-        success: function(response) {
-            jQuery("#wpbody").css("pointer-events", "auto");
-            jQuery('.topNavBar').removeClass('loading-row')
-            jQuery('#campaignName').val(response.result['campaignName'].replace(/\\/g, '')).attr('readonly', true)
-            jQuery('#daily_budget').val(response.result['budget'])
-            jQuery('#target_country_campaign').val(response.result['sale_country']).trigger('change').attr('disabled', true)
-            jQuery('#edit_country_campaign').val(response.result['sale_country'])
-            jQuery('#target_roas').val(response.result['target_roas'])
-            jQuery('#start_date').val(response.result['startDate']).attr('readonly', true)
-            jQuery('#end_date').val(response.result['endDate'])
-            jQuery('input[name=status][value="' + response.result['status'] + '"]').val()
-            jQuery('#resourceName').val(response.result['resourceName'])
-            jQuery('#campaignBudget').val(response.result['campaignBudget'])
-            jQuery('#campaign_id').val(id)
-            jQuery('#allproduct').attr('disabled', true)
-            jQuery('#specific_feeds').attr('disabled', true)
+    jQuery(document).ready(function() {
 
-            jQuery('.campaign-pmax-title').text('Edit Pmax Campaign');
-            jQuery('#submitCampaign').text('Update Campaign');
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromParam = urlParams.get('from');
+
+        if (fromParam === 'create_campaign') {
             jQuery('.createCampaignDiv').removeClass('d-none');
-            jQuery('.campaignTableDiv').addClass('d-none')
-        },
-        complete: function(err, status) {
-            jQuery('td[data-id=' + id + '] label').removeClass('loading-row')
-            jQuery("#wpbody").css("pointer-events", "auto");
+            jQuery('.campaignTableDiv').addClass('d-none');
         }
-    });
-}
 
-function updateCampaign() {
-    let arrValidate = ['daily_budget', 'end_date'];
-    let hasError = false;
-    jQuery.each(arrValidate, function(i, v) {
-        if (jQuery('#' + v).val() == '') {
-            jQuery('#' + v).addClass('errorInput');
-            hasError = true
-        }
-    })
-
-    if (hasError == true) {
-        return false;
-    }
-    var todayDate = new Date();
-    var eDate = new Date(jQuery('#end_date').val());
-    var sDate = new Date(jQuery('#start_date').val());
-    if (sDate > eDate) {
-        jQuery('#end_date').addClass('errorInput');
-        jQuery('.endDateError').html('Check End Date.')
-        return false;
-    }
-    let subscriptionId = "<?php echo esc_js($subscription_id) ?>";
-    let store_id = "<?php echo esc_js($store_id) ?>";
-    var conversios_nonce = "<?php echo esc_js(wp_create_nonce('conversios_nonce')); ?>";
-    var data = {
-        action: "ee_update_PmaxCampaign",
-        campaign_name: jQuery('#campaignName').val(),
-        budget: jQuery('#daily_budget').val(),
-        target_country: jQuery('#edit_country_campaign').val(),
-        start_date: jQuery('#start_date').val(),
-        end_date: jQuery('#end_date').val(),
-        target_roas: jQuery('#target_roas').val() == '' ? 0 : jQuery('#target_roas').val(),
-        status: jQuery('input[name=status]:checked').val(),
-        merchant_id: "<?php echo esc_js($google_merchant_id) ?>",
-        customer_id: "<?php echo esc_js($google_ads_id) ?>",
-        resource_name: jQuery('#resourceName').val(),
-        campaign_budget_resource_name: jQuery('#campaignBudget').val(),
-        campaign_id: jQuery('#campaign_id').val(),
-        conversios_nonce: conversios_nonce
-    }
-    jQuery.ajax({
-        type: "POST",
-        dataType: "json",
-        url: tvc_ajax_url,
-        data: data,
-        beforeSend: function() {
-            jQuery("#loadingbar_blue_modal_campign").removeClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "none");
-            jQuery('#submitCampaign').attr('disabled', true);
-        },
-        error: function(err, status) {
-            jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "auto");
-            jQuery('#submitEditedCampaign').attr('disabled', false);
-        },
-        success: function(response) {
-            jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "auto");
-            jQuery('#submitEditedCampaign').attr('disabled', false);
-            jQuery('#edit-campign-pop-up').modal('hide');
-            if (response.error == true) {
-                var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/errorImg.png'); ?>" alt="" style="width:150px; height:150px;">';
-                html += '<div class="text-danger">Failed! Your operation was failed.</div>';
-                html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
-                jQuery('.infoBody').html(html)
-                jQuery('#infoModal').modal('show')
+        jQuery(document).on('click', '#submitCampaign', function() {
+            if (jQuery('#resourceName').val() == '' && jQuery('#campaign_id').val() == '') {
+                submitCampaign();
             } else {
-                var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>" alt="" style="width:150px; height:150px;">';
-                html += '<div class="text-success">Success! Your operation was completed.</div>';
-                html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
+                updateCampaign();
+            }
+        });
+    });
 
-                jQuery('.infoBody').html(html)
-                jQuery('#infoModal').modal('show')
+    function submitCampaign() {
+        let hasError = false;
+        let productSource = jQuery('input[name="productSource"]:checked').val();
+        let feed_ids = '';
+        if (productSource == 'Feeds') {
+            var feed_id = jQuery('#selecetdCampaign option:selected').map(function() {
+                return $(this).val();
+            }).get();
+            feed_ids = feed_id.join(', ');
+            if (feed_ids == '') {
+                jQuery('#selecetdCampaign').next('span').find('.select2-selection--multiple').addClass('errorInput')
+                hasError = true
             }
         }
-    });
-}
+        let arrValidate = ['campaignName', 'daily_budget', 'target_country_campaign', 'start_date', 'end_date'];
+
+        jQuery.each(arrValidate, function(i, v) {
+            if (jQuery('#' + v).val() == '' && v !== 'target_country_campaign') {
+                jQuery('#' + v).addClass('errorInput');
+                hasError = true
+            }
+            if (v == 'target_country_campaign' && jQuery('select[name="' + v + '"] option:selected').val() == '') {
+                jQuery('select[name="' + v + '"]').addClass('errorInput');
+                jQuery('select[name="' + v + '"]').next('span').find('.select2-selection--single').addClass('errorInput');
+                hasError = true
+            }
+        })
+        var todayDate = new Date();
+        var eDate = new Date(jQuery('#end_date').val());
+        var sDate = new Date(jQuery('#start_date').val());
+        if (new Date(sDate.toDateString()) < new Date(todayDate.toDateString())) {
+            jQuery('#start_date').addClass('errorInput');
+            jQuery(".startDateError").html("Start date is less than today's date.")
+            hasError = true
+        }
+        if (sDate > eDate) {
+            jQuery('#end_date').addClass('errorInput');
+            jQuery('.endDateError').html('Check End Date.')
+            return false;
+        }
+        if (hasError == true) {
+            return false;
+        }
+        let subscriptionId = "<?php echo esc_js($subscription_id) ?>";
+        let google_merchant_center_id = "<?php echo esc_js($google_merchant_id) ?>";
+        let google_ads_id = "<?php echo esc_js($google_ads_id) ?>";
+        let store_id = "<?php echo esc_js($store_id) ?>";
+        var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>";
+        var data = {
+            action: "ee_createPmaxCampaign",
+            campaign_name: jQuery('#campaignName').val(),
+            budget: jQuery('#daily_budget').val(),
+            target_country: jQuery('#target_country_campaign').find(":selected").val(),
+            start_date: jQuery('#start_date').val(),
+            end_date: jQuery('#end_date').val(),
+            target_roas: jQuery('#target_roas').val() == '' ? 0 : jQuery('#target_roas').val(),
+            status: jQuery('input[name=status]:checked').val(),
+            subscription_id: "<?php echo esc_js($subscription_id) ?>",
+            google_merchant_id: "<?php echo esc_js($google_merchant_id) ?>",
+            google_ads_id: "<?php echo esc_js($google_ads_id) ?>",
+            sync_item_ids: feed_ids,
+            domain: "<?php echo esc_js(get_site_url()) ?>",
+            store_id: "<?php echo esc_js($store_id) ?>",
+            productSource: productSource,
+            sync_type: "feed",
+            conv_onboarding_nonce: conv_onboarding_nonce
+        }
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: data,
+            beforeSend: function() {
+                jQuery("#loadingbar_blue_modal_campign").removeClass('d-none');
+                jQuery("#wpbody").css("pointer-events", "none");
+                jQuery('#submitCampaign').attr('disabled', true);
+            },
+            error: function(err, status) {
+                jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
+                jQuery("#wpbody").css("pointer-events", "auto");
+                jQuery('#submitCampaign').attr('disabled', false);
+            },
+            success: function(response) {
+                jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
+                jQuery("#wpbody").css("pointer-events", "auto");
+                jQuery('#submitCampaign').attr('disabled', false);
+                if (response.error == true) {
+                    var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/errorImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    html += '<div class="text-danger">Failed! Your operation was failed.</div>';
+                    html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
+                    jQuery('.infoBody').html(html)
+                    jQuery('#infoModal').modal('show')
+                } else {
+                    var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    html += '<div class="text-success">Success! Your operation was completed.</div>';
+                    html += '<div class="text-dark fs-12 mt-2">Exciting things are happening behind the scenes! We\'re crafting your Pmax campaign for Google Ads with precision. Your products are gearing up to shine. Sit tight, and get ready for an amplified reach and increased sales.</div>';
+
+                    jQuery('.infoBody').html(html)
+                    jQuery('#infoModal').modal('show')
+                }
+            }
+        });
+    }
+
+    function editCampaign(id) {
+        var conv_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>";
+        var data = {
+            action: "ee_editPmaxCampaign",
+            id: id,
+            google_ads_id: "<?php echo esc_js($google_ads_id) ?>",
+            conv_onboarding_nonce: conv_onboarding_nonce
+        }
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: data,
+            beforeSend: function() {
+                jQuery('td[data-id=' + id + '] label').addClass('loading-row');
+                jQuery("#wpbody").css("pointer-events", "none");
+            },
+            success: function(response) {
+                jQuery("#wpbody").css("pointer-events", "auto");
+                jQuery('.topNavBar').removeClass('loading-row')
+                jQuery('#campaignName').val(response.result['campaignName'].replace(/\\/g, '')).attr('readonly', true)
+                jQuery('#daily_budget').val(response.result['budget'])
+                jQuery('#target_country_campaign').val(response.result['sale_country']).trigger('change').attr('disabled', true)
+                jQuery('#edit_country_campaign').val(response.result['sale_country'])
+                jQuery('#target_roas').val(response.result['target_roas'])
+                jQuery('#start_date').val(response.result['startDate']).attr('readonly', true)
+                jQuery('#end_date').val(response.result['endDate'])
+                jQuery('input[name=status][value="' + response.result['status'] + '"]').val()
+                jQuery('#resourceName').val(response.result['resourceName'])
+                jQuery('#campaignBudget').val(response.result['campaignBudget'])
+                jQuery('#campaign_id').val(id)
+                jQuery('#allproduct').attr('disabled', true)
+                jQuery('#specific_feeds').attr('disabled', true)
+
+                jQuery('.campaign-pmax-title').text('Edit Pmax Campaign');
+                jQuery('#submitCampaign').text('Update Campaign');
+                jQuery('.createCampaignDiv').removeClass('d-none');
+                jQuery('.campaignTableDiv').addClass('d-none')
+            },
+            complete: function(err, status) {
+                jQuery('td[data-id=' + id + '] label').removeClass('loading-row')
+                jQuery("#wpbody").css("pointer-events", "auto");
+            }
+        });
+    }
+
+    function updateCampaign() {
+        let arrValidate = ['daily_budget', 'end_date'];
+        let hasError = false;
+        jQuery.each(arrValidate, function(i, v) {
+            if (jQuery('#' + v).val() == '') {
+                jQuery('#' + v).addClass('errorInput');
+                hasError = true
+            }
+        })
+
+        if (hasError == true) {
+            return false;
+        }
+        var todayDate = new Date();
+        var eDate = new Date(jQuery('#end_date').val());
+        var sDate = new Date(jQuery('#start_date').val());
+        if (sDate > eDate) {
+            jQuery('#end_date').addClass('errorInput');
+            jQuery('.endDateError').html('Check End Date.')
+            return false;
+        }
+        let subscriptionId = "<?php echo esc_js($subscription_id) ?>";
+        let store_id = "<?php echo esc_js($store_id) ?>";
+        var conversios_nonce = "<?php echo esc_js(wp_create_nonce('conversios_nonce')); ?>";
+        var data = {
+            action: "ee_update_PmaxCampaign",
+            campaign_name: jQuery('#campaignName').val(),
+            budget: jQuery('#daily_budget').val(),
+            target_country: jQuery('#edit_country_campaign').val(),
+            start_date: jQuery('#start_date').val(),
+            end_date: jQuery('#end_date').val(),
+            target_roas: jQuery('#target_roas').val() == '' ? 0 : jQuery('#target_roas').val(),
+            status: jQuery('input[name=status]:checked').val(),
+            merchant_id: "<?php echo esc_js($google_merchant_id) ?>",
+            customer_id: "<?php echo esc_js($google_ads_id) ?>",
+            resource_name: jQuery('#resourceName').val(),
+            campaign_budget_resource_name: jQuery('#campaignBudget').val(),
+            campaign_id: jQuery('#campaign_id').val(),
+            conversios_nonce: conversios_nonce
+        }
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: data,
+            beforeSend: function() {
+                jQuery("#loadingbar_blue_modal_campign").removeClass('d-none');
+                jQuery("#wpbody").css("pointer-events", "none");
+                jQuery('#submitCampaign').attr('disabled', true);
+            },
+            error: function(err, status) {
+                jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
+                jQuery("#wpbody").css("pointer-events", "auto");
+                jQuery('#submitEditedCampaign').attr('disabled', false);
+            },
+            success: function(response) {
+                jQuery("#loadingbar_blue_modal_campign").addClass('d-none');
+                jQuery("#wpbody").css("pointer-events", "auto");
+                jQuery('#submitEditedCampaign').attr('disabled', false);
+                jQuery('#edit-campign-pop-up').modal('hide');
+                if (response.error == true) {
+                    var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/errorImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    html += '<div class="text-danger">Failed! Your operation was failed.</div>';
+                    html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
+                    jQuery('.infoBody').html(html)
+                    jQuery('#infoModal').modal('show')
+                } else {
+                    var html = '<img class="" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>" alt="" style="width:150px; height:150px;">';
+                    html += '<div class="text-success">Success! Your operation was completed.</div>';
+                    html += '<div class="text-dark fs-12 mt-2">' + response.message + '</div>';
+
+                    jQuery('.infoBody').html(html)
+                    jQuery('#infoModal').modal('show')
+                }
+            }
+        });
+    }
 </script>

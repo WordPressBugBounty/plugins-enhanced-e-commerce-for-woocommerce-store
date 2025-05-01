@@ -22,7 +22,7 @@
             <div class="onbrdpp-body">
                 <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
                 <div class="google_signin_sec_left">
-                    <?php if (!isset($tvc_data['g_mail']) || $tvc_data['g_mail'] == "" || $subscriptionId == "") { ?>
+                    <?php if (!isset($tvc_data['g_mail']) || $tvc_data['g_mail'] == "" || $subscription_id == "") { ?>
                         <div class="google_connect_url_ga google-btn">
                             <?php echo wp_kses(
                                 enhancad_get_plugin_image('/admin/images/logos/btn_google_signin_dark_normal_web.png'),
@@ -125,30 +125,18 @@
     jQuery(function() {
         var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
         var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
-        let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
+        let subscription_id = "<?php echo esc_attr($subscription_id); ?>";
         let plan_id = "<?php echo esc_attr($plan_id); ?>";
         let app_id = "<?php echo esc_attr($app_id); ?>";
         let bagdeVal = "yes";
-        let convBadgeVal = "<?php echo esc_attr($convBadgeVal); ?>";
-
-        let ua_acc_val = jQuery('#ua_acc_val').val();
         let ga4_acc_val = jQuery('#ga4_acc_val').val();
-        //let propId = jQuery('#propId').val();
-        //let measurementId = jQuery('#measurementId').val();
         let googleAds = jQuery('#googleAds').val();
         let gmc_field = jQuery('#gmc_field').val();
-        //console.log("ua_acc_val",ua_acc_val);  
-        //console.log("ga4_acc_val",ga4_acc_val);  
-        //console.log("googleAds",googleAds);  
-        //console.log("gmc_field",gmc_field);  
 
         //open google signin popup
-        jQuery(".tvc_google_signinbtn_ga").on("click", function() {
+        jQuery(".tvc_google_signinbtn_ga, .google-auth-btn-highlighted").on("click", function() {
             jQuery('#tvc_google_signin_ga').addClass('showpopup');
             jQuery('body').addClass('scrlnone');
-            if (convBadgeVal == "") {
-                cov_save_badge_settings("no");
-            }
         });
 
         jQuery(".google_connect_url_ga").on("click", function() {

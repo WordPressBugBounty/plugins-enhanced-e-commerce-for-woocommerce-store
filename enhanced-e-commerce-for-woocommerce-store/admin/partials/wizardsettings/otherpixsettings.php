@@ -3,7 +3,7 @@
         <div class="convwizlogotitle">
             <div class="d-flex flex-row align-items-center">
                 <?php echo wp_kses(
-                    enhancad_get_plugin_image('/admin/images/logos/mix_logos.png', '', 'conv_channel_logo me-2 align-self-center','width: 42px;'),
+                    enhancad_get_plugin_image('/admin/images/logos/mix_logos.png', '', 'conv_channel_logo me-2 align-self-center', 'width: 42px;'),
                     array(
                         'img' => array(
                             'src' => true,
@@ -41,154 +41,357 @@
         $linkedin_insight_id = (isset($ee_options["linkedin_insight_id"]) && $ee_options["linkedin_insight_id"] != "") ? $ee_options["linkedin_insight_id"] : "";
         $hotjar_pixel_id = (isset($ee_options["hotjar_pixel_id"]) && $ee_options["hotjar_pixel_id"] != "") ? $ee_options["hotjar_pixel_id"] : "";
         $crazyegg_pixel_id = (isset($ee_options["crazyegg_pixel_id"]) && $ee_options["crazyegg_pixel_id"] != "") ? $ee_options["crazyegg_pixel_id"] : "";
-
+        $fb_pixel_id = (isset($ee_options["fb_pixel_id"]) && $ee_options["fb_pixel_id"] != "") ? $ee_options["fb_pixel_id"] : "";
+        $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=wizard&utm_campaign=freetopro"
         ?>
         <div id="otherpixel_box" class="py-1">
             <div class="row pt-2">
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("Tiktok Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="tiKtok_ads_pixel_id" id="tiKtok_ads_pixel_id" class="form-control" value="<?php echo esc_attr($tiKtok_ads_pixel_id); ?>">
+                <div class="col-8 m-auto pt-3">
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_fb_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Meta (Facebook) Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-my-facebook-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="form-control" value="<?php echo esc_attr($fb_pixel_id); ?>">
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_meta_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Facebook Conversion API (FBCAPI) Token", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-generate-facebook-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_bing_logo.png', '', 'me-2 align-self-center', 'height: 24px;'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Microsoft Ads (Bing) Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/set-up-microsoft-advertising-with-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="microsoft_ads_pixel_id" id="microsoft_ads_pixel_id" class="form-control" value="<?php echo esc_attr($microsoft_ads_pixel_id); ?>">
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_clarity_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("MS Clarity Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-set-up-microsoft-ads-pixel-using-conversios-plugin/'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id" class="form-control" value="<?php echo esc_attr($msclarity_pixel_id); ?>">
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_linkedin_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Linkedin Insight ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://business.linkedin.com/marketing-solutions/insight-tag'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="linkedin_insight_id" id="linkedin_insight_id" class="form-control" value="<?php echo esc_attr($linkedin_insight_id); ?>">
+                    </div>
+
+
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Tiktok Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-tiktok-pixel-id-from-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="tiKtok_ads_pixel_id" id="tiKtok_ads_pixel_id" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Tiktok Events API Token", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-your-tiktok-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Snapchat Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-the-snapchat-pixel-id-from-the-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="snapchat_ads_pixel_id" id="snapchat_ads_pixel_id" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Snapchat Conversion API Token", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-your-snapchat-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_pint_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Pinterest Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-pinterest-pixel-id-from-a-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="pinterest_ads_pixel_id" id="pinterest_ads_pixel_id" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_hotjar_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-a-hotjar-pixel-from-hotjar-business-manager/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="hotjar_pixel_id" id="hotjar_pixel_id" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h5 class="fw-normal mb-1 text-dark">
+                            <?php echo wp_kses(
+                                enhancad_get_plugin_image('/admin/images/logos/conv_crazyegg_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                                array(
+                                    'img' => array(
+                                        'src' => true,
+                                        'alt' => true,
+                                        'class' => true,
+                                        'style' => true,
+                                    ),
+                                )
+                            ); ?>
+                            <b><?php esc_html_e("Crazy Egg Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                            <a target="_blank" class="convdocslink text-white px-2 ms-3" href="<?php echo esc_url('https://www.conversios.io/docs/how-to-find-crazyegg-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin'); ?>">
+                                Docs
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                            <a target="_blank" class="grid_prolink text-white px-3 ms-3" href="<?php echo esc_url($conv_pro_url); ?>">
+                                Pro
+                                <span class="material-symbols-outlined">
+                                    open_in_new
+                                </span>
+                            </a>
+                        </h5>
+                        <input type="text" name="crazyegg_pixel_id" id="crazyegg_pixel_id" class="form-control" readonly>
+                    </div>
+
                 </div>
 
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("Snapchat Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="snapchat_ads_pixel_id" id="snapchat_ads_pixel_id" class="form-control" value="<?php echo esc_attr($snapchat_ads_pixel_id); ?>">
-                </div>
 
-
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_pint_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("Pinterest Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="pinterest_ads_pixel_id" id="pinterest_ads_pixel_id" class="form-control" value="<?php echo esc_attr($pinterest_ads_pixel_id); ?>">
-                </div>
-
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_bing_logo.png', '', 'me-2 align-self-center', 'height: 24px;'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("Microsoft Ads (Bing) Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="microsoft_ads_pixel_id" id="microsoft_ads_pixel_id" class="form-control" value="<?php echo esc_attr($microsoft_ads_pixel_id); ?>">
-                </div>
-
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_clarity_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("MS Clarity Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id" class="form-control" value="<?php echo esc_attr($msclarity_pixel_id); ?>">
-                </div>
-
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_linkedin_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("Linkedin Insight ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="linkedin_insight_id" id="linkedin_insight_id" class="form-control" value="<?php echo esc_attr($linkedin_insight_id); ?>">
-                </div>
-
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_hotjar_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="hotjar_pixel_id" id="hotjar_pixel_id" class="form-control" value="<?php echo esc_attr($hotjar_pixel_id); ?>">
-                </div>
-
-                <div class="col-6 pt-3">
-                    <h5 class="fw-normal mb-1 text-dark">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_crazyegg_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                        <b><?php esc_html_e("Crazy Egg Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                    </h5>
-                    <input type="text" name="crazyegg_pixel_id" id="crazyegg_pixel_id" class="form-control" value="<?php echo esc_attr($crazyegg_pixel_id); ?>">
-                </div>
             </div>
         </div>
 
@@ -197,7 +400,7 @@
 <!-- Tab bottom buttons -->
 <div class="tab_bottom_buttons d-flex justify-content-end pt-2">
     <div class="ms-auto d-flex align-items-center">
-        <button class="btn btn-outline-primary" onclick="changeTabBox('webfbbox-tab')">
+        <button class="btn btn-outline-primary" onclick="changeTabBox('webpixbox-tab')">
             <?php esc_html_e('Go Back', "enhanced-e-commerce-for-woocommerce-store"); ?>
         </button>
         <button id="conv_save_opix_finish" type="button" class="btn btn-primary px-5 ms-3">
@@ -254,6 +457,7 @@
             var selected_vals = {};
             selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
 
+            selected_vals["fb_pixel_id"] = jQuery("#fb_pixel_id").val();
             selected_vals["tiKtok_ads_pixel_id"] = jQuery("#tiKtok_ads_pixel_id").val();
             selected_vals["snapchat_ads_pixel_id"] = jQuery("#snapchat_ads_pixel_id").val();
             selected_vals["pinterest_ads_pixel_id"] = jQuery("#pinterest_ads_pixel_id").val();

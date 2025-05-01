@@ -87,6 +87,7 @@ $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setu
 
 $contData = json_decode($getCountris);
 $data = unserialize(get_option('ee_options'));
+$conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=wizard&utm_campaign=freetopro";
 ?>
 
 <!-- Main row -->
@@ -106,7 +107,7 @@ $data = unserialize(get_option('ee_options'));
             <div class="conv-pixel-logo d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                     <?php echo wp_kses(
-                        enhancad_get_plugin_image('/admin/images/logos/conv_gmc_logo.png'),
+                        enhancad_get_plugin_image('/admin/images/g-logo.png'),
                         array(
                             'img' => array(
                                 'src' => true,
@@ -116,9 +117,16 @@ $data = unserialize(get_option('ee_options'));
                             ),
                         )
                     ); ?>
-                    <span class="fw-bold fs-4 ms-2 pixel-title">
-                        <?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </span>
+
+                    <div>
+                        <span class="fw-bold fs-4 ms-2 pixel-title">
+                            <?php esc_html_e("Google", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                        <br><span class="ms-2">
+                            <?php esc_html_e("Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                    </div>
+
                 </div>
                 <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=gmcsettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
                     <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
@@ -135,7 +143,7 @@ $data = unserialize(get_option('ee_options'));
                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
                     <?php } ?>
 
-                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to GMC&nbsp;
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0 d-none"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to GMC&nbsp;
                         <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=gmc&amp;plugin_name=aio">
                             <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                         </a>
@@ -153,9 +161,14 @@ $data = unserialize(get_option('ee_options'));
             <div class="conv-pixel-logo d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                     <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" />
-                    <span class="fw-bold fs-4 ms-2 pixel-title">
-                        <?php esc_html_e("Microsoft Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </span>
+                    <div>
+                        <span class="fw-bold fs-4 ms-2 pixel-title">
+                            <?php esc_html_e("Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                        <br><span class="ms-2">
+                            <?php esc_html_e("Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                    </div>
                 </div>
                 <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=mmcsettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
                     <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
@@ -172,7 +185,7 @@ $data = unserialize(get_option('ee_options'));
                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
                     <?php } ?>
 
-                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync &nbsp;
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0 d-none"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync &nbsp;
                         <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedgrid&utm_campaign=gmc&plugin_name=aio">
                             <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                         </a>
@@ -181,52 +194,6 @@ $data = unserialize(get_option('ee_options'));
             </div>
         </div>
     </div>
-
-    <!-- TikTok Business Account Start -->
-    <div class="col-md-3 p-3">
-        <div class="p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
-            <div class="conv-pixel-logo d-flex justify-content-between">
-                <div class="d-flex align-items-center">
-                    <?php echo wp_kses(
-                        enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png'),
-                        array(
-                            'img' => array(
-                                'src' => true,
-                                'alt' => true,
-                                'class' => true,
-                                'style' => true,
-                            ),
-                        )
-                    ); ?>
-                    <span class="fw-bold fs-4 ms-2 pixel-title">
-                        <?php esc_html_e("TikTok Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </span>
-                </div>
-                <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
-                    <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
-                </a>
-            </div>
-            <div class="pt-3 pb-3 pixel-desc">
-                <div class="d-flex align-items-start flex-column">
-                    <?php if (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><?php echo (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? esc_attr($data['tiktok_setting']['tiktok_business_id']) : ''; ?>
-                        </div>
-                    <?php } else { ?>
-                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
-                    <?php } ?>
-
-                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Tiktok&nbsp;
-                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=gmc&amp;plugin_name=aio">
-                            <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- TikTok Business Account End -->
 
     <!-- Meta Business Account Start -->
     <div class="col-md-3 p-3 pe-0">
@@ -244,9 +211,15 @@ $data = unserialize(get_option('ee_options'));
                             ),
                         )
                     ); ?>
-                    <span class="fw-bold fs-4 ms-2 pixel-title">
-                        <?php esc_html_e("Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </span>
+
+                    <div>
+                        <span class="fw-bold fs-4 ms-2 pixel-title">
+                            <?php esc_html_e("Facebook", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                        <br><span class="ms-2">
+                            <?php esc_html_e("Catalog", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                    </div>
                 </div>
                 <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>" class="align-self-center bg-white ps-2 pt-1">
                     <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
@@ -262,7 +235,7 @@ $data = unserialize(get_option('ee_options'));
                         <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
                     <?php } ?>
 
-                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Meta&nbsp;
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0 d-none"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Meta&nbsp;
                         <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=meta&amp;plugin_name=aio">
                             <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                         </a>
@@ -272,6 +245,61 @@ $data = unserialize(get_option('ee_options'));
         </div>
     </div>
     <!-- Meta Business Account End -->
+
+
+    <!-- TikTok Business Account Start -->
+    <div class="col-md-3 p-3">
+        <div class="propixel_card p-3 convcard rounded-n-3 shadow-sm d-flex flex-column">
+            <div class="conv-pixel-logo d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
+
+                    <div>
+                        <span class="fw-bold fs-4 ms-2 pixel-title">
+                            <?php esc_html_e("Tiktok", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                        <br><span class="ms-2">
+                            <?php esc_html_e("Catalog", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </span>
+                    </div>
+                </div>
+                <a target="_blank" class="grid_prolink text-white" href="<?php echo esc_url($conv_pro_url); ?>">
+                    <?php esc_html_e("Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </a>
+            </div>
+            <div class="pt-3 pb-3 pixel-desc">
+                <div class="d-flex align-items-start flex-column">
+                    <?php if (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                            <span class="material-symbols-outlined text-success me-1 fs-16">check_circle</span><?php echo (isset($data['tiktok_setting']['tiktok_business_id']) && $data['tiktok_setting']['tiktok_business_id'] != '') ? esc_attr($data['tiktok_setting']['tiktok_business_id']) : ''; ?>
+                        </div>
+                    <?php } else { ?>
+                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span><span>Not connected</span></div>
+                    <?php } ?>
+
+                    <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0 d-none"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Unlimited Product Sync to Tiktok&nbsp;
+                        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=feedgrid&amp;utm_campaign=gmc&amp;plugin_name=aio">
+                            <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- TikTok Business Account End -->
+
+
 </div>
 <style>
     .errorInput {
@@ -850,8 +878,8 @@ $data = unserialize(get_option('ee_options'));
                                 ?>
                             </label>
                         </div>
-                        <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="tiktok_id" name="tiktok_id" <?php echo $tiktok_business_account !== '' ? "checked" : 'disabled' ?>>
+                        <div class="form-check form-check-custom d-none">
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="tiktok_id" name="tiktok_id" disabled>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("TikTok Catalog Id :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
@@ -1002,6 +1030,25 @@ $data = unserialize(get_option('ee_options'));
 <!-- Success Save Modal End -->
 <script>
     jQuery(document).ready(function() {
+        jQuery(".propixel_card").css("cursor", "pointer").click(function() {
+            window.open("<?php echo esc_js($conv_pro_url); ?>");
+        });
+        <?php
+        $iscreatefeed = !empty($_GET['createfeed']) ? $_GET['createfeed'] : "";
+        if ($iscreatefeed == 'yes') {
+        ?>
+            jQuery('#convCreateFeedModal').modal('show');
+            var tiktok_business_account = "<?php echo esc_js($tiktok_business_account) ?>";
+            if (tiktok_business_account !== '' && jQuery('#tiktok_id').is(":checked")) {
+                getCatalogId(jQuery('#target_country').find(":selected").val());
+            }
+            jQuery('#target_country').select2({
+                dropdownParent: jQuery("#convCreateFeedModal")
+            });
+        <?php
+        }
+        ?>
+
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)

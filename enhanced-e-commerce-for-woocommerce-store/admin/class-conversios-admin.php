@@ -214,10 +214,6 @@ if (class_exists('Conversios_Admin') === FALSE) {
         //wp_enqueue_style('conversios-style-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/style.css'), array(), esc_attr($this->version), 'all');
         //}
 
-        //pricingcss
-        if ($screen->id == "conversios_page_conversios-pricings") {
-          wp_enqueue_style('conversios-pricing-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/pricing/pricing.css'), array(), esc_attr($this->version), 'all');
-        }
         //all conversios page css        
         wp_enqueue_style('conversios-responsive-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/responsive.css'), array(), esc_attr($this->version), 'all');
         if (sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) == "campaignManagement") {
@@ -323,8 +319,8 @@ if (class_exists('Conversios_Admin') === FALSE) {
         if (CONV_APP_ID == 1) {
           add_submenu_page(
             CONV_MENU_SLUG,
-            esc_html__('Reports & Insights', 'enhanced-e-commerce-for-woocommerce-store'),
-            esc_html__('Reports & Insights', 'enhanced-e-commerce-for-woocommerce-store'),
+            esc_html__('Analytics Report', 'enhanced-e-commerce-for-woocommerce-store'),
+            esc_html__('Analytics Report', 'enhanced-e-commerce-for-woocommerce-store'),
             'manage_options',
             'conversios-analytics-reports',
             array($this, 'showPage'),
@@ -366,8 +362,8 @@ if (class_exists('Conversios_Admin') === FALSE) {
 
         add_submenu_page(
           CONV_MENU_SLUG,
-          esc_html__('Reports & Insights', 'enhanced-e-commerce-for-woocommerce-store'),
-          esc_html__('Reports & Insights', 'enhanced-e-commerce-for-woocommerce-store'),
+          esc_html__('Analytics Report', 'enhanced-e-commerce-for-woocommerce-store'),
+          esc_html__('Analytics Report', 'enhanced-e-commerce-for-woocommerce-store'),
           'manage_options',
           'conversios-analytics-reports',
           array($this, 'showPage'),
@@ -392,7 +388,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
           esc_html__('Free Vs Pro', 'enhanced-e-commerce-for-woocommerce-store') . '<img style="position: absolute; height: 30px;bottom: 5px; right: 10px;" src="' . esc_url($freevspro) . '">',
           'manage_options',
           'conversios-pricings',
-          array($this, 'showPage'),
+          '__return_null',
           13
         );
       }
@@ -479,33 +475,53 @@ if (class_exists('Conversios_Admin') === FALSE) {
 
     public function conversios()
     {
-      $is_inner_page = isset($_GET['tab']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'tab'))) : "";
-      $is_inner_page = str_replace("-", "_", sanitize_text_field($is_inner_page));
-      $is_wizard = isset($_GET['wizard']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) : "";
-      if ($is_inner_page != "") {
+      $get_tab = filter_input(INPUT_GET, 'tab');
+      $is_inner_page = $get_tab ? str_replace("-", "_", sanitize_text_field(wp_unslash($get_tab))) : "";
+
+      $get_wizard = filter_input(INPUT_GET, 'wizard');
+      $is_wizard = $get_wizard ? sanitize_text_field(wp_unslash($get_wizard)) : "";
+
+      // Call inner page method if specified
+      if (!empty($is_inner_page) && method_exists($this, $is_inner_page)) {
         $this->$is_inner_page();
-      } else {
-        if ($is_wizard != "" && $is_wizard == "pixelandanalytics") {
-          require_once('partials/wizard_pixelandanalytics.php');
-        } else {
-          require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-dashboard.php');
-        }
+        return;
       }
 
-      $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'subpage'))) : "";
-      if ($sub_page == "pixelandanalytics") {
-        require_once('partials/wizard_pixelandanalytics.php');
+      $ee_options = maybe_unserialize(get_option('ee_options'));
+      $gm_id = $ee_options['gm_id'] ?? "";
+      $google_ads_id = $ee_options['google_ads_id'] ?? "";
+      $conv_onboarding_done_step = $ee_options['conv_onboarding_done_step'] ?? "";
+      $conv_onboarding_done = $ee_options['conv_onboarding_done'] ?? "";
+
+      // Load onboarding wizard if applicable
+      if (
+        version_compare(PLUGIN_TVC_VERSION, "7.1.2", ">") &&
+        (empty($gm_id) || empty($google_ads_id)) &&
+        (empty($conv_onboarding_done_step) || $conv_onboarding_done_step != "6") &&
+        empty($conv_onboarding_done)
+      ) {
+        require_once 'partials/wizard_pixelandanalytics.php';
+        return;
       }
-      if ($sub_page == "productfeed") {
-        require_once('partials/wizard_productfeed.php');
+
+      // Load wizard page directly if requested
+      if ($is_wizard === "pixelandanalytics") {
+        require_once 'partials/wizard_pixelandanalytics.php';
+        return;
+      }
+
+      // Default: load dashboard
+      require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-dashboard.php';
+
+      // Load subpage if specified
+      $sub_page = filter_input(INPUT_GET, 'subpage', FILTER_DEFAULT);
+      if ($sub_page === "pixelandanalytics") {
+        require_once 'partials/wizard_pixelandanalytics.php';
+      } elseif ($sub_page === "productfeed") {
+        require_once 'partials/wizard_productfeed.php';
       }
     }
 
-    public function conversios_pricings()
-    {
-      require_once(ENHANCAD_PLUGIN_DIR . 'admin/partials/pricings.php');
-      new TVC_Pricings();
-    }
     public function conversios_account()
     {
       require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');

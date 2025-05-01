@@ -41,7 +41,7 @@ if ($subpage == "ga4ecommerce") {
         <div class="d-flex">
             <div class="conv_pageheading d-flex align-items-end">
                 <h2>
-                    <?php esc_html_e("Reports & Insights", "enhanced-e-commerce-for-woocommerce-store") ?>
+                    <?php esc_html_e("Analytics reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </h2>
                 <h5 id="conv_pdf_logo" class="d-none ms-2">by <?php echo wp_kses(
                                                                     enhancad_get_plugin_image('/admin/images/logo.png', '', '', 'width:120px;'),
@@ -238,9 +238,7 @@ if ($subpage == "ga4ecommerce") {
 <!-- Schedule Email Modal box -->
 <div class="modal email-modal fade" id="schedule_email_modal" tabindex="-1" aria-labelledby="schedule_email_modalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div id="loadingbar_blue" class="progress-materializecss" style="
-    display: none;
-">
+        <div id="loadingbar_blue" class="progress-materializecss" style="display: none;">
             <div class="indeterminate"></div>
         </div>
         <div class="modal-content">

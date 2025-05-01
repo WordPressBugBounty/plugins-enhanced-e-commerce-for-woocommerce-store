@@ -15,7 +15,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.4
+ * Version:           7.2.5
  * Author:            Conversios
  * Author URI:        https://conversios.io
  * License:           GPLv3
@@ -46,30 +46,6 @@ if (defined('ABSPATH') && ABSPATH !== null) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-
-
-
-// Add custom column to Orders list table
-add_filter('manage_edit-shop_order_columns', 'autofresh_add_custom_order_meta_column');
-function autofresh_add_custom_order_meta_column($columns) {
-    $columns['poster_conv_tracked'] = 'Purchase Tracked';
-    return $columns;
-}
-add_action('manage_shop_order_posts_custom_column', 'autofresh_show_custom_order_meta_column');
-function autofresh_show_custom_order_meta_column($column) {
-    global $post;
-
-    if ($column == 'poster_conv_tracked') {
-        // Get the custom meta value
-        $order = new WC_Order($post->ID);
-        $custom_meta_value = $order->get_meta('_tracked');
-        if ($custom_meta_value) {
-            echo "Yes";
-        } else {
-            echo 'No';
-        }
-    }
-}
 
 function is_EeAioPro_active()
 {
@@ -176,10 +152,10 @@ if (!defined('ENHANCAD_PLUGIN_URL')) {
 }
 
 if (!defined('TVC_API_CALL_URL')) {
-    define('TVC_API_CALL_URL', 'https://connect.tatvic.com/laravelapi/public/api/v1');
+    define('TVC_API_CALL_URL', 'https://connect.conversios.io/laravelapi/public/api/v1');
 }
 if (!defined('TVC_API_CALL_URL_TEMP')) {
-    define('TVC_API_CALL_URL_TEMP', 'https://connect.tatvic.com/laravelapi/public');
+    define('TVC_API_CALL_URL_TEMP', 'https://connect.conversios.io/laravelapi/public');
 }
 
 if (!defined('TVC_AUTH_CONNECT_URL')) {

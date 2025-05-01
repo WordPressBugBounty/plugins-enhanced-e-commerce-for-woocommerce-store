@@ -575,6 +575,11 @@ class Con_GTM_WP_Tracking extends Con_Settings
       $dataLayer["cov_gads_conversions"] = $this->gads_conversions;
     }
 
+    if (!empty($this->microsoft_ads_conversions)) {
+      map_deep($this->microsoft_ads_conversions, "esc_js");
+      $dataLayer["cov_ms_ads_conversions"] = $this->microsoft_ads_conversions;
+    }
+
     /*end user tracking*/
     $conversio_send_to = array();
     if ($this->conversio_send_to != "") {

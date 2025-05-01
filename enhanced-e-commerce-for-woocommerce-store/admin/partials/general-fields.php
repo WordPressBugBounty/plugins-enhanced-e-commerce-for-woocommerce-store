@@ -23,7 +23,8 @@ $conv_selected_events = unserialize(get_option('conv_selected_events'));
 $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
 
 $TVC_Admin_Helper->add_spinner_html();
-$is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_method_options($subscription_id);
+$is_show_tracking_method_options =  true;
+$conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=wizard&utm_campaign=freetopro";
 ?>
 
 <!-- Main container -->
@@ -145,7 +146,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                 <?php } else { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Measurement ID: Not connected</span></div>
                                 <?php } ?>
-                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Use your own GTM container &nbsp;
+                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0 d-none"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Use your own GTM container &nbsp;
                                     <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=ga&amp;plugin_name=aio">
                                         <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                                     </a>
@@ -198,7 +199,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Purchase Conversion Tracking</span></div>
                                 <?php } ?>
 
-                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Purchase Enhance conversion tracking &nbsp;
+                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0 d-none"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Purchase Enhance conversion tracking &nbsp;
                                     <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=gads&amp;plugin_name=aio">
                                         <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                                     </a>
@@ -248,7 +249,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                 <?php } else { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Meta Pixel ID: Not connected</span></div>
                                 <?php } ?>
-                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Facebook conversion API (Server Side)&nbsp;
+                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0 d-none"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Facebook conversion API (Server Side)&nbsp;
                                     <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=fbcapi&amp;plugin_name=aio">
                                         <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
                                     </a>
@@ -259,8 +260,8 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                     </div>
                 </div>
 
-                 <!-- MS Bing Ads -->
-                 <div class="col-md-4 p-3">
+                <!-- MS Bing Ads -->
+                <div class="col-md-4 p-3">
                     <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
@@ -359,7 +360,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 
                 <!-- Tiktok -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="propixel_card p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -377,25 +378,16 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <?php esc_html_e("Tiktok Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=tiktoksettings'); ?>" class="align-self-center">
-                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+
+                            <a target="_blank" class="grid_prolink text-white" href="<?php echo esc_url($conv_pro_url); ?>">
+                                <?php esc_html_e("Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </a>
+
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
-                                <?php if (empty($pixel_not_connected['tiKtok_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">TikTok Pixel ID: <?php echo (isset($data['tiKtok_ads_pixel_id']) && $data['tiKtok_ads_pixel_id'] != '') ? esc_attr($data['tiKtok_ads_pixel_id']) : 'Not connected'; ?></span>
-                                    </div>
-                                <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>TikTok Pixel ID: Not connected</span></div>
-                                <?php } ?>
-                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Tiktok Events API (Server Side) &nbsp;
-                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=tiktok&amp;plugin_name=aio">
-                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
-                                    </a>
-                                </div>
+                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>TikTok Pixel ID: Not connected</span></div>
                             </div>
                         </div>
                     </div>
@@ -403,7 +395,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 
                 <!-- Snapchat Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="propixel_card p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -421,27 +413,18 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <?php esc_html_e("Snapchat Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=snapchatsettings'); ?>" class="align-self-center">
-                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            <a target="_blank" class="grid_prolink text-white" href="<?php echo esc_url($conv_pro_url); ?>">
+                                <?php esc_html_e("Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </a>
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
-                                <?php if (empty($pixel_not_connected['snapchat_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Snapchat Pixel ID: <?php echo (isset($data['snapchat_ads_pixel_id']) && $data['snapchat_ads_pixel_id'] != '') ? esc_attr($data['snapchat_ads_pixel_id']) : 'Not connected'; ?></span>
+                                <div class="pt-3 pb-3 pixel-desc">
+                                    <div class="d-flex align-items-start flex-column">
+                                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Snapchat CAPI & Pixel ID: Not connected</span></div>
                                     </div>
-                                <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Snapchat Pixel ID: Not connected</span></div>
-                                <?php } ?>
-
-                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Snapchat Conversion API (Server Side)&nbsp;
-                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=snapchat&amp;plugin_name=aio">
-                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
-                                    </a>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -449,7 +432,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 
                 <!-- Pinterest Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="propixel_card p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -467,30 +450,19 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <?php esc_html_e("Pinterest Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=pintrestsettings'); ?>" class="align-self-center">
-                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            <a target="_blank" class="grid_prolink text-white" href="<?php echo esc_url($conv_pro_url); ?>">
+                                <?php esc_html_e("Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </a>
 
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
-                                <?php if (empty($pixel_not_connected['pinterest_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Pinterest Pixel ID: <?php echo (isset($data['pinterest_ads_pixel_id']) && $data['pinterest_ads_pixel_id'] != '') ? esc_attr($data['pinterest_ads_pixel_id']) : 'Not connected'; ?></span>
+                                <div class="pt-3 pb-3 pixel-desc">
+                                    <div class="d-flex align-items-start flex-column">
+                                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Pinterest CAPI & Pixel ID: Not connected</span></div>
                                     </div>
-                                <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Pinterest Pixel ID: Not connected</span></div>
-                                <?php } ?>
-
-
-
-                                <div class="alert alert-danger d-flex align-items-center p-1 mt-1 mb-0"><span class="material-symbols-outlined text-error me-1 fs-16">cancel</span>Pinterest Conversion API (Server Side) &nbsp;
-                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pixelgrid&amp;utm_campaign=pinterest&amp;plugin_name=aio">
-                                        <small class="lh-0 fs-10 m-0"><b class="pro btn btn-success px-2 py-0">Premium</b></small>
-                                    </a>
                                 </div>
-
                             </div>
                         </div>
 
@@ -500,7 +472,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 
                 <!-- Twitter Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="propixel_card p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -518,20 +490,18 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <?php esc_html_e("Twitter Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=twittersettings'); ?>" class="align-self-center">
-                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            <a target="_blank" class="grid_prolink text-white" href="<?php echo esc_url($conv_pro_url); ?>">
+                                <?php esc_html_e("Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </a>
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
-                                <?php if (empty($pixel_not_connected['twitter_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Twitter Pixel ID: <?php echo (isset($data['twitter_ads_pixel_id']) && $data['twitter_ads_pixel_id'] != '') ? esc_attr($data['twitter_ads_pixel_id']) : 'Not connected'; ?></span>
+                                <div class="pt-3 pb-3 pixel-desc">
+                                    <div class="d-flex align-items-start flex-column">
+                                        <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>X(Twitter) CAPI & Pixel ID: Not connected</span></div>
                                     </div>
-                                <?php } else { ?>
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Twitter Pixel ID: Not connected</span></div>
-                                <?php } ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -539,7 +509,7 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
 
                 <!-- Hotjar -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="propixel_card p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -557,28 +527,24 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=hotjarsettings'); ?>" class="align-self-center">
-                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            <a target="_blank" class="grid_prolink text-white" href="<?php echo esc_url($conv_pro_url); ?>">
+                                <?php esc_html_e("Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </a>
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc">
-                            <?php if (empty($pixel_not_connected['hotjar_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
+                            <div class="pt-3 pb-3 pixel-desc">
                                 <div class="d-flex align-items-start flex-column">
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Hotjar Pixel ID: <?php echo (isset($data['hotjar_pixel_id']) && $data['hotjar_pixel_id'] != '') ? esc_attr($data['hotjar_pixel_id']) : 'Not connected'; ?></span>
-                                    </div>
+                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Hotjsr Pixel ID: Not connected</span></div>
                                 </div>
-                            <?php } else { ?>
-                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Hotjar Pixel ID: Not connected</span></div>
-                            <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Crazyegg -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="propixel_card p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -596,21 +562,13 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
                                     <?php esc_html_e("Crazyegg Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=crazyeggsettings'); ?>" class="align-self-center">
-                                <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
+                            <a target="_blank" class="grid_prolink text-white" href="<?php echo esc_url($conv_pro_url); ?>">
+                                <?php esc_html_e("Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </a>
                         </div>
 
                         <div class="pt-3 pb-3 pixel-desc align-items-start flex-column">
-                            <?php if (empty($pixel_not_connected['crazyegg_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
-                                <div class="d-flex">
-                                    <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
-                                        <span class="material-symbols-outlined text-success me-1 fs-16 ps-1">check_circle</span><span class="pe-2 m-0">Crazyegg Pixel ID: <?php echo (isset($data['crazyegg_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? esc_attr($data['crazyegg_pixel_id']) : 'Not connected'; ?></span>
-                                    </div>
-                                </div>
-                            <?php } else { ?>
-                                <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Crazyegg Pixel ID: Not connected</span></div>
-                            <?php } ?>
+                            <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n"><span class="material-symbols-outlined text-error me-1 fs-16 ps-1">cancel</span><span>Crazyegg Pixel ID: Not connected</span></div>
                         </div>
                     </div>
                 </div>
@@ -738,6 +696,9 @@ $is_show_tracking_method_options =  true; //$TVC_Admin_Helper->is_show_tracking_
             jQuery(".ecbuttonbox").hide();
         }
 
+        jQuery(".propixel_card").css("cursor", "pointer").click(function() {
+            window.open("<?php echo esc_js($conv_pro_url); ?>");
+        });
         jQuery('#starttrackingbut').click(function() {
             jQuery('#starttrackingbut').addClass('convdisabledbox');
             var ecrandomstring = "<?php echo esc_js($TVC_Admin_Helper->generateRandomStringConv()); ?>";

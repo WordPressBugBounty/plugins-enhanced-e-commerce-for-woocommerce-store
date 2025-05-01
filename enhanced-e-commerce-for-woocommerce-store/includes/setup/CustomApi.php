@@ -27,14 +27,14 @@ class CustomApi
         $response_body = json_decode(wp_remote_retrieve_body($request));
 
         if ((isset($response_body->error) && $response_body->error == '')) {
-          if( isset($response_body->data) && $response_body->data != '' ) {
+          if (isset($response_body->data) && $response_body->data != '') {
             return new WP_REST_Response($response_body->data);
-          }elseif( isset($response_body->message) && $response_body->message != '' ){
+          } elseif (isset($response_body->message) && $response_body->message != '') {
             return new WP_REST_Response($response_body->message);
-          }else{
+          } else {
             return new WP_REST_Response($response_body);
           }
-        } else { 
+        } else {
           return new WP_Error($response_code, $response_message, $response_body);
         }
       }
@@ -52,6 +52,31 @@ class CustomApi
       return false;
     }
   }
+
+  /**
+   * Update Google Merchant Center business information
+   */
+  public function update_gmc_business_info($business_data)
+  {
+    $url = $this->apiDomain . '/gmc/update-merchant-business-detail';
+    $args = [
+      'method' => 'POST',
+      'headers' => [
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' . $this->token
+      ],
+      'body' => json_encode($business_data) // ✅ send flat structure
+    ];
+
+    $response = $this->tc_wp_remot_call_post($url, $args);
+
+    if (is_wp_error($response)) {
+      return (object)['error' => true, 'message' => $response->get_error_message()];
+    }
+
+    return $response;
+  }
+
 
   public function update_app_status($status = 1)
   {
@@ -416,6 +441,106 @@ class CustomApi
     }
   }
 
+  public function get_microsoft_conversion_list($customer_id, $account_id, $tag_id)
+  {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    try {
+      $header = array(
+        "Authorization: Bearer MTIzNA==",
+        "Content-Type" => "application/json"
+      );
+      $url = $this->apiDomain . "/microsoft/getConversionGoals";
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
+      $data = [
+        'customer_id' => sanitize_text_field($customer_id),
+        'account_id' => sanitize_text_field($account_id),
+        'subscription_id' => sanitize_text_field($subscription_id),
+        'tag_id' => sanitize_text_field($tag_id)
+      ];
+      $args = array(
+        'timeout' => 300,
+        'headers' => $header,
+        'method' => 'POST',
+        'body' => wp_json_encode($data)
+      );
+
+      // $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+      $request = wp_remote_post(esc_url_raw($url), $args);
+      $response_code = wp_remote_retrieve_response_code($request);
+      $response_message = wp_remote_retrieve_response_message($request);
+      $result = json_decode(wp_remote_retrieve_body($request));
+      $return = new \stdClass();
+      if ((isset($result->error) && $result->error == '')) {
+        $return->status = $response_code;
+        $return->data = $result->data;
+        $return->error = false;
+        return $return;
+      } else {
+        $return->error = true;
+        //$return->errors = $result->errors;
+        //$return->error = $result->data;
+        $return->status = $response_code;
+        return $return;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function conv_create_microsoft_ads_conversion($customer_id, $account_id, $tag_id, $conversionCategory, $name, $action_value)
+  {
+    $currency_code = "";
+    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+      $currency_code = get_woocommerce_currency();
+    }
+    try {
+      $header = array(
+        "Authorization: Bearer MTIzNA==",
+        "Content-Type" => "application/json"
+      );
+      $url = $this->apiDomain . "/microsoft/createConversionGoals";
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
+      $data = [
+        'customer_id' => sanitize_text_field($customer_id),
+        'account_id' => sanitize_text_field($account_id),
+        'tag_id' => sanitize_text_field($tag_id),
+        'conversion_category' => sanitize_text_field($conversionCategory),
+        'name' => sanitize_text_field($name),
+        'subscription_id' => $subscription_id,
+        'currency_code' => $currency_code,
+        'action_value' => $action_value
+      ];
+      $args = array(
+        'timeout' => 300,
+        'headers' => $header,
+        'method' => 'POST',
+        'body' => wp_json_encode($data)
+      );
+
+      // $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+      $request = wp_remote_post(esc_url_raw($url), $args);
+      $response_code = wp_remote_retrieve_response_code($request);
+      $response_message = wp_remote_retrieve_response_message($request);
+      $result = json_decode(wp_remote_retrieve_body($request));
+      $return = new \stdClass();
+      if ((isset($result->error) && $result->error == '')) {
+        $return->status = $response_code;
+        $return->data = $result->data;
+        $return->error = false;
+        return $return;
+      } else {
+        $return->error = true;
+        //$return->errors = $result->errors;
+        //$return->error = $result->data;
+        $return->status = $response_code;
+        return $return;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
   public function conv_create_gads_conversion($customer_id, $conversionName, $conversionCategory = "")
   {
     $TVC_Admin_Helper = new TVC_Admin_Helper();
@@ -472,7 +597,7 @@ class CustomApi
   public function get_google_analytics_reports_ga4($postData)
   {
     $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();  
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     $postData['store_id'] = $google_detail['setting']->store_id;
     $postData['subscription_id'] = $google_detail['setting']->id;
     try {
@@ -937,7 +1062,7 @@ class CustomApi
         'subscription_id' => sanitize_text_field($postData['subscription_id']),
         'account_id' => sanitize_text_field($postData['account_id']),
         'method' => sanitize_text_field($postData['method']),
-        'store_id' => $google_detail['setting']->store_id      
+        'store_id' => $google_detail['setting']->store_id
       ];
 
       $args = array(
@@ -1192,7 +1317,7 @@ class CustomApi
       return $e->getMessage();
     }
   }
-  public function feed_wise_products_sync($postData,$callby='no-reference-give')
+  public function feed_wise_products_sync($postData, $callby = 'no-reference-give')
   {
     $TVC_Admin_Helper = new TVC_Admin_Helper();
     $google_detail = $TVC_Admin_Helper->get_ee_options_data();
@@ -1218,7 +1343,7 @@ class CustomApi
       $request = wp_remote_post(esc_url_raw($url), $args);
 
       //echo '<pre>'.$callby; print_r(json_decode(wp_remote_retrieve_body($request))); echo '</pre>'; // 
-      
+
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1418,7 +1543,7 @@ class CustomApi
   }
 
   public function createPmaxCampaign_ms($postData)
-  { 
+  {
     try {
       if ($postData != "") {
         $url = $this->apiDomain . '/microsoft/createCampaign';
@@ -1581,7 +1706,7 @@ class CustomApi
       return $e->getMessage();
     }
   }
-  
+
 
   public function ads_checkMcc($subscription_id, $ads_accountId)
   {
@@ -1611,6 +1736,114 @@ class CustomApi
       }
     } catch (Exception $e) {
       return $e->getMessage();
+    }
+  }
+
+  public function get_gads_info($google_ads_id, $api_type)
+  {
+    try {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      if (isset($subscription_id)) {
+        $url = $this->apiDomain . '/adwords/get-google-ads-status';
+        $header = array(
+          "Authorization: Bearer " . $this->token,
+          "Content-Type" => "application/json"
+        );
+        $postData = array(
+          "subscription_id" => $subscription_id,
+          "store_id" => $google_detail['setting']->store_id,
+          "api_type" => $api_type,
+          "customer_id" => $google_ads_id
+        );
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result->data;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function get_gmc_business_info($google_merchant_id)
+  {
+    try {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      if (isset($subscription_id)) {
+        $url = $this->apiDomain . '/gmc/get-gmc-business-detail';
+        $header = array(
+          "Authorization: Bearer " . $this->token,
+          "Content-Type" => "application/json"
+        );
+        $postData = array(
+          "subscription_id" => $subscription_id,
+          "store_id" => $google_detail['setting']->store_id,
+          "account_id" => $google_merchant_id
+        );
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        // echo '<pre>'; print_r($args); echo '</pre>';
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        // echo '<pre>'; print_r($result);die('sdvgdasgb'); echo '</pre>';
+        return $result->data;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+  public function get_local_currency_rate_live($currency)
+  {
+    $url = esc_url_raw("https://query1.finance.yahoo.com/v8/finance/chart/USD{$currency}=X");
+    $args = [
+      'timeout' => 15,
+      'headers' => [
+        'Accept' => 'application/json',
+      ],
+    ];
+    try {
+      $response = wp_remote_get($url, $args);
+
+      if (is_wp_error($response)) {
+        return (object) [
+          'status'  => 500,
+          'error'   => true,
+          'message' => $response->get_error_message(),
+        ];
+      }
+
+      $body = wp_remote_retrieve_body($response);
+      $data = json_decode($body);
+      if (
+        isset($data->chart->result[0]->meta->regularMarketPrice)
+      ) {
+        return (object) [
+          'status' => 200,
+          'rate'   => $data->chart->result[0]->meta->regularMarketPrice,
+          'error'  => false,
+        ];
+      } else {
+        return (object) [
+          'status'  => 500,
+          'error'   => true,
+          'message' => 'Invalid data received from Yahoo Finance',
+        ];
+      }
+    } catch (Exception $e) {
+      return (object) [
+        'status'  => 500,
+        'error'   => true,
+        'message' => $e->getMessage(),
+      ];
     }
   }
 }

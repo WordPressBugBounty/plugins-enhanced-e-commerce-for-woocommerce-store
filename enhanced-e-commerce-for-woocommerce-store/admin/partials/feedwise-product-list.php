@@ -687,8 +687,8 @@ $conv_data['subscription_id'] = $googleDetail->id;
                                 <?php echo esc_html(sanitize_text_field($google_merchant_center_id));  ?>
                             </label>
                         </div>
-                        <div class="form-check form-check-custom">
-                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="tiktok_id" name="tiktok_id" <?php echo $tiktok_business_account !== '' ? "checked" : 'disabled' ?>>
+                        <div class="form-check form-check-custom d-none">
+                            <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="" id="tiktok_id" name="tiktok_id" disabled>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
                                 <?php esc_html_e("TikTok Catalog Id :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>

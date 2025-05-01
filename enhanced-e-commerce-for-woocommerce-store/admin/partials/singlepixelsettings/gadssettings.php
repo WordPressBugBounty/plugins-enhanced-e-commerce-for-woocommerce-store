@@ -108,6 +108,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                         echo esc_html($credit_message);
                                         ?>
                                     </h5>
+                                    <div class="text-dark fs-12 pt-1"><?php esc_html_e("Spend", "enhanced-e-commerce-for-woocommerce-store"); ?> <?php echo esc_html($off_credit_amt); ?> <?php esc_html_e("with Google Ads in the first 60 days to unlock the credit", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
                                     <span class="text-dark fs-12">
                                         <?php esc_html_e("Sign up for Google Ads and complete your payment information to apply the offer to", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                         <br>
@@ -170,82 +171,34 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                                 </button>
                             </li>
                             <li class="<?php echo !CONV_IS_WC ? 'hidden' : 'd-flex align-items-center my-2' ?>">
-                                <div class="inlist_text_pre_pro ms-2 disabledsection-no" conversion_name="">
-                                    <h5 class="mb-0"><?php esc_html_e("Purchase Enhance conversion tracking", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
+                                <div class="inlist_text_pre ms-2" conversion_name="ADD_TO_CART">
+                                    <h5 class="mb-0"><?php esc_html_e("Add to cart", "enhanced-e-commerce-for-woocommerce-store"); ?>(Woocommerce)</h5>
                                     <div class="inlist_text_notconnected d-none">
-                                        <?php esc_html_e("Track 'add to cart' events to evaluate campaign effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        <?php esc_html_e("You can track all the Add to cart events by adding the conversion label", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </div>
                                     <div class="inlist_text_connected d-flex d-none">
                                         <div class="text-success"><?php esc_html_e("Connected with Conversion ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
-                                        <div class="inlist_text_connected_convid ps-2"></div>
+                                        <div class="inlist_text_connected_convid"></div>
                                     </div>
                                 </div>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
-                                    <?php echo wp_kses(
-                                        enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
-                                        array(
-                                            'img' => array(
-                                                'src' => true,
-                                                'alt' => true,
-                                                'class' => true,
-                                                'style' => true,
-                                            ),
-                                        )
-                                    ); ?>
-                                    <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                </a>
+                                <button type="button" class="btn btn-outline-primary btn-sm ms-auto conv_con_modal_opener px-4 py-2" conversion_name="ADD_TO_CART">
+                                    <?php esc_html_e("Add", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </button>
                             </li>
                             <li class="<?php echo !CONV_IS_WC ? 'hidden' : 'd-flex align-items-center my-2' ?>">
-                                <div class="inlist_text_pre_pro ms-2 disabledsection-no" conversion_name="">
-                                    <h5 class="mb-0"><?php esc_html_e("Add to Cart (Woocommerce)", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
+                                <div class="inlist_text_pre ms-2" conversion_name="BEGIN_CHECKOUT">
+                                    <h5 class="mb-0"><?php esc_html_e("Begin checkout", "enhanced-e-commerce-for-woocommerce-store"); ?>(Woocommerce)</h5>
                                     <div class="inlist_text_notconnected d-none">
-                                        <?php esc_html_e("Track 'add to cart' events to evaluate campaign effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                        <?php esc_html_e("You can track all the checkout events by adding the conversion label", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </div>
                                     <div class="inlist_text_connected d-flex d-none">
                                         <div class="text-success"><?php esc_html_e("Connected with Conversion ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
-                                        <div class="inlist_text_connected_convid ps-2"></div>
+                                        <div class="inlist_text_connected_convid"></div>
                                     </div>
                                 </div>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
-                                    <?php echo wp_kses(
-                                        enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
-                                        array(
-                                            'img' => array(
-                                                'src' => true,
-                                                'alt' => true,
-                                                'class' => true,
-                                                'style' => true,
-                                            ),
-                                        )
-                                    ); ?>
-                                    <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                </a>
-                            </li>
-                            <li class="<?php echo !CONV_IS_WC ? 'hidden' : 'd-flex align-items-center my-2' ?>">
-                                <div class="inlist_text_pre_pro ms-2 disabledsection-no" conversion_name="">
-                                    <h5 class="mb-0"><?php esc_html_e("Begin Checkout (Woocommerce)", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
-                                    <div class="inlist_text_notconnected d-none">
-                                        <?php esc_html_e("Track 'begin checkout' events to evaluate campaign effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                    </div>
-                                    <div class="inlist_text_connected d-flex d-none">
-                                        <div class="text-success"><?php esc_html_e("Connected with Conversion ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
-                                        <div class="inlist_text_connected_convid ps-2"></div>
-                                    </div>
-                                </div>
-                                <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec&plugin_name=aio'); ?>" class="btn pe-0 conv-link-blue ms-2 fw-bold-500 ms-auto">
-                                    <?php echo wp_kses(
-                                        enhancad_get_plugin_image('/admin/images/logos/upgrade_badge.png'),
-                                        array(
-                                            'img' => array(
-                                                'src' => true,
-                                                'alt' => true,
-                                                'class' => true,
-                                                'style' => true,
-                                            ),
-                                        )
-                                    ); ?>
-                                    <?php esc_html_e("Available In Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                </a>
+                                <button type="button" class="btn btn-outline-primary btn-sm ms-auto conv_con_modal_opener px-4 py-2" conversion_name="BEGIN_CHECKOUT">
+                                    <?php esc_html_e("Add", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </button>
                             </li>
                             <li class="d-flex align-items-center my-2">
                                 <div class="inlist_text_pre ms-2" conversion_name="SUBMIT_LEAD_FORM">
@@ -265,7 +218,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
 
                         </ul>
                     </div>
-                    <div class="col-5 pt-0 p-4 d-flex justify-content-center">
+                    <div class="col-5 pt-0 p-4 d-flex justify-content-center d-none">
                         <div class="card rounded shadow">
                             <div class="card-body">
                                 <h5 class="card-title text-center">Increase Google Ads <br> Conversion Rate by</h5>
@@ -1151,7 +1104,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                 ADD_TO_CART: "Select Conversion ID Label For Add To Cart",
                 BEGIN_CHECKOUT: "Select Conversion ID Label For Begin Checkout",
                 PURCHASE: "Select Conversion ID Label For Purchase",
-                SUBMIT_LEAD_FORM: "Select conversion id and label from below"
+                SUBMIT_LEAD_FORM: "Select Conversion ID Label For Form Lead Submit"
             }
 
             conversion_value_arr = {
@@ -1168,6 +1121,14 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
                 SUBMIT_LEAD_FORM: "Conversios-FormSubmit",
             }
 
+            conversion_button_arr = {
+                ADD_TO_CART: "Create new add to cart conversion",
+                BEGIN_CHECKOUT: "Create new begin checkout conversion",
+                PURCHASE: "Create new purchase conversion",
+                SUBMIT_LEAD_FORM: "Create new form lead submit conversion",
+            }
+
+            jQuery('#convcon_create_but').html(conversion_button_arr[conversion_name]);
             jQuery("#conv_con_modalLabel").html(conversion_label_arr[conversion_name]);
             jQuery("#concre_name").val(conversion_name_arr[conversion_name]);
             jQuery("#concre_value").val(conversion_value_arr[conversion_name]);
