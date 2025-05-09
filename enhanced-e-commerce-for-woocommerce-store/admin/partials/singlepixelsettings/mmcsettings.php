@@ -111,7 +111,7 @@ $required_bing = false;
                         <?php esc_html_e("Select Microsoft Merchant Center Store", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </label>
                     <div class="row pt-2 conv-mmcsettings">
-                        <div class="col-10">
+                        <div class="col-9">
                             <select id="microsoft_merchant_center_id" name="microsoft_merchant_center_id" class="form-select form-select-lg mb-3 selecttwo valtoshow_inpopup_this" style="width: 100%" <?php echo esc_attr($is_sel_disable); ?>>
                                 <?php if (!empty($microsoft_merchant_center_id)) { ?>
                                     <option value="<?php echo esc_attr($microsoft_merchant_center_id); ?>" selected>
@@ -121,8 +121,10 @@ $required_bing = false;
                                 <option value="">Select Microsoft Merchant Center Store</option>
                             </select>
                         </div>
-                        <div class="col-2 conv-enable-selection conv-link-blue">
-                            <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
+                        <div class="col-1 btn btn-sm btn-primary ms4 conv-enable-selection conv-link-blue">
+                            <label class="fs-6 text">
+                                <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </label>
                         </div>
                     </div>
                     <label class="text-dark fw-bold-500 mt-4">

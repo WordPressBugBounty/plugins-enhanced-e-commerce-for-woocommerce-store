@@ -3196,6 +3196,10 @@ ul.conv-green-checklis.fb-kapi li .text-success {
   font-size: 14px;
   text-decoration: none;
 }
+.btn label
+{
+  cursor: pointer;
+}
 
 .convdocslink .material-symbols-outlined {
   font-size: 13px !important;

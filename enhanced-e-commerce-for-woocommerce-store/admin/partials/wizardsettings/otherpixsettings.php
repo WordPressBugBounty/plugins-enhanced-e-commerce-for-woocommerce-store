@@ -25,7 +25,7 @@
 
 <div class="col-12">
     <div class="alert alert-success mb-0" role="alert">
-        <?php esc_html_e('This screen allows you to track additional pixels. If you prefer to skip this step, simply click "Save & Finish" to finish your setup.', 'enhanced-e-commerce-for-woocommerce-store'); ?>
+        <b><?php esc_html_e('This screen allows you to track additional pixels. If you prefer to skip this step, simply click "Save & Finish" to finish your setup.', 'enhanced-e-commerce-for-woocommerce-store'); ?></b>
     </div>
 </div>
 <!-- Other Pixel Form -->
@@ -452,6 +452,7 @@
         var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
 
         jQuery(document).on("click", "#conv_save_opix_finish", function() {
+            jQuery(this).find(".spinner-border").removeClass('d-none');
             conv_change_loadingbar("show");
             jQuery(this).addClass('disabled');
             var selected_vals = {};

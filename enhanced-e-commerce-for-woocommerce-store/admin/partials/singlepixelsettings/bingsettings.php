@@ -58,9 +58,8 @@ if ($store_country[0]) {
                                         <?php } ?>
                                         <option value="">Select Account</option>
                                     </select>
-                                    <button type="button" class="btn btn-sm d-flex conv-enable-selection conv-link-blue align-items-center">
-                                        <span class="material-symbols-outlined md-18">edit</span>
-                                        <span class="px-1">Edit</span>
+                                    <button type="button" class="btn btn-primary ms-4 btn-sm d-flex conv-enable-selection align-items-center">
+                                        <span class="px-1"><?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                                     </button>
                                 </div>
                             </div>
@@ -89,9 +88,8 @@ if ($store_country[0]) {
                                         <?php } ?>
                                         <option value="">Select Account</option>
                                     </select>
-                                    <button type="button" class="btn btn-sm d-flex conv-enable-selection conv-link-blue align-items-center">
-                                        <span class="material-symbols-outlined md-18">edit</span>
-                                        <span class="px-1">Edit</span>
+                                    <button type="button" class="btn btn-primary ms-3 btn-sm d-flex conv-enable-selection align-items-center">
+                                        <span class="px-1"><?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                                     </button>
                                 </div>
                             </div>
@@ -154,9 +152,8 @@ if ($store_country[0]) {
                                 <?php } ?>
                                 <option value="">Select Account</option>
                             </select>
-                            <button type="button" class="btn btn-sm d-flex conv-enable-selection conv-enable-selection-ads-pixel conv-link-blue align-items-center">
-                                <span class="material-symbols-outlined md-18">edit</span>
-                                <span class="px-1">Edit</span>
+                            <button type="button" class="btn btn-primary ms-4 btn-sm d-flex conv-enable-selection conv-enable-selection-ads-pixel align-items-center">
+                                <span class="px-1"><?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                             </button>
                         </div>
                     </div>

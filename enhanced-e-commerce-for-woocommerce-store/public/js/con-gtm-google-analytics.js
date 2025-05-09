@@ -27,7 +27,7 @@ class TVC_GTM_WP_Enhanced {
       cov_form_type: "CF7 Plugin",
       cov_form_id: e.detail.contactFormId,
     };
-    
+
     dataLayer.push(form_submit_datalayer);
   }
 
@@ -41,7 +41,7 @@ class TVC_GTM_WP_Enhanced {
    * @param {number} id The ID of the submitted Ninja Form.
    * @returns {void}
    */
-  formsubmit_ninja_tracking(e,r,id) {
+  formsubmit_ninja_tracking(e, r, id) {
     if (this.options.is_admin == true) {
       return;
     }
@@ -52,7 +52,7 @@ class TVC_GTM_WP_Enhanced {
       cov_form_type: "Ninja Form Plugin",
       cov_form_id: r.id,
     };
-    
+
     dataLayer.push(form_submit_datalayer);
   }
 
@@ -62,14 +62,14 @@ class TVC_GTM_WP_Enhanced {
    * @param {any[]} fdata The data to be pushed to the dataLayer.
    * @param {string} is_plugin (optional) A flag indicating if this call originates from a plugin. Defaults to an empty string.
    */
-  formsubmit_ajax_tracking( fdata = [], is_plugin = '' ) {
+  formsubmit_ajax_tracking(fdata = [], is_plugin = '') {
     var postdata = {
       action: "datalayer_push",
       nonce: ConvAioGlobal.nonce,
       is_plugin: is_plugin,
     };
 
-    if( typeof fdata === 'string' ) {
+    if (typeof fdata === 'string') {
       const parts = fdata.split('&');
       const params = {};
       for (let i = 0; i < parts.length; i++) {
@@ -78,13 +78,13 @@ class TVC_GTM_WP_Enhanced {
       }
 
       // Formidable plugin related
-      if( 'action' in params && params.action == "frm_entries_create" ) {
+      if ('action' in params && params.action == "frm_entries_create") {
         postdata['form_id'] = params.form_id;
         postdata['form_action'] = params.action;
       }
-    }else {
+    } else {
       // WpForm plugin related
-      if( 'action' in fdata && fdata['action'] == 'wpforms_submit' ) {
+      if ('action' in fdata && fdata['action'] == 'wpforms_submit') {
         postdata['form_id'] = fdata['form_id'];
         postdata['form_action'] = fdata['action'];
       }
@@ -123,7 +123,9 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
     }
     if (single_btn.length > 0) {
       single_btn.forEach((aCartBut) => {
-        aCartBut.addEventListener("click", () => this.add_to_cart_click(variations_data, "Product Pages"));
+        aCartBut.addEventListener("click", (event) => {
+          this.add_to_cart_click(variations_data, "Product Pages", event);
+        });
       });
     }
   }
@@ -133,7 +135,7 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
     if (elements.length > 0) {
       for (var i = 0; i < elements.length; i++) {
         if (elements[i]) {
-          elements[i].addEventListener("click", () => this.list_add_to_cart_click());
+          elements[i].addEventListener("click", (event) => this.list_add_to_cart_click(event));
         }
       }
     }
@@ -144,7 +146,7 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
     if (elements.length > 0) {
       for (var i = 0; i < elements.length; i++) {
         if (elements[i]) {
-          elements[i].addEventListener("click", () => this.list_select_item_click());
+          elements[i].addEventListener("click", (event) => this.list_select_item_click(event));
         }
       }
     }
@@ -231,7 +233,7 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
       }
     }
   }
-  list_select_item_click() {
+  list_select_item_click(event) {
     var this_var = event.currentTarget;
     var href = this_var.getAttribute('href');
     var item = this.get_product_from_product_list_by_url(conProductList, 'productlink', href);
@@ -281,7 +283,7 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
     }
 
   }
-  list_add_to_cart_click() {
+  list_add_to_cart_click(event) {
     var this_var = event.currentTarget;
     var href = this_var.getAttribute('href');
     var product_id = this.getParameterByName("add-to-cart", href);
@@ -326,7 +328,7 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
    * below code run while add to cart on product page. 
    * ( Event=>  add_to_cart)
    */
-  add_to_cart_click(variations_data, page_type = "Product Pages") {
+  add_to_cart_click(variations_data, page_type = "Product Pages", event) {
     var this_var = event.currentTarget;
     var item_dataLayer = this.get_event_data_layer("view_item");
     if (this.options.is_admin == true) {
@@ -342,7 +344,7 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
         variation_id = document.getElementsByClassName("variation_id")[0].value;
       }
       var varPrice = item.price;
-      if (variation_id != "") {
+      if (variation_id != "" && variation_id != "0") {
         vari_data = this.get_variation_data_by_id(variations_data, variation_id);
         var p_attributes = vari_data.attributes;
         if (Object.keys(p_attributes).length > 0) {

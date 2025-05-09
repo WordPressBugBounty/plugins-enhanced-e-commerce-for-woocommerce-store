@@ -970,10 +970,12 @@ class Con_GTM_WC_Tracking extends Con_Settings
           });
         <?php } ?>
         jQuery(function() {
-          window.wp.hooks.addAction('experimental__woocommerce_blocks-checkout-submit', 'conv_apinfo_hook', function() {
-            tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
-            tvc_js.checkout_step_3_tracking();
-          });
+          if (window.wp && wp.hooks && typeof wp.hooks.addAction === 'function') {
+            window.wp.hooks.addAction('experimental__woocommerce_blocks-checkout-submit', 'conv_apinfo_hook', function() {
+              tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
+              tvc_js.checkout_step_3_tracking();
+            });
+          }
         });
       </script>
 
@@ -1071,7 +1073,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
       if (!$this->disable_tracking($this->ga_eeT, "add_to_cart_single")) {
         global $product, $woocommerce;
         $variations_data = array();
-        if (isset($product->is_type) && $product->is_type('variable')) {
+        if ($product && $product->is_type('variable')) {
           $variations_data['default_attributes'] = $product->get_default_attributes();
           $variations_data['available_variations'] = $product->get_available_variations(); //get all child variations
           $variations_data['available_attributes'] = $product->get_variation_attributes();

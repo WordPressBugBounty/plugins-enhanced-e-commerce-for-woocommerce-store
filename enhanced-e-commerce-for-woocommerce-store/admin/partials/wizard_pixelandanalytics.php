@@ -641,14 +641,12 @@ if (isset($google_detail->is_site_verified) === true) {
                 </div>
             </div>
             <div class="modal-footer m-auto">
-
-                <a href="<?php echo esc_url('admin.php?page=conversios-analytics-reports'); ?>" class="btn btn-primary">
-                    Explore Reports
-                </a>
                 <a href="<?php echo esc_url('admin.php?page=conversios'); ?>" class="btn btn-primary">
                     Goto Dashboard
                 </a>
-
+                <a href="<?php echo esc_url('admin.php?page=conversios-analytics-reports'); ?>" class="btn btn-primary">
+                    Explore Reports
+                </a>
             </div>
         </div>
     </div>

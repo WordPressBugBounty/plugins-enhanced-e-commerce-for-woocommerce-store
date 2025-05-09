@@ -586,9 +586,7 @@ class Con_GTM_WP_Tracking extends Con_Settings
       $conversio_send_to = explode("/", $this->conversio_send_to);
     }
 
-    if ($this->ga_id != "") {
-      $dataLayer["cov_ga3_propety_id"] = esc_js($this->ga_id);
-    }
+    
     if ($this->gm_id != "") {
       $dataLayer["cov_ga4_measurment_id"] = esc_js($this->gm_id);
     }

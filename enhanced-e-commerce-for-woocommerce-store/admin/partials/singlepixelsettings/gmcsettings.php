@@ -101,8 +101,8 @@ $contData = json_decode($getCountris);
                         <option value="">Select Google Merchant Center Account</option>
                     </select>
                 </div>
-                <div class="col-2 conv-enable-selection conv-link-blue">
-                    <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
+                <div class="col-1 btn btn-primary conv-enable-selection">
+                    <label class="fs-6 text"><?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
                 </div>
             </div>
             <div class="col-12 flex-row pt-3">
@@ -115,7 +115,7 @@ $contData = json_decode($getCountris);
             </div>
             <div class="col-12 flex-row pt-3 row">
                 <div class="col-5">
-                    <label class="text-dark">Site Verified</label>
+                    <label class="text-dark">Site Verified (Click red icon to verify now)</label>
                     <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you verify your website, you let Google know that you're the owner of the website. You're the website owner if you have the ability to make edits to your website content. Not the website owner? Work together with your website owner or admin to verify the website.">
                         info
                     </span>
@@ -127,7 +127,7 @@ $contData = json_decode($getCountris);
                             check_circle
                         </span>
                     <?php } else { ?>
-                        <span class="material-symbols-outlined text-danger fs-5 site_verified" onclick="call_site_verified()" style="cursor:pointer">
+                        <span class="material-symbols-outlined text-danger fs-3 site_verified" onclick="call_site_verified()" style="cursor:pointer">
                             sync_problem
                         </span>
                     <?php }
@@ -136,7 +136,7 @@ $contData = json_decode($getCountris);
             </div>
             <div class="col-12 flex-row pt-3 row domain_claimDiv">
                 <div class="col-5">
-                    <label class="text-dark">Domain Claim</label>
+                    <label class="text-dark">Domain Claim (Click red icon to claim now)</label>
                     <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you claim your website, it gives you the right to use your website in connection with your Merchant Center account. First you need to verify your website and then you can claim it. Only the user who verified the website can claim it.">
                         info
                     </span>
@@ -147,7 +147,7 @@ $contData = json_decode($getCountris);
                             check_circle
                         </span>
                     <?php } else { ?>
-                        <span class="material-symbols-outlined text-danger fs-5 domain_claim" onclick="call_domain_claim()" style="cursor:pointer">
+                        <span class="material-symbols-outlined text-danger fs-3 domain_claim" onclick="call_domain_claim()" style="cursor:pointer">
                             sync_problem
                         </span>
                     <?php }
@@ -669,6 +669,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 setTimeout(function() {}, 2000);
                 jQuery('#google_merchant_center_id').prop('disabled', false);
                 conv_change_loadingbar("hide");
+                jQuery("#google_merchant_center_id").trigger('change');
             }
         });
     }
@@ -956,7 +957,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                     url: tvc_ajax_url,
                     data: data,
                     beforeSend: function() {
-                        //loaderSection(true);
+                        jQuery("#gadsinviteloader").removeClass("d-none");
                     },
                     success: function(response, status) {
                         jQuery('#model_close_gmc_creation, .closeButton').removeClass('disabled')

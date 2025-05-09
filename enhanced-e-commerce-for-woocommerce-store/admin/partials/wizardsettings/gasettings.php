@@ -128,8 +128,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                                     </div>
 
                                     <div class="col-2 d-flex align-items-end">
-                                        <button type="button" class="btn btn-sm d-flex conv-enable-selection_ga conv-link-blue align-items-center">
-                                            <span class="material-symbols-outlined md-18">edit</span>
+                                        <button type="button" class="btn btn-primary btn-sm d-flex conv-enable-selection_ga align-items-center">
                                             <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                         </button>
                                     </div>
@@ -292,8 +291,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                                         </div>
 
                                         <div class="col-2 d-flex align-items-end">
-                                            <button type="button" class="btn btn-sm d-flex conv-enable-selection_gads conv-link-blue align-items-center">
-                                                <span class="material-symbols-outlined md-18">edit</span>
+                                            <button type="button" class="btn btn-primary btn-sm d-flex conv-enable-selection_gads align-items-center">
                                                 <span class="px-1">
                                                     <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                                 </span>
@@ -454,9 +452,8 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                                     <?php } ?>
                                 </div>
 
-                                <div class="align-self-center">
-                                    <div class="conv-enable-selection_gmc conv-link-blue">
-                                        <span class="material-symbols-outlined pt-1 ps-2">edit</span>
+                                <div class="align-self-center mt-auto ms-3">
+                                    <div class="btn btn-primary btn-sm conv-enable-selection_gmc">
                                         <div class="mb-2 fs-6 text d-inline">Change</div>
                                     </div>
                                 </div>
@@ -489,25 +486,44 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
 
 
 <!-- Modals No GA account found-->
-<div class="modal fade" id="nogaaccfound" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="nogaaccfoundLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="nogaaccfound" aria-labelledby="nogaaccfoundLabel">
+    <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'conv_channel_logo me-4 align-self-start'),
+                        array(
+                            'img' => array(
+                                'src' => true,
+                                'alt' => true,
+                                'class' => true,
+                                'style' => true,
+                            ),
+                        )
+                    ); ?>
+                    No Google Analytics account found.
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
-                <div class="col-12 flex-row pt-3">
-                    <div class="d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'conv_channel_logo me-4 align-self-start'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                    </div>
+                <div class="alert alert-danger">
+                    <p class="h6 fw-light">
+                        You're logged in with Google, but we couldn't find any Google Analytics accounts linked to your email, or you might not have administrative access to any existing accounts.
+                        <br><br> Please <a href="https://analytics.google.com/analytics/web/#/provision" target="_blank" rel="noopener noreferrer">create a new Analytics account</a> if you don't have one. After that, refresh this page to see your account in the dropdown.
+                    </p>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <a href="https://analytics.google.com/analytics/web/#/provision" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                    Create Analytics Account
+                </a>
+                <button type="button" class="btn btn-secondary" onclick="location.reload();">
+                    Refresh Page
+                </button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
             </div>
         </div>
     </div>
@@ -707,7 +723,7 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
                         <div id="create_conversion_box" class="col-12">
                             <div class="col-12">
                                 <button id="convcon_create_but" type="button" class="btn btn-outline-primary">
-                                    <?php esc_html_e("Create Conversion", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                    <?php esc_html_e("Create New Conversion", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     <div class="spinner-border spinner-border-sm d-none" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
@@ -1341,8 +1357,8 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
     }
 
 
-       // get list google ads dropdown options
-       function list_google_ads_account(tvc_data, new_ads_id) {
+    // get list google ads dropdown options
+    function list_google_ads_account(tvc_data, new_ads_id) {
         conv_change_loadingbar_popup("show");
         conv_change_loadingbar("show");
         openAccordionById("accordion2");
@@ -1777,10 +1793,10 @@ $conwizverifydomain = (isset($ee_options['conwizverifydomain'])) ? esc_attr($ee_
             }
 
             conversion_label_arr = {
-                ADD_TO_CART: "Select Conversion ID Label For Add to Cart",
-                BEGIN_CHECKOUT: "Select Conversion ID Label For Begin Checkout",
-                PURCHASE: "Select Conversion ID Label For Purchase",
-                SUBMIT_LEAD_FORM: "Select Conversion ID Label For Form Lead Submit",
+                ADD_TO_CART: "Select Conversion for Add to Cart",
+                BEGIN_CHECKOUT: "Select Conversion for Begin Checkout",
+                PURCHASE: "Select Conversion for Purchase",
+                SUBMIT_LEAD_FORM: "Select Conversion for Form Lead Submit",
             }
 
             conversion_value_arr = {

@@ -60,9 +60,8 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
                         </select>
                     </div>
                     <div class="col-2 d-flex align-items-end">
-                        <button type="button" class="btn btn-sm d-flex conv-enable-selection conv-link-blue align-items-center">
-                            <span class="material-symbols-outlined md-18">edit</span>
-                            <span class="px-1">Edit</span>
+                        <button type="button" class="btn btn-primary btn-sm d-flex conv-enable-selection align-items-center">
+                            <span class="px-1"><?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                         </button>
                     </div>
 
