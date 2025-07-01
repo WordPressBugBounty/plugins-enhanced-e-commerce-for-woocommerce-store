@@ -326,16 +326,6 @@ if (class_exists('Conversios_Admin') === FALSE) {
             array($this, 'showPage'),
             1
           );
-
-          add_submenu_page(
-            CONV_MENU_SLUG,
-            esc_html__('Campaign Management', 'enhanced-e-commerce-for-woocommerce-store'),
-            esc_html__('Campaign Management', 'enhanced-e-commerce-for-woocommerce-store'),
-            'manage_options',
-            'conversios-pmax',
-            array($this, 'showPage'),
-            4
-          );
         }
 
         add_submenu_page(
@@ -346,17 +336,6 @@ if (class_exists('Conversios_Admin') === FALSE) {
           'conversios-google-shopping-feed',
           array($this, 'showPage'),
           3
-        );
-
-
-        add_submenu_page(
-          CONV_MENU_SLUG,
-          esc_html__('Audience Manager', 'enhanced-e-commerce-for-woocommerce-store'),
-          '<span class="product_feed_menu"> Audience Manager </span>',
-          'manage_options',
-          'conversios-audience-manager',
-          array($this, 'showPage'),
-          5
         );
       } else { // When no wc
 
@@ -511,7 +490,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
       }
 
       // Default: load dashboard
-      require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-dashboard.php';
+      require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-analytics-reports.php');
 
       // Load subpage if specified
       $sub_page = filter_input(INPUT_GET, 'subpage', FILTER_DEFAULT);
@@ -543,26 +522,6 @@ if (class_exists('Conversios_Admin') === FALSE) {
     public function conversios_analytics_reports()
     {
       require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-analytics-reports.php');
-    }
-    public function conversios_pmax()
-    {
-      $action_tab = (isset($_GET['tab']) === TRUE) ? sanitize_text_field(wp_unslash($_GET['tab'])) : "";
-      if ($action_tab != "") {
-        $this->$action_tab();
-      } else {
-        require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/pmax.php');
-        // new TVC_PMax();
-      }
-    }
-    public function pmax_add()
-    {
-      require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/pmax-add.php');
-      new TVC_PMaxAdd();
-    }
-    public function pmax_edit()
-    {
-      require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/pmax-edit.php');
-      new TVC_PMaxEdit();
     }
     public function conversios_google_shopping_feed()
     {
@@ -602,24 +561,6 @@ if (class_exists('Conversios_Admin') === FALSE) {
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/tatvic-category-wrapper.php';
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
       require_once 'partials/feedwise-product-list.php';
-    }
-
-    public function conversios_audience_manager()
-    {
-      $action_tab = (isset($_GET['tab'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'tab'))) : "";
-      if ($action_tab != "") {
-        //$this->$action_tab();
-        require_once 'partials/customermatch/export.php';
-        require_once 'partials/customermatch/batch_exporter.php';
-        require_once 'partials/customermatch/html.php';
-        require_once 'partials/customermatch/settings.php';
-        Conv_Exporter::conv_enqueue();
-        Conv_Exporter::conv_admin_gui();
-        Conv_Exporter::conv_styles();
-        new Conv_Exporter();
-      } else {
-        require_once 'partials/customermatch/customer-match.php';
-      }
     }
   }
 }

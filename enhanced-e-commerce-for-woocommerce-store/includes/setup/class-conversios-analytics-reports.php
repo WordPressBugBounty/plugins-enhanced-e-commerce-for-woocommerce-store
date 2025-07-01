@@ -1,4 +1,5 @@
 <?php
+$TVC_Admin_Helper = new TVC_Admin_Helper();
 $ee_options = unserialize(get_option('ee_options'));
 $sch_email_toggle_check = isset($ee_options['sch_email_toggle_check']) ? sanitize_text_field($ee_options['sch_email_toggle_check']) : '1';
 $sch_custom_email = isset($ee_options['sch_custom_email']) ? sanitize_text_field($ee_options['sch_custom_email']) : '';
@@ -94,14 +95,17 @@ if ($subpage == "ga4ecommerce") {
                 <a href="admin.php?page=conversios-analytics-reports" class="btn <?php echo esc_attr($ga4general_cls); ?> bg-white me-3">
                     <?php esc_html_e("General Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </a>
-                <a href="admin.php?page=conversios-analytics-reports&subpage=ga4ecommerce" class="btn <?php echo esc_attr($ga4page_cls); ?> bg-white me-3">
+                <a class="btn <?php echo esc_attr($ga4page_cls); ?> bg-white me-3" data-bs-toggle="modal" data-bs-target="#upgradetopromodalotherReports">
                     <?php esc_html_e("Ecommerce Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </a>
-                <a href="admin.php?page=conversios-analytics-reports&subpage=gads" class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white me-3">
+                <a class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white me-3" data-bs-toggle="modal" data-bs-target="#upgradetopromodalotherReports">
                     <?php esc_html_e("Google Ads Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </a>
+                <a class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white me-3" data-bs-toggle="modal" data-bs-target="#upgradetopromodalotherReports">
+                    <?php esc_html_e("Facebook (Meta) Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
+                </a>
             </div>
-            <?php if ($ga4_measurement_id != "") { ?>
+            <?php if ($ga4_measurement_id != "" && $g_mail != "") { ?>
                 <div id="conv_report_opright" class="ms-auto p-2 bd-highlight d-flex">
                     <h4 class="conv-link-blue d-flex pe-2" data-bs-toggle="modal" data-bs-target="#schedule_email_modal">
                         <span class="material-symbols-outlined conv-link-blue pe-1">check_circle</span>
@@ -115,56 +119,25 @@ if ($subpage == "ga4ecommerce") {
             <?php } ?>
         </div>
 
-        <?php if ($subpage == "ga4general" && $ga4_measurement_id == "") { ?>
-            <div class="d-flex">
-                <div class="col-12 alert alert-danger alert alert-danger h5 py-4 my-4 d-flex justify-content-center" role="alert">
-                    <span class="material-symbols-outlined">
-                        error
-                    </span>
-                    <?php esc_html_e("Please connect Google Analytics account to view the reports.", "enhanced-e-commerce-for-woocommerce-store") ?>
-                    <a class="conv-link-blue d-flex ps-3" href="<?php echo esc_url_raw('admin.php?page=conversios-google-analytics"'); ?>">
-                        <?php esc_html_e("Click here to connect", "enhanced-e-commerce-for-woocommerce-store") ?>
-                        <span class="material-symbols-outlined">
-                            arrow_forward
-                        </span>
-                    </a>
+        <?php if ($subpage == "ga4general" && (empty($g_mail) || empty($ga4_measurement_id))) { ?>
+            <div class="alert alert-info mt-4 w-100" role="alert">
+                <div class="mx-auto" style="max-width: 600px;">
+                    <h5 class="alert-heading">Connect Google Analytics to View Reports</h5>
+                    <p>To view reports in the plugin, please connect your Google account and complete the Google Analytics setup:</p>
+                    <ol class="ms-0">
+                        <li>Click the button below to start the connection.</li>
+                        <li>Authorize access through the Google authentication screen.</li>
+                        <li>Select your <strong>Google Analytics Account ID</strong>.</li>
+                        <li>Choose your <strong>Measurement ID</strong> and click <strong>Save</strong>.</li>
+                        <li>After saving, a success message will appear. Click <strong>"View Reports"</strong> to access your analytics.</li>
+                    </ol>
+                    <div class="mt-3">
+                        <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-analytics&subpage=gasettings"'); ?>" class="btn btn-primary">Click here to connect Google</a>
+                    </div>
                 </div>
             </div>
         <?php } ?>
 
-        <?php if ($subpage == "ga4ecommerce" && $ga4_measurement_id == "") { ?>
-            <div class="d-flex">
-                <div class="col-12 alert alert-danger alert alert-danger h5 py-4 my-4 d-flex justify-content-center" role="alert">
-                    <span class="material-symbols-outlined">
-                        error
-                    </span>
-                    <?php esc_html_e("Please connect Google Analytics account to view the reports.", "enhanced-e-commerce-for-woocommerce-store") ?>
-                    <a class="conv-link-blue d-flex ps-3" href="<?php echo esc_url_raw('admin.php?page=conversios-google-analytics"'); ?>">
-                        <?php esc_html_e("Click here to connect", "enhanced-e-commerce-for-woocommerce-store") ?>
-                        <span class="material-symbols-outlined">
-                            arrow_forward
-                        </span>
-                    </a>
-                </div>
-            </div>
-        <?php } ?>
-
-        <?php if ($subpage == "gads" && $google_ads_id == "") { ?>
-            <div class="d-flex">
-                <div class="col-12 alert alert-danger alert alert-danger h5 py-4 my-4 d-flex justify-content-center" role="alert">
-                    <span class="material-symbols-outlined">
-                        error
-                    </span>
-                    <?php esc_html_e("Please connect Google Ads account to view the reports.", "enhanced-e-commerce-for-woocommerce-store") ?>
-                    <a class="conv-link-blue d-flex ps-3" href="<?php echo esc_url_raw('admin.php?page=conversios-google-analytics"'); ?>">
-                        <?php esc_html_e("Click here to connect", "enhanced-e-commerce-for-woocommerce-store") ?>
-                        <span class="material-symbols-outlined">
-                            arrow_forward
-                        </span>
-                    </a>
-                </div>
-            </div>
-        <?php } ?>
 
         <?php
         if (in_array($subpage, $report_settings_arr)) {
@@ -324,13 +297,41 @@ if ($subpage == "ga4ecommerce") {
 </div>
 <!--schedule modal end-->
 
+
+<div class="modal fade" id="upgradetopromodalotherReports" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="position:relative;border-radius:16px;">
+            <div class="modal-body p-4 pb-0">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <img width="200" height="200"
+                        src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/upgrade-pro-reporting.png'); ?>" />
+                    <h2 class="text-fw-bold">Upgrade to Pro Now</h2>
+                    <span class="text-secondary text-center">Unlock this premium report with our <span
+                            class="fw-bold">Pro version!</span> Upgrade now for comprehensive insights and advanced
+                        analytics.</span>
+                </div>
+            </div>
+            <div class="border-0 pb-4 mb-1 pt-4 d-flex flex-row justify-content-center align-items-center p-2">
+                <a class="btn bg-white text-black m-auto w-100 mx-2 ms-4 p-2" style="border: 1px solid black;" data-bs-dismiss="modal">
+                    <?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </a>
+                <a id="upgradetopro_modal_link" class="btn conv-yellow-bg m-auto w-100 mx-2 me-4 p-2"
+                    href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=modal_popup&utm_campaign=upgrade"
+                    target="_blank">
+                    <?php esc_html_e("Upgrade Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var start = moment().subtract(45, 'days');
     var end = moment().subtract(1, 'days');
     var start_date = "";
     var end_date = "";
 
-    <?php if (!$ga4_measurement_id == "") { ?>
+    <?php if (!$ga4_measurement_id == "" && !empty($g_mail)) { ?>
         cb(start, end);
     <?php } ?>
 
@@ -367,6 +368,9 @@ if ($subpage == "ga4ecommerce") {
         });
     }
     jQuery(document).ready(function() {
+        jQuery("#navbarSupportedContent ul li").removeClass("rich-blue");
+        jQuery('#navbarSupportedContent ul > li').eq(0).addClass('rich-blue');
+
         var save_email_bydefault = '<?php echo esc_js($options["save_email_bydefault"] ?? ""); ?>';
         if (save_email_bydefault === "") {
             let email_toggle_check = '0'; //default

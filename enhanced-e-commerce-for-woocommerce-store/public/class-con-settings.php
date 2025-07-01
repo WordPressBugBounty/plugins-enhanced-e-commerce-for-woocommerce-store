@@ -81,8 +81,8 @@ class Con_Settings
     protected $gads_conversions;
     protected $conv_disabled_users;
     protected $google_ads_currency;
-
     protected $microsoft_ads_conversions;
+    protected $gads_remarketing_id;
 
     public function __construct()
     {
@@ -149,6 +149,7 @@ class Con_Settings
         }
 
         /*pixels*/
+        $this->gads_remarketing_id = sanitize_text_field($this->get_option('gads_remarketing_id'));
         $this->fb_pixel_id = sanitize_text_field($this->get_option('fb_pixel_id'));
         $this->microsoft_ads_pixel_id = sanitize_text_field($this->get_option('microsoft_ads_pixel_id'));
         $this->twitter_ads_pixel_id = sanitize_text_field($this->get_option('twitter_ads_pixel_id'));
@@ -170,7 +171,7 @@ class Con_Settings
         /* GTM*/
         $this->want_to_use_your_gtm = sanitize_text_field($this->get_option('want_to_use_your_gtm'));
         $this->use_your_gtm_id = sanitize_text_field($this->get_option('use_your_gtm_id'));
-        
+
         //Disabled user roles
         $this->conv_disabled_users = $this->get_option('conv_disabled_users');
         $this->c_t_o = $this->TVC_Admin_Helper->get_ee_options_settings();
@@ -190,12 +191,12 @@ class Con_Settings
         if (in_array("yith-multi-currency-switcher-for-woocommerce/init.php", apply_filters('active_plugins', get_option('active_plugins')))) {
             $this->ga_LC = yith_wcmcs_get_current_currency_id();
         }
-        ?>
-    <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
-      var tvc_lc = '<?php echo esc_js($this->ga_LC); ?>';
-    </script>
+?>
+        <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
+            var tvc_lc = '<?php echo esc_js($this->ga_LC); ?>';
+        </script>
 <?php
-}
+    }
 
     public function get_option($key)
     {
@@ -383,6 +384,5 @@ class Con_Settings
         }
         return $user_data;
     }
-
 }
 ?>

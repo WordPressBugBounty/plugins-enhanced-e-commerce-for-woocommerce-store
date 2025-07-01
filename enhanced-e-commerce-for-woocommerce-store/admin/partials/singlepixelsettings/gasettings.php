@@ -29,6 +29,13 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
             $ga4_analytic_account_id = (isset($googleDetail->ga4_analytic_account_id) && $googleDetail->ga4_analytic_account_id != "") ? $googleDetail->ga4_analytic_account_id : "";
             $measurement_id = (isset($googleDetail->measurement_id) && $googleDetail->measurement_id != "") ? $googleDetail->measurement_id : "";
             ?>
+            <div class="alert alert-warning d-flex align-items-top" role="alert">
+                <strong class="h6 me-3">Note:</strong>
+                <div>
+                    When you set the Google Analytics 4 Measurement ID here, it will be used for all tracking.
+                    <br>All website activity will be sent to this same ID.
+                </div>
+            </div>
             <div id="analytics_box_GA4" class="py-1">
                 <div class="row pt-3 conv-hideme-gasettings">
                     <div class="col-5">
@@ -76,7 +83,7 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
             ?>
             <div id="ga4apisecret_box" class="py-3 <?php echo $tracking_option === 'UA' || !CONV_IS_WC ? 'd-none' : ''; ?>">
                 <div class="row pt-2">
-                    <div class="col-12">
+                    <div class="col-5">
                         <h5 class="d-flex fw-normal mb-1 text-dark">
                             <b><?php esc_html_e("GA4 API Secret", "enhanced-e-commerce-for-woocommerce-store"); ?></b>&nbsp;<?php esc_html_e("(To track refund order)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             <span class="ms-1 align-middle conv-link-blue fw-bold-500 upgradetopro_badge" popupopener="ga4apisecret_box_inner">&nbsp;
@@ -184,7 +191,7 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
             </div>
         </div>
     </form>
-    <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3" style="background: #caf3e3;">
+    <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3 mt-5" style="background: #caf3e3;">
         <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
             <?php echo wp_kses(
                 enhancad_get_plugin_image('/admin/images/sstimpact.png', '', 'rounded shadow'),

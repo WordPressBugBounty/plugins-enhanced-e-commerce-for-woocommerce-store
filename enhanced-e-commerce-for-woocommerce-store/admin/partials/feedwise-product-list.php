@@ -2103,7 +2103,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
             var data = {
                 action: "get_category_for_filter",
                 type: "total_synced_product_count",
-                get_category_for_filter: "<?php echo esc_html_e(wp_create_nonce('get_category_for_filter-nonce')); ?>"
+                get_category_for_filter: "<?php echo esc_js(wp_create_nonce('get_category_for_filter-nonce')); ?>"
             };
             jQuery.ajax({
                 type: "POST",

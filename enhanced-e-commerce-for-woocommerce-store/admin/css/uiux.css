@@ -2078,7 +2078,7 @@ button:disabled {
 }
 
 #conversioshead_notice {
-  background: #19357c !important;
+  background: linear-gradient(to right,#c06c84,#6c5b7b,#355c7d);
 }
 
 .promoright .btn {

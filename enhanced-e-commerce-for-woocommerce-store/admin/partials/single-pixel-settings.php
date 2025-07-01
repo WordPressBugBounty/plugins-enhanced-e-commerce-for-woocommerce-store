@@ -130,7 +130,7 @@ if ($microsoft_mail) {
 if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
 
     $subscriptionId = sanitize_text_field(wp_unslash($_GET['subscription_id']));
-    
+
     // for google
     if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
         $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
@@ -191,7 +191,7 @@ if ($subscriptionId != "") {
                                     'alt' => true,
                                     'class' => true,
                                     'style' => true,
-                                ),  
+                                ),
                             )
                         ); ?>
                     </div>
@@ -241,8 +241,14 @@ if ($subscriptionId != "") {
                 </h3>
                 <span id="conv_save_success_txt" class="mb-1 d-flex justify-content-center text-dark fs-16 px-2"></span>
             </div>
-            <div class="modal-footer border-0 px-4 pb-4 mb-1 modalFooterSuccess w-100" style="display:flex; justify-content: center">
-                <button id="conv-modal-redirect-btn" class="btn fs-20 fw-normal w-100 text-white dismissModal" data-bs-dismiss="modal" style="background-color: #209365;">Close</button>
+            <div class="modal-footer border-0 px-4 pb-4 mb-1 modalFooterSuccess" style="display:flex; justify-content: center">
+                <button id="conv-modal-redirect-btn" class="btn fs-20 fw-normal text-white dismissModal btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+                <?php
+                $sub_page = filter_input(INPUT_GET, 'subpage', FILTER_DEFAULT);
+                if ($sub_page == "gasettings") {
+                ?>
+                    <a href="<?php echo esc_url('admin.php?page=conversios-analytics-reports'); ?>" class="btn fs-20 fw-normal text-white btn-success px-4">Reports</a>
+                <?php } ?>
             </div>
         </div>
     </div>

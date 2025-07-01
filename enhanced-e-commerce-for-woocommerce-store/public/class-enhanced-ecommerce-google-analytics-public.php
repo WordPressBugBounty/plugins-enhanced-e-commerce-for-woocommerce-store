@@ -97,7 +97,8 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
       "fb_event_id" => $this->get_fb_event_id(),
       "tvc_ajax_url" => esc_url(admin_url('admin-ajax.php')),
       "tiktok_event_id" => $this->generate_unique_event_id(),
-      "snapchat_event_id" =>  $this->generate_unique_event_id()
+      "snapchat_event_id" =>  $this->generate_unique_event_id(),
+      "gads_remarketing_id" => esc_js($this->gads_remarketing_id)
     );
     /*
      * end tvc_options
@@ -345,112 +346,8 @@ class Con_GTM_WC_Tracking extends Con_Settings
     // Added filter to add data attributes to exclude cloud fare cache
     add_filter('script_loader_tag',  array($this, "exclude_congtm_from_cf_loader"), 10, 2);
   }
-  public function get_user_data()
-  {
-    if (empty($this->user_data)) {
-      $this->set_user_data();
-    }
-    return $this->user_data;
-  }
 
-  public function set_user_data()
-  {
-    $enhanced_conversion = array();
-    if (is_user_logged_in()) {
-      global $current_user;
-      wp_get_current_user();
-      $billing_country = WC()->customer->get_billing_country();
-      $calling_code = WC()->countries->get_country_calling_code($billing_country);
-      $phone = get_user_meta($current_user->ID, 'billing_phone', true);
-      if ($phone != "") {
-        $phone = str_replace($calling_code, "", $phone);
-        $phone = $calling_code . $phone;
-        $enhanced_conversion["phone_number"] = esc_js($phone);
-      }
-      $email = esc_js($current_user->user_email);
-      if ($email != "") {
-        $enhanced_conversion["email"] = esc_js($email);
-      }
-      $first_name         = esc_js($current_user->user_firstname);
-      if ($first_name != "") {
-        $enhanced_conversion["address"]["first_name"] = esc_js($first_name);
-      }
-      $last_name          = $current_user->user_lastname;
-      if ($last_name != "") {
-        $enhanced_conversion["address"]["last_name"] = esc_js($last_name);
-      }
-      $billing_address_1  = WC()->customer->get_billing_address_1();
-      if ($billing_address_1 != "") {
-        $enhanced_conversion["address"]["street"] = esc_js($billing_address_1);
-      }
-      $billing_postcode   = WC()->customer->get_billing_postcode();
-      if ($billing_postcode != "") {
-        $enhanced_conversion["address"]["postal_code"] = esc_js($billing_postcode);
-      }
-      $billing_city       = WC()->customer->get_billing_city();
-      if ($billing_city != "") {
-        $enhanced_conversion["address"]["city"] = esc_js($billing_city);
-      }
-      $billing_state      = WC()->customer->get_billing_state();
-      if ($billing_state != "") {
-        $enhanced_conversion["address"]["region"] = esc_js($billing_state);
-      }
-      $billing_country    = WC()->customer->get_billing_country();
-      if ($billing_country != "") {
-        $enhanced_conversion["address"]["country"] = esc_js($billing_country);
-      }
-    } else { // get user       
-      $order = "";
-      $order_id = "";
-      if ($order_id == null && is_order_received_page()) {
-        $order = $this->tvc_get_order_from_order_received_page();
-        $order_id = $order->get_id();
-      }
-      if ($order_id) {
-        $billing_country  = $order->get_billing_country();
-        $calling_code = WC()->countries->get_country_calling_code($billing_country);
-        $billing_email  = $order->get_billing_email();
-        if ($billing_email != "") {
-          $enhanced_conversion["email"] = esc_js($billing_email);
-        }
-        $billing_phone  = $order->get_billing_phone();
-        if ($billing_phone != "") {
-          $billing_phone = str_replace($calling_code, "", $billing_phone);
-          $billing_phone = $calling_code . $billing_phone;
-          $enhanced_conversion["phone_number"] = esc_js($billing_phone);
-        }
-        $billing_first_name = $order->get_billing_first_name();
-        if ($billing_first_name != "") {
-          $enhanced_conversion["address"]["first_name"] = esc_js($billing_first_name);
-        }
-        $billing_last_name = $order->get_billing_last_name();
-        if ($billing_last_name != "") {
-          $enhanced_conversion["address"]["last_name"] = esc_js($billing_last_name);
-        }
-        $billing_address_1 = $order->get_billing_address_1();
-        if ($billing_address_1 != "") {
-          $enhanced_conversion["address"]["street"] = esc_js($billing_address_1);
-        }
-        $billing_city = $order->get_billing_city();
-        if ($billing_city != "") {
-          $enhanced_conversion["address"]["city"] = esc_js($billing_city);
-        }
-        $billing_state = $order->get_billing_state();
-        if ($billing_state != "") {
-          $enhanced_conversion["address"]["region"] = esc_js($billing_state);
-        }
-        $billing_postcode = $order->get_billing_postcode();
-        if ($billing_postcode != "") {
-          $enhanced_conversion["address"]["postal_code"] = esc_js($billing_postcode);
-        }
-        $billing_country = $order->get_billing_country();
-        if ($billing_country != "") {
-          $enhanced_conversion["address"]["country"] = esc_js($billing_country);
-        }
-      }
-    }
-    $this->user_data = $enhanced_conversion;
-  }
+
 
   /**
    * begin datalayer like settings

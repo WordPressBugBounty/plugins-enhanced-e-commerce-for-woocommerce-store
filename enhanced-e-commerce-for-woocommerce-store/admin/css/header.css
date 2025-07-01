@@ -8,8 +8,7 @@ body {
     padding-left: 0;
 }
 
-.fixedcontainer_conversios
-{
+.fixedcontainer_conversios {
     max-width: 1190px;
 }
 
@@ -77,7 +76,8 @@ body {
 .attribute-box .attribute-content {
     margin-bottom: 32px;
 }
-.attribute-box .attribute-content.para{
+
+.attribute-box .attribute-content.para {
     width: 100%;
     margin: 0 auto;
 }
@@ -137,12 +137,15 @@ body {
     padding: 0.5rem 0.5rem;
     margin: -4.5rem -0.5rem -0.5rem auto;
 }
-#wpadminbar{
+
+#wpadminbar {
     /*z-index: 100;*/
 }
-.new-badge{
+
+.new-badge {
     position: relative;
 }
+
 .new-badge .menu-badge {
     position: absolute;
     top: -15px;
@@ -153,28 +156,57 @@ body {
     box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
     font-size: 10px;
     font-weight: 500;
-    margin-left: 0px;					
+    margin-left: 0px;
     margin-bottom: 27px;
-    color: #ffffff;					
+    color: #ffffff;
     padding: 4px 5px;
     z-index: 1;
+}
+
+.badge-new {
+    position: absolute;
+    top: 1px;
+    right: -23px;
+    background-color: #dc3545;
+    color: white;
+    font-size: 10px;
+    padding: 0px 6px;
+    border-radius: 10px;
+    font-weight: normal;
 }
 
 /* .badge-bounce {
     animation: bouncing .8s cubic-bezier(0.1,0.05,0.05,1) 0s infinite alternate both;
 } */
 
-@keyframes bouncing{
-    0%{top:-6px}
-    100%{top:-10px}
+@keyframes bouncing {
+    0% {
+        top: -6px
+    }
+
+    100% {
+        top: -10px
+    }
 }
-.btn-soft-primary{ background-color: #1967D2; color: #fff; border-color: #1967D2; }
-.btn-soft-primary:hover, .btn-soft-primary:focus, .btn-soft-primary:active, .btn-soft-primary.active, .open>.dropdown-toggle.btn-soft-primary {
+
+.btn-soft-primary {
+    background-color: #1967D2;
+    color: #fff;
+    border-color: #1967D2;
+}
+
+.btn-soft-primary:hover,
+.btn-soft-primary:focus,
+.btn-soft-primary:active,
+.btn-soft-primary.active,
+.open>.dropdown-toggle.btn-soft-primary {
     color: #fff;
     background-color: #0d6efd;
-    border-color: #0d6efd; /*set the color you want here*/
+    border-color: #0d6efd;
+    /*set the color you want here*/
     box-shadow: none;
 }
+
 .feed_name .errorInput {
     border: 1.3px solid #ef1717 !important;
 }

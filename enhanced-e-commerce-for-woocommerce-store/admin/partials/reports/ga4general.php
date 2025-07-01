@@ -343,17 +343,16 @@
 </div>
 
 
-<?php if (!$ga4_measurement_id == "") { ?>
+<?php if (!$ga4_measurement_id == "" && !empty($g_mail)) { ?>
 
     <script>
-
         jQuery(document).ready(function($) {
             // Check if the bar has been closed before using localStorage
             if (!localStorage.getItem('feedbackConvBarClosed')) {
                 setTimeout(function() {
                     $('#feedback-bar').addClass('show');
                     console.log('show');
-                }, 5000); 
+                }, 5000);
             }
 
             // Close the bar and never show again
@@ -477,8 +476,8 @@
                 dataType: "json",
                 url: tvc_ajax_url,
                 data: post_data,
-                success: function(response) { 
-                    console.log("grid response",response);
+                success: function(response) {
+                    console.log("grid response", response);
                     if (response?.error == false) {
 
                         let presentdata = response.data_present[0];

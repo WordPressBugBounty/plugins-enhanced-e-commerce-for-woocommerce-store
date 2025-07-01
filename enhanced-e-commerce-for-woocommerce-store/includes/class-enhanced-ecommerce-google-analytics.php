@@ -134,7 +134,6 @@ class Enhanced_Ecommerce_Google_Analytics
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-reports-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-pmax-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-conversios-admin.php';
-    require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-customer-segment-helper.php';
 
     /**
      * End New conversios UI file list
@@ -193,13 +192,15 @@ class Enhanced_Ecommerce_Google_Analytics
     $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
     $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
     $this->loader->add_action('admin_notice_message', $plugin_admin, 'tvc_add_admin_notice');
-    //$this->loader->add_action('admin_notices', $plugin_admin, 'tvc_display_admin_notices');
-    //$this->loader->add_action('admin_notices', $plugin_admin, 'tvc_add_data_admin_notice');
-    //$this->loader->add_action('admin_notices', $plugin_admin, 'convtvc_admin_notice');
 
-
+    // Delay TVC_Survey creation until init
     if (is_admin()) {
-      new TVC_Survey(esc_html__("Enhanced ecommerce google analytics plugin for woocommerce", "enhanced-e-commerce-for-woocommerce-store"), ENHANCAD_PLUGIN_NAME);
+      add_action('init', function () {
+        new TVC_Survey(
+          esc_html__("Enhanced ecommerce google analytics plugin for woocommerce", "enhanced-e-commerce-for-woocommerce-store"),
+          ENHANCAD_PLUGIN_NAME
+        );
+      });
     }
   }
 

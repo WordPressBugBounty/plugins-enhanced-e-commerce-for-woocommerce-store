@@ -263,15 +263,6 @@ if ($store_country[0]) {
                     </li>
                 </ul>
             </div>
-            <div class="col-5 pt-0 p-4 d-flex justify-content-center">
-                <div class="card rounded shadow mt-0">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Increase Microsoft Ads <br> Conversion Rate by</h5>
-                        <h5 class="h1 text-center text-primary">30%<sup>*</sup></h5>
-                        <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/checkout/?pid=wpAIO_SY1&utm_source=woo_aiofree_plugin&utm_medium=innersetting_gads&utm_campaign=gadseec'); ?>" class="btn btn-sm mt-2 btn-primary w-100">Upgrade Now</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

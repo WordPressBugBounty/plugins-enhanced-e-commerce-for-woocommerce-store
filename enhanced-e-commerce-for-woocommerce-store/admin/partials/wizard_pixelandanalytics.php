@@ -97,473 +97,468 @@ if ('' != $subscription_id) {
         }
     }
 }
-
-$pixel_progress_bar_class = array(18);
-$conv_onboarding_done_step = (isset($ee_options['conv_onboarding_done_step']) && '' != $ee_options['conv_onboarding_done_step']) ? $ee_options['conv_onboarding_done_step'] : '';
-
-$is_domain_claim = '';
-if (isset($google_detail->is_domain_claim) === true) {
-    $is_domain_claim = esc_attr($google_detail->is_domain_claim);
-}
-
-$is_site_verified = '';
-if (isset($google_detail->is_site_verified) === true) {
-    $is_site_verified = esc_attr($google_detail->is_site_verified);
-}
 ?>
+
 <style>
-    #conversioshead,
-    #conversioshead_notice {
-        display: none;
-    }
-
-    .progressinfo {
-        text-align: right;
-        font-size: 12px;
-        line-height: 16px;
-        color: #515151;
-        margin-top: 9px;
-    }
-
-    .conv-border-box {
-        border: 1px solid #ccc;
-        border-radius: 12px;
-        box-shadow: 0px 0px 4px #ccc;
-        padding: 15px;
-        margin: 0px;
-    }
-
-    /* CONWIZ SLIDER CSS */
-    .conwiz_slide-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        position: relative;
-        animation: fadeInUp 0.8s ease-in-out;
-        padding-bottom: 1rem;
-    }
-
-    .conwiz_slide-inner {
-        display: flex;
-        height: 500px;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(40px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .conwiz_progress-bar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 5px;
-        width: 0;
-        background-color: #444444;
-        animation: progressSlide 10s linear forwards;
-        z-index: 10;
-    }
-
-    @keyframes progressSlide {
-        from {
-            width: 0%;
-        }
-
-        to {
-            width: 100%;
-        }
-    }
-
-    .conwiz_left-buttons {
-        width: 285px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 1rem;
-        gap: 1rem;
-        background: #fff;
-    }
-
-    .conwiz_slide-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #fff;
-        color: #444444;
-        font-weight: 600;
-        border-radius: 30px;
-        padding: 10px 20px;
-        border: 2px solid #444444;
-        cursor: pointer;
-        height: 50px;
-        width: 100%;
-        box-sizing: border-box;
-        transition: all 0.3s ease;
-        white-space: nowrap;
-    }
-
-    .conwiz_slide-btn:hover {
-        background-color: #f1f1f1;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .conwiz_slide-btn.conwiz_btn-purple {
-        background-color: #444444;
-        color: #fff;
-    }
-
-    .conwiz_middle-image {
-        width: 45%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem;
-        animation: fadeIn 1s ease-in-out;
-    }
-
-    .conwiz_middle-image img {
-        max-width: 100%;
-        /* max-height: 400px; */
-        object-fit: contain;
-    }
-
-    .conwiz_right-text {
-        width: 35%;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        animation: fadeIn 1s ease-in-out;
-    }
-
-    .conwiz_right-text h3 {
-        font-weight: 700;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .conwiz_google-auth-row {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1.25rem 2rem 0.5rem;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: 2rem;
-        margin-bottom: 3rem;
-    }
-
-    .google-auth-btn-highlighted {
-        background-color: #4285f4;
-        color: #fff;
-        font-weight: 600;
-        font-size: 16px;
-        padding: 12px 24px;
-        border-radius: 30px;
-        display: inline-flex;
-        align-items: center;
-        border: none;
-        box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
-        transition: all 0.3s ease;
-        text-decoration: none;
-    }
-
-    .google-auth-btn-highlighted img {
-        width: 22px;
-        height: 22px;
-        margin-right: 12px;
-    }
-
-    .google-auth-btn-highlighted:hover {
-        background-color: #3367d6;
-        box-shadow: 0 6px 14px rgba(66, 133, 244, 0.4);
-        text-decoration: none;
-        color: #fff;
-    }
-
-    .google-auth-benefits {
-        font-size: 17px;
-        color: #444444;
-        text-align: left;
-        line-height: 1.4;
-    }
-
-    /* CONVWIZ Accordio CSS */
-    .conwizaccord_accordion {
-        width: 100%;
-        font-family: Arial, sans-serif;
-    }
-
-    .conwizaccord_item {
-        margin-bottom: 10px;
-    }
-
-    .conwizaccord_header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px 0;
-        cursor: pointer;
-    }
-
-    .conwizaccord_logo-title {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .conwizaccord_logo {
-        width: 24px;
-        height: 24px;
-    }
-
-    .conwizaccord_title {
+    .pixel-status,
+    .convpixeldoclink {
+        display: inline-block;
+        margin-left: 10px;
         font-weight: bold;
-        font-size: 16px;
     }
 
-    .conwizaccord_icon {
-        font-size: 24px;
-        transition: transform 0.3s ease;
+    .pixel-active {
+        color: green;
     }
 
-    .conwizaccord_body {
-        display: none;
-        padding: 10px 0;
+    .pixel-inactive {
+        color: red;
+    }
+
+    #convallpixel_table th {
+        display: flex;
+    }
+
+    .convfreetrialbut {
+        color: blue;
+        padding: 5px 7px;
+        border-radius: 5px;
+        border: 1px solid blue;
+        background: #fff;
+    }
+
+    .convpixeldoclink .dashicons {
+        color: #0073aa;
+        vertical-align: middle;
+        cursor: help;
+    }
+
+    .gagadsoptionbox {
+        background: #ccedfd;
+        display: inline-block;
+    }
+
+    .badge.text-light.rounded-pill {
+        background-color: #873EFF !important;
+        font-size: 13px;
+        letter-spacing: 1px;
+        cursor: pointer;
+    }
+
+    .conv-sticky-save-row {
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        z-index: 10;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
     }
 </style>
-<script>
-    function conv_change_loadingbar(state = 'show') {
-        if (state === 'show') {
-            jQuery("#loadingbar_blue").removeClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "none");
-            jQuery("#convwizard_main").addClass("disabledopc");
-        } else {
-            jQuery("#loadingbar_blue").addClass('d-none');
-            jQuery("#wpbody").css("pointer-events", "auto");
-            jQuery("#convwizard_main").removeClass("disabledopc");
-        }
-    }
 
-    function conv_change_loadingbar_popup(state = 'show') {
-        if (state === 'show') {
-            setTimeout(function() {
-                jQuery(".modal.show").find(".topfull_loader").removeClass('d-none');
-                jQuery(".modal:visible").find(".modal-content").css("pointer-events", "none");
-            }, 1000);
-        } else {
-            jQuery(".modal:visible").find(".topfull_loader").addClass('d-none');
-            jQuery(".modal:visible").find(".modal-content").css("pointer-events", "auto");
-        }
-    }
+<div class="pt-4" style="padding-left: 20px;">
+    <h3 class="pb-3 fw-normal"><?php esc_html_e('Pixel & Analytics Settings', 'enhanced-e-commerce-for-woocommerce-store'); ?></h3>
 
-    function showtoastdynamically(content) {
-        jQuery("#dynamictoastbody").html(content);
-        jQuery('.toast').toast('show');
+    <?php
+
+    $remarketing = unserialize(get_option('ee_remarketing_snippets'));
+    $remarketing_snippet_id = "";
+    if (!empty($remarketing) && isset($remarketing['snippets']) && esc_attr($remarketing['snippets'])) {
+        $remarketing_snippet_id = sanitize_text_field(isset($remarketing['id']) ? esc_attr($remarketing['id']) : "");
     }
 
 
-    function getAlertMessageAll(type = 'Success', title = 'Success', message = '', icon = 'success', buttonText = 'Done!', buttonColor = '#1967D2', iconImageTag = '') {
-        Swal.fire({
-            type: type,
-            icon: icon,
-            title: title,
-            confirmButtonText: buttonText,
-            confirmButtonColor: buttonColor,
-            text: message,
-        })
-        let swalContainer = Swal.getContainer();
-        jQuery(swalContainer).find('.swal2-icon-show').removeClass('swal2-' + icon).removeClass('swal2-icon')
-        jQuery('.swal2-icon-show').html(iconImageTag)
+    // Define all pixel values
+    $measurement_id = !empty($ee_options["gm_id"]) ? $ee_options["gm_id"] : "";
 
+    $gads_remarketing_id = "";
+    if (!empty($ee_options["gads_remarketing_id"])) {
+        $gads_remarketing_id = !empty($ee_options["gads_remarketing_id"]) ? $ee_options["gads_remarketing_id"] : "";
+    } else {
+        $gads_remarketing_id = $remarketing_snippet_id;
     }
-</script>
-
-<div aria-live="polite" aria-atomic="true" class="bg-dark position-relative bd-example-toasts">
-    <div id="convdynamictoast" class="toast-container position-absolute p-3 top-0 end-0" id="toastPlacement">
-        <div class="toast text-white bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">Oops</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div id="dynamictoastbody" class="toast-body"></div>
-        </div>
-    </div>
-</div>
 
 
+    $fb_pixel_id = !empty($ee_options["fb_pixel_id"]) ? $ee_options["fb_pixel_id"] : "";
+    $tiKtok_ads_pixel_id = !empty($ee_options["tiKtok_ads_pixel_id"]) ? $ee_options["tiKtok_ads_pixel_id"] : "";
+    $snapchat_ads_pixel_id = !empty($ee_options["snapchat_ads_pixel_id"]) ? $ee_options["snapchat_ads_pixel_id"] : "";
+    $pinterest_ads_pixel_id = !empty($ee_options["pinterest_ads_pixel_id"]) ? $ee_options["pinterest_ads_pixel_id"] : "";
+    $microsoft_ads_pixel_id = !empty($ee_options["microsoft_ads_pixel_id"]) ? $ee_options["microsoft_ads_pixel_id"] : "";
+    $msclarity_pixel_id = !empty($ee_options["msclarity_pixel_id"]) ? $ee_options["msclarity_pixel_id"] : "";
+    $linkedin_insight_id = !empty($ee_options["linkedin_insight_id"]) ? $ee_options["linkedin_insight_id"] : "";
+    $hotjar_pixel_id = !empty($ee_options["hotjar_pixel_id"]) ? $ee_options["hotjar_pixel_id"] : "";
+    $crazyegg_pixel_id = !empty($ee_options["crazyegg_pixel_id"]) ? $ee_options["crazyegg_pixel_id"] : "";
+    $twitter_ads_pixel_id = !empty($ee_options["twitter_ads_pixel_id"]) ? $ee_options["twitter_ads_pixel_id"] : "";
 
-<div id="convwizard_main" class="container container-old conv-container conv-setting-container">
-    <div class="row">
-
-        <?php
-        $g_email = (isset($tvc_data['g_mail']) && esc_attr($subscription_id)) ? esc_attr($tvc_data['g_mail']) : "";
-        if ($g_email === "") {
-        ?>
-            <div id="conwizwrapper" class="mx-auto mt-1" style="max-width: 1200px;">
-                <!-- CONWIZ -->
-                <div class="conwiz_slide-container">
-                    <div class="conwiz_progress-bar" id="conwiz_progress"></div>
-
-                    <!-- Google Auth Button + CTA -->
-                    <div class="conwiz_google-auth-row">
-                        <div class="google-auth-benefits">
-                            Track traffic, analyze behavior, and optimize with Google Analytics.
-                            <br> Connect your Google Account for insights, ads, and shopping sync - no setup hassle.
-                        </div>
-                        <a href="#" class="google-auth-btn-highlighted">
-                            <img class="rounded" src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
-                            <?php esc_html_e("Login with Google to Get Started", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </a>
-                    </div>
-
-                    <!-- SLIDER INNER WRAPPER -->
-                    <div class="conwiz_slide-inner">
-                        <!-- Left Panel -->
-                        <div class="conwiz_left-buttons">
-                            <div class="conwiz_slide-btn" data-index="0">
-                                <span><?php esc_html_e("Google Analytics", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                            </div>
-                            <div class="conwiz_slide-btn" data-index="1">
-                                <span><?php esc_html_e("Google Ads", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                            </div>
-                            <div class="conwiz_slide-btn" data-index="2">
-                                <span><?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                            </div>
-                            <div class="conwiz_slide-btn" data-index="3">
-                                <span><?php esc_html_e("Other Integrations", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                            </div>
-                        </div>
-
-                        <!-- Center Image -->
-                        <div class="conwiz_middle-image" id="conwiz_middle-section">
-                            <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/dashboardimages/conwiz_gaimage.png') ?>" id="conwiz_slide-image">
-                        </div>
-
-                        <!-- Right Text -->
-                        <div class="conwiz_right-text" id="conwiz_right-section">
-                            <h3 id="conwiz_slide-title">Google Analytics</h3>
-                            <div id="conwiz_slide-desc">
-                                <?php esc_html_e("Measure your website traffic, understand user behavior, and make data-driven decisions with GA4 integration.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        <?php } else { ?>
-
-            <!-- TABS Started -->
-            <div class="mx-auto convcard p-0 mt-0 rounded-3 shadow-lg mt-1" style="max-width: 1072px;">
-                <div id="loadingbar_blue" class="progress-materializecss d-none ps-2 pe-2 w-100 topfull_loader">
-                    <div class="indeterminate"></div>
-                </div>
-                <ul class="nav nav-tabs border-0 p-3 pb-0 w-100 pt-4" id="myTab" role="tablist">
-                    <li class="nav-item mb-0" role="presentation">
-                        <button class="d-inline-flex align-items-center pawizard_tab_but nav-link" id="webpixbox-tab" data-bs-toggle="tab" data-bs-target="#webpixbox" type="button" role="tab" aria-controls="webpixbox" aria-selected="false">
-                            <h5 class="text-start m-0 ps-1 d-flex align-items-center">
-                                <div class="convdott me-1"></div>
-                                <?php esc_html_e("Google Analytics", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </h5>
-                        </button>
-                    </li>
-
-                    <li class="nav-item mb-0" role="presentation">
-                        <button class="d-inline-flex align-items-center pawizard_tab_but nav-link" id="webotherbox-tab" data-bs-toggle="tab" data-bs-target="#webotherbox" type="button" role="tab" aria-controls="webotherbox" aria-selected="false">
-                            <h5 class="text-start m-0 ps-1 d-flex align-items-center">
-                                <div class="convdott d-none  me-1"></div>
-                                <?php esc_html_e("Other Pixels", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </h5>
-                        </button>
-                    </li>
-
-                </ul>
-
-                <div class="tab-content p-3 pt-0" id="myTabContent">
-                    <div class="tab-pane fade show active" id="webpixbox" role="tabpanel" aria-labelledby="webpixbox-tab">
-                        <?php require_once("wizardsettings/gasettings.php"); ?>
-                    </div>
-                    <div class="tab-pane fade" id="webotherbox" role="tabpanel" aria-labelledby="webotherbox-tab">
-                        <?php require_once("wizardsettings/otherpixsettings.php"); ?>
-                    </div>
-                </div>
-            </div>
-
-        <?php } ?>
+    // Helper function
+    function pixel_status($value)
+    {
+        return $value ? '<span class="pixel-status pixel-active">Active</span>' : '<span class="pixel-status pixel-inactive">Inactive</span>';
+    }
+    ?>
 
 
 
-    </div>
-</div>
+    <table id="convallpixel_table" class="form-table" role="presentation">
+        <tbody>
 
-
-<!-- Exit Wizard modal -->
-<div class="modal fade" id="exitwizardconvmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body p-3">
-                <p class="m-4 text-center h5"><?php esc_html_e("Are you sure you want to exit the setup?", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
-            </div>
-            <div class="modal-footer p-4">
-                <div class="m-auto">
-                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
-                        <?php esc_html_e("Continue Setup", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </button>
-                    <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics'); ?>" class="btn btn-primary">
-                        <?php esc_html_e("Exit Wizard", "enhanced-e-commerce-for-woocommerce-store"); ?>
+            <!-- Google Analytics -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Google Analytics
+                </th>
+                <td>
+                    <input type="text" name="measurement_id" id="measurement_id" class="regular-text" value="<?php echo esc_attr($measurement_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($measurement_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-your-ga4-measurement-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Exit wizard modal End -->
+                    <p class="description">The Google Analytics 4 Measurement ID looks similar to this: G-XXXXXXXXXX</p>
+                    <div id="enable_cid" class="pt-4 ps-2">
+                        <div class="row gagadsoptionbox p-3">
+                            <div class="col-12 m-auto text-end d-flex">
+                                <div class="form-check p-0 me-2">
+                                    <input class="form-check-input ms-auto float-end" type="checkbox" id="non_woo_tracking" name="non_woo_tracking" checked>
+                                </div>
+                                <label class="form-check-label fw-normal text-dark" for="non_woo_tracking">
+                                    Enable Recommended Events in GA4
+                                </label>
+                                <span class="dashicons dashicons-info text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Page scroll tracking, File download, Author tracking, SignUp, Login."></span>
+                            </div>
+                            <div class="col-12 m-auto text-end d-flex">
+                                <div class="form-check p-0 me-2">
+                                    <input class="form-check-input ms-auto float-end" type="checkbox" id="ga_cid" name="ga_cid" checked>
+                                </div>
+                                <label class="form-check-label fw-normal text-dark" for="ga_cid">
+                                    Enable client id and Enhance conversion in GA4 for better reporting
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
 
-<!-- Change GAuth modal -->
-<div class="modal fade" id="conv_wizchangeauth" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="conv_wizchangeauth" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center w-100 h5"><?php esc_html_e("Would you like to switch the Google account?", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
-            </div>
-            <div class="modal-body p-3">
-                <p class="m-4 text-center"><?php esc_html_e("This will reset your Google account for Google Analytics, Google Ads, and Google Merchant Center.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
-            </div>
-            <div class="modal-footer p-4">
-                <div class="m-auto">
-                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
-                        <?php esc_html_e("Continue Setup", "enhanced-e-commerce-for-woocommerce-store"); ?>
+            <!-- Google Ads -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Google Ads
+                </th>
+                <td>
+                    <input type="text" name="gads_remarketing_id" id="gads_remarketing_id" class="regular-text" value="<?php echo esc_attr($gads_remarketing_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($gads_remarketing_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/how-to-find-google-ads-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Google Ads remarketing ID looks similar to this: AW-XXXXXXXXX</p>
+                    <div class="pt-4 ps-2">
+                        <div class="row gagadsoptionbox p-3">
+                            <h5>Pro Feature</h5>
+                            <div class="col-12 m-auto text-end d-flex">
+                                <div class="form-check p-0 me-2">
+                                    <input class="ms-auto float-end disabled" readonly type="checkbox" checked>
+                                </div>
+                                <label class="form-check-label fw-normal text-dark">
+                                    Enable Google Ads conversion tracking for Purchase, AddtoCart & Checkout
+                                </label>
+                                <span class="dashicons dashicons-info text-primary ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Google Ads conversion tracking helps you see if people take action (like buying or signing up) after clicking your ad."></span>
+                            </div>
+                            <div class="col-12 m-auto text-end d-flex">
+                                <div class="form-check p-0 me-2">
+                                    <input class="ms-auto float-end disabled" readonly type="checkbox" checked>
+                                </div>
+                                <label class="form-check-label fw-normal text-dark">
+                                    Enable Google Ads Enhanced Conversion tracking
+                                </label>
+                                <span class="dashicons dashicons-info text-primary ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Google Ads Enhanced Conversion tracking improves accuracy by securely using customer data (like email or phone) to better track actions after ads."></span>
+                            </div>
+                            <a class="convfreetrialbut ms-3" style="float: right; width: auto;" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Facebook Pixel -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_fb_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Facebook Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="regular-text" value="<?php echo esc_attr($fb_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($fb_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-my-facebook-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Facebook Pixel ID looks similar to this: 123456789012345</p>
+                </td>
+            </tr>
+
+
+            <!-- Meta CAPI -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_fb_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Facebook Conversion API Token (FBCAPI)
+                </th>
+                <td>
+                    <input type="text" readonly class="regular-text">
+                    <span class="badge text-light rounded-pill probadgeconv">(Pro)</span>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-generate-facebook-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">
+                        Send events directly from your web server to Facebook through the Conversion API.
+                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                    </p>
+                </td>
+            </tr>
+
+            <!-- TikTok Pixel -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    TikTok Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="tiKtok_ads_pixel_id" id="tiKtok_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($tiKtok_ads_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($tiKtok_ads_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-tiktok-pixel-id-from-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The TikTok Pixel ID looks similar to this: C0ABCDE1234567890D12</p>
+                </td>
+            </tr>
+
+            <!-- Tiktok CAPI -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Tiktok Events API Token
+                </th>
+                <td>
+                    <input type="text" readonly class="regular-text">
+                    <span class="badge text-light rounded-pill probadgeconv">(Pro)</span>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-your-tiktok-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">
+                        Send events directly from your web server to Tiktok through the Events API.
+                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                    </p>
+                </td>
+            </tr>
+
+            <!-- Snapchat Pixel -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Snapchat Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="snapchat_ads_pixel_id" id="snapchat_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($snapchat_ads_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($snapchat_ads_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-the-snapchat-pixel-id-from-the-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Snapchat Pixel ID looks similar to this: abc12345-6789-def0-1234-56789abcdef0</p>
+                </td>
+            </tr>
+
+            <!-- Snapchat CAPI -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Snapchat Conversion API Token
+                </th>
+                <td>
+                    <input type="text" readonly class="regular-text">
+                    <span class="badge text-light rounded-pill probadgeconv">(Pro)</span>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-your-snapchat-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">
+                        Send events directly from your web server to Snapchat through the Conversion API.
+                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                    </p>
+                </td>
+            </tr>
+
+            <!-- Pinterest Pixel -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_pint_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Pinterest Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="pinterest_ads_pixel_id" id="pinterest_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($pinterest_ads_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($pinterest_ads_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-pinterest-pixel-id-from-a-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Pinterest tag ID looks similar to this: 2610194491234</p>
+                </td>
+            </tr>
+
+            <!-- Microsoft Ads -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_bing_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Microsoft Ads (Bing) Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="microsoft_ads_pixel_id" id="microsoft_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($microsoft_ads_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($microsoft_ads_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/set-up-microsoft-advertising-with-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Microsoft UET tag ID looks similar to this: 12345678</p>
+                </td>
+            </tr>
+
+            <!-- MS Clarity -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_clarity_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    MS Clarity Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id" class="regular-text" value="<?php echo esc_attr($msclarity_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($msclarity_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/set-up-microsoft-advertising-with-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The MS Clarity project ID looks similar to this: abcd1234</p>
+                </td>
+            </tr>
+
+            <!-- LinkedIn Insight -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_linkedin_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    LinkedIn Insight ID
+                </th>
+                <td>
+                    <input type="text" name="linkedin_insight_id" id="linkedin_insight_id" class="regular-text" value="<?php echo esc_attr($linkedin_insight_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($linkedin_insight_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://business.linkedin.com/marketing-solutions/insight-tag">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The LinkedIn insight ID looks similar to this: 123456</p>
+                </td>
+            </tr>
+
+            <!-- Hotjar Pixel -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_hotjar_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Hotjar Pixel
+                </th>
+                <td>
+                    <input type="text" name="hotjar_pixel_id" id="hotjar_pixel_id" class="regular-text" value="<?php echo esc_attr($hotjar_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($hotjar_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-a-hotjar-pixel-from-hotjar-business-manager/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Hotjar Site ID looks similar to this: 1234567</p>
+                </td>
+            </tr>
+
+            <!-- Twitter Pixel -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_twitter_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Twitter Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="twitter_ads_pixel_id" id="twitter_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($twitter_ads_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($twitter_ads_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-crazyegg-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Twitter Pixel ID looks similar to this: ocihv</p>
+                </td>
+            </tr>
+
+            <!-- Crazy Egg Pixel -->
+            <tr>
+                <th scope="row" style="vertical-align: top;">
+                    <?php echo wp_kses(
+                        enhancad_get_plugin_image('/admin/images/logos/conv_crazyegg_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
+                        ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
+                    ); ?>
+                    Crazy Egg Pixel ID
+                </th>
+                <td>
+                    <input type="text" name="crazyegg_pixel_id" id="crazyegg_pixel_id" class="regular-text" value="<?php echo esc_attr($crazyegg_pixel_id); ?>">
+                    <?php echo wp_kses_post(pixel_status($crazyegg_pixel_id)); ?>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-crazyegg-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                        <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
+                    </a>
+                    <p class="description">The Crazy Egg account ID looks similar to this: 12345678</p>
+                </td>
+            </tr>
+            <tr class="conv-sticky-save-row">
+                <td>
+                </td>
+                <td>
+                    <button id="convsaveallpixels" role="button" class="btn btn-primary px-5">
+                        <span class="spinner-border text-light spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <?php echo esc_html__('Save Settings', 'enhanced-e-commerce-for-woocommerce-store') ?>
                     </button>
-                    <button id="conv_wizauthbtn" type="button" class="btn btn-primary" style="bacground:#1967D2 !important">
-                        <?php esc_html_e("Switch Google Account", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+
+
 </div>
-<!-- Change GAuth modal End -->
+
+
 
 <!-- Modal -->
 <div class="modal fade" id="conv_wizfinish" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="conv_wizfinish" aria-hidden="true">
@@ -573,10 +568,7 @@ if (isset($google_detail->is_site_verified) === true) {
                 <div class="container-fluid">
                     <div class="row">
                         <div id="conv_wizfinish_right" class="col-12 py-3 px-4 text-center">
-                            <span class="material-symbols-outlined conv-success-check-big">
-                                check_circle
-                            </span>
-                            <h3 class="fw-light h2" style="color:#09bd3a;">Congratulations!!</h3>
+                            <h3 class="fw-light h2 pt-3" style="color:#09bd3a;">Congratulations!!</h3>
                             <h6>Your tracking is now live and data flowing in real time. <br> Reports and insights will be available within the next 24 hours.</h6>
                             <h6 class="mt-4">Stay connected & Follow us on social media to get product tips, updates & video tutorials.</h6>
                             <div class="d-flex justify-content-center my-4 convsocialicons">
@@ -641,9 +633,6 @@ if (isset($google_detail->is_site_verified) === true) {
                 </div>
             </div>
             <div class="modal-footer m-auto">
-                <a href="<?php echo esc_url('admin.php?page=conversios'); ?>" class="btn btn-primary">
-                    Goto Dashboard
-                </a>
                 <a href="<?php echo esc_url('admin.php?page=conversios-analytics-reports'); ?>" class="btn btn-primary">
                     Explore Reports
                 </a>
@@ -651,280 +640,90 @@ if (isset($google_detail->is_site_verified) === true) {
         </div>
     </div>
 </div>
-<!-- Google Sign In -->
-
-<?php
-$connect_url_gagads = $tvc_admin_helper->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios&wizard=pixelandanalytics_gasettings');
-$connect_url_gaa = $tvc_admin_helper->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios&wizard=pixelandanalytics_gasettings');
-$connect_url_gadss = $tvc_admin_helper->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios&wizard=pixelandanalytics_gadssettings');
-require_once ENHANCAD_PLUGIN_DIR . 'admin/partials/singlepixelsettings/googlesigninforga.php';
-?>
-
-
-<?php if ($g_email === "") { ?>
-    <script>
-        const conwiz_slides = [{
-                img: "<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/dashboardimages/conwiz_gaimage.png') ?>",
-                title: "Google Analytics",
-                desc: "Measure your website traffic, understand user behavior, and make data-driven decisions with GA4 integration."
-            },
-            {
-                img: "<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/dashboardimages/conwiz_gadsimage.png') ?>",
-                title: "Google Ads",
-                desc: "Create high-converting ads and maximize ROI by connecting your store with Google Ads."
-            },
-            {
-                img: "<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/dashboardimages/conwiz_gmcimage.png') ?>",
-                title: "Google Merchant Center",
-                desc: "Sync your product feed and show your products across Google Shopping and other surfaces."
-            },
-            {
-                img: "<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/dashboardimages/conwiz_allpixel1.png') ?>",
-                title: "All Other Pixels",
-                desc: "Sync your product feed and show your products across Google Shopping and other surfaces."
-            }
-        ];
-
-        let currentIndex = 0;
-        const totalSlides = conwiz_slides.length;
-        let autoSlideInterval;
-        let isHovered = false;
-
-        function updateSlide(index) {
-            jQuery('.conwiz_slide-btn')
-                .removeClass('conwiz_btn-purple conwiz_active');
-            jQuery('.conwiz_slide-btn[data-index="' + index + '"]')
-                .addClass('conwiz_active conwiz_btn-purple');
-            jQuery('#conwiz_slide-image').attr('src', conwiz_slides[index].img);
-            jQuery('#conwiz_slide-title').text(conwiz_slides[index].title);
-            jQuery('#conwiz_slide-desc').text(conwiz_slides[index].desc);
-
-            const progress = document.getElementById('conwiz_progress');
-            progress.style.animation = 'none';
-            void progress.offsetWidth;
-            progress.style.animation = null;
-            progress.style.animation = 'progressSlide 10s linear forwards';
-        }
-
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(() => {
-                if (!isHovered) {
-                    currentIndex = (currentIndex + 1) % totalSlides;
-                    updateSlide(currentIndex);
-                }
-            }, 10000);
-        }
-
-        function resetAutoSlide() {
-            clearInterval(autoSlideInterval);
-            startAutoSlide();
-        }
-
-        jQuery(document).ready(function() {
-            jQuery('.conwiz_slide-btn').click(function() {
-                currentIndex = jQuery(this).data('index');
-                updateSlide(currentIndex);
-                resetAutoSlide();
-            });
-
-            jQuery('.conwiz_slide-btn')
-                .on('mouseenter', function() {
-                    isHovered = true;
-                    const progress = document.getElementById('conwiz_progress');
-                    if (progress) {
-                        progress.style.animationPlayState = 'paused';
-                    }
-                })
-                .on('mouseleave', function() {
-                    isHovered = false;
-                    const progress = document.getElementById('conwiz_progress');
-                    if (progress) {
-                        progress.style.animationPlayState = 'running';
-                    }
-                });
-            updateSlide(currentIndex);
-            startAutoSlide();
-        });
-    </script>
-<?php } ?>
-
-
 
 <script>
-    function changeTabBox(tbaname = "webpixbox-tab") {
-        console.log(tbaname);
-        jQuery("#" + tbaname).tab('show');
-    }
-
-    jQuery(function() {
-        <?php if (!isset($_GET['wizard_channel'])) { ?>
-            var conv_onboarding_done_step = "<?php echo esc_js($conv_onboarding_done_step) ?>";
-            //console.log(conv_onboarding_done_step);
-            if (conv_onboarding_done_step == 1) {
-                changeTabBox("webpixbox-tab");
-            }
-            if (conv_onboarding_done_step == 2) {
-                changeTabBox("webadsbox-tab");
-            }
-            if (conv_onboarding_done_step == 3) {
-                changeTabBox("webgmcbox-tab");
-            }
-            if (conv_onboarding_done_step == 4) {
-                changeTabBox("webfbbox-tab");
-            }
-            if (conv_onboarding_done_step == 5 || conv_onboarding_done_step == 6) {
-                changeTabBox("webotherbox-tab");
-            }
-        <?php } ?>
-
-        <?php if ($cust_g_email == "") { ?>
-            jQuery("#save_gahotclcr, #save_gads_finish").addClass("disabledsection");
-        <?php } ?>
-
-        if (jQuery("#ga4_property_id").val() == "") {
-            jQuery("#save_gahotclcr").addClass("disabledsection");
-        }
-
-        jQuery(document).on("click", "#conv_wizauthbtn", function() {
-            jQuery("#conv_wizchangeauth").modal("hide");
-            jQuery(".tvc_google_signinbtn_ga").click();
-        });
-
-        jQuery(document).on("click", ".conv_change_gauth", function() {
-            jQuery("#conv_wizchangeauth").modal("show");
-            //changeTabBox("webpixbox-tab");
-        });
-
-        var conv_bodywid = jQuery("body").outerWidth();
-        // if (conv_bodywid <= 1367) {
-        //     jQuery("#conv_wizfinish .modal-dialog").removeClass("modal-dialog-centered");
-        // } else {
-        //     jQuery("#conv_wizfinish .modal-dialog").addClass("modal-dialog-centered");
-        // }
-
-        var tabhash = location.hash.replace(/^#/, ''); // ^ means starting, meaning only match the first hash
-        if (tabhash) {
-            changeTabBox(tabhash);
-        }
-        <?php if (isset($_GET['wizard_channel']) && $_GET['wizard_channel'] == "gtmsettings") { ?>
-            changeTabBox("webpixbox-tab");
-        <?php } else if (isset($_GET['wizard_channel']) && $_GET['wizard_channel'] == "gasettings") { ?>
-            changeTabBox("webpixbox-tab");
-        <?php } else if (isset($_GET['wizard_channel']) && $_GET['wizard_channel'] == "gadssettings") { ?>
-            changeTabBox("webadsbox-tab");
-        <?php } else if ($conv_onboarding_done_step == "") { ?>
-            changeTabBox("webpixbox-tab");
-        <?php } ?>
-
-        jQuery(".conv-enable-selection_comman").click(function() {
-            jQuery(this).parent().find("input").removeAttr("readonly")
-            jQuery(this).parent().find("textarea").removeAttr("readonly")
-        });
-
-        //For tooltip
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-        jQuery(".gtmautotabs button").click(function() {
-            if (jQuery("#nav-automatic-tab").hasClass('active')) {
-                is_gtm_automatic_process = true;
-            } else {
-                is_gtm_automatic_process = false;
-            }
-        });
-        jQuery('#convdynamictoast').on('hide.bs.modal', function() {
-            jQuery("#dynamictoastbody").html("");
-        });
-
-        jQuery(".event-setting-row").addClass("disabledsection");
-
-        jQuery(".event-setting-row").each(function() {
-            jQuery(this).find(".item").each(function() {
-                let inpid = jQuery(this).find("input").attr("id");
-                jQuery(this).find("label").attr("for", inpid);
+    document.addEventListener('DOMContentLoaded', function() {
+        const proBadge = document.querySelectorAll('.probadgeconv');
+        proBadge.forEach(el => {
+            el.addEventListener('click', function() {
+                window.open('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizardbadge&utm_campaign=freetopro', '_blank');
             });
         });
+    });
 
-        jQuery(".col-md-4 span[data-bs-toggle='tooltip']").addClass("d-flex align-items-center");
+    jQuery(function() {
+        jQuery("#navbarSupportedContent ul li").removeClass("rich-blue");
+        jQuery('#navbarSupportedContent ul > li').eq(1).addClass('rich-blue');
 
-        jQuery('#starttrackingbut_wizard').click(function() {
-            jQuery('#starttrackingbut_wizard').addClass('convdisabledbox');
-            var ecrandomstring = "<?php echo esc_js($tvc_admin_helper->generateRandomStringConv()); ?>";
-            var subscription_id = "<?php echo esc_js($subscription_id); ?>";
-            var fronturl = '<?php echo esc_url(site_url()); ?>?is_calc_on=1&ec_token=' + ecrandomstring;
-            // console.log(fronturl);
+        jQuery(document).on("click", "#convsaveallpixels", function() {
+            jQuery(this).addClass('disabled');
+            jQuery(this).find(".spinner-border").removeClass('d-none');
+            var selected_vals = {};
+            selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
+
+            selected_vals["tracking_option"] = "GA4";
+            selected_vals["property_id"] = jQuery("#measurement_id").val();
+            selected_vals["measurement_id"] = jQuery("#measurement_id").val();
+
+            selected_vals["ga_cid"] = document.getElementById('ga_cid').checked ? "1" : "0";
+            selected_vals["non_woo_tracking"] = document.getElementById('non_woo_tracking').checked ? "1" : "0";
+
+            selected_vals["cov_remarketing"] = "0";
+            if (jQuery("#gads_remarketing_id").val()) {
+                selected_vals["cov_remarketing"] = "1";
+            }
+
+            selected_vals["gads_remarketing_id"] = jQuery("#gads_remarketing_id").val();
+            selected_vals["fb_pixel_id"] = jQuery("#fb_pixel_id").val();
+            selected_vals["tiKtok_ads_pixel_id"] = jQuery("#tiKtok_ads_pixel_id").val();
+            selected_vals["snapchat_ads_pixel_id"] = jQuery("#snapchat_ads_pixel_id").val();
+            selected_vals["pinterest_ads_pixel_id"] = jQuery("#pinterest_ads_pixel_id").val();
+            selected_vals["microsoft_ads_pixel_id"] = jQuery("#microsoft_ads_pixel_id").val();
+            selected_vals["msclarity_pixel_id"] = jQuery("#msclarity_pixel_id").val();
+            selected_vals["linkedin_insight_id"] = jQuery("#linkedin_insight_id").val();
+            selected_vals["hotjar_pixel_id"] = jQuery("#hotjar_pixel_id").val();
+            selected_vals["crazyegg_pixel_id"] = jQuery("#crazyegg_pixel_id").val();
+            selected_vals["twitter_ads_pixel_id"] = jQuery("#twitter_ads_pixel_id").val();
+            selected_vals["conv_onboarding_done_step"] = "<?php echo esc_js("6"); ?>";
+            selected_vals["conv_onboarding_done"] = "<?php echo esc_js(gmdate('Y-m-d H:i:s')) ?>";
+            //console.log(selected_vals)
+
             jQuery.ajax({
                 type: "POST",
                 dataType: "json",
                 url: tvc_ajax_url,
                 data: {
-                    action: "conv_create_ec_row",
-                    pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
-                    ecrandomstring: ecrandomstring,
-                    subscription_id: subscription_id
+                    action: "conv_save_pixel_data",
+                    pix_sav_nonce: "<?php echo esc_html(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                    conv_options_data: selected_vals,
+                    conv_options_type: ["eeoptions", "eeapidata", "middleware"],
                 },
                 success: function(response) {
-                    window.open(fronturl, '_blank');
-                    location.href = "<?php echo esc_url('admin.php?page=conversios'); ?>";
+                    jQuery(this).find(".spinner-border").addClass('d-none');
+                    jQuery("#conv_wizfinish").modal("show");
                 }
             });
         });
+    });
 
-        jQuery('.pawizard_tab_but').on('shown.bs.tab', function(e) {
-            var activeTabId = jQuery(e.target).attr('id');
-            if (activeTabId === 'webpixbox-tab') {
-                jQuery('#convwizard_main .tab-content > .active').css('border-radius', '0px 15px 15px 15px');
-            } else {
-                jQuery('#convwizard_main .tab-content > .active').css('border-radius', '15px');
-            }
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('#convallpixel_table input[type="text"]');
 
-            jQuery(".convexitwizard").removeClass('d-none');
-            jQuery(".convdott").addClass('d-none');
-            jQuery(".pawizard_tab_but.active .convdott").removeClass('d-none');
-
-            if (jQuery("#ga4_property_id").val() == "") {
-                jQuery("#link_google_analytics_with_google_ads").attr("disabled", true);
-                jQuery("#save_gahotclcr").addClass('disabledsection');
-            }
-
-            if (jQuery("#google_ads_id").val() == "") {
-                jQuery("#save_gads_finish").addClass('disabledsection');
-            }
-
-        });
-
-        jQuery(document).on("change", "#google_ads_id", function() {
-            var remarketing_tags = '<?php echo isset($google_detail->remarketing_tags) ? esc_js($google_detail->remarketing_tags) : "notset"; ?>';
-            var dynamic_remarketing_tags = '<?php echo isset($google_detail->dynamic_remarketing_tags) ? esc_js($google_detail->dynamic_remarketing_tags) : "notset"; ?>';
-            var link_google_analytics_with_google_ads = '<?php echo isset($google_detail->link_google_analytics_with_google_ads) ? esc_js($google_detail->link_google_analytics_with_google_ads) : "notset"; ?>';
-            jQuery("#remarketing_tags").prop('checked', true);
-            jQuery("#dynamic_remarketing_tags").prop('checked', true);
-
-            if (jQuery("#ga4_property_id").val() != "") {
-                jQuery("#link_google_analytics_with_google_ads").removeAttr("disabled");
-                jQuery("#link_google_analytics_with_google_ads").prop('checked', true);
-            }
-        });
-
-        jQuery(document).on("click", "#ads-continue-close", function() {
-            jQuery("#gadsConversionAcco .accordion-body").removeClass("disabledsection");
-            if (jQuery("#ga4_property_id").val() == "") {
-                jQuery("#link_google_analytics_with_google_ads").attr("disabled", true);
-                jQuery("#ga_GMC").attr("disabled", true);
-            } else {
-                jQuery("#link_google_analytics_with_google_ads").removeClass("disabled");
-                jQuery("#ga_GMC").removeClass("disabled");
-
-                jQuery("#remarketing_tags").prop('checked', true);
-                jQuery("#dynamic_remarketing_tags").prop('checked', true);
-
-                if (jQuery("#ga4_property_id").val() != "") {
-                    jQuery("#link_google_analytics_with_google_ads").removeAttr("disabled");
-                    jQuery("#link_google_analytics_with_google_ads").prop('checked', true);
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const statusSpan = this.parentElement.querySelector('.pixel-status');
+                if (statusSpan) {
+                    if (this.value.trim()) {
+                        statusSpan.classList.remove('pixel-inactive');
+                        statusSpan.classList.add('pixel-active');
+                        statusSpan.textContent = 'Active';
+                    } else {
+                        statusSpan.classList.remove('pixel-active');
+                        statusSpan.classList.add('pixel-inactive');
+                        statusSpan.textContent = 'Inactive';
+                    }
                 }
-            }
+            });
         });
-
     });
 </script>

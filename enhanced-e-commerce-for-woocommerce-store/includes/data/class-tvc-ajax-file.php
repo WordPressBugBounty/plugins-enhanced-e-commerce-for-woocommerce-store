@@ -104,9 +104,9 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('wp_ajax_conv_send_email', array($this, 'conv_send_email'));
       //add_action('wp_ajax_conv_convnewfeaturemodal_ajax', array($this, 'conv_convnewfeaturemodal_ajax'));
       add_action('wp_ajax_convert_budget_to_local_currency', [$this, 'convert_budget_to_local_currency']);
-      require_once(ENHANCAD_PLUGIN_DIR . 'admin/partials/customermatch/export.php');
-      $exporter = new Conv_Exporter();
-      add_action('wp_ajax_conv_export_users_csv', array($exporter, 'conv_export_users_csv'));
+      // require_once(ENHANCAD_PLUGIN_DIR . 'admin/partials/customermatch/export.php');
+      // $exporter = new Conv_Exporter();
+      //add_action('wp_ajax_conv_export_users_csv', array($exporter, 'conv_export_users_csv'));
     }
 
     public function conv_create_ec_row()
@@ -346,7 +346,7 @@ if (!class_exists('TVC_Ajax_File')) :
           $serialized_data = maybe_serialize($updated_data);
           update_option('ee_options', $serialized_data);
         }
-        if ( (isset($_POST['conv_options_data']['non_woo_tracking']) || isset($_POST['conv_options_data']['conv_track_page_scroll']) || isset($_POST['conv_options_data']['conv_track_file_download']) || isset($_POST['conv_options_data']['conv_track_author']) || isset($_POST['conv_options_data']['conv_track_signup']) || isset($_POST['conv_options_data']['conv_track_signin'])) ) {
+        if ((isset($_POST['conv_options_data']['non_woo_tracking']) || isset($_POST['conv_options_data']['conv_track_page_scroll']) || isset($_POST['conv_options_data']['conv_track_file_download']) || isset($_POST['conv_options_data']['conv_track_author']) || isset($_POST['conv_options_data']['conv_track_signup']) || isset($_POST['conv_options_data']['conv_track_signin']))) {
           $data = array();
           $data['conv_track_page_scroll'] = '1';
           $data['conv_track_file_download'] = '1';
@@ -1931,29 +1931,22 @@ if (!class_exists('TVC_Ajax_File')) :
      */
     public function ee_delete_feed_gmc()
     {
-      $nonce = filter_input(INPUT_POST, 'conv_onboarding_nonce', FILTER_UNSAFE_RAW);
-
-      if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
+      if (isset($_POST['conv_onboarding_nonce']) && wp_verify_nonce($_POST['conv_onboarding_nonce'], 'conv_onboarding_nonce')) {
         $CONV_Admin_DB_Helper = new TVC_Admin_DB_Helper();
-        if (isset($_POST['feed_id'])) {
-          $where = '`id` = ' . esc_sql(sanitize_text_field(wp_unslash($_POST['feed_id'])));
-        } else {
-          echo wp_json_encode(array("error" => true, "message" => esc_html__("Id is missing.", "enhanced-e-commerce-for-woocommerce-store")));
-          exit;
-        }
-        $filed = array('exclude_product', 'status', 'include_product', 'total_product');
+        $where = 'id = ' . esc_sql(sanitize_text_field($_POST['feed_id']));
+        $filed = array('exclude_product', 'status', 'include_product', 'total_product', 'product_id_prefix', 'tiktok_catalog_id');
         $result = $CONV_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
         $totProdRem = $result[0]['total_product'] - 1;
-        if (isset($result[0]['exclude_product']) && $result[0]['exclude_product'] != '' && isset($_POST['product_ids']) && $_POST['product_ids'] != '') {
-          $allExclude = $result[0]['exclude_product'] . ',' . sanitize_text_field(wp_unslash($_POST['product_ids']));
+        if ($result[0]['exclude_product'] != '' && $_POST['product_ids'] != '') {
+          $allExclude = $result[0]['exclude_product'] . ',' . trim(str_replace($result[0]['product_id_prefix'], '', sanitize_text_field($_POST['product_ids'])));
           $profile_data = array(
             'exclude_product' => esc_sql($allExclude),
             'total_product' => $totProdRem >= 0 ? $totProdRem : 0,
           );
-          $CONV_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => sanitize_text_field(wp_unslash($_POST['feed_id']))));
-        } else if (isset($result[0]['include_product']) && $result[0]['include_product'] != '' && isset($_POST['product_ids']) && $_POST['product_ids'] != '') {
+          $CONV_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => sanitize_text_field($_POST['feed_id'])));
+        } else if ($result[0]['include_product'] != '' && $_POST['product_ids'] != '') {
           $include_product = explode(',', $result[0]['include_product']);
-          if (($key = array_search($_POST['product_ids'], $include_product)) !== false) {
+          if (($key = array_search(trim(str_replace($result[0]['product_id_prefix'], '', sanitize_text_field($_POST['product_ids']))), $include_product)) !== false) {
             unset($include_product[$key]);
           }
           $all_include = implode(',', $include_product);
@@ -1961,33 +1954,56 @@ if (!class_exists('TVC_Ajax_File')) :
             'include_product' => esc_sql($all_include),
             'total_product' => $totProdRem >= 0 ? $totProdRem : 0,
           );
-          $CONV_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => sanitize_text_field(wp_unslash($_POST['feed_id']))));
+          $CONV_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => sanitize_text_field($_POST['feed_id'])));
         } else {
           $profile_data = array(
-            'exclude_product' => isset($_POST['product_ids']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['product_ids']))) : '',
+            'exclude_product' => esc_sql(trim(str_replace($result[0]['product_id_prefix'], '', sanitize_text_field($_POST['product_ids'])))),
             'total_product' => $totProdRem >= 0 ? $totProdRem : 0,
           );
-          $CONV_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => sanitize_text_field(wp_unslash($_POST['feed_id']))));
+          $CONV_Admin_DB_Helper->tvc_update_row("ee_product_feed", $profile_data, array("id" => sanitize_text_field($_POST['feed_id'])));
         }
-
         $CONV_Admin_Helper = new TVC_Admin_Helper();
         $google_detail = $CONV_Admin_Helper->get_ee_options_data();
         $merchantId = $CONV_Admin_Helper->get_merchantId();
+
+        $microsoft_catalog_id = '';
+        $fb_catalog_id = '';
+        $tiktok_catalog_id = '';
+
         $data = array(
-          "merchant_id" => $merchantId,
-          "store_id" => $google_detail['setting']->store_id,
-          "store_feed_id" => isset($_POST['feed_id']) ? sanitize_text_field(wp_unslash($_POST['feed_id'])) : '',
-          "product_ids" => isset($_POST['product_ids']) ? sanitize_text_field(wp_unslash($_POST['product_ids'])) : ''
+          "merchant_id"     => $merchantId,
+          "store_id"        => $google_detail['setting']->store_id,
+          "store_feed_id"   => sanitize_text_field($_POST['feed_id']),
+          "product_ids"     => sanitize_text_field($_POST['product_ids'])
         );
+        if (!empty($result[0]) && isset($result[0]['tiktok_catalog_id'])) {
+          $tiktok_catalog_id = sanitize_text_field($result[0]['tiktok_catalog_id']);
+        }
+        $tvc_admin_helper = new TVC_Admin_Helper();
+        $ee_options = $tvc_admin_helper->get_ee_options_settings();
+        if (!empty($ee_options['ms_catalog_id'])) {
+          $microsoft_catalog_id = esc_html($ee_options['ms_catalog_id']);
+        }
+        $subscriptionId = $tvc_admin_helper->get_subscriptionId();
+        $customApiObj = new CustomApi();
+        $googledetail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
+        if (!empty($googledetail->data->facebook_setting->fb_catalog_id)) {
+          $fb_catalog_id = sanitize_text_field($googledetail->data->facebook_setting->fb_catalog_id);
+        }
+        $tiktok_business_id = isset($ee_options['tiktok_setting']['tiktok_business_id']) ? $ee_options['tiktok_setting']['tiktok_business_id'] : '';
+        $data['tiktok_catalog_id'] = $tiktok_catalog_id;
+        $data['tiktok_business_id'] = $tiktok_business_id;
+        $data['ms_catalog_id']     = $microsoft_catalog_id;
+        $data['catalog_id']     = $fb_catalog_id;
         /**
          * Api Call to delete product from GMC
          */
         $convCustomApi = new CustomApi();
         $response = $convCustomApi->delete_from_channels($data);
-        echo wp_json_encode($response);
+        echo json_encode($response);
         exit;
       } else {
-        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+        echo json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
       }
       exit;
     }
