@@ -91,10 +91,15 @@ $data = unserialize(get_option('ee_options'));
 
 <!-- Main row -->
 <div class="px-50 pt-4 conv-heading-box-no">
-    <h3 class="m-0">Product Feed Channels</h3>
-    <div class="h6 alert alert-success p-2 m-0 mt-2 fw-light text-dark">
-        <?php esc_html_e("Automated, real-time API-based product feeds ensure the highest product approval rates,", "enhanced-e-commerce-for-woocommerce-store"); ?>
-        <?php esc_html_e("enhancing online campaign optimization across Google, Facebook, and TikTok.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+    <h3 class="m-0">
+        <?php esc_html_e("Product Feed Channels", "enhanced-e-commerce-for-woocommerce-store"); ?>
+    </h3>
+
+    <div class="h6 alert p-2 m-0 mt-2 fw-light text-dark" style="background: #ccedfd">
+        <?php esc_html_e("Free plan supports 100 products. Upgrade to Pro for unlimited product feeds.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+        <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedchannellist&utm_campaign=undertitle" class="bg-white btn btn-outline-primary btn-sm fw-normal ms-3">
+            Start 15 days trial
+        </a>
     </div>
 </div>
 <div id="conv_grid_list_box" class="row px-50 conv-pixel-list-item justify-content-center pt-1 p-3" style="--bs-gutter-x: 0rem;">
@@ -117,7 +122,7 @@ $data = unserialize(get_option('ee_options'));
                         )
                     ); ?>
                     <div>
-                        <span class="fw-bold fs-4 ms-2 pixel-title"> Google </span>
+                        <span class="fw-bold fs-5 ms-2 pixel-title"> Google </span>
                         <br><span class="ms-2"> Merchant Center </span>
                     </div>
                 </div>
@@ -149,7 +154,7 @@ $data = unserialize(get_option('ee_options'));
                 <div class="d-flex align-items-center">
                     <img class="align-self-center" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" />
                     <div>
-                        <span class="fw-bold fs-4 ms-2 pixel-title"> Microsoft </span>
+                        <span class="fw-bold fs-5 ms-2 pixel-title"> Microsoft </span>
                         <br><span class="ms-2"> Merchant Center </span>
                     </div>
                 </div>
@@ -189,8 +194,8 @@ $data = unserialize(get_option('ee_options'));
                             ),
                         )
                     ); ?>
-                   <div>
-                        <span class="fw-bold fs-4 ms-2 pixel-title"> Tiktok </span>
+                    <div>
+                        <span class="fw-bold fs-5 ms-2 pixel-title"> Tiktok </span>
                         <br><span class="ms-2"> Catalog</span>
                     </div>
                 </div>
@@ -229,8 +234,8 @@ $data = unserialize(get_option('ee_options'));
                             ),
                         )
                     ); ?>
-                     <div>
-                        <span class="fw-bold fs-4 ms-2 pixel-title"> Facebook (Meta) </span>
+                    <div>
+                        <span class="fw-bold fs-5 ms-2 pixel-title"> Facebook (Meta) </span>
                         <br><span class="ms-2"> Catalog</span>
                     </div>
                 </div>
@@ -759,14 +764,19 @@ $data = unserialize(get_option('ee_options'));
                             <label for="" class="col-form-label fs-14 fw-400">
                                 <?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
-                            <span>
-                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup&plugin_name=aio">
-                                    <b>
-                                        Upgrade To Pro
-                                    </b>
-                                </a>
-                            </span>
                         </div>
+
+                        <div class="col-12 d-flex my-3 p-2 justify-content-between align-items-center" style="background: #ccedfd;">
+                            <div>
+                                Upgrade to Pro for Daily product sync.
+                            </div>
+                            <div>
+                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=createfeed&utm_campaign=dailysync&plugin_name=aio" class="bg-white btn btn-outline-primary btn-sm fw-normal ms-3">
+                                    Start 15 days trial
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="mb-3 row">
                         <div class="col-5">

@@ -67,9 +67,9 @@ if (class_exists('Conversios_Header') === FALSE) {
 				<div id="conversioshead_notice" class="promobandtop">
 					<div class="d-flex justify-content-center fixedcontainer_conversios_notice align-items-center">
 						<div class="promoleft">
-							<div class="promobandmsg text-white text-center fs-6 d-flex align-items-center">
-								<div class="text-white h5 mb-0 fw-normal">
-									☀️ Catch the hottest WooCommerce deal of the season, <span style="color: yellow;">60% OFF</span> using code <span style="color: yellow;">Summer25</span>
+							<div class="promobandmsg text-center fs-6 d-flex align-items-center">
+								<div class="h5 mb-0 fw-normal">
+									Celebrate Independence with <span style="color: #ff0000;">65% Savings</span> using code <span style="color: #ff0000;">Independence15</span>
 									<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn btn-sm text-white fw-normal ms-3" style="background: #07BB4F">Buy Now</a>
 								</div>
 							</div>

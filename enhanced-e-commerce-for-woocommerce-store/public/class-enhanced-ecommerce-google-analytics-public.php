@@ -745,7 +745,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
         }
 
         $dataLayer["ecommerce"]["transaction_id"] = (isset($con_ordered_item_list["transaction_id"])) ? $con_ordered_item_list["transaction_id"] : "";
-        $dataLayer["ecommerce"]["value"] = round($trans_val, 2);
+        $dataLayer["ecommerce"]["value"] = is_numeric($trans_val) ? round((float)$trans_val, 2) : 0;
         $dataLayer["ecommerce"]["affiliation"] = (isset($con_ordered_item_list["affiliation"])) ? $con_ordered_item_list["affiliation"] : "";
         $dataLayer["ecommerce"]["tax"] = (isset($con_ordered_item_list["tax"])) ? (float) $con_ordered_item_list["tax"] : "";
         $dataLayer["ecommerce"]["shipping"] = (isset($con_ordered_item_list["shipping"])) ? (float) $con_ordered_item_list["shipping"] : "";

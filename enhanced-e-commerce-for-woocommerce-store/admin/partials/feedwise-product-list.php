@@ -2122,11 +2122,12 @@ $conv_data['subscription_id'] = $googleDetail->id;
                         jQuery('#conv_save_error_txt').html('')
                         jQuery('.errorText').text('Notice');
 
-                        var upgradetopro = '<a class="btn btn-soft-primary pointer upgrade__btn" target="_blank" href="https://www.conversios.io/pricing?utm_source=aiopro&utm_medium=pfmlimitpopup&utm_campaign=upgrade&plugin_name=aiofree">Upgrade to Professional</a>';
+      
+                        var upgradetopro = '<a class="btn btn-soft-primary pointer upgrade__btn" target="_blank" href="https://www.conversios.io/pricing?utm_source=woo_aiofree_plugin&utm_medium=pfmlimitpopup&utm_campaign=upgrade&plugin_name=aio">Upgrade to Professional</a>';
                         var closebtn = '<button class="btn conv-yellow-bg m-auto text-white" data-bs-dismiss="modal">Close</button>';
-                        jQuery('.errorFooter').html(upgradetopro + closebtn);
+                        jQuery('.errorFooter').html(upgradetopro);
 
-                        jQuery('#conv_save_error_txt').html('According to your plan, the maximum limit for syncing products is 100');
+                        jQuery('#conv_save_error_txt').html('Your free plan allows syncing up to 100 products only. <br> Upgrade to sync your entire catalog.');
 
                         jQuery('#conv_save_error_modal').modal('show')
                         return false;

@@ -207,7 +207,7 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_ganalytics_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Google Analytics
+                    <?php esc_html_e("Google Analytics", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="measurement_id" id="measurement_id" class="regular-text" value="<?php echo esc_attr($measurement_id); ?>">
@@ -215,26 +215,33 @@ if ('' != $subscription_id) {
                     <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-your-ga4-measurement-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Google Analytics 4 Measurement ID looks similar to this: G-XXXXXXXXXX</p>
-                    <div id="enable_cid" class="pt-4 ps-2">
+                    <p class="description">
+                        <?php esc_html_e("The Google Analytics 4 Measurement ID looks similar to this: G-XXXXXXXXXX", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
+                    <div class="pt-4 ps-2">
                         <div class="row gagadsoptionbox p-3">
+                            <h5>Pro Feature</h5>
                             <div class="col-12 m-auto text-end d-flex">
                                 <div class="form-check p-0 me-2">
-                                    <input class="form-check-input ms-auto float-end" type="checkbox" id="non_woo_tracking" name="non_woo_tracking" checked>
+                                    <input class="ms-auto float-end disabled" readonly type="checkbox" checked>
                                 </div>
-                                <label class="form-check-label fw-normal text-dark" for="non_woo_tracking">
-                                    Enable Recommended Events in GA4
+                                <label class="form-check-label fw-normal text-dark">
+                                    <?php esc_html_e("Fully compliant Consent Mode v2 via pre-configured GTM", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </label>
-                                <span class="dashicons dashicons-info text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Page scroll tracking, File download, Author tracking, SignUp, Login."></span>
+                                <span class="dashicons dashicons-info text-primary ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Get a fully pre-configured GTM setup that automatically handles Consent Mode v2 — ensuring tags fire only based on the user’s consent choices, keeping your site privacy-compliant"></span>
                             </div>
                             <div class="col-12 m-auto text-end d-flex">
                                 <div class="form-check p-0 me-2">
-                                    <input class="form-check-input ms-auto float-end" type="checkbox" id="ga_cid" name="ga_cid" checked>
+                                    <input class="ms-auto float-end disabled" readonly type="checkbox" checked>
                                 </div>
-                                <label class="form-check-label fw-normal text-dark" for="ga_cid">
-                                    Enable client id and Enhance conversion in GA4 for better reporting
+                                <label class="form-check-label fw-normal text-dark">
+                                    <?php esc_html_e("Connect your GTM with ready-made eCommerce setup from plugins", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </label>
+                                <span class="dashicons dashicons-info text-primary ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Easily integrate your own GTM container with the plugin's pre-built tags, triggers, and variables for complete eCommerce event tracking — no manual setup needed."></span>
                             </div>
+                            <a class="convfreetrialbut ms-3" style="float: right; width: auto;" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=GA4v2consent">
+                                <?php esc_html_e("Start 15 days trial", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </a>
                         </div>
                     </div>
                 </td>
@@ -247,7 +254,7 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_gads_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Google Ads
+                    <?php esc_html_e("Google Ads", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="gads_remarketing_id" id="gads_remarketing_id" class="regular-text" value="<?php echo esc_attr($gads_remarketing_id); ?>">
@@ -255,16 +262,20 @@ if ('' != $subscription_id) {
                     <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/how-to-find-google-ads-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Google Ads remarketing ID looks similar to this: AW-XXXXXXXXX</p>
+                    <p class="description">
+                        <?php esc_html_e("The Google Ads remarketing ID looks similar to this: AW-XXXXXXXXX", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                     <div class="pt-4 ps-2">
                         <div class="row gagadsoptionbox p-3">
-                            <h5>Pro Feature</h5>
+                            <h5>
+                                <?php esc_html_e("Pro Feature", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </h5>
                             <div class="col-12 m-auto text-end d-flex">
                                 <div class="form-check p-0 me-2">
                                     <input class="ms-auto float-end disabled" readonly type="checkbox" checked>
                                 </div>
                                 <label class="form-check-label fw-normal text-dark">
-                                    Enable Google Ads conversion tracking for Purchase, AddtoCart & Checkout
+                                    <?php esc_html_e("Enable Google Ads conversion tracking for Purchase, AddtoCart & Checkout", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </label>
                                 <span class="dashicons dashicons-info text-primary ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Google Ads conversion tracking helps you see if people take action (like buying or signing up) after clicking your ad."></span>
                             </div>
@@ -273,11 +284,13 @@ if ('' != $subscription_id) {
                                     <input class="ms-auto float-end disabled" readonly type="checkbox" checked>
                                 </div>
                                 <label class="form-check-label fw-normal text-dark">
-                                    Enable Google Ads Enhanced Conversion tracking
+                                    <?php esc_html_e("Enable Google Ads Enhanced Conversion tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </label>
                                 <span class="dashicons dashicons-info text-primary ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Google Ads Enhanced Conversion tracking improves accuracy by securely using customer data (like email or phone) to better track actions after ads."></span>
                             </div>
-                            <a class="convfreetrialbut ms-3" style="float: right; width: auto;" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                            <a class="convfreetrialbut ms-3" style="float: right; width: auto;" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=GadsConversion">
+                                <?php esc_html_e("Start 15 days trial", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </a>
                         </div>
                     </div>
                 </td>
@@ -290,15 +303,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_fb_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Facebook Pixel ID
+                    <?php esc_html_e("Facebook Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="fb_pixel_id" id="fb_pixel_id" class="regular-text" value="<?php echo esc_attr($fb_pixel_id); ?>">
                     <?php echo wp_kses_post(pixel_status($fb_pixel_id)); ?>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-my-facebook-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/how-to-find-google-ads-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Facebook Pixel ID looks similar to this: 123456789012345</p>
+                    <p class="description">
+                        <?php esc_html_e("The Facebook Pixel ID looks similar to this: 123456789012345", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -310,17 +325,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_fb_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Facebook Conversion API Token (FBCAPI)
+                    <?php esc_html_e("Facebook Conversion API Token (FBCAPI)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" readonly class="regular-text">
-                    <span class="badge text-light rounded-pill probadgeconv">(Pro)</span>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-generate-facebook-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=FBCAPIbadge" class="badge text-light rounded-pill">(Pro)</a>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/how-to-generate-facebook-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
                     <p class="description">
-                        Send events directly from your web server to Facebook through the Conversion API.
-                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                        <?php esc_html_e("Send events directly from your web server to Facebook through the Conversion API.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=FBCAPI">Start 15 days trial</a>
                     </p>
                 </td>
             </tr>
@@ -332,7 +347,7 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    TikTok Pixel ID
+                    <?php esc_html_e("TikTok Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="tiKtok_ads_pixel_id" id="tiKtok_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($tiKtok_ads_pixel_id); ?>">
@@ -340,7 +355,9 @@ if ('' != $subscription_id) {
                     <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-tiktok-pixel-id-from-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The TikTok Pixel ID looks similar to this: C0ABCDE1234567890D12</p>
+                    <p class="description">
+                        <?php esc_html_e("The TikTok Pixel ID looks similar to this: C0ABCDE1234567890D12", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -351,17 +368,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_tiktok_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Tiktok Events API Token
+                    <?php esc_html_e("Tiktok Events API Token", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" readonly class="regular-text">
-                    <span class="badge text-light rounded-pill probadgeconv">(Pro)</span>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-your-tiktok-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=TikTokCAPIbadge" class="badge text-light rounded-pill">(Pro)</a>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/how-to-find-your-tiktok-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
                     <p class="description">
-                        Send events directly from your web server to Tiktok through the Events API.
-                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                        <?php esc_html_e("Send events directly from your web server to Tiktok through the Events API.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=TikTokCAPI">Start 15 days trial</a>
                     </p>
                 </td>
             </tr>
@@ -373,15 +390,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Snapchat Pixel ID
+                    <?php esc_html_e("Snapchat Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="snapchat_ads_pixel_id" id="snapchat_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($snapchat_ads_pixel_id); ?>">
                     <?php echo wp_kses_post(pixel_status($snapchat_ads_pixel_id)); ?>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-the-snapchat-pixel-id-from-the-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/find-your-snapchat-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Snapchat Pixel ID looks similar to this: abc12345-6789-def0-1234-56789abcdef0</p>
+                    <p class="description">
+                        <?php esc_html_e("The Snapchat Pixel ID looks similar to this: abc12345-6789-def0-1234-56789abcdef0", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -392,17 +411,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_snap_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Snapchat Conversion API Token
+                    <?php esc_html_e("Snapchat Conversion API Token", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" readonly class="regular-text">
-                    <span class="badge text-light rounded-pill probadgeconv">(Pro)</span>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-your-snapchat-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=SnapchatCAPIbadge" class="badge text-light rounded-pill">(Pro)</a>
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/find-your-snapchat-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
                     <p class="description">
-                        Send events directly from your web server to Snapchat through the Conversion API.
-                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=freetopro">Start 15 days trial</a>
+                        <?php esc_html_e("Send events directly from your web server to Snapchat through the Conversion API.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        <a class="convfreetrialbut" target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=SnapchatCAPI">Start 15 days trial</a>
                     </p>
                 </td>
             </tr>
@@ -414,15 +433,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_pint_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Pinterest Pixel ID
+                    <?php esc_html_e("Pinterest Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="pinterest_ads_pixel_id" id="pinterest_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($pinterest_ads_pixel_id); ?>">
                     <?php echo wp_kses_post(pixel_status($pinterest_ads_pixel_id)); ?>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-pinterest-pixel-id-from-a-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/how-to-find-pinterest-pixel-id-from-a-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Pinterest tag ID looks similar to this: 2610194491234</p>
+                    <p class="description">
+                        <?php esc_html_e("The Pinterest tag ID looks similar to this: 2610194491234", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -433,7 +454,7 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_bing_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Microsoft Ads (Bing) Pixel ID
+                    <?php esc_html_e("Microsoft Ads (Bing) Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="microsoft_ads_pixel_id" id="microsoft_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($microsoft_ads_pixel_id); ?>">
@@ -441,7 +462,9 @@ if ('' != $subscription_id) {
                     <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/set-up-microsoft-advertising-with-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Microsoft UET tag ID looks similar to this: 12345678</p>
+                    <p class="description">
+                        <?php esc_html_e("The Microsoft UET tag ID looks similar to this: 12345678", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -452,7 +475,7 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_clarity_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    MS Clarity Pixel ID
+                    <?php esc_html_e("MS Clarity Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="msclarity_pixel_id" id="msclarity_pixel_id" class="regular-text" value="<?php echo esc_attr($msclarity_pixel_id); ?>">
@@ -460,7 +483,9 @@ if ('' != $subscription_id) {
                     <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/set-up-microsoft-advertising-with-conversios-plugin/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The MS Clarity project ID looks similar to this: abcd1234</p>
+                    <p class="description">
+                        <?php esc_html_e("The MS Clarity project ID looks similar to this: abcd1234", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -471,7 +496,7 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_linkedin_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    LinkedIn Insight ID
+                    <?php esc_html_e("LinkedIn Insight ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="linkedin_insight_id" id="linkedin_insight_id" class="regular-text" value="<?php echo esc_attr($linkedin_insight_id); ?>">
@@ -479,7 +504,9 @@ if ('' != $subscription_id) {
                     <a class="convpixeldoclink" target="_blank" href="https://business.linkedin.com/marketing-solutions/insight-tag">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The LinkedIn insight ID looks similar to this: 123456</p>
+                    <p class="description">
+                        <?php esc_html_e("The LinkedIn insight ID looks similar to this: 123456", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -490,15 +517,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_hotjar_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Hotjar Pixel
+                    <?php esc_html_e("Hotjar Pixel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="hotjar_pixel_id" id="hotjar_pixel_id" class="regular-text" value="<?php echo esc_attr($hotjar_pixel_id); ?>">
                     <?php echo wp_kses_post(pixel_status($hotjar_pixel_id)); ?>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-a-hotjar-pixel-from-hotjar-business-manager/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/how-to-find-a-hotjar-pixel-from-hotjar-business-manager/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Hotjar Site ID looks similar to this: 1234567</p>
+                    <p class="description">
+                        <?php esc_html_e("The Hotjar Site ID looks similar to this: 1234567", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -509,15 +538,17 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_twitter_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Twitter Pixel ID
+                    <?php esc_html_e("Twitter Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="twitter_ads_pixel_id" id="twitter_ads_pixel_id" class="regular-text" value="<?php echo esc_attr($twitter_ads_pixel_id); ?>">
                     <?php echo wp_kses_post(pixel_status($twitter_ads_pixel_id)); ?>
-                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-crazyegg-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
+                    <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/blog/what-is-x-twitter-pixel-id-and-how-to-find-it/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Twitter Pixel ID looks similar to this: ocihv</p>
+                    <p class="description">
+                        <?php esc_html_e("The Twitter Pixel ID looks similar to this: ocihv", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -528,7 +559,7 @@ if ('' != $subscription_id) {
                         enhancad_get_plugin_image('/admin/images/logos/conv_crazyegg_logo.png', '', 'conv_channel_logo me-2 align-self-center'),
                         ['img' => ['src' => true, 'alt' => true, 'class' => true, 'style' => true]]
                     ); ?>
-                    Crazy Egg Pixel ID
+                    <?php esc_html_e("Crazy Egg Pixel ID", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </th>
                 <td>
                     <input type="text" name="crazyegg_pixel_id" id="crazyegg_pixel_id" class="regular-text" value="<?php echo esc_attr($crazyegg_pixel_id); ?>">
@@ -536,7 +567,9 @@ if ('' != $subscription_id) {
                     <a class="convpixeldoclink" target="_blank" href="https://www.conversios.io/docs/how-to-find-crazyegg-pixel-id/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span class="dashicons dashicons-editor-help text-primary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Open documentation"></span>
                     </a>
-                    <p class="description">The Crazy Egg account ID looks similar to this: 12345678</p>
+                    <p class="description">
+                        <?php esc_html_e("The Crazy Egg account ID looks similar to this: 12345678", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </p>
                 </td>
             </tr>
             <tr class="conv-sticky-save-row">
@@ -569,8 +602,14 @@ if ('' != $subscription_id) {
                     <div class="row">
                         <div id="conv_wizfinish_right" class="col-12 py-3 px-4 text-center">
                             <h3 class="fw-light h2 pt-3" style="color:#09bd3a;">Congratulations!!</h3>
-                            <h6>Your tracking is now live and data flowing in real time. <br> Reports and insights will be available within the next 24 hours.</h6>
-                            <h6 class="mt-4">Stay connected & Follow us on social media to get product tips, updates & video tutorials.</h6>
+                            <h6>
+                                <?php esc_html_e("Your tracking is now live and data flowing in real time.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <br>
+                                <?php esc_html_e("Reports and insights will be available within the next 24 hours.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </h6>
+                            <h6 class="mt-4">
+                                <?php esc_html_e("Stay connected & Follow us on social media to get product tips, updates & video tutorials.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </h6>
                             <div class="d-flex justify-content-center my-4 convsocialicons">
                                 <a href="https://facebook.com/Conversios" target="_blank" class="rounded-circle p-2" title="Facebook">
                                     <?php echo wp_kses(
@@ -642,15 +681,6 @@ if ('' != $subscription_id) {
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const proBadge = document.querySelectorAll('.probadgeconv');
-        proBadge.forEach(el => {
-            el.addEventListener('click', function() {
-                window.open('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizardbadge&utm_campaign=freetopro', '_blank');
-            });
-        });
-    });
-
     jQuery(function() {
         jQuery("#navbarSupportedContent ul li").removeClass("rich-blue");
         jQuery('#navbarSupportedContent ul > li').eq(1).addClass('rich-blue');
@@ -665,8 +695,8 @@ if ('' != $subscription_id) {
             selected_vals["property_id"] = jQuery("#measurement_id").val();
             selected_vals["measurement_id"] = jQuery("#measurement_id").val();
 
-            selected_vals["ga_cid"] = document.getElementById('ga_cid').checked ? "1" : "0";
-            selected_vals["non_woo_tracking"] = document.getElementById('non_woo_tracking').checked ? "1" : "0";
+            selected_vals["ga_cid"] = "1";
+            selected_vals["non_woo_tracking"] = "1";
 
             selected_vals["cov_remarketing"] = "0";
             if (jQuery("#gads_remarketing_id").val()) {
