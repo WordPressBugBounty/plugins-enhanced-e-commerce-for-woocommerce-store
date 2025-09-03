@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The plugin bootstrap file
  *
@@ -15,7 +16,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.8
+ * Version:           7.2.9
  * Author:            Conversios
  * Author URI:        https://conversios.io
  * License:           GPLv3
@@ -118,7 +119,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.2.8');
+define('PLUGIN_TVC_VERSION', '7.2.9');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 
@@ -187,32 +188,183 @@ function tvc_upgrade_function($upgrader_object, $options)
             if ($each_plugin == $fullName) {
                 $TVC_Admin_Helper = new TVC_Admin_Helper();
                 $TVC_Admin_Helper->update_app_status();
-
-                // on update plugin also need to show new feature popup, so will delete old flag value
-                update_option('conv_popup_newfeature', 'no-on-update');
             }
         }
     }
 }
 // On Plugin update
-function my_plugin_update_db() {
-    
+function my_plugin_update_db()
+{
     $current_version = get_option('ee_conv_plugin_version');
-    $new_version = '7.1.9'; // Replace with your new plugin version whenever you want to run something on specific update
-    
-    if ($current_version!== $new_version) {
+    $new_version = '7.2.7'; // Update this whenever you change the DB schema
+
+    if ($current_version !== $new_version) {
         global $wpdb;
-        $table_name = $wpdb->prefix.'ee_product_feed';
-        $column_name = 'ms_status';
-        
-        $column_exists = $wpdb->get_results("SHOW COLUMNS FROM $table_name LIKE '$column_name'");
-        if (empty($column_exists)) {
-            $wpdb->query("ALTER TABLE $table_name ADD COLUMN $column_name varchar(200) DEFAULT NULL");
+        $table_name = $wpdb->prefix . 'ee_product_feed';
+
+        // Column name => column definition
+        $columns = [
+            'ms_status' => "VARCHAR(200) DEFAULT NULL",
+            'IncProductVar' => "VARCHAR(200) DEFAULT 1",
+            'IncDefProductVar' => "VARCHAR(200) DEFAULT 0",
+            'IncLowestPriceProductVar' => "VARCHAR(200) DEFAULT 0",
+        ];
+
+        foreach ($columns as $column_name => $column_definition) {
+            $exists = $wpdb->get_results(
+                $wpdb->prepare("SHOW COLUMNS FROM `$table_name` LIKE %s", $column_name)
+            );
+
+            if (empty($exists)) {
+                $wpdb->query("ALTER TABLE `$table_name` ADD COLUMN `$column_name` $column_definition");
+            }
+            $column_name = 'ms_status';
+
+            $column_exists = $wpdb->get_results("SHOW COLUMNS FROM $table_name LIKE '$column_name'");
+            if (empty($column_exists)) {
+                $wpdb->query("ALTER TABLE $table_name ADD COLUMN $column_name varchar(200) DEFAULT NULL");
+            }
+
+            // Finally update the version
+            update_option('ee_conv_plugin_version', $new_version);
         }
-        update_option('ee_conv_plugin_version', $new_version);
-    } 
+    }
 }
-add_action('plugins_loaded','my_plugin_update_db');
+add_action('plugins_loaded', 'my_plugin_update_db');
+
+add_action('action_scheduler_init', 'conv_clear_ut_cron', 1);
+add_action('admin_init', 'conv_clear_ut_cron', 1);
+//add_action('init', 'conv_clear_ut_cron', 1);
+
+function conv_clear_ut_cron() {
+    if ( get_option('conv_ut_cleanup') === 'yes' ) {
+        return;
+    }
+
+    // Prevent the old scheduler from re-creating jobs by removing the flag it checks
+    delete_option('ee_ut');
+
+    // 1) Try Action Scheduler API unschedule/delete (best-effort)
+    if ( function_exists('as_unschedule_all_actions') ) {
+        @as_unschedule_all_actions('ee_ut_cron');
+    }
+
+    // Helper to get IDs from as_get_scheduled_actions across AS versions
+    $conv_get_as_ids = function($args) {
+        if ( ! function_exists('as_get_scheduled_actions') ) {
+            return array();
+        }
+
+        $args_local = $args;
+        $args_local['return'] = 'ids';
+        $ids = @as_get_scheduled_actions($args_local);
+
+        if ( empty($ids) ) {
+            // older AS versions sometimes accept a second param 'ids'
+            $try = @as_get_scheduled_actions($args, 'ids');
+            if ( ! empty($try) ) {
+                $ids = $try;
+            }
+        }
+
+        // If objects returned, convert to IDs
+        if ( ! empty($ids) && is_array($ids) && is_object(reset($ids)) ) {
+            $converted = array();
+            foreach ($ids as $obj) {
+                if ( is_object($obj) ) {
+                    if ( method_exists($obj, 'get_id') ) {
+                        $converted[] = (int) $obj->get_id();
+                    } elseif ( isset($obj->action_id) ) {
+                        $converted[] = (int) $obj->action_id;
+                    } elseif ( isset($obj->ID) ) {
+                        $converted[] = (int) $obj->ID;
+                    }
+                }
+            }
+            $ids = $converted;
+        }
+
+        return is_array($ids) ? array_map('intval', $ids) : array();
+    };
+
+    // If ActionScheduler store exists, cancel + delete via API (safe)
+    if ( function_exists('as_get_scheduled_actions') && class_exists('ActionScheduler') ) {
+        $store = ActionScheduler::store();
+        $statuses = array('pending','in-progress','complete','failed','canceled','paused','running');
+
+        foreach ($statuses as $status) {
+            $offset = 0;
+            do {
+                $ids = $conv_get_as_ids(array(
+                    'hook'     => 'ee_ut_cron',
+                    'status'   => $status,
+                    'per_page' => 100,
+                    'offset'   => $offset,
+                ));
+
+                if ( empty($ids) ) {
+                    break;
+                }
+
+                foreach ($ids as $aid) {
+                    $aid = (int) $aid;
+                    try { $store->cancel_action($aid); } catch (Exception $e) {}
+                    try { $store->delete_action($aid); } catch (Exception $e) {}
+                }
+
+                $offset += count($ids);
+            } while (true);
+        }
+    }
+
+    // 2) DB-level fallback / hard delete (in safe chunks)
+    global $wpdb;
+    $conv_actions_table = $wpdb->prefix . 'actionscheduler_actions';
+    $conv_logs_table    = $wpdb->prefix . 'actionscheduler_logs';
+    $conv_claims_table  = $wpdb->prefix . 'actionscheduler_claims';
+
+    $exists = $wpdb->get_var( $wpdb->prepare("SHOW TABLES LIKE %s", $conv_actions_table) );
+    if ( $exists === $conv_actions_table ) {
+        $limit = 200;
+        $offset = 0;
+        do {
+            $conv_ids = $wpdb->get_col( $wpdb->prepare(
+                "SELECT action_id FROM {$conv_actions_table} WHERE hook = %s LIMIT %d, %d",
+                'ee_ut_cron',
+                $offset,
+                $limit
+            ) );
+
+            if ( empty($conv_ids) ) {
+                break;
+            }
+
+            $conv_ids_in = implode(',', array_map('intval', $conv_ids));
+
+            if ( $wpdb->get_var( $wpdb->prepare("SHOW TABLES LIKE %s", $conv_logs_table) ) === $conv_logs_table ) {
+                $wpdb->query( "DELETE FROM {$conv_logs_table} WHERE action_id IN ({$conv_ids_in})" );
+            }
+
+            if ( $wpdb->get_var( $wpdb->prepare("SHOW TABLES LIKE %s", $conv_claims_table) ) === $conv_claims_table ) {
+                $wpdb->query( "DELETE FROM {$conv_claims_table} WHERE action_id IN ({$conv_ids_in})" );
+            }
+
+            // Delete actions in chunks
+            $wpdb->query( "DELETE FROM {$conv_actions_table} WHERE action_id IN ({$conv_ids_in})" );
+
+            $offset += $limit;
+        } while ( true );
+    }
+
+    // 3) Final safety: remove historical rows that maybe reference hook in other places (rare)
+    // (optional) remove any residual actions by hook text, using prepare
+    if ( $exists === $conv_actions_table ) {
+        $wpdb->query( $wpdb->prepare("DELETE FROM {$conv_actions_table} WHERE hook = %s", 'ee_ut_cron') );
+    }
+
+    // 4) Remove old option (defensive) and mark cleanup done
+    update_option('conv_ut_cleanup', 'yes');
+}
 
 
 /**

@@ -39,7 +39,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 		{
 			global $wpdb;
 			$tablename = esc_sql($wpdb->prefix . "ee_product_sync_profile");
-			if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', '%'.$wpdb->esc_like($tablename).'%')) === $tablename) {
+			if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', '%' . $wpdb->esc_like($tablename) . '%')) === $tablename) {
 				$result = $wpdb->get_row($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_sync_profile WHERE FIELD = %s", "update_date"));
 				if ($result->Type == 'date') {
 					$wpdb->query($wpdb->prepare("ALTER TABLE %i Modify `update_date` DATETIME NULL", $tablename));
@@ -51,17 +51,16 @@ if (!class_exists('TVCProductSyncHelper')) {
 			}
 
 			$tablename = esc_sql($wpdb->prefix . "ee_prouct_pre_sync_data");
-			if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', '%'.$wpdb->esc_like($tablename).'%')) === $tablename) {
+			if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', '%' . $wpdb->esc_like($tablename) . '%')) === $tablename) {
 				$result = $wpdb->get_row($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_prouct_pre_sync_data WHERE FIELD = %s", "update_date"));
 				if ($result->Type == 'date') {
 					$wpdb->query($wpdb->prepare("ALTER TABLE %i Modify `update_date` DATETIME NULL", $tablename));
 				}
-				
-				$pre_sync_result = $wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_prouct_pre_sync_data LIKE %s", '%'.$wpdb->esc_like('feedId').'%'));
+
+				$pre_sync_result = $wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_prouct_pre_sync_data LIKE %s", '%' . $wpdb->esc_like('feedId') . '%'));
 				if ($pre_sync_result == '') {
 					$wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `feedId` int(11) NULL  AFTER `status`", $tablename));
 				}
-
 			} else {
 				$sql_create = "CREATE TABLE `$tablename` ( `id` BIGINT(20) NOT NULL AUTO_INCREMENT , `w_product_id` BIGINT(20) NOT NULL , `w_cat_id` INT(10) NOT NULL , `g_cat_id` INT(10) NOT NULL , `product_sync_profile_id` INT(10) NOT NULL ,`create_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP, `update_date` DATETIME NULL , `status` INT(1) NOT NULL DEFAULT '0', `feedId` int(11) NULL , PRIMARY KEY (`id`) );";
 				if (maybe_create_table($tablename, $sql_create)) {
@@ -293,7 +292,6 @@ if (!class_exists('TVCProductSyncHelper')) {
 								//Delete the variant product which does not have children
 								$deletedIds[] = $postvalue->w_product_id;
 							}
-
 						} else {
 							//simpleproduct: 
 							$image_id = $prd->get_image_id();
@@ -365,7 +363,6 @@ if (!class_exists('TVCProductSyncHelper')) {
 								} else if (isset($postObj->$value) && $postObj->$value != "") {
 									$product[$key] = $postObj->$value;
 								}
-
 							}
 							$item = [
 								'merchant_id' => sanitize_text_field($merchantId),
@@ -445,7 +442,6 @@ if (!class_exists('TVCProductSyncHelper')) {
 					}
 				}
 			}
-
 		}
 
 		/*
@@ -501,7 +497,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 							// Update status in pre sync product database
 							$TVC_Admin_Auto_Product_sync_Helper->update_product_status_pre_sync_data($p_map_attribute['last_sync_product_id']);
 
-							if ($response->error == false) {								
+							if ($response->error == false) {
 								$products_sync = $p_map_attribute['products_sync'];
 
 								$ee_additional_data['product_sync_alert'] = NULL;
@@ -583,7 +579,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 					$feed_attribute = json_decode($result[0]['attributes']);
 					$feed_attribute->target_country = $result[0]['target_country'];
 					if (!empty($products)) {
-						$p_map_attribute = $this->conv_get_feed_wise_map_product_attribute($products, $tvc_currency, $merchantId, $product_batch_size, $feed_attribute, $result[0]['product_id_prefix']);
+						$p_map_attribute = $this->conv_get_feed_wise_map_product_attribute($products, $tvc_currency, $merchantId, $feedId, $product_batch_size, $feed_attribute, $result[0]['product_id_prefix']);
 
 						//Delete the variant product which does not have children
 						if (!empty($p_map_attribute) && isset($p_map_attribute['deleted_products']) && !empty($p_map_attribute['deleted_products'])) {
@@ -629,11 +625,11 @@ if (!class_exists('TVCProductSyncHelper')) {
 							$this->TVC_Admin_Helper->plugin_log("Products sync API duration time " . $diff->i . " minutes" . $diff->s . " seconds", 'product_sync');
 							$responseData['time_duration'] = $diff;
 							update_option("ee_prod_response", serialize($responseData));
-							
+
 							// Update status in pre sync product database
 							$TVC_Admin_Auto_Product_sync_Helper->update_product_status_pre_sync_data_ee($products, $feedId);
 
-							if ($response->error == false) {								
+							if ($response->error == false) {
 								$products_sync = $p_map_attribute['products_sync'];
 
 								$conv_additional_data['product_sync_alert'] = NULL;
@@ -672,10 +668,9 @@ if (!class_exists('TVCProductSyncHelper')) {
 				$this->TVC_Admin_Helper->set_ee_additional_data($conv_additional_data);
 				$this->TVC_Admin_Helper->plugin_log($e->getMessage(), 'product_sync');
 			}
-
 		}
 
-		public function conv_get_feed_wise_map_product_attribute($products, $tvc_currency, $merchantId, $product_batch_size = 100, $feed_attribute = '', $prefix = '')
+		public function conv_get_feed_wise_map_product_attribute($products, $tvc_currency, $merchantId, $feedId, $product_batch_size = 100, $feed_attribute = '', $prefix = '')
 		{
 			try {
 				if (!empty($products)) {
@@ -688,8 +683,19 @@ if (!class_exists('TVCProductSyncHelper')) {
 					$product_ids = [];
 					$deletedIds = [];
 					$batchId = time();
+					$where = '`id` = ' . esc_sql($feedId);
 					$sync_profile = $this->TVC_Admin_DB_Helper->tvc_get_results('ee_product_sync_profile');
-					// set profile id in array key
+					$filed = ['id', 'feed_name', 'channel_ids', 'auto_sync_interval', 'auto_schedule', 'categories', 'attributes', 'filters', 'include_product', 'exclude_product', 'total_product', 'product_id_prefix', 'status', 'created_date', 'is_mapping_update', 'target_country', 'tiktok_status', 'tiktok_catalog_id', 'fb_status', 'ms_status', 'product_sync_batch_size', 'IncProductVar', 'IncDefProductVar', 'IncLowestPriceProductVar'];
+					$result = $this->TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
+					$incProductVar = null;
+					$incDefProductVar = null;
+					$incLowestPriceProductVar = null;
+					if (!empty($result) && isset($result[0])) {
+						$feed = $result[0];
+						$incProductVar = isset($feed['IncProductVar']) ? $feed['IncProductVar'] : null;
+						$incDefProductVar = isset($feed['IncDefProductVar']) ? $feed['IncDefProductVar'] : null;
+						$incLowestPriceProductVar = isset($feed['IncLowestPriceProductVar']) ? $feed['IncLowestPriceProductVar'] : null;
+					}
 					$sync_profile_data = array();
 					if (!empty($sync_profile)) {
 						foreach ($sync_profile as $key => $value) {
@@ -744,20 +750,43 @@ if (!class_exists('TVCProductSyncHelper')) {
 						$product = array_merge($temp_product, $product);
 						$conv_additional_data = $this->TVC_Admin_Helper->get_ee_additional_data();
 						$product_id_prefix = $prefix;
+						$valid_variation_ids = [];
 
-						if ($prd->get_type() == "variable") {
+
+						if ($prd->get_type() === "variable" && $incProductVar === "1") {
+							$default_attributes = $prd->get_default_attributes();
+							$lowest_price = null;
+							$lowest_price_variation = null;
 							$p_variations = $prd->get_children();
-							if (!empty($p_variations)) {
-								foreach ($p_variations as $v_key => $variation_id) {
+							if ($incLowestPriceProductVar === "1") {
+								foreach ($p_variations as $v_id) {
+									$v = wc_get_product($v_id);
+									if (!$v || $v->get_stock_status() !== 'instock') continue;
+									$price = $v->get_price();
+									if ($lowest_price === null || $price < $lowest_price) {
+										$lowest_price = $price;
+										$lowest_price_variation = $v_id;
+									}
+								}
+							}
+							foreach ($p_variations as $variation_id) {
+								$variation = wc_get_product($variation_id);
+								if (empty($variation)) continue;
+								if ($variation->get_stock_status() !== 'instock') continue;
+								if ($incDefProductVar === "1") {
+									if ($variation->get_attributes() !== $default_attributes) continue;
+								}
+								if ($incLowestPriceProductVar === "1" && $variation_id != $lowest_price_variation) continue;
+								$valid_variation_ids[] = $variation_id;
+							}
+
+							if (!empty($valid_variation_ids)) {
+								foreach ($valid_variation_ids as $variation_id) {
 									$variation = wc_get_product($variation_id);
 									if (empty($variation)) {
 										continue;
 									}
-									if ($variation->get_stock_status() != 'instock') {
-										//Delete outstock product 
-										$deletedIds[] = $postvalue->w_product_id;
-										continue;
-									}
+
 									$variation_description = wc_format_content($variation->get_description());
 									unset($product['customAttributes']);
 									$postmeta_var = (object) $this->TVC_Admin_Helper->tvc_get_post_meta($variation_id);
@@ -821,10 +850,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 											}
 											if (isset($product[$key]['value']) && $product[$key]['value'] > 0) {
 												$product[$key]['currency'] = sanitize_text_field($tvc_currency);
-											} 
-											// else {
-											// 	$skipProducts[$product->ID] = $postmeta_var;
-											// }
+											}
 										} else if ($key == 'sale_price') {
 											if (isset($postmeta_var->$value) && $postmeta_var->$value > 0) {
 												$product[$key]['value'] = $postmeta_var->$value;
@@ -848,7 +874,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 												$stock_status = str_replace($tvc_find, $tvc_replace, $stock_status);
 												$product[$key] = sanitize_text_field($stock_status);
 											}
-										} else if (in_array($key, array("brand"))) { //list of cutom option added (Pro user only)                    
+										} else if (in_array($key, array("brand"))) {
 											$product_brand = "";
 											$is_custom_attr_brand = false;
 											$woo_attr_list = json_decode(wp_json_encode($this->TVC_Admin_Helper->getTableData($tve_table_prefix . 'woocommerce_attribute_taxonomies', ['attribute_name'])), true);
@@ -866,22 +892,21 @@ if (!class_exists('TVCProductSyncHelper')) {
 											if ($product_brand != "") {
 												$product[$key] = sanitize_text_field($product_brand);
 											}
-										} else if($key == 'product_weight'){
-											if(isset($postmeta_var->$value) && $postmeta_var->$value != ""){
+										} else if ($key == 'product_weight') {
+											if (isset($postmeta_var->$value) && $postmeta_var->$value != "") {
 												$product[$key]['value'] = sanitize_text_field($postmeta_var->$value);
 												$product[$key]['unit'] = get_option('woocommerce_weight_unit');
 											}
-											
-										} else if($key == 'shipping_weight'){
-											if(isset($postmeta_var->$value) && $postmeta_var->$value != ""){
-											  $product[$key]['value'] = sanitize_text_field($postmeta_var->$value);
-											  $product[$key]['unit'] = get_option('woocommerce_weight_unit');
+										} else if ($key == 'shipping_weight') {
+											if (isset($postmeta_var->$value) && $postmeta_var->$value != "") {
+												$product[$key]['value'] = sanitize_text_field($postmeta_var->$value);
+												$product[$key]['unit'] = get_option('woocommerce_weight_unit');
 											}
-											
 										} else if (isset($postmeta_var->$value) && $postmeta_var->$value != "") {
 											$product[$key] = sanitize_text_field($postmeta_var->$value);
 										}
 									}
+
 									$category_mapping = array(
 										'google_product_category' => $postvalue->g_cat_id != '0' ? sanitize_text_field($postvalue->g_cat_id) : '',
 										'facebook_product_category' => $postvalue->g_cat_id != '0' ? sanitize_text_field($postvalue->g_cat_id) : '',
@@ -894,14 +919,12 @@ if (!class_exists('TVCProductSyncHelper')) {
 										'category_mapping' => $category_mapping,
 									];
 									$items[] = $item;
-
 								}
 								$validProducts[] = $postvalue;
 							} else {
 								//Delete the variant product which does not have children
 								$deletedIds[] = $postvalue->w_product_id;
 							}
-
 						} else {
 							//simpleproduct: 
 							if ($prd->get_stock_status() != 'instock') {
@@ -936,7 +959,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 									}
 									if (isset($product[$key]['value']) && $product[$key]['value'] > 0) {
 										$product[$key]['currency'] = sanitize_text_field($tvc_currency);
-									} 
+									}
 									// else {
 									// 	$skipProducts[$postObj->ID] = $postObj;
 									// }
@@ -980,19 +1003,17 @@ if (!class_exists('TVCProductSyncHelper')) {
 									if ($product_brand != "") {
 										$product[$key] = sanitize_text_field($product_brand);
 									}
-								} else if($key == 'product_weight'){
-									if(isset($postObj->$value) && $postObj->$value != ""){
+								} else if ($key == 'product_weight') {
+									if (isset($postObj->$value) && $postObj->$value != "") {
 										$product[$key]['value'] = sanitize_text_field($postObj->$value);
 										$product[$key]['unit'] = get_option('woocommerce_weight_unit');
 									}
-									
-								} else if($key == 'shipping_weight'){
-									if(isset($postObj->$value) && $postObj->$value != ""){
-									  $product[$key]['value'] = sanitize_text_field($postObj->$value);
-									  $product[$key]['unit'] = get_option('woocommerce_weight_unit');
+								} else if ($key == 'shipping_weight') {
+									if (isset($postObj->$value) && $postObj->$value != "") {
+										$product[$key]['value'] = sanitize_text_field($postObj->$value);
+										$product[$key]['unit'] = get_option('woocommerce_weight_unit');
 									}
-									
-								} else if($key == 'product_shipping_class') {
+								} else if ($key == 'product_shipping_class') {
 									$product[$key] = $prd->get_shipping_class();
 								} else if (isset($postObj->$value) && $postObj->$value != "") {
 									$product[$key] = $postObj->$value;
@@ -1034,6 +1055,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 			try {
 				global $wpdb;
 				$where = '`id` = ' . esc_sql($feedId);
+				$feedId = esc_sql($feedId);
 				$filed = ['feed_name', 'channel_ids', 'auto_sync_interval', 'auto_schedule', 'categories', 'attributes', 'filters', 'include_product', 'exclude_product', 'is_mapping_update', 'product_id_prefix', 'tiktok_catalog_id', 'target_country'];
 				$result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
 				if (!empty($result) && isset($result) && $result[0]['is_mapping_update'] == '1') {
@@ -1059,29 +1081,29 @@ if (!class_exists('TVCProductSyncHelper')) {
 					$not_stock_status_to_fetch = $product_ids_to_exclude = $product_ids_to_include = $search = array();
 					if ($filters_count != '') {
 						for ($i = 0; $i < $filters_count; $i++) {
-						switch ($filters[$i]->attr) {
-							case 'product_cat':
-							if ($filters[$i]->condition == "=") {
-								array_push($in_category_ids,$filters[$i]->value);
-							} else if ($filters[$i]->condition == "!=") {
-								array_push($not_in_category_ids,$filters[$i]->value);
+							switch ($filters[$i]->attr) {
+								case 'product_cat':
+									if ($filters[$i]->condition == "=") {
+										array_push($in_category_ids, $filters[$i]->value);
+									} else if ($filters[$i]->condition == "!=") {
+										array_push($not_in_category_ids, $filters[$i]->value);
+									}
+									break;
+								case '_stock_status':
+									if (!empty($filters[$i]->condition) && $filters[$i]->condition == "=") {
+										array_push($stock_status_to_fetch, $filters[$i]->value);
+									} else if (!empty($filters[$i]->condition) && $filters[$i]->condition == "!=") {
+										array_push($not_stock_status_to_fetch, $filters[$i]->value);
+									}
+									break;
+								case 'ID':
+									if ($filters[$i]->condition == "=") {
+										array_push($product_ids_to_include, $filters[$i]->value);
+									} else if ($filters[$i]->condition == "!=") {
+										array_push($product_ids_to_exclude, $filters[$i]->value);
+									}
+									break;
 							}
-							break;
-							case '_stock_status':
-							if (!empty($filters[$i]->condition) && $filters[$i]->condition == "=") {
-								array_push($stock_status_to_fetch,$filters[$i]->value);
-							} else if (!empty($filters[$i]->condition) && $filters[$i]->condition == "!=") {
-								array_push($not_stock_status_to_fetch,$filters[$i]->value);
-							}
-							break;
-							case 'ID':
-							if ($filters[$i]->condition == "=") {
-								array_push($product_ids_to_include,$filters[$i]->value);
-							} else if ($filters[$i]->condition == "!=") {
-								array_push($product_ids_to_exclude,$filters[$i]->value);                
-							}
-							break;							
-						}
 						}
 					}
 
@@ -1104,18 +1126,18 @@ if (!class_exists('TVCProductSyncHelper')) {
 								'operator' => 'NOT IN', // Exclude products in any of the specified categories
 							);
 						}
-						if(!empty($in_category_ids) && !empty($not_in_category_ids)) {
+						if (!empty($in_category_ids) && !empty($not_in_category_ids)) {
 							$tax_query = array('relation' => 'AND');
 						}
 						$meta_query = array();
 						if (!empty($stock_status_to_fetch)) {
-						$meta_query[] = array(
-							'key'     => '_stock_status',
-							'value'   => $stock_status_to_fetch,
-							'compare' => 'IN', // Include products with these stock statuses
-						);
+							$meta_query[] = array(
+								'key'     => '_stock_status',
+								'value'   => $stock_status_to_fetch,
+								'compare' => 'IN', // Include products with these stock statuses
+							);
 						}
-					
+
 						// Add not_stock_status_to_fetch condition
 						if (!empty($not_stock_status_to_fetch)) {
 							$meta_query[] = array(
@@ -1124,33 +1146,32 @@ if (!class_exists('TVCProductSyncHelper')) {
 								'compare' => 'NOT IN', // Exclude products with these stock statuses
 							);
 						}
-						if(!empty($stock_status_to_fetch) && !empty($not_stock_status_to_fetch)) {
+						if (!empty($stock_status_to_fetch) && !empty($not_stock_status_to_fetch)) {
 							$meta_query = array('relation' => 'AND');
 						}
 						$args = array(
-						'post_type'      => 'product',
-						'posts_per_page' => 100,
-						'post_status'    => 'publish',
-						's'              => $search,
-						'offset'         => 0,
-						'tax_query'      => $tax_query, // Dynamic tax query
-						'meta_query'     => $meta_query,            
-						'post__not_in'   => $product_ids_to_exclude,
-						'post__in'       => $product_ids_to_include,
+							'post_type'      => 'product',
+							'posts_per_page' => 100,
+							'post_status'    => 'publish',
+							's'              => $search,
+							'offset'         => 0,
+							'tax_query'      => $tax_query, // Dynamic tax query
+							'meta_query'     => $meta_query,
+							'post__not_in'   => $product_ids_to_exclude,
+							'post__in'       => $product_ids_to_include,
 						);
-			
-						$products  = new WP_Query( $args );
+
+						$products  = new WP_Query($args);
 						$allResult = array();
-						if($products->have_posts()) {
-							while ( $products->have_posts() ) { 
-								$products->the_post();  
+						if ($products->have_posts()) {
+							while ($products->have_posts()) {
+								$products->the_post();
 								$allResult[]['ID'] = get_the_ID();
 								// array_push($allResult, get_the_ID());                    
-							}          
+							}
 						}
-						
 					} else {
-						
+
 						$TVC_Admin_Helper->plugin_log("Only include product", 'product_sync'); // Add logs               
 						foreach ($include as $val) {
 							$allResult[]['ID'] = $val;
@@ -1162,12 +1183,12 @@ if (!class_exists('TVCProductSyncHelper')) {
 				if (!empty($allResult)) {
 					$TVC_Admin_Helper->plugin_log("woow 103", 'product_sync');
 					$all_cat = [];
-					if($categories) {
+					if ($categories) {
 						foreach ($categories as $cat_key => $cat_val) {
 							$all_cat[$cat_key] = $cat_key;
 						}
 					}
-					
+
 					$totProduct = 0;
 					$a = 0;
 					$object = [];
@@ -1176,7 +1197,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 						if (!in_array($postvalue['ID'], $exclude)) {
 							//get all mapped categories with product
 							$terms = get_the_terms(sanitize_text_field($postvalue['ID']), 'product_cat');
-							if ( $terms && ! is_wp_error( $terms ) ) {
+							if ($terms && ! is_wp_error($terms)) {
 								foreach ($terms as $key => $term) {
 									$cat_id = $term->term_id;
 									if (isset($all_cat[$cat_id]) && $term->term_id == $all_cat[$cat_id] && $have_cat == false) {
@@ -1188,7 +1209,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 							if ($have_cat == true) {
 								$totProduct++;
 								$object[] = (object) ['w_product_id' => $postvalue['ID'], 'w_cat_id' => $cat_matched_id, 'g_cat_id' => $categories->$cat_matched_id->id];
-							}else {
+							} else {
 								$totProduct++;
 								$object[] = (object) ['w_product_id' => $postvalue['ID'], 'w_cat_id' => $cat_id, 'g_cat_id' => ''];
 							}
@@ -1200,8 +1221,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 					$subscriptionId = sanitize_text_field(sanitize_text_field($TVC_Admin_Helper->get_subscriptionId()));
 					$product_batch_size = 100;
 					//map each product with category and attribute
-					$p_map_attribute = $this->conv_get_feed_wise_map_product_attribute($object, $tvc_currency, $merchantId, $product_batch_size, $attributes, $product_id_prefix);					
-					
+					$p_map_attribute = $this->conv_get_feed_wise_map_product_attribute($object, $tvc_currency, $merchantId, $feedId, $product_batch_size, $attributes, $product_id_prefix);
 					$TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
 					$TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db_batch_wise($p_map_attribute['valid_products'], $feedId);
 					if (!empty($p_map_attribute) && isset($p_map_attribute['items']) && !empty($p_map_attribute['items'])) {
@@ -1225,7 +1245,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 						];
 						/**************************** API Call to GMC ****************************************************************************/
 						$CustomApi = new CustomApi();
-						$response = $CustomApi->feed_wise_products_sync($data,'call_by-includes/setup/class-tvc-product-sync-helper.php 1224');
+						$response = $CustomApi->feed_wise_products_sync($data, 'call_by-includes/setup/class-tvc-product-sync-helper.php 1224');
 						$endTime = new DateTime();
 						$startTime = new DateTime();
 						$diff = $endTime->diff($startTime);
@@ -1243,24 +1263,24 @@ if (!class_exists('TVCProductSyncHelper')) {
 							);
 							$TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_data", $syn_data, array("feedId" => $feedId));
 							$sync_message = esc_html__("By API Initiated, products are being synced to Merchant Center.Do not refresh.", "enhanced-e-commerce-for-woocommerce-store");
-							$sync_message = esc_html( $sync_message );
+							$sync_message = esc_html($sync_message);
 							$sync_progressive_data = array("sync_message" => $sync_message);
 							return array('status' => 'success', "sync_progressive_data" => $sync_progressive_data);
 							exit;
 						} else {
 
-							if ( is_string($response->message) ){
+							if (is_string($response->message)) {
 								$message = $response->message;
-							}else {
+							} else {
 								$message = 'Error in Sync:' . json_encode($response->message);
 							}
 
-							if( strpos( $message, 'limit' ) !== false && strpos( $message, 'maximum' ) !== false ) {
+							if (strpos($message, 'limit') !== false && strpos($message, 'maximum') !== false) {
 								//Your maximum limit to add product is over.
-								update_option( 'ee_conv_total_synced_product_count', 101 );
+								update_option('ee_conv_total_synced_product_count', 101);
 							}
 
-							$TVC_Admin_Helper->plugin_log("Error in sync 1010:" . $message , 'product_sync');
+							$TVC_Admin_Helper->plugin_log("Error in sync 1010:" . $message, 'product_sync');
 
 							return array('status' => 'error', "message" => $message);
 							exit;
@@ -1269,7 +1289,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 				}
 				$TVC_Admin_Helper->plugin_log("woow 104 success", 'product_sync');
 			} catch (Exception $e) {
-				
+
 				$feed_data = array(
 					"product_sync_alert" => $e->getMessage(),
 					"is_mapping_update" => false,
@@ -1279,9 +1299,10 @@ if (!class_exists('TVCProductSyncHelper')) {
 			}
 		}
 
-		public function superFeedProductSync($feedId){
+		public function superFeedProductSync($feedId)
+		{
 			$TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
-			$TVC_Admin_Helper = new TVC_Admin_Helper();		
+			$TVC_Admin_Helper = new TVC_Admin_Helper();
 			$ee_options = $TVC_Admin_Helper->get_ee_options_settings();
 			global $wpdb;
 			$where = '`id` = ' . esc_sql($feedId);
@@ -1290,7 +1311,7 @@ if (!class_exists('TVCProductSyncHelper')) {
 			$categories = json_decode($result[0]['categories']);
 			$attributes = json_decode($result[0]['attributes']);
 			$product_id_prefix = $result[0]['product_id_prefix'];
-			
+
 			$query = $wpdb->prepare(
 				"SELECT {$wpdb->prefix}posts.ID
 				FROM {$wpdb->prefix}posts
@@ -1307,9 +1328,9 @@ if (!class_exists('TVCProductSyncHelper')) {
 				'_stock_status',
 				'instock'
 			);
-			
+
 			$allResult = $wpdb->get_results($query, ARRAY_A);
-			
+
 			$TVC_Admin_Helper->plugin_log("Get all result", 'product_sync');
 			if (!empty($allResult)) {
 				$all_cat = [];
@@ -1318,11 +1339,11 @@ if (!class_exists('TVCProductSyncHelper')) {
 				}
 				foreach ($allResult as $postvalue) {
 					$terms = get_the_terms(sanitize_text_field($postvalue['ID']), 'product_cat');
-					if ( $terms && ! is_wp_error( $terms ) ) {
-						foreach ($terms as $key => $term) {							
+					if ($terms && ! is_wp_error($terms)) {
+						foreach ($terms as $key => $term) {
 							$cat_matched_id = $term->term_id;
-						}	
-					}					
+						}
+					}
 					//$object[] = (object) ['w_product_id' => $postvalue['ID'], 'w_cat_id' => $cat_matched_id, 'g_cat_id' => $categories->$cat_matched_id->id];
 					$object[] = (object) ['w_product_id' => $postvalue['ID'], 'w_cat_id' => $cat_matched_id, 'g_cat_id' => 0];
 				}
@@ -1340,10 +1361,10 @@ if (!class_exists('TVCProductSyncHelper')) {
 				$accountId = sanitize_text_field($TVC_Admin_Helper->get_main_merchantId());
 				$subscriptionId = sanitize_text_field(sanitize_text_field($TVC_Admin_Helper->get_subscriptionId()));
 				$product_batch_size = 100;
-				$p_map_attribute = $this->conv_get_feed_wise_map_product_attribute($object, $tvc_currency, $merchantId, $product_batch_size, $attributes, $product_id_prefix);
+				$p_map_attribute = $this->conv_get_feed_wise_map_product_attribute($object, $tvc_currency, $merchantId, $feedId, $product_batch_size, $attributes, $product_id_prefix);
 				$TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
 				$TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db_batch_wise($p_map_attribute['valid_products'], $feedId);
-				if (!empty($p_map_attribute) && isset($p_map_attribute['items']) && !empty($p_map_attribute['items'])) {					
+				if (!empty($p_map_attribute) && isset($p_map_attribute['items']) && !empty($p_map_attribute['items'])) {
 					$data = [
 						'merchant_id' => sanitize_text_field($accountId),
 						'account_id' => sanitize_text_field($merchantId),
@@ -1381,9 +1402,9 @@ if (!class_exists('TVCProductSyncHelper')) {
 						);
 						$TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_data", $syn_data, array("feedId" => $feedId));
 						$sync_message = esc_html__("Via API Initiated, products are being synced to Merchant Center. Do not refresh.", "enhanced-e-commerce-for-woocommerce-store");
-						$sync_message = esc_html( $sync_message );
+						$sync_message = esc_html($sync_message);
 						$sync_progressive_data = array("sync_message" => $sync_message);
-						$TVC_Admin_Helper->plugin_log(count($p_map_attribute['items']).' Product Synced', 'product_sync');
+						$TVC_Admin_Helper->plugin_log(count($p_map_attribute['items']) . ' Product Synced', 'product_sync');
 						return array('status' => 'success', "sync_progressive_data" => $sync_progressive_data);
 						exit;
 					} else {
@@ -1391,11 +1412,10 @@ if (!class_exists('TVCProductSyncHelper')) {
 						return array('error' => true, 'message' => esc_attr('Error in Sync...'));
 						exit;
 					}
-				}	
-			}else {
+				}
+			} else {
 				$TVC_Admin_Helper->plugin_log("No data found", 'product_sync');
 			}
-		}	
-
+		}
 	}
 }

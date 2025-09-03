@@ -20,6 +20,7 @@ if (!class_exists('Conversios_PMax_Helper')) {
     protected $CustomApi;
     protected $apiDomain;
     protected $token;
+    protected $store_id;
     public function __construct()
     {
       $this->req_int();
@@ -27,15 +28,16 @@ if (!class_exists('Conversios_PMax_Helper')) {
       $this->token = 'MTIzNA==';
       $this->TVC_Admin_Helper = new TVC_Admin_Helper();
       $this->CustomApi = new CustomApi();
+      $this->store_id = $this->TVC_Admin_Helper->conv_get_store_id();
       //$this->ShoppingApi = new ShoppingApi();
-			//add_action('wp_ajax_get_google_ads_reports_chart', array($this,'get_google_ads_reports_chart') );
-			add_action('wp_ajax_get_pmax_campaign_list', array($this,'get_pmax_campaign_list') );
-			add_action('wp_ajax_create_pmax_campaign', array($this,'create_pmax_campaign') );
-			add_action('wp_ajax_edit_pmax_campaign', array($this,'edit_pmax_campaign') );
-      add_action('wp_ajax_campaign_pmax_detail', array($this,'campaign_pmax_detail') );
-      add_action('wp_ajax_campaign_pmax_detail_ms', array($this,'campaign_pmax_detail_ms') );
-      add_action('wp_ajax_update_campaign_pmax_detail_ms', array($this,'update_campaign_pmax_detail_ms') );
-		}
+      //add_action('wp_ajax_get_google_ads_reports_chart', array($this,'get_google_ads_reports_chart') );
+      add_action('wp_ajax_get_pmax_campaign_list', array($this, 'get_pmax_campaign_list'));
+      add_action('wp_ajax_create_pmax_campaign', array($this, 'create_pmax_campaign'));
+      add_action('wp_ajax_edit_pmax_campaign', array($this, 'edit_pmax_campaign'));
+      add_action('wp_ajax_campaign_pmax_detail', array($this, 'campaign_pmax_detail'));
+      add_action('wp_ajax_campaign_pmax_detail_ms', array($this, 'campaign_pmax_detail_ms'));
+      add_action('wp_ajax_update_campaign_pmax_detail_ms', array($this, 'update_campaign_pmax_detail_ms'));
+    }
 
     public function req_int()
     {
@@ -244,7 +246,7 @@ if (!class_exists('Conversios_PMax_Helper')) {
         $data = [
           'customer_id' => $customer_id,
           'campaign_id' => $campaign_id,
-          'store_id' => $google_detail['setting']->store_id,
+          'store_id' => $this->store_id,
           'subscription_id' => $google_detail['setting']->id
         ];
         $header = array(
@@ -282,9 +284,10 @@ if (!class_exists('Conversios_PMax_Helper')) {
       }
     }
 
-    public function campaign_pmax_detail_ms($subscription_id, $customer_id, $account_id, $campaign_id) {
+    public function campaign_pmax_detail_ms($subscription_id, $customer_id, $account_id, $campaign_id)
+    {
       try {
-        $url = $this->apiDomain . '/microsoft/getCampaignDetail';        
+        $url = $this->apiDomain . '/microsoft/getCampaignDetail';
         $data = [
           'customer_subscription_id' => $subscription_id,
           'customer_id' => $customer_id,
@@ -298,8 +301,8 @@ if (!class_exists('Conversios_PMax_Helper')) {
           'body' => wp_json_encode($data)
         );
         $args = array(
-        	'timeout' => 300,
-          'headers' =>$header,
+          'timeout' => 300,
+          'headers' => $header,
           'method' => 'POST',
           'body' => wp_json_encode($data)
         );
@@ -312,26 +315,26 @@ if (!class_exists('Conversios_PMax_Helper')) {
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
 
-        if( isset($result->error) && isset($result->data) && $result->error == '' ) {
-          $return->data = (isset($result->data))?$result->data:"";
+        if (isset($result->error) && isset($result->data) && $result->error == '') {
+          $return->data = (isset($result->data)) ? $result->data : "";
           $return->error = false;
           return $return;
-        }else{
+        } else {
           $return->error = true;
-          $return->data = (isset($result->data))?$result->data:"";
+          $return->data = (isset($result->data)) ? $result->data : "";
           $return->errors = $result->errors;
           $return->status = $response_code;
           return $return;
         }
-
       } catch (Exception $e) {
-          return $e->getMessage();
+        return $e->getMessage();
       }
     }
 
-    public function update_campaign_pmax_detail_ms($subscription_id, $customer_id, $account_id, $campaign_id, $daily_budget, $status) {
+    public function update_campaign_pmax_detail_ms($subscription_id, $customer_id, $account_id, $campaign_id, $daily_budget, $status)
+    {
       try {
-        $url = $this->apiDomain . '/microsoft/updateCampaign';        
+        $url = $this->apiDomain . '/microsoft/updateCampaign';
         $data = [
           'customer_subscription_id' => $subscription_id,
           'customer_id' => $customer_id,
@@ -345,8 +348,8 @@ if (!class_exists('Conversios_PMax_Helper')) {
           "Content-Type" => "application/json"
         );
         $args = array(
-        	'timeout' => 300,
-          'headers' =>$header,
+          'timeout' => 300,
+          'headers' => $header,
           'method' => 'POST',
           'body' => wp_json_encode($data)
         );
@@ -357,15 +360,15 @@ if (!class_exists('Conversios_PMax_Helper')) {
         $response_message = wp_remote_retrieve_response_message($request);
         $result = json_decode(wp_remote_retrieve_body($request));
         $return = new \stdClass();
-        
-        
-       
-        if( isset($result->error) && isset($result->data) && $result->error == '' ) {
-          $return->data = (isset($result->data))?$result->data:"";          
-          $return->error = false;          
-        }else{
+
+
+
+        if (isset($result->error) && isset($result->data) && $result->error == '') {
+          $return->data = (isset($result->data)) ? $result->data : "";
+          $return->error = false;
+        } else {
           $return->error = true;
-          $return->data = (isset($result->data))?$result->data:"";
+          $return->data = (isset($result->data)) ? $result->data : "";
           $return->errors = $result->errors;
           $return->status = $response_code;
         }
@@ -375,7 +378,8 @@ if (!class_exists('Conversios_PMax_Helper')) {
       }
     }
 
-		public function campaign_pmax_list($customer_id, $page_size, $page_token, $page) {
+    public function campaign_pmax_list($customer_id, $page_size, $page_token, $page)
+    {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       try {
@@ -385,7 +389,7 @@ if (!class_exists('Conversios_PMax_Helper')) {
           'customer_id' => $customer_id,
           'page_size' => $page_size,
           'page_token' => $page_token,
-          'store_id' => $google_detail['setting']->store_id,
+          'store_id' => $this->store_id,
           'subscription_id' => $google_detail['setting']->id
         ];
 
@@ -484,7 +488,7 @@ if (!class_exists('Conversios_PMax_Helper')) {
     {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      $store_id = $google_detail['setting']->store_id;
+      $store_id = $this->store_id;
       $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
       try {
         $url = $this->apiDomain . '/pmax/create';
@@ -541,7 +545,7 @@ if (!class_exists('Conversios_PMax_Helper')) {
     {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      $store_id = $google_detail['setting']->store_id;
+      $store_id = $this->store_id;
       $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
 
       try {
@@ -601,7 +605,7 @@ if (!class_exists('Conversios_PMax_Helper')) {
     {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      $postData['store_id'] = $google_detail['setting']->store_id;
+      $postData['store_id'] = $this->store_id;
       $postData['subscription_id'] = $google_detail['setting']->id;
       try {
         $url = $this->apiDomain . '/pmax/delete';
@@ -644,53 +648,6 @@ if (!class_exists('Conversios_PMax_Helper')) {
           } else {
             $return->errors = $result->errors;
           }
-          $return->status = $response_code;
-          return $return;
-        }
-      } catch (Exception $e) {
-        return $e->getMessage();
-      }
-    }
-
-    public function get_campaign_currency_code($customer_id)
-    {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      try {
-        $url = $this->apiDomain . '/pmax/currency-code';
-        $data = [
-          'customer_id' => $customer_id,
-          'store_id' => $google_detail['setting']->store_id,
-          'subscription_id' => $google_detail['setting']->id
-        ];
-        $header = array(
-          "Authorization: Bearer $this->token",
-          "Content-Type" => "application/json"
-        );
-        $args = array(
-          'timeout' => 300,
-          'headers' => $header,
-          'method' => 'POST',
-          'body' => wp_json_encode($data)
-        );
-
-        // Send remote request
-        $request = wp_remote_post(esc_url($url), $args);
-
-        // Retrieve information
-        $response_code = wp_remote_retrieve_response_code($request);
-        $response_message = wp_remote_retrieve_response_message($request);
-        $result = json_decode(wp_remote_retrieve_body($request));
-        $return = new \stdClass();
-
-        if (isset($result->error) && isset($result->data) && $result->error == '') {
-          $return->data = (isset($result->data)) ? $result->data : "";
-          $return->error = false;
-          return $return;
-        } else {
-          $return->error = true;
-          $return->data = (isset($result->data)) ? $result->data : "";
-          $return->errors = (isset($result->errors)) ? $result->errors : "";
           $return->status = $response_code;
           return $return;
         }

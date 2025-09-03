@@ -45,24 +45,6 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
             }
             ?>
 
-            <?php if (isset($tracking_method) && $tracking_method == 'gtag') { ?>
-                <div class="alert d-flex align-items-cente p-0" role="alert">
-                    <div class="text-light conv-error-bg rounded-start d-flex">
-                        <span class="p-2 material-symbols-outlined align-self-center">info</span>
-                    </div>
-
-                    <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert lh-lg bg-white">
-                        <h6 class="fs-6 lh-1 text-dark fw-bold border-bottom w-100 py-2">
-                            <?php esc_html_e("Attention!", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </h6>
-
-                        <span class="fs-6 lh-1 text-dark">
-                            <?php esc_html_e("As you might be knowing, GA3 is seeing sunset from 1st July 2023, we are also removing gtag.js based implementation for the old app users soon. Hence, we recommend you to change your implementation method to Google Tag Manager from below to avoid data descrepancy in the future.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </div>
-                </div>
-
-            <?php } ?>
-
             <!-- All pixel list -->
             <?php
             $conv_gtm_not_connected = (empty($subscription_id) || $tracking_method != "gtm") ? "conv-gtm-not-connected" : "conv-gtm-connected";

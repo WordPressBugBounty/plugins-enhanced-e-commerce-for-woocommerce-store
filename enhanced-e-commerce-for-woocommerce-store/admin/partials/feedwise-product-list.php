@@ -22,7 +22,17 @@ $TVC_Admin_Helper->get_feed_status();
 //$google_detail = $TVC_Admin_Helper->get_ee_options_data();
 $conv_data = $TVC_Admin_Helper->get_store_data();
 $ee_options = $TVC_Admin_Helper->get_ee_options_settings();
-$site_url = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
+$site_url = "admin.php?page=conversios-google-shopping-feed";
+$subpage = isset($_GET['from']) ? sanitize_text_field($_GET['from']) : '';
+if ($subpage === 'gmc') {
+    $return_url = "admin.php?page=conversios-google-shopping-feed&subpage=gmc";
+} else if ($subpage === 'microsoft') {
+    $return_url = "admin.php?page=conversios-google-shopping-feed&subpage=microsoft";
+} else if ($subpage === 'tiktok') {
+    $return_url = "admin.php?page=conversios-google-shopping-feed&subpage=tiktok";
+} else if ($subpage === 'meta') {
+    $return_url = "admin.php?page=conversios-google-shopping-feed&subpage=meta";
+}
 $category_wrapper_obj = new Tatvic_Category_Wrapper();
 $gmcAttributes = $TVC_Admin_Helper->get_gmcAttributes();
 $wooCommerceAttributes = array_map("unserialize", array_unique(array_map("serialize", $TVCProductSyncHelper->wooCommerceAttributes())));
@@ -105,7 +115,7 @@ $data = unserialize(get_option('ee_options'));
                 <span id="conv_save_req_error_txt" class="mb-1 lh-lg"></span>
             </div>
             <div class="modal-footer border-0 pb-4 mb-1">
-                <a href="<?php echo esc_url($site_url); ?>" type="button" class="btn conv-yellow-bg m-auto text-white"><?php esc_html_e("Go back", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+                <a href="<?php echo esc_url($return_url); ?>" type="button" class="btn conv-yellow-bg m-auto text-white"><?php esc_html_e("Go back", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
             </div>
         </div>
     </div>
@@ -120,7 +130,7 @@ if (!isset($_GET['id']) || filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_
 }
 
 $where = '`id` = ' . esc_sql(sanitize_text_field(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
-$filed = ['id', 'feed_name', 'channel_ids', 'auto_sync_interval', 'auto_schedule', 'categories', 'attributes', 'filters', 'include_product', 'exclude_product', 'total_product', 'product_id_prefix', 'status', 'created_date', 'is_mapping_update', 'target_country', 'tiktok_status', 'tiktok_catalog_id', 'fb_status', 'ms_status', 'product_sync_batch_size'];
+$filed = ['id', 'feed_name', 'channel_ids', 'auto_sync_interval', 'auto_schedule', 'categories', 'attributes', 'filters', 'include_product', 'exclude_product', 'total_product', 'product_id_prefix', 'status', 'created_date', 'is_mapping_update', 'target_country', 'tiktok_status', 'tiktok_catalog_id', 'fb_status', 'ms_status', 'product_sync_batch_size', 'IncProductVar', 'IncDefProductVar', 'IncLowestPriceProductVar'];
 $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
 $product_sync_batch_size = isset($result[0]['product_sync_batch_size']) && $result[0]['product_sync_batch_size'] ? $result[0]['product_sync_batch_size'] : 200;
 if ($result === FALSE) {
@@ -166,25 +176,6 @@ if ($filters !== '') {
         if ($val->attr === 'product_cat') {
             $terms = get_term_by('id', $val->value, 'product_cat');
             $eachVallue = $terms->name;
-        }
-        if ($result[0]['is_mapping_update'] == '1') {
-            $html .= '<div class="btn-group border rounded mt-1 me-1 disabled"><button class="btn btn-light btn-sm text-secondary fs-7 ps-1 pe-1 pt-0 pb-0" type="button">' . $filterAttributes[$val->attr] . '  <b>' . $val->condition . '</b> ' . $eachVallue . ' </button>
-                        <button type="button" class="btn btn-sm btn-light onhover-close pt-0 pb-0" data-bs-toggle=""
-                            aria-expanded="false" style="cursor: no-drop;">
-                            <span class="material-symbols-outlined fs-6 pt-1 onhover-close">
-                                close
-                            </span>
-                        </button>
-                    </div>';
-        } else {
-            $html .= '<div class="btn-group border rounded mt-1 me-1 removecardThis" ><button value="' . $count++ . '" class="btn btn-light btn-sm text-secondary fs-7 ps-1 pe-1 pt-0 pb-0" type="button">' . $filterAttributes[$val->attr] . '  <b>' . $val->condition . '</b> ' . $eachVallue . ' </button>
-                        <button type="button" class="btn btn-sm btn-light onhover-close pt-0 pb-0" data-bs-toggle=""
-                            aria-expanded="false">
-                            <span class="material-symbols-outlined fs-6 pt-1 onhover-close removecard">
-                                close
-                            </span>
-                        </button>
-                    </div>';
         }
     } //end foreach
 
@@ -253,7 +244,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
             <div class="m-0 p-0 col-12">
                 <div class="conv-heading-box d-flex align-items-center">
                     <span class="float-start d-flex align-items-center">
-                        <a href="<?php echo esc_url($site_url); ?>" class="text-dark">
+                        <a href="<?php echo esc_url($return_url); ?>" class="text-dark">
                             <label class="fs-20">
                                 <?php esc_html_e("Feed Management", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
@@ -263,10 +254,6 @@ $conv_data['subscription_id'] = $googleDetail->id;
                             <?php echo esc_attr($result[0]['feed_name']); ?>
                         </label>
                     </span>
-                    <div class="conv-link-blue d-flex align-items-center ms-2">
-                        <span style="cursor: pointer" class="material-symbols-outlined fs-14 me-1" onclick="editFeed(<?php echo filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT); ?>)">edit</span>
-                        <label class="fs-14 text" onclick="editFeed(<?php echo esc_js(sanitize_text_field(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT))); ?>)"><?php esc_html_e("Edit Feed", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
-                    </div>
                 </div>
             </div>
         </div>
@@ -347,7 +334,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
         if ((isset($result[0]['status']) && $result[0]['status'] === 'Draft') ||
             (isset($result[0]['tiktok_status']) && $result[0]['tiktok_status'] === 'Draft') ||
             (isset($result[0]['fb_status']) && $result[0]['fb_status'] === 'Draft') ||
-            (isset($result[0]['ms_status']) && $result[0]['ms_status'] === 'Draft') 
+            (isset($result[0]['ms_status']) && $result[0]['ms_status'] === 'Draft')
         ) {
             $class_1 = 'col-12';
             $class_2 = 'alert alert-danger';
@@ -360,12 +347,10 @@ $conv_data['subscription_id'] = $googleDetail->id;
             <div class="<?php echo esc_attr($class_2); ?> m-0 d-flex align-items-center justify-content-end fs-6">
                 <?php if ($class_2 != '') : ?>
                     <div>
-                        <span>Your feed is in draft mode. Sync your products with <?php echo esc_html(implode(", ", $convfeedchnames)) ?> by clicking here.</span>
-                        <?php if (in_array('1', $channel_id)) { ?>
-                            <div class="">
-                                <span>Products will typically appear in the Microsoft Merchant Center within 24 to 48 hours.</span>
-                            </div>
-                        <?php } ?>
+                        <span>Your feed is in draft mode. Sync your products by clicking here.</span>
+                        <div class="">
+                            <span>Products will typically appear in the platform within 24 to 48 hours.</span>
+                        </div>
                     </div>
 
                 <?php endif; ?>
@@ -418,11 +403,6 @@ $conv_data['subscription_id'] = $googleDetail->id;
     <div class="card" style="max-width:100%; border-top-left-radius:8px;border-top-right-radius:8px;">
         <div class="card-body row ">
             <div class="col-9 pt-0">
-                <span class="ps-2 pe-1 pt-1 pb-1 filterDiv rounded border <?php echo $result[0]['is_mapping_update'] == '1' ? '' : 'addFilter'; ?>" style="<?php echo $result[0]['is_mapping_update'] == '1' ? 'cursor: no-drop' : 'cursor: pointer'; ?>">
-                    <span class="material-symbols-outlined fs-6 text-secondary">
-                        filter_list
-                    </span> <label class="fs-14 fw-500 mb-2 pt-1 text-secondary" style="<?php echo $result[0]['is_mapping_update'] == '1' ? 'cursor: no-drop' : ''; ?>">Filter</label>
-                </span>
                 <span class="ms-2 ps-2 pe-1 pt-1 pb-1 rounded border">
                     <label class="fs-14 fw-500  text-dark pb-1 defaultPointer">
                         <?php echo esc_html_e("Total Products : ", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -489,9 +469,6 @@ $conv_data['subscription_id'] = $googleDetail->id;
                                     Status</option> <?php } ?>
                         </select>
 
-                    </th>
-                    <th scope="col" class="text-center sorting_disabled" style="width:5%">
-                        <?php esc_html_e("ACTION", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </th>
                 </tr>
             </thead>
@@ -802,7 +779,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
                         </div>
                         <div class="col-12 row bg-white m-0 p-0">
                             <div class="col-12 row categoryDiv" style="overflow-y: scroll; max-height:450px;">
-                                <?php $category_html = $category_wrapper_obj->category_table_content(0, 0, 'mapping');
+                                <?php $category_html = $category_wrapper_obj->category_table_content(0, 0, 'mapping', $ee_mapped_attrs);
                                 echo wp_kses(
                                     $category_html,
                                     array(
@@ -1264,10 +1241,6 @@ $conv_data['subscription_id'] = $googleDetail->id;
                 {
                     className: "align-middle",
                     targets: 5
-                },
-                {
-                    className: "align-middle",
-                    targets: 6
                 }
             ],
             initComplete: function() {
@@ -1339,9 +1312,6 @@ $conv_data['subscription_id'] = $googleDetail->id;
                 },
                 {
                     data: 'channelstatus'
-                },
-                {
-                    data: 'action'
                 }
             ],
 
@@ -1380,7 +1350,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
             var ms_status = "<?php echo esc_html($result[0]['ms_status']) ?>";
 
             var is_mapping_update = "<?php echo esc_html($result[0]['is_mapping_update']); ?>"
-            if (status === 'Draft' && tiktok_status == 'Draft' && fb_status == 'Draft' && ms_status == 'Draft' &&
+            if (status === 'Draft' || tiktok_status == 'Draft' || fb_status == 'Draft' || ms_status == 'Draft' ||
                 is_mapping_update != '1') {
                 jQuery('.action_').remove();
                 jQuery("input:checkbox[name=attrProduct]").each(function() {
@@ -1484,7 +1454,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
                 jQuery('.allPendingCount').text(addCommas(
                     <?php echo $result[0]['total_product'] !== "" ? esc_html($result[0]['total_product']) : 0 ?>
                 ));
-            } else {
+            } else if (status != 'Draft' && tiktok_status != 'Draft' && fb_status != 'Draft' && ms_status != 'Draft') {
                 /*********Fetch real time status from API***********/
                 var all_check_list = Array(); // all checked box value
                 jQuery("input:checkbox[name=attrProduct]:checked").each(function() {
@@ -2100,218 +2070,9 @@ $conv_data['subscription_id'] = $googleDetail->id;
         /****************************** Select All CheckBox End ************************************************************************************/
         /****************************** Product Wise Category Start ************************************************************************************/
         jQuery(document).on('click', '.filteredProductSyn', function(e) {
-            var data = {
-                action: "get_category_for_filter",
-                type: "total_synced_product_count",
-                get_category_for_filter: "<?php echo esc_js(wp_create_nonce('get_category_for_filter-nonce')); ?>"
-            };
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: tvc_ajax_url,
-                data: data,
-                beforeSend: function() {},
-                success: function(total_product_feed) {
-
-                    jQuery('#totProduct').val(total_product_feed);
-                    console.log('your current limit=' + total_product_feed);
-                    console.log('you max limit=100');
-
-                    if (total_product_feed > 100) {
-                        console.log(total_product_feed);
-                        jQuery('#conv_save_error_txt').html('')
-                        jQuery('.errorText').text('Notice');
-
-      
-                        var upgradetopro = '<a class="btn btn-soft-primary pointer upgrade__btn" target="_blank" href="https://www.conversios.io/pricing?utm_source=woo_aiofree_plugin&utm_medium=pfmlimitpopup&utm_campaign=upgrade&plugin_name=aio">Upgrade to Professional</a>';
-                        var closebtn = '<button class="btn conv-yellow-bg m-auto text-white" data-bs-dismiss="modal">Close</button>';
-                        jQuery('.errorFooter').html(upgradetopro);
-
-                        jQuery('#conv_save_error_txt').html('Your free plan allows syncing up to 100 products only. <br> Upgrade to sync your entire catalog.');
-
-                        jQuery('#conv_save_error_modal').modal('show')
-                        return false;
-                    }
-
-                    var thisVal = jQuery('.' + e.target.id).val();
-                    let productArray = Array();
-                    let exclude = Array();
-                    let include = Array();
-                    let attr_ids =
-                        <?php echo isset($attr_id) && $attr_id == 1 ? 1 : wp_json_encode(json_decode($attr_id)); ?>;
-                    let prefix = "<?php echo esc_html($result[0]['product_id_prefix']) ?>";
-                    if (prefix != '') {
-                        jQuery('#product_id_prefix').val(prefix);
-                    }
-                    if (attr_ids != 1) {
-                        jQuery.each(attr_ids, function(attr_key, attr_value) {
-                            jQuery('select[name^="' + attr_key + '"] option[value="' + attr_value + '"]')
-                                .attr("selected", "selected");
-                        });
-                    }
-                    var prodId = '';
-
-                    if (thisVal != 'syncAll') {
-                        productArray.push(jQuery('.syncProduct_' + thisVal).val());
-                        if (attr_ids != 1) {
-                            exclude = jQuery('#excludeProductFromSync').val().split(',');
-                            include = jQuery('#includeProductFromSync').val();
-                            if (exclude != '') {
-                                prodId = thisVal;
-                                var arrProd = [];
-                                exclude = jQuery.grep(exclude, function(values) {
-                                    return values != prodId;
-                                });
-                                var excludeProd = exclude.join(',');
-                                jQuery('#excludeProductFromSync').val(excludeProd);
-                                jQuery('#includeExtraProductForFeed').val(prodId);
-                            } else if (include != '') {
-                                prodId = thisVal;
-                                jQuery('#includeProductFromSync').val(include + ',' + prodId);
-                                jQuery('#includeExtraProductForFeed').val(prodId);
-                            }
-
-                        } else {
-                            jQuery(".checkbox").prop('checked', false);
-                            jQuery('.syncProduct_' + thisVal).prop('checked', true);
-                            jQuery("#filteredProductSyn").text('Sync 1 Product');
-                            jQuery('#totProduct').val(1);
-                            jQuery('#includeProductFromSync').val(thisVal);
-                            jQuery('#excludeProductFromSync').val('');
-                        }
-
-                    } else if (jQuery('#excludeProductFromSync').val() != '' && jQuery('#selectAllunchecked')
-                        .val() == '') {
-                        exclude = jQuery('#excludeProductFromSync').val().split(',');
-                        jQuery('#includeProductFromSync').val('');
-                    } else if (jQuery('#includeProductFromSync').val() != '' && jQuery('#selectAllunchecked')
-                        .val() != '') {
-                        include = jQuery('#includeProductFromSync').val().split(',');
-                        jQuery('#excludeProductFromSync').val('');
-                    }
-
-                    if (!jQuery.isEmptyObject(productArray) || !jQuery.isEmptyObject(exclude) || (thisVal ==
-                            'syncAll' && jQuery('.syncProduct').is(':checked')) || !jQuery.isEmptyObject(include)) {
-                        let totProduct = parseInt(jQuery('#totProduct').val());
-                        let syncProductCount = parseInt(jQuery('#syncProductCount').val());
-                        if (totProduct > 100 || (totProduct + syncProductCount) > 100) {
-                            jQuery('.errorFooter').empty();
-                            jQuery('.errorFooter').html(
-                                '<a class="btn conv-blue-bg m-auto text-white" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=productlist&utm_campaign=Pricing" target="_blank" >Upgrade to pro</a>'
-                            );
-                            jQuery('.errorText').html('Oops!');
-                            jQuery('#conv_save_error_txt').html(
-                                "<p>You've reached the maximum product limit of 100 products for your current plan.</p>" +
-                                "<p>With our Pro version, you'll benefit from unlimited products, advanced analytics, priority support, and much more. Upgrade now to unlock the full potential of our platform and take your business to the next level. " +
-                                "<a href='https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=productlist&utm_campaign=Pricing' target='_blank'>Upgrade to pro.</a></p>"
-                            );
-                            jQuery('#conv_save_error_modal').modal('show');
-                            return false;
-                        }
-
-                        var data = {
-                            action: "ee_syncProductCategory",
-                            productData: jQuery("#strProData").val(),
-                            conditionData: jQuery("#strConditionData").val(),
-                            valueData: jQuery("#strValueData").val(),
-                            searchName: jQuery("#searchName").val(),
-                            productArray: productArray,
-                            exclude: exclude,
-                            include: include,
-                            inculdeExtraProduct: prodId,
-                            conv_syncprodcat_nonce: "<?php echo esc_js(wp_create_nonce('conv_syncprodcat')); ?>"
-                        };
-                        jQuery.ajax({
-                            url: tvc_ajax_url,
-                            type: "POST",
-                            data: data,
-                            dataType: "json",
-                            beforeSend: function() {
-                                conv_change_loadingbar('show');
-                            },
-                            error: function(err, status) {
-                                conv_change_loadingbar('hide');
-                            },
-                            success: function(response) {
-                                conv_change_loadingbar('hide');
-                                if (response.error === true) {
-                                    // console.log(response.message)
-                                    return false;
-                                }
-                                selected_cat_id = response;
-                                jQuery('#selectedCategory').val('');
-                                jQuery('.catTermId').hide();
-                                let totCatCount = 0;
-                                jQuery('.catTermId').each(function(index) {
-                                    totCatCount++;
-                                })
-                                let selectedCategory = [];
-                                let catCount = 0;
-                                jQuery.each(response, function(key, value) {
-                                    var last_element = value;
-                                    jQuery('#selectedCategory').val() == '' ? jQuery(
-                                        '#selectedCategory').val(jQuery.trim(
-                                        last_element)) : jQuery('#selectedCategory').val(
-                                        jQuery(
-                                            '#selectedCategory').val() + ',' + jQuery.trim(
-                                            last_element))
-                                    jQuery('.termId_' + jQuery.trim(last_element)).show();
-                                });
-                                catCount = jQuery('.catTermId').filter(function(index) {
-                                    return jQuery(this).css('display') !== 'none';
-                                }).length;
-                                // jQuery('.catCount').html(catCount+' Out of '+totCatCount+' categories found. Only mapped categories will be synced in Google Merchant Center.');
-                                jQuery('.productAttribute').css('display', 'none')
-                                var target_country =
-                                    "<?php echo esc_html($result[0]['target_country']) ?>";
-                                if (target_country !== "") {
-                                    jQuery('#target_country').val(
-                                        "<?php echo esc_html($result[0]['target_country']) ?>");
-                                    jQuery('#target_country').attr('disabled', true);
-                                }
-                                var attr = <?php echo wp_json_encode($result[0]['attributes']) ?>;
-                                if (attr) {
-                                    jQuery('#id').attr('disabled', true);
-                                }
-
-                                // var is_tvc_cat_selected = false;
-                                // selected_cat_id.forEach(function(v,i){	
-                                //     if(is_tvc_cat_selected == false && jQuery("#category-"+jQuery.trim(v)).val() != "" && jQuery("#category-"+jQuery.trim(v)).val() != 0){
-                                //         is_tvc_cat_selected =true;
-                                //     }          
-                                // });
-                                // if(is_tvc_cat_selected == 1 || is_tvc_cat_selected == true){
-                                // }else{
-                                // jQuery('#nextBtn').addClass('disabled')
-                                // }
-
-                                currentTab = 0; // Current tab is set to be the first tab (0)
-                                showTab(currentTab); // Display the current tab
-                                jQuery("#categoryModal").modal("show");
-                                jQuery('.catCount').show();
-                                jQuery('.asterisk').show();
-                                setTimeout(function() {
-                                    jQuery('.select2').select2({
-                                        dropdownParent: jQuery("#categoryModal")
-                                    });
-                                }, 100);
-                            }
-                        });
-                    } else {
-                        conv_change_loadingbar('hide');
-                        jQuery('.errorFooter').empty();
-                        jQuery('.errorFooter').html(
-                            '<button class="btn conv-yellow-bg m-auto text-white" data-bs-dismiss="modal">Close</button>'
-                        )
-                        jQuery(".errorText").html('Error: No Product Selected');
-                        jQuery("#conv_save_error_txt").html(
-                            "We're sorry, but it seems you haven't selected any products. <br/>In order to proceed, please select at least one product from the available options."
-                        );
-                        jQuery("#conv_save_error_modal").modal("show");
-                    }
-                }
-            });
-
+            submitProductSyncUp();
+            jQuery("#categoryModal").modal("hide");
+            return false;
         });
 
         /****************************** Product Wise Category End ************************************************************************************/
@@ -2449,7 +2210,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
                             location.reload(true);
                         } else {
                             window.location.replace(
-                                "<?php echo esc_url_raw($site_url . 'product_list&id='); ?>" + response
+                                "<?php echo esc_url_raw($return_url . 'product_list&id='); ?>" + response
                                 .id);
                         }
 
@@ -2832,9 +2593,9 @@ $conv_data['subscription_id'] = $googleDetail->id;
             conv_nonce: "<?php echo esc_js(wp_create_nonce('conv_ajax_product_sync_bantch_wise-nonce')); ?>",
             // Adding filters value to feed table
             feedId: <?php echo esc_js(sanitize_text_field(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT))) ?>,
-            productData: jQuery("#strProData").val(),
-            conditionData: jQuery("#strConditionData").val(),
-            valueData: jQuery("#strValueData").val(),
+            // productData: jQuery("#strProData").val(),
+            // conditionData: jQuery("#strConditionData").val(),
+            // valueData: jQuery("#strValueData").val(),
             searchName: jQuery("#searchName").val(),
             include: jQuery('#includeProductFromSync').val(),
             exclude: jQuery('#excludeProductFromSync').val(),
@@ -2866,11 +2627,11 @@ $conv_data['subscription_id'] = $googleDetail->id;
                     jQuery("#conv_save_success_modal .leave-a-review").show();
                     jQuery("#conv_save_success_modal").modal("show");
                     setTimeout(function() {
-                        var url = "<?php echo esc_url_raw($site_url); ?>";
+                        var url = "<?php echo esc_url_raw($return_url); ?>";
                         var anchorTag = '<a href="' + url +
                             '" class="btn btn-secondary fs-20 fw-normal">Close</a>'
                         jQuery("#conv_save_success_modal button").replaceWith(anchorTag);
-                        //window.location.replace("<?php echo esc_url_raw($site_url); ?>");
+                        //window.location.replace("<?php echo esc_url_raw($return_url); ?>");
                     }, 1000);
 
                 } else {

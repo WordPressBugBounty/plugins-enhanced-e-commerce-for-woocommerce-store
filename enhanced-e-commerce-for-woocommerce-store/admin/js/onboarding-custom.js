@@ -945,20 +945,3 @@ function create_google_merchant_center_account(tvc_data){
     
   }
 }
-
-function user_tracking_data(event_name,error_msg,screen_name,event_label=''){
-  // var date = new Date();
-  // var timestamp = date.getFullYear() + ("0" + (date.getMonth() + 1)).slice(-2) + ("0" + date.getDate()).slice(-2) + ("0" + date.getHours() ).slice(-2) + ("0" + date.getMinutes()).slice(-2) + ("0" + date.getSeconds()).slice(-2);
-    jQuery.ajax({
-      type: "POST",
-      dataType: "json",
-      url: tvc_ajax_url,
-      data: {action: "update_user_tracking_data", event_name:event_name, error_msg:error_msg, screen_name:screen_name,
-          event_label:event_label,
-          TVCNonce : "<?php echo esc_js(wp_create_nonce('update_user_tracking_data-nonce')); ?>"
-      },
-      success: function (response) {
-           //console.log('user tracking');       
-      }
-    });
-  }

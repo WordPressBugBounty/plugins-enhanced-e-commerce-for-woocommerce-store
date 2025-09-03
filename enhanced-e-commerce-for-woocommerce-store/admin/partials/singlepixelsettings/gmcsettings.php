@@ -1,49 +1,60 @@
 <?php
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
-
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
-
 $is_sel_disable = 'disabled';
 $google_merchant_center_id = "";
 if (isset($googleDetail->google_merchant_center_id) === TRUE && $googleDetail->google_merchant_center_id !== "") {
     $google_merchant_center_id = $googleDetail->google_merchant_center_id;
 }
-
-$microsoft_merchant_center_id = "";
-if (isset($googleDetail->microsoft_merchant_center_id) === TRUE && $googleDetail->microsoft_merchant_center_id !== "") {
-    $microsoft_merchant_center_id = $googleDetail->microsoft_merchant_center_id;
-}
-
-$google_ads_id = "";
-if (isset($googleDetail->google_ads_id) === TRUE && $googleDetail->google_ads_id !== "") {
-    $google_ads_id = $googleDetail->google_ads_id;
-}
-
-$cust_g_email = "";
-if (isset($tvc_data['g_mail']) === TRUE && esc_attr($subscriptionId) !== '') {
-    $cust_g_email = esc_attr($tvc_data['g_mail']);
-}
-
+$cust_g_email = get_option('ee_customer_gmail');
 $is_domain_claim = "";
 if (isset($googleDetail->is_domain_claim) === TRUE) {
     $is_domain_claim = esc_attr($googleDetail->is_domain_claim);
 }
-
 $is_site_verified = "";
 if (isset($googleDetail->is_site_verified) === TRUE) {
     $is_site_verified = esc_attr($googleDetail->is_site_verified);
 }
-
-$site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
+$site_url = "admin.php?page=conversios-google-shopping-feed";
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 $conv_data = $TVC_Admin_Helper->get_store_data();
+$tvc_store_data = $TVC_Admin_Helper->get_store_data();
 //$getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
-
+$is_refresh_token_expire = false;
 global $wp_filesystem;
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
+if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
+    $subscriptionId = sanitize_text_field(wp_unslash($_GET['subscription_id']));
+    // for google
+    if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
+        $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
+        $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
+        $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
+        $is_refresh_token_expire = false;
+    }
+}
+if ($subscriptionId != "") {
+    $google_detail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
+
+    if (property_exists($google_detail, "error") && $google_detail->error == false) {
+        if (property_exists($google_detail, "data") && $google_detail->data != "") {
+            $googleDetail = $google_detail->data;
+            $tvc_data['subscription_id'] = $googleDetail->id;
+            $plan_id = $googleDetail->plan_id;
+            $login_customer_id = $googleDetail->customer_id;
+            $tracking_option = $googleDetail->tracking_option;
+            if ($googleDetail->tracking_option != '') {
+                $defaulSelection = 0;
+            }
+        }
+    }
+}
+$convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
+$convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 ?>
 <style>
     .tooltip-inner {
@@ -67,21 +78,9 @@ $contData = json_decode($getCountris);
         display: none;
     }
 </style>
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm">
-    <?php if (isset($pixel_settings_arr[$subpage]['topnoti']) === TRUE && $pixel_settings_arr[$subpage]['topnoti'] !== "") { ?>
-        <div class="alert d-flex align-items-cente p-0" role="alert">
-            <div class="text-light conv-success-bg rounded-start d-flex">
-                <span class="p-2 material-symbols-outlined align-self-center">verified</span>
-            </div>
-            <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
-                <div class="">
-                    <?php printf('%s', esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
+<div class="p-4 mt-0 rounded-3 shadow-sm d-none gmcsettingscard" style="background-color: #f0f0f1;">
     <?php
-    $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-shopping-feed', "gmcsettings");
+    $connect_url = $TVC_Admin_Helper->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios-google-shopping-feed&subpage=gmc');
     require_once "googlesignin.php";
     ?>
 
@@ -154,8 +153,14 @@ $contData = json_decode($getCountris);
                     ?>
                 </div>
             </div>
-
-
+            <div style="width: 100%; margin-top: 20px;">
+                <button class="conv-btn-connect-enabled-gmc" style="padding: 4px 15px; background-color: #0062ee; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Save
+                </button>
+                <button id="closeButtongmc" style="padding: 4px 15px; background-color: #5c636a; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                    Close
+                </button>
+            </div>
         </div>
     </form>
 
@@ -165,7 +170,6 @@ $contData = json_decode($getCountris);
     <input type="hidden" id="feedType" name="feedType" value="<?php echo isset($_GET['feedType']) && $_GET['feedType'] != '' ? esc_attr(sanitize_text_field(wp_unslash($_GET['feedType']))) : '' ?>" />
 
 </div>
-
 
 <!-- Create New Ads Account Modal -->
 <div class="modal fade" id="conv_create_gmc_new" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 9999;">
@@ -199,7 +203,7 @@ $contData = json_decode($getCountris);
                             </div>
                             <form id="conv_form_new_gmc">
                                 <div class="mb-3">
-                                    <input class="form-control mb-4" type="text" id="gmc_website_url" name="website_url" value="<?php echo esc_attr($tvc_data['user_domain']); ?>" placeholder="Enter Website" required>
+                                    <input class="form-control mb-4" type="text" id="gmc_website_url" name="website_url" value="<?php echo esc_attr($tvc_store_data['user_domain']); ?>" placeholder="Enter Website" required>
 
                                     <input class="form-control mb-4" type="text" id="gmc_email_address" name="email_address" value="<?php echo isset($tvc_data['g_mail']) === TRUE ? esc_attr($tvc_data['g_mail']) : ""; ?>" placeholder="Enter email address" required>
 
@@ -229,7 +233,7 @@ $contData = json_decode($getCountris);
                                             $contData = json_decode($getCountris);
                                             foreach ($contData as $key => $value) {
                                             ?>
-                                                <option value="<?php echo esc_attr($value->code) ?>" <?php echo $tvc_data['user_country'] === $value->code ? 'selected = "selecetd"' :
+                                                <option value="<?php echo esc_attr($value->code) ?>" <?php echo $tvc_store_data['user_country'] === $value->code ? 'selected = "selecetd"' :
                                                                                                             '' ?>>
                                                     <?php echo esc_attr($value->name) ?>
                                                 </option>"
@@ -456,7 +460,7 @@ $contData = json_decode($getCountris);
                                             <?php esc_html_e("A feed management tool centralizes updates, optimizes listings, and boosts data quality, streamlining product feed management for better efficiency and effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                         </p>
                                         <div class="attribute-btn">
-                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&tab=feed_list&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
+                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
                                         </div>
                                     </div>
                                 </div>
@@ -473,18 +477,6 @@ $contData = json_decode($getCountris);
         </div>
     </div>
 </div>
-<?php
-$tiktok_business_account = '';
-if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $googleDetail->tiktok_setting->tiktok_business_id !== '') {
-    $tiktok_business_account = $googleDetail->tiktok_setting->tiktok_business_id;
-}
-$facebook_business_account = '';
-$fb_catalog_id = '';
-if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDetail->facebook_setting->fb_business_id !== '') {
-    $facebook_business_account = $googleDetail->facebook_setting->fb_business_id;
-    $fb_catalog_id = $googleDetail->facebook_setting->fb_catalog_id;
-}
-?>
 <!-------------------------CTA super_feed_modal Start ---------------------------------->
 <div class="modal fade" id="conv_super_feed_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 99999">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -532,7 +524,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
 
                                         </p>
                                         <div class="attribute-btn">
-                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&tab=feed_list'); ?>" class="btn btn-dark">Manage Feeds</a>
+                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed'); ?>" class="btn btn-dark">Manage Feeds</a>
                                         </div>
                                     </div>
                                 </div>
@@ -576,7 +568,6 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
 <script>
     var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field(wp_unslash($_GET['subscription_id']))) : '' ?>";
     var gmc_id = "<?php echo esc_html($google_merchant_center_id) ?>";
-    var mmc_id = "<?php echo esc_html($microsoft_merchant_center_id) ?>";
 
     /**
      * Get Google Merchant Center List
@@ -742,8 +733,6 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery("#conv_save_error_txt").html(rsp.message);
                 jQuery("#conv_save_error_modal").modal("show");
             }
-            user_tracking_data('refresh_call', 'null', 'product-feed-manager-for-woocommerce',
-                'call_site_verified');
         });
     }
 
@@ -766,7 +755,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery("#conv_save_error_txt").html(rsp.message);
                 jQuery("#conv_save_error_modal").modal("show");
             }
-            user_tracking_data('refresh_call', 'null', 'product-feed-manager-for-woocommerce', 'call_domain_claim');
+            
         });
     }
     //Onload functions
@@ -841,7 +830,8 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         <?php } ?>
 
         //Save GMC id
-        jQuery(document).on("click", ".conv-btn-connect-enabled-gmc", function() {
+        jQuery(document).on("click", ".conv-btn-connect-enabled-gmc", function(e) {
+            e.preventDefault();
             var feedType = jQuery('#feedType').val();
             var valtoshow_inpopup = jQuery("#valtoshow_inpopup").val() + " " + jQuery(
                 ".valtoshow_inpopup_this").val();
@@ -889,11 +879,12 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                         // } else {
                         conv_change_loadingbar("hide");
                         jQuery(".conv-btn-connect-enabled-gmc").text("Save");
-                        jQuery(".conv-btn-connect-enabled-gmc").removeClass('disabled');
                         jQuery('.gmcAccount').html(selected_vals["google_merchant_id"])
-                        jQuery("#conv_save_success_modal_cta").modal("show");
+                        jQuery("#conv_save_success_modal_").modal("show");
                         // }
                         // });
+                        window.location.href = window.location.origin + window.location.pathname + '?page=conversios-google-shopping-feed&subpage=gmc';
+
                     }
                 }
 

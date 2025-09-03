@@ -510,33 +510,42 @@ class TVC_Admin_Helper
   }
   public function get_connect_url()
   {
+    $google_detail = $this->get_ee_options_data();
+    $store_id = $google_detail['setting']->store_id;
     if (!empty($this->connect_url)) {
       return $this->connect_url;
     } else {
-      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config3/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config3/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . admin_url() . "&amp;timezone=" . $this->get_time_zone();
+      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . admin_url() . "&amp;timezone=" . $this->get_time_zone();
       return $this->connect_url;
     }
   }
   public function get_custom_connect_url($confirm_url = "")
   {
+    $google_detail = $this->get_ee_options_data();
+    $store_id = $google_detail['setting']->store_id;
     if ($confirm_url == "") {
       $confirm_url = admin_url();
     }
-    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config3/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config3/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
+    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
     return $this->connect_url;
   }
 
   public function get_custom_connect_url_wizard($confirm_url = "")
   {
+    $google_detail = $this->get_ee_options_data();
+    $store_id = $google_detail['setting']->store_id;
     if ($confirm_url == "") {
       $confirm_url = admin_url();
     }
-    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config3/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config3/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
+    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
     return $this->connect_url;
   }
 
   public function get_custom_connect_url_subpage($confirm_url = "", $subpage = "")
   {
+    $google_detail = $this->get_ee_options_data();
+    $store_id = $google_detail['setting']->store_id;
+
     if (!empty($this->connect_url)) {
       return $this->connect_url;
     } else {
@@ -544,7 +553,7 @@ class TVC_Admin_Helper
         $confirm_url = admin_url();
       }
 
-      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config3/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config3/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone();
+      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone();
       return $this->connect_url;
     }
   }
@@ -588,6 +597,20 @@ class TVC_Admin_Helper
       $googleDetail = (array) $google_detail['setting'];
       return ((isset($googleDetail['customer_id'])) ? $googleDetail['customer_id'] : "");
     }
+  }
+
+  public function conv_get_store_id()
+  {
+    $google_detail = $this->get_ee_options_data();
+    $store_id = $google_detail['setting']->store_id;
+    if(!empty($store_id))
+    {
+      return $store_id;
+    }
+    else{
+      return '';
+    }
+
   }
 
   public function get_currentCustomerId()
@@ -915,7 +938,7 @@ class TVC_Admin_Helper
               });
             }
           </script>
-        <?php
+<?php
         }
       }
     }
@@ -1199,7 +1222,7 @@ class TVC_Admin_Helper
       $this->set_ee_additional_data($ee_additional_data);
     }
   }
- 
+
   /*
    * conver curency code to currency symbols
    */
@@ -1436,17 +1459,25 @@ class TVC_Admin_Helper
     return true;
   }
 
-  public function ee_get_results($table)
+  public function ee_get_results($table, $channel_id = null)
   {
     global $wpdb;
+
     if ($table == "") {
       return;
-    } else {
-      $tablename = esc_sql($wpdb->prefix . $table);
-      $sql = $wpdb->prepare("select * from %i order by id desc", $tablename);
-      return $wpdb->get_results($sql);
     }
+
+    $tablename = esc_sql($wpdb->prefix . $table);
+
+    if ($channel_id !== null) {
+      $sql = $wpdb->prepare("SELECT * FROM $tablename WHERE FIND_IN_SET(%d, channel_ids) > 0 AND is_delete IS NULL ORDER BY id DESC", $channel_id);
+    } else {
+      $sql = "SELECT * FROM $tablename WHERE is_delete IS NULL ORDER BY id DESC";
+    }
+
+    return $wpdb->get_results($sql);
   }
+
 
   public function ee_get_result_limit($table, $limit)
   {
@@ -1463,7 +1494,7 @@ class TVC_Admin_Helper
   public function get_custom_connect_url_superfeed($confirm_url = "", $subpage = "")
   {
     $feedType = "superfeed";
-    $connect_sf_url = "https://" . TVC_AUTH_CONNECT_URL . "/config3/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config3/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone() . "&amp;feedType=" . $feedType;
+    $connect_sf_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone() . "&amp;feedType=" . $feedType;
     return $connect_sf_url;
   }
 

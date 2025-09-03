@@ -20,7 +20,7 @@ if ($store_country[0]) {
 }
 $woo_currency = get_option('woocommerce_currency');
 $timezone = get_option('timezone_string');
-$confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=metasettings";
+$confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=meta";
 $fb_mail = isset($ee_options['facebook_setting']['fb_mail']) === TRUE ? esc_html($ee_options['facebook_setting']['fb_mail']) : '';
 
 if (isset($_GET['g_mail']) && !empty($_GET['g_mail'])) {
@@ -40,6 +40,27 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
 global $wp_filesystem;
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 $contData = json_decode($getCountris);
+$app_id = CONV_APP_ID;
+$ee_options = $TVC_Admin_Helper->get_ee_options_settings();
+$subscriptionId = $ee_options['subscription_id'];
+if ($subscriptionId != "") {
+    $google_detail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
+
+    if (property_exists($google_detail, "error") && $google_detail->error == false) {
+        if (property_exists($google_detail, "data") && $google_detail->data != "") {
+            $googleDetail = $google_detail->data;
+            $tvc_data['subscription_id'] = $googleDetail->id;
+            $plan_id = $googleDetail->plan_id;
+            $login_customer_id = $googleDetail->customer_id;
+            $tracking_option = $googleDetail->tracking_option;
+            if ($googleDetail->tracking_option != '') {
+                $defaulSelection = 0;
+            }
+        }
+    }
+}
+$convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
+$convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 ?>
 <style>
     .tooltip-inner {
@@ -63,19 +84,7 @@ $contData = json_decode($getCountris);
         display: none;
     }
 </style>
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm">
-    <?php if (isset($pixel_settings_arr[$subpage]['topnoti']) && $pixel_settings_arr[$subpage]['topnoti'] != "") { ?>
-        <div class="alert d-flex align-items-cente p-0" role="alert">
-            <div class="text-light conv-success-bg rounded-start d-flex">
-                <span class="p-2 material-symbols-outlined align-self-center">verified</span>
-            </div>
-            <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
-                <div class="">
-                    <?php printf('%s', esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
+<div class="convcard p-4 mt-0 rounded-3 shadow-sm metasettingscard d-none" style="background-color: #f0f0f1;">
     <div class="alert d-flex align-items-cente p-0">
         <div class="convpixsetting-inner-box">
             <span>
@@ -83,7 +92,6 @@ $contData = json_decode($getCountris);
                 $businessId = '';
                 $subId = isset($_GET['subscription_id']) ? sanitize_text_field(wp_unslash($_GET['subscription_id'])) : sanitize_text_field($subscriptionId);
                 $facebook_auth_url = TVC_API_CALL_URL_TEMP . '/auth/facebook?domain=' . esc_url_raw(get_site_url()) . '&app_id=' . $app_id . '&country=' . $country . '&user_currency=' . $woo_currency . '&subscription_id=' . $subId . '&confirm_url=' . admin_url() . $confirm_url . '&timezone=' . $timezone . '&scope=productFeed';
-
                 if (isset($_GET['subscription_id']) || $fb_business_id !== '') {
                     $data = array(
                         "customer_subscription_id" => esc_html($subId)
@@ -172,39 +180,40 @@ $contData = json_decode($getCountris);
                     <span class="material-symbols-outlined">edit</span><label class="mb-2 fs-12 text">Edit</label>
                 </div>
             </div>
-        </div>
-        <input type="hidden" id="fb_mail" value="<?php echo esc_attr($fb_mail) ?>" />
-
-
-        <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3 mt-3" style="background: #caf3e3;">
-            <div class="mt-0 mb-2 col-10">
-                <div class="fs-6 fw-bold text-primary">Unlock Google First Party Mode with Server Side Tagging</div>
-                <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
-                        Improves Event Match Quality scores by sending extra user data (e.g., email, phone number).
-                    </li>
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">
-                            check_circle
-                        </span>
-                        Capture events like purchases and form submissions directly from your server, regardless of browser restrictions.
-                    </li>
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
-                        Complete picture of user journeys, resulting in better conversion attribution, especially with iOS 14+ restrictions.
-                    </li>
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
-                        Bypasses ad blockers and browser restrictions, ensuring more precise tracking of conversions.
-                    </li>
-                </ul>
-                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=snapinnersetting&amp;utm_campaign=sstcapi&amp;plugin_name=aio" class="align-middle btn btn-sm btn-primary fw-bold-500">
-                    Buy Professional Plan Now! </a>
+            <div style="width: 100%; margin-top: 20px;">
+                <button class="conv-btn-connect" style="padding: 4px 15px; background-color: #0062ee; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Save
+                </button>
+                <button id="closeButtonmeta" style="padding: 4px 15px; background-color: #5c636a; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                    Close
+                </button>
             </div>
         </div>
+        <input type="hidden" id="fb_mail" value="<?php echo esc_attr($fb_mail) ?>" />
     </form>
 
+</div>
+
+<div class="modal fade" id="conv_save_success_modal_" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+
+            </div>
+            <div class="modal-body text-center p-0">
+                <img style="width:184px;"
+                    src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/successImg.png'); ?>">
+                <h3 class="fw-normal pt-3">
+                    <?php esc_html_e("Updated Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                </h3>
+                <span id="conv_save_success_txt_" class="mb-1 lh-lg d-flex px-2"></span>
+            </div>
+            <div class="modal-footer border-0 pb-4 mb-1">
+                <button class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal">Done</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-------------------------CTA POP up Start ---------------------------------->
@@ -293,7 +302,7 @@ $contData = json_decode($getCountris);
 
                                         </p>
                                         <div class="attribute-btn">
-                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&tab=feed_list&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
+                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
                                         </div>
                                     </div>
                                 </div>
@@ -358,7 +367,8 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
         ?>
 
         // Save data
-        jQuery(document).on("click", ".conv-btn-connect", function() {
+        jQuery(document).on("click", ".conv-btn-connect", function(e) {
+            e.preventDefault();
             var selected_vals = {};
             var facebook_data = {};
             facebook_data["fb_mail"] = jQuery('#fb_mail').val();
@@ -394,7 +404,8 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
                     if (response == "0" || response == "1") {
                         jQuery(".conv-btn-connect").text("Save");
                         jQuery('.gmcAccount').html(facebook_data["fb_business_id"])
-                        jQuery("#conv_save_success_modal_cta").modal("show");
+                        jQuery("#conv_save_success_modal_").modal("show");
+                        window.location.href = window.location.origin + window.location.pathname + '?page=conversios-google-shopping-feed&subpage=meta';
                     }
                 }
             });

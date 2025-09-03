@@ -526,17 +526,23 @@ if (class_exists('Conversios_Admin') === FALSE) {
     public function conversios_google_shopping_feed()
     {
       $action_tab = (isset($_GET['tab'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'tab'))) : "";
-      $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'subpage'))) : "";
-      if (!empty($sub_page)) {
-        require_once('partials/single-pixel-settings.php');
-      } else if ($action_tab != "") {
-        $this->$action_tab();
+      if ($action_tab == "product_list") {
+        $this->product_list();
+      }
+      if (!isset($_GET['subpage']) && $action_tab !== 'product_list') {
+        wp_redirect(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=gmc'));
+        exit;
+      }
+      $action_tab = isset($_GET['subpage']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'subpage'))) : '';
+      // $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'subpage'))) : "";
+      if ($action_tab != "") {
+        $this->load_channel_feed();
       } else {
         //new GoogleShoppingFeed();
         require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
         require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
         //require_once 'partials/product-feed-list.php';
-        require_once('partials/general-fields-product-feed.php');
+        // require_once('partials/general-fields-product-feed.php');
       }
     }
     public function gaa_config_page()
@@ -545,7 +551,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
       require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
       require_once('partials/general-fields-product-feed.php');
     }
-    public function feed_list()
+    public function load_channel_feed()
     {
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php';
       require_once ENHANCAD_PLUGIN_DIR . 'admin/class-tvc-admin-helper.php';

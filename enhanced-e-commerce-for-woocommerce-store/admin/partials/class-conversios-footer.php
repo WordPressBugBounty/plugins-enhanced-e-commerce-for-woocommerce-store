@@ -134,14 +134,7 @@ if (!class_exists('Conversios_Footer')) {
                 jQuery(document).ready(function() {
                     var screen_name = '<?php echo isset($_GET['page']) ? esc_js(sanitize_text_field(wp_unslash($_GET['page']))) : ''; ?>';
                     var error_msg = 'null';
-                    jQuery('.navinfotopnav ul li a').click(function() {
-                        var slug = jQuery(this).find('span').text();
-                        var menu = jQuery(this).attr('href');
-                        str_menu = slug.replace(/\s+/g, '_').toLowerCase();
-                        user_tracking_data('click', error_msg, screen_name, 'topmenu_' + str_menu);
-                    });
-
-
+                    
                     var convpricelink = jQuery('#toplevel_page_<?php echo esc_js(CONV_MENU_SLUG); ?>').find('a[href="admin.php?page=conversios-pricings"]');
                     if (convpricelink.length) {
                         convpricelink.attr('href', '<?php echo esc_js("https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro"); ?>');
@@ -209,24 +202,6 @@ if (!class_exists('Conversios_Footer')) {
                     });
                 });
 
-                function user_tracking_data(event_name, error_msg, screen_name, event_label) {
-                    jQuery.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        url: tvc_ajax_url,
-                        data: {
-                            action: "update_user_tracking_data",
-                            event_name: event_name,
-                            error_msg: error_msg,
-                            screen_name: screen_name,
-                            event_label: event_label,
-                            TVCNonce: "<?php echo esc_js(wp_create_nonce('update_user_tracking_data-nonce')); ?>"
-                        },
-                        success: function(response) {
-                            // console.log('user tracking');
-                        }
-                    });
-                }
             </script>
 
             <?php

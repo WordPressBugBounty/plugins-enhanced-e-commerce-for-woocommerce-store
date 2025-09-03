@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 if( !isset($_GET['tab']) || (isset($_GET['tab']) && $_GET['tab'] != 'feed_list') ) {
-    wp_safe_redirect("admin.php?page=conversios-google-shopping-feed&tab=feed_list"); //Odd
+    wp_safe_redirect("admin.php?page=conversios-google-shopping-feed"); //Odd
     exit;
 }
 require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
@@ -29,7 +29,7 @@ $message_p = "";
 $validate_pixels = array();
 $google_detail = $TVC_Admin_Helper->get_ee_options_data();
 $plan_id = 1;
-$site_url_feedlist = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
+$site_url_feedlist = "admin.php?page=conversios-google-shopping-feed";
 $googleDetail = "";
 if (isset($google_detail['setting'])) {
     $googleDetail = $google_detail['setting'];

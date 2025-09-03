@@ -24,10 +24,7 @@ if (isset($googleDetail->microsoft_ads_pixel_id) === TRUE && $googleDetail->micr
     $microsoft_ads_pixel_id = $googleDetail->microsoft_ads_pixel_id;
 }
 
-$cust_ms_email = "";
-if (isset($tvc_data['microsoft_mail']) === TRUE && esc_attr($subscriptionId) !== '') {
-    $cust_ms_email = esc_attr($tvc_data['microsoft_mail']);
-}
+$cust_ms_email = get_option('ee_customer_msmail');
 
 $is_domain_claim = "";
 if (isset($googleDetail->is_domain_claim) === TRUE) {
@@ -49,6 +46,35 @@ $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setu
 
 $contData = json_decode($getCountris);
 $required_bing = false;
+if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
+    $subscriptionId = sanitize_text_field(wp_unslash($_GET['subscription_id']));
+    // for google
+    if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
+        $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
+        $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
+        $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
+        $is_refresh_token_expire = false;
+    }
+}
+if ($subscriptionId != "") {
+    $google_detail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
+
+    if (property_exists($google_detail, "error") && $google_detail->error == false) {
+        if (property_exists($google_detail, "data") && $google_detail->data != "") {
+            $googleDetail = $google_detail->data;
+            $tvc_data['subscription_id'] = $googleDetail->id;
+            $plan_id = $googleDetail->plan_id;
+            $login_customer_id = $googleDetail->customer_id;
+            $tracking_option = $googleDetail->tracking_option;
+            if ($googleDetail->tracking_option != '') {
+                $defaulSelection = 0;
+            }
+        }
+    }
+}
+$convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
+$convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 ?>
 <style>
     .tooltip-inner {
@@ -75,27 +101,19 @@ $required_bing = false;
 
 <?php if (empty($microsoft_ads_manager_id) || empty($microsoft_ads_subaccount_id) || empty($microsoft_ads_pixel_id)) {
     $required_bing = true; ?>
-    <div class="alert alert-danger mb-3 d-flex align-items-center justify-content-end fs-6">
-        <span>Please connect your Microsoft Bing Ads account with all properties.</span>
-        <a href="<?php echo esc_url(admin_url() . 'admin.php?page=conversios-google-analytics&subpage=bingsettings'); ?>" class="btn btn-soft-primary float-end ms-2 fs-14 fw-500 ">
-            <?php esc_html_e("Connect You Bing Ads", "enhanced-e-commerce-for-woocommerce-store"); ?>
+    <div class="notice notice-error bing-connect-notice mmcsettingscard d-none" style="padding: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 14px;">
+            <?php esc_html_e("Please connect your Microsoft Bing Ads account with all properties.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+        </span>
+        <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-analytics&subpage=bingsettings')); ?>"
+            class="button button-primary" target="_blank" rel="noopener noreferrer" style="margin-left: 15px;">
+            <?php esc_html_e("Connect Your Bing Ads", "enhanced-e-commerce-for-woocommerce-store"); ?>
         </a>
     </div>
 <?php } ?>
 
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm <?php echo $required_bing ? 'disabledsection' : ''; ?>">
-    <?php if (isset($pixel_settings_arr[$subpage]['topnoti']) === TRUE && $pixel_settings_arr[$subpage]['topnoti'] !== "") { ?>
-        <div class="alert d-flex align-items-cente p-0" role="alert">
-            <div class="text-light conv-success-bg rounded-start d-flex">
-                <span class="p-2 material-symbols-outlined align-self-center">verified</span>
-            </div>
-            <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
-                <div class="">
-                    <?php printf('%s', esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
+
+<div style="background-color: #f0f0f1;" class="convcard p-4 mt-0 rounded-3 shadow-sm mmcsettingscard d-none <?php echo $required_bing ? 'disabledsection' : ''; ?>">
     <?php
     $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-shopping-feed', "mmcsettings");
 
@@ -105,7 +123,7 @@ $required_bing = false;
 
     <form id="mmcsetings_form" class="convpixsetting-inner-box mt-4">
         <div id="analytics_box_UA" class="py-1">
-            <div class="row">
+            <div class="row" style="width: 80%;">
                 <div class="col-6">
                     <label class="text-dark fw-bold-500">
                         <?php esc_html_e("Select Microsoft Merchant Center Store", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -121,17 +139,15 @@ $required_bing = false;
                                 <option value="">Select Microsoft Merchant Center Store</option>
                             </select>
                         </div>
-                        <div class="col-1 btn btn-sm btn-primary ms4 conv-enable-selection conv-link-blue">
-                            <label class="fs-6 text">
-                                <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                            </label>
+                        <div class="col-2 conv-enable-selection conv-link-blue">
+                            <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
                         </div>
                     </div>
                     <label class="text-dark fw-bold-500 mt-4">
                         <?php esc_html_e("Select Microsoft Merchant Catalog Id", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </label>
                     <div class="row pt-2 conv-mc-settings <?php echo !empty($microsoft_merchant_center_id) ? '' : 'disabledsection' ?>">
-                        <div class="col-10">
+                        <div class="col-9">
                             <select id="ms_catalog_id" name="ms_catalog_id" class="form-select form-select-lg mb-3 selecttwo valtoshow_inpopup_this" style="width: 100%" <?php echo esc_attr($is_sel_disable); ?>>
                                 <?php if (!empty($ms_catalog_id)) { ?>
                                     <option value="<?php echo esc_attr($ms_catalog_id); ?>" selected>
@@ -144,6 +160,14 @@ $required_bing = false;
                         <div class="col-2 conv-enable-catalog-selection conv-link-blue">
                             <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
                         </div>
+                    </div>
+                    <div style="width: 100%; margin-top: 20px;">
+                        <button class="conv-btn-connect-enabled-mmc" style="padding: 4px 15px; background-color: #0062ee; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            Save
+                        </button>
+                        <button id="closeButtonmmc" style="padding: 4px 15px; background-color: #5c636a; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                            Close
+                        </button>
                     </div>
                 </div>
                 <div class="col-6 d-flex justify-content-between align-items-center conv_create_new_bing_card rounded px-3 py-3">
@@ -453,7 +477,7 @@ $required_bing = false;
                                             <?php esc_html_e("A feed management tool centralizes updates, optimizes listings, and boosts data quality, streamlining product feed management for better efficiency and effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                         </p>
                                         <div class="attribute-btn">
-                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&tab=feed_list&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
+                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
                                         </div>
                                     </div>
                                 </div>
@@ -529,7 +553,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
 
                                         </p>
                                         <div class="attribute-btn">
-                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&tab=feed_list'); ?>" class="btn btn-dark">Manage Feeds</a>
+                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed'); ?>" class="btn btn-dark">Manage Feeds</a>
                                         </div>
                                     </div>
                                 </div>
@@ -574,6 +598,24 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
     var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field(wp_unslash($_GET['subscription_id']))) : '' ?>";
     var mmc_id = "<?php echo esc_html($microsoft_merchant_center_id) ?>";
     let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
+
+    jQuery(document).ready(function() {
+        if (jQuery('#ms_catalog_id').hasClass("select2-hidden-accessible")) {
+            jQuery('#ms_catalog_id').select2('destroy');
+        }
+        jQuery('#ms_catalog_id').select2();
+        var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
+        const urlParams = new URLSearchParams(window.location.search);
+        const $microsoft_ads_pixel_id = <?php echo !empty($microsoft_ads_pixel_id) ? 'true' : 'false'; ?>;
+
+        jQuery("#openmmcsettings").on("click", function() {
+            <?php if ($microsoft_ads_pixel_id == "" || $ms_catalog_id == "") { ?>
+                list_microsoft_merchant_account(tvc_data);
+            <?php } ?>
+        });
+    });
+
+
 
     jQuery(document).on('select2:select', '#microsoft_merchant_center_id', function(e) {
         if (jQuery(this).val() != "" && jQuery(this).val() != undefined) {
@@ -814,8 +856,6 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery("#conv_save_error_txt").html(rsp.message);
                 jQuery("#conv_save_error_modal").modal("show");
             }
-            user_tracking_data('refresh_call', 'null', 'product-feed-manager-for-woocommerce',
-                'call_site_verified');
         });
     }
 
@@ -838,7 +878,6 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                 jQuery("#conv_save_error_txt").html(rsp.message);
                 jQuery("#conv_save_error_modal").modal("show");
             }
-            user_tracking_data('refresh_call', 'null', 'product-feed-manager-for-woocommerce', 'call_domain_claim');
         });
     }
     //Onload functions
@@ -929,7 +968,8 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         <?php } ?>
 
         //Save GMC id
-        jQuery(document).on("click", ".conv-btn-connect-enabled-mmc", function() {
+        jQuery(document).on("click", ".conv-btn-connect-enabled-mmc", function(e) {
+            e.preventDefault();
             var feedType = jQuery('#feedType').val();
             var valtoshow_inpopup = jQuery("#valtoshow_inpopup").val() + " " + jQuery(
                 ".valtoshow_inpopup_this").val();
@@ -980,9 +1020,10 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                         jQuery(".conv-btn-connect-enabled-mmc").text("Save");
                         jQuery(".conv-btn-connect-enabled-mmc").removeClass('disabled');
                         jQuery('.mmcAccount').html(selected_vals["ms_catalog_id"])
-                        jQuery("#conv_save_success_modal_cta").modal("show");
+                        jQuery("#conv_save_success_modal_").modal("show");
                         // }
                         // });
+                        window.location.reload();
                     }
                 }
 

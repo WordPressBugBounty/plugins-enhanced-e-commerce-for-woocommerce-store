@@ -55,29 +55,7 @@ if (!class_exists('Conversios_Onboarding_Helper')) :
       //get subscription details
       add_action('wp_ajax_get_subscription_details', array($this, 'get_subscription_details'));
       add_action('wp_ajax_update_setup_time_to_subscription', array($this, 'update_setup_time_to_subscription'));
-
-      add_action('admin_init', array($this, 'add_schedule_ut'));
-      add_action('ee_ut_cron', array($this, 'ee_ut_crons'));
     }
-
-    public function add_schedule_ut()
-    {
-      $options_val = get_option('ee_ut');
-      if (!empty($options_val)) {
-        if (false === as_next_scheduled_action('ee_ut_cron')) {
-          // 86400
-          as_schedule_recurring_action(time(), 259200, 'ee_ut_cron');
-        }
-      }
-    }
-
-    public function ee_ut_crons()
-    {
-      $google_detail = unserialize(get_option('ee_api_data'));
-      $api_obj = new Conversios_Onboarding_ApiCall();
-      echo wp_json_encode($api_obj->createUserTracking());
-    }
-
 
     public function req_int()
     {
@@ -848,6 +826,8 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
     protected $apiDomain;
     protected $token;
     protected $merchantId;
+    protected $store_id;
+
     public function __construct()
     {
       global $wp_filesystem;
@@ -855,6 +835,8 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
       $this->apiDomain = TVC_API_CALL_URL;
       $this->token = 'MTIzNA==';
       $this->merchantId = sanitize_text_field($merchantInfo['merchantId']);
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $this->store_id = $TVC_Admin_Helper->conv_get_store_id();
     }
     public function tc_wp_remot_call_post($url, $args)
     {
@@ -924,7 +906,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
         $data = [
           'type' => sanitize_text_field($postData['type']),
           'account_id' => sanitize_text_field($postData['account_id']),
-          'store_id' => $google_detail['setting']->store_id,
+          'store_id' => $this->store_id,
           'subscription_id' => $google_detail['setting']->id
         ];
         $args = array(
@@ -973,7 +955,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
         $data = [
           'page' => sanitize_text_field($page),
           'max_results' => sanitize_text_field($max_results),
-          'store_id' => $google_detail['setting']->store_id,
+          'store_id' => $this->store_id,
           'subscription_id' => $google_detail['setting']->id
         ];
         $args = array(
@@ -1012,7 +994,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
     {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      $postData['store_id'] = $google_detail['setting']->store_id;
+      $postData['store_id'] = $this->store_id;
       $postData['subscription_id'] = $google_detail['setting']->id;
       try {
         if ($postData['store_id'] != "") {
@@ -1296,7 +1278,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
     {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      $data["store_id"] = $google_detail['setting']->store_id;
+      $data["store_id"] = $this->store_id;
       $data["subscription_id"] = $google_detail['setting']->id;
       try {
         $url = $this->apiDomain . '/gmc/user-merchant-center/list';
@@ -1400,7 +1382,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
     {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-      $data["store_id"] = $google_detail['setting']->store_id;
+      $data["store_id"] = $this->store_id;
       $data["subscription_id"] = $google_detail['setting']->id;
       try {
         $url = $this->apiDomain . '/google-analytics/dimensions/insert';
@@ -1424,7 +1406,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
       $google_detail = $TVC_Admin_Helper->get_ee_options_data();
       $formatted_data = array(
         "subscription_id" => intval($google_detail['setting']->id),
-        "store_id" => intval($google_detail['setting']->store_id),
+        "store_id" => intval($this->store_id),
         "additional_dimension" => array(
           "conv_track_page_scroll" => intval($data['conv_track_page_scroll']),
           "conv_track_file_download" => intval($data['conv_track_file_download']),
@@ -1467,7 +1449,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'currency' => sanitize_text_field($tvc_data->currency_code),
           'time_zone' => sanitize_text_field($tvc_data->timezone_string), //'Asia/Kolkata',
           'domain' => sanitize_text_field($tvc_data->user_domain),
-          'store_id' => $google_detail['setting']->store_id
+          'store_id' => $this->store_id
         ];
         $args = array(
           'headers' => $header,
@@ -1652,7 +1634,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'dynamic_remarketing_tags' => sanitize_text_field((isset($postData['dynamic_remarketing_tags']) && $postData['dynamic_remarketing_tags'] == 'true') ? 1 : 0),
           'google_ads_conversion_tracking' => sanitize_text_field((isset($postData['google_ads_conversion_tracking']) && $postData['google_ads_conversion_tracking'] == 'true') ? 1 : 0),
           'link_google_analytics_with_google_ads' => sanitize_text_field((isset($postData['link_google_analytics_with_google_ads']) && $postData['link_google_analytics_with_google_ads'] == 'true') ? 1 : 0),
-          'store_id' => $google_detail['setting']->store_id
+          'store_id' => $this->store_id
         );
         $args = array(
           'headers' => $header,
@@ -1691,7 +1673,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'google_merchant_center_id' => sanitize_text_field((isset($postData['google_merchant_center'])) ? $postData['google_merchant_center'] : ''),
           'website_url' => sanitize_text_field($postData['website_url']),
           'customer_id' => sanitize_text_field($postData['customer_id']),
-          'store_id' => $google_detail['setting']->store_id
+          'store_id' => $this->store_id
         ];
         $args = array(
           'headers' => $header,
@@ -1727,7 +1709,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'type' => "GA4",
           'ads_customer_id' => sanitize_text_field($postData['ads_customer_id']),
           'subscription_id' => sanitize_text_field($postData['subscription_id']),
-          'store_id' => $google_detail['setting']->store_id,
+          'store_id' => $this->store_id,
           'web_property' => sanitize_text_field($postData['web_property'])
         ];
         $args = array(
@@ -1772,7 +1754,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
           'account_id' => sanitize_text_field($postData['account_id']),
           'adwords_id' => sanitize_text_field($postData['adwords_id']),
           'subscription_id' => sanitize_text_field($postData['subscription_id']),
-          'store_id' => $google_detail['setting']->store_id
+          'store_id' => $this->store_id
         ];
         $args = array(
           'timeout' => 300,
@@ -1860,7 +1842,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
             $postData[$key] = sanitize_text_field($value);
           }
         }
-        $postData['store_id'] = $google_detail['setting']->store_id;
+        $postData['store_id'] = $this->store_id;
         $postData['subscription_id'] = $google_detail['setting']->id;
         $url = $this->apiDomain . '/google-ads/conversion-list';
         $header = array(
@@ -1921,7 +1903,7 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
         $data = [
           'customer_id' => sanitize_text_field((isset($postData['customer_id'])) ? $postData['customer_id'] : ''),
           'name' => "Order Conversion",
-          'store_id' => $google_detail['setting']->store_id,
+          'store_id' => $this->store_id,
           'subscription_id' => $google_detail['setting']->id
         ];
         $args = array(
@@ -1932,43 +1914,6 @@ if (!class_exists('Conversios_Onboarding_ApiCall')) {
         $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
         $return = new \stdClass();
         if ($result->status == 200) {
-          $return->status = $result->status;
-          $return->data = $result->data;
-          $return->error = false;
-          return $return;
-        } else {
-          $return->error = true;
-          $return->data = $result->data;
-          $return->status = $result->status;
-          return $return;
-        }
-      } catch (Exception $e) {
-        return $e->getMessage();
-      }
-    }
-
-    public function createUserTracking()
-    {
-      try {
-        $url = $this->apiDomain . '/usertracking';
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $subscriptionId =  $TVC_Admin_Helper->get_subscriptionId();
-        $options_val = get_option('ee_ut');
-        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
-        $data = [
-          'subscription_id' => sanitize_text_field((isset($subscriptionId)) ? $subscriptionId : ''),
-          'site_url' => esc_url(get_site_url()),
-          'ee_ut' => $options_val
-        ];
-        $args = array(
-          'headers' => $header,
-          'method' => 'POST',
-          'body' => wp_json_encode($data)
-        );
-        $result = $this->tc_wp_remot_call_post(esc_url($url), $args);
-        $return = new \stdClass();
-        if ($result->status == 200) {
-          update_option("ee_ut", '');
           $return->status = $result->status;
           $return->data = $result->data;
           $return->error = false;

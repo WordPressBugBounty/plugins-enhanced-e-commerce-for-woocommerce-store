@@ -10,6 +10,7 @@ class ShoppingApi
     protected $TVC_Admin_Helper;
     private $customApiObj;
     private $subscriptionId;
+    protected $store_id;
 
     public function __construct()
     {
@@ -21,6 +22,8 @@ class ShoppingApi
         $this->merchantId = sanitize_text_field($this->TVC_Admin_Helper->get_merchantId());
         $this->customerId = sanitize_text_field($this->TVC_Admin_Helper->get_currentCustomerId());
         $this->subscriptionId = sanitize_text_field($this->TVC_Admin_Helper->get_subscriptionId());
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $this->store_id = $TVC_Admin_Helper->conv_get_store_id();
     }
 
     public function getCampaigns()
@@ -289,8 +292,6 @@ class ShoppingApi
     //ga4general reports
     public function ga4_general_grid_report($from_date = '', $to_date = '', $domain = '')
     {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
         try {
             $url = $this->apiDomain . '/ga-general-reports/get-ga-grid-report';
             $data = [
@@ -298,7 +299,7 @@ class ShoppingApi
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $google_detail['setting']->store_id
+                'store_id' => $this->store_id
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -334,14 +335,12 @@ class ShoppingApi
     }
     public function ga4_realtime_report($domain = '')
     {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
         try {
             $url = $this->apiDomain . '/ga-general-reports/get-ga-realtime-reports';
             $data = [
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $google_detail['setting']->store_id
+                'store_id' => $this->store_id
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -377,9 +376,6 @@ class ShoppingApi
     }
     public function ga4_general_daily_visitors_report($from_date = '', $to_date = '', $domain = '')
     {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
- 	    $store_id = $google_detail['setting']->store_id;
         try {
             $url = $this->apiDomain . '/ga-general-reports/get-ga-daily-visitors-report';
             $data = [
@@ -387,7 +383,7 @@ class ShoppingApi
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $store_id
+                'store_id' => $this->store_id
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -423,9 +419,6 @@ class ShoppingApi
     }
     public function ga4_general_audience_report($from_date = '', $to_date = '', $domain = '')
     {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
- 	    $store_id = $google_detail['setting']->store_id;
         try {
             $url = $this->apiDomain . '/ga-general-reports/get-ga-audience-report';
             $data = [
@@ -433,7 +426,7 @@ class ShoppingApi
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $store_id
+                'store_id' => $this->store_id
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -469,9 +462,6 @@ class ShoppingApi
     }
     public function ga4_demographics_report($from_date = '', $to_date = '', $domain = '', $report_name = '')
     {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
- 	    $store_id = $google_detail['setting']->store_id;
         try {
             $url = $this->apiDomain . '/ga-general-reports/get-ga-demographics-reports';
             $data = [
@@ -481,7 +471,7 @@ class ShoppingApi
                 'domain' => $domain,
                 'dimension' => $report_name,
                 'limit' => 5,
-                'store_id' => $store_id
+                'store_id' => $this->store_id
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -527,7 +517,8 @@ class ShoppingApi
                 'start_date' => sanitize_text_field($from_date),
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
-                'domain' => $domain
+                'domain' => $domain,
+                'store_id' => $this->store_id
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -564,8 +555,6 @@ class ShoppingApi
 
     public function ga4_page_report($from_date = '', $to_date = '', $domain = '', $limit = '')
     {
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $google_detail = $TVC_Admin_Helper->get_ee_options_data();
         try {
             $url = $this->apiDomain . '/ga-general-reports/get-ga-pages-report';
             $data = [
@@ -577,7 +566,7 @@ class ShoppingApi
                 'limit' => $limit,
                 'orderbymetric' => 'screenPageViews',
                 'offset' => '0',
-                'store_id' => $google_detail['setting']->store_id
+                'store_id' => $this->store_id
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -611,5 +600,4 @@ class ShoppingApi
             return $e->getMessage();
         }
     }
-
 }

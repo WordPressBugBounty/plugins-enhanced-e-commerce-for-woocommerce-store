@@ -6,12 +6,35 @@ class CustomApi
 {
   private $apiDomain;
   private $token;
+
+  protected $subscriptionId;
   public function __construct()
   {
     $this->apiDomain = TVC_API_CALL_URL;
     $this->token = 'MTIzNA==';
   }
 
+  public function get_subscriptionId()
+  {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    if (!empty($this->subscriptionId)) {
+      return $this->subscriptionId;
+    } else {
+      $ee_options_settings = $TVC_Admin_Helper->get_ee_options_settings();
+      return $this->subscriptionId = (isset($ee_options_settings['subscription_id'])) ? $ee_options_settings['subscription_id'] : "";
+    }
+  }
+  public function conv_get_store_id()
+  {
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+    $store_id = $google_detail['setting']->store_id;
+    if (!empty($store_id)) {
+      return $store_id;
+    } else {
+      return '';
+    }
+  }
   public function tc_wp_remot_call_post($url, $args)
   {
     try {
@@ -81,8 +104,7 @@ class CustomApi
   public function update_app_status($status = 1)
   {
     try {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
+      $subscription_id = $this->get_subscriptionId();
       if ($subscription_id != "") {
         $url = $this->apiDomain . '/customer-subscriptions/update-app-status';
         $header = array(
@@ -145,8 +167,7 @@ class CustomApi
   public function app_activity_detail($status)
   {
     try {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
+      $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id) && $status != "") {
         $url = $this->apiDomain . '/customer-subscriptions/app_activity_detail';
         $header = array(
@@ -395,21 +416,18 @@ class CustomApi
   }
   public function get_conversion_list($customer_id, $conversionCategory = "")
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $header = array(
         "Authorization: Bearer MTIzNA==",
         "Content-Type" => "application/json"
       );
       $url = $this->apiDomain . "/google-ads/conversion-list";
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
+      $subscription_id = $this->get_subscriptionId();
       $data = [
         'customer_id' => sanitize_text_field($customer_id),
         'conversionCategory' => sanitize_text_field($conversionCategory),
         'subscription_id' => sanitize_text_field($subscription_id),
-        'store_id' => $google_detail['setting']->store_id
+        'store_id' => $this->conv_get_store_id()
       ];
       $args = array(
         'timeout' => 300,
@@ -443,15 +461,13 @@ class CustomApi
 
   public function get_microsoft_conversion_list($customer_id, $account_id, $tag_id)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
     try {
       $header = array(
         "Authorization: Bearer MTIzNA==",
         "Content-Type" => "application/json"
       );
       $url = $this->apiDomain . "/microsoft/getConversionGoals";
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
+      $subscription_id = $this->get_subscriptionId();
       $data = [
         'customer_id' => sanitize_text_field($customer_id),
         'account_id' => sanitize_text_field($account_id),
@@ -500,8 +516,7 @@ class CustomApi
         "Content-Type" => "application/json"
       );
       $url = $this->apiDomain . "/microsoft/createConversionGoals";
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
+      $subscription_id = $this->get_subscriptionId();
       $data = [
         'customer_id' => sanitize_text_field($customer_id),
         'account_id' => sanitize_text_field($account_id),
@@ -543,22 +558,19 @@ class CustomApi
   }
   public function conv_create_gads_conversion($customer_id, $conversionName, $conversionCategory = "")
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $header = array(
         "Authorization: Bearer MTIzNA==",
         "Content-Type" => "application/json"
       );
       $url = $this->apiDomain . "/google-ads/create-conversion";
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
+      $subscription_id = $this->get_subscriptionId();
       $data = [
         'customer_id' => sanitize_text_field($customer_id),
         'name' => sanitize_text_field($conversionName),
         'subscription_id' => sanitize_text_field($subscription_id),
         'conversionCategory' => sanitize_text_field($conversionCategory),
-        'store_id' => $google_detail['setting']->store_id
+        'store_id' => $this->conv_get_store_id()
       ];
       $args = array(
         'timeout' => 300,
@@ -596,10 +608,8 @@ class CustomApi
    */
   public function get_google_analytics_reports_ga4($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-    $postData['store_id'] = $google_detail['setting']->store_id;
-    $postData['subscription_id'] = $google_detail['setting']->id;
+    $postData['store_id'] = $this->conv_get_store_id();
+    $postData['subscription_id'] = $this->get_subscriptionId();
     try {
       $url = $this->apiDomain . "/actionable-dashboard/google-analytics-reports-ga4";
       $header = array(
@@ -749,8 +759,6 @@ class CustomApi
   }
   public function products_sync($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if (!empty($postData)) {
         foreach ($postData as $key => $value) {
@@ -759,8 +767,8 @@ class CustomApi
           }
         }
       }
-      $postData['store_id'] = $google_detail['setting']->store_id;
-      $postData['subscription_id'] = $google_detail['setting']->id;
+      $postData['store_id'] = $this->conv_get_store_id();
+      $postData['subscription_id'] = $this->get_subscriptionId();
       $url = $this->apiDomain . "/products/batch";
       $args = array(
         'timeout' => 300,
@@ -878,10 +886,8 @@ class CustomApi
 
   public function getCampaignCurrencySymbol($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-    $postData['store_id'] = $google_detail['setting']->store_id;
-    $postData['subscription_id'] = $google_detail['setting']->id;
+    $postData['store_id'] = $this->conv_get_store_id();
+    $postData['subscription_id'] = $this->get_subscriptionId();
     try {
       if (!empty($postData)) {
         foreach ($postData as $key => $value) {
@@ -999,8 +1005,6 @@ class CustomApi
 
   public function siteVerificationToken($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $url = $this->apiDomain . '/gmc/site-verification-token';
       $data = [
@@ -1008,8 +1012,8 @@ class CustomApi
         'website' => sanitize_text_field($postData['website_url']),
         'account_id' => sanitize_text_field($postData['account_id']),
         'method' => sanitize_text_field($postData['method']),
-        'store_id' => $google_detail['setting']->store_id,
-        'subscription_id' => $google_detail['setting']->id
+        'store_id' => $this->conv_get_store_id(),
+        'subscription_id' => $this->get_subscriptionId()
       ];
 
       $args = array(
@@ -1052,17 +1056,15 @@ class CustomApi
 
   public function siteVerification($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $url = $this->apiDomain . '/gmc/site-verification';
       $data = [
         'merchant_id' => sanitize_text_field($postData['merchant_id']),
         'website' => esc_url_raw($postData['website_url']),
-        'subscription_id' => sanitize_text_field($postData['subscription_id']),
+        'subscription_id' => $this->get_subscriptionId(),
         'account_id' => sanitize_text_field($postData['account_id']),
         'method' => sanitize_text_field($postData['method']),
-        'store_id' => $google_detail['setting']->store_id
+        'store_id' => $this->conv_get_store_id()
       ];
 
       $args = array(
@@ -1107,16 +1109,14 @@ class CustomApi
 
   public function claimWebsite($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       $url = $this->apiDomain . '/gmc/claim-website';
       $data = [
         'merchant_id' => sanitize_text_field($postData['merchant_id']),
         'account_id' => sanitize_text_field($postData['account_id']),
         'website' => esc_url_raw($postData['website_url']),
-        'subscription_id' => sanitize_text_field($postData['subscription_id']),
-        'store_id' => $google_detail['setting']->store_id
+        'subscription_id' => $this->get_subscriptionId(),
+        'store_id' => $this->conv_get_store_id()
       ];
       $args = array(
         'timeout' => 300,
@@ -1234,8 +1234,7 @@ class CustomApi
   public function get_feed_status_by_store_id($data)
   {
     try {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
+      $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id) && $data != "") {
         $url = $this->apiDomain . '/products/feed-list';
         $header = array(
@@ -1257,19 +1256,16 @@ class CustomApi
   }
   public function delete_from_channels($data)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
+      $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id) && $data != "") {
         $url = $this->apiDomain . '/products/batch';
         $header = array(
           "Authorization: Bearer " . $this->token,
           "Content-Type" => "application/json"
         );
-        $data['store_id'] = $google_detail['setting']->store_id;
-        $data['subscription_id'] = $google_detail['setting']->id;
+        $data['store_id'] = $this->conv_get_store_id();
+        $data['subscription_id'] = $this->get_subscriptionId();
         $args = array(
           'headers' => $header,
           'method' => 'DELETE',
@@ -1296,8 +1292,7 @@ class CustomApi
   public function ee_create_product_feed($data)
   {
     try {
-      $CONV_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = sanitize_text_field($CONV_Admin_Helper->get_subscriptionId());
+      $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id) && $data != "") {
         $url = $this->apiDomain . '/products/feed';
         $header = array(
@@ -1319,8 +1314,6 @@ class CustomApi
   }
   public function feed_wise_products_sync($postData, $callby = 'no-reference-give')
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if (!empty($postData)) {
         foreach ($postData as $key => $value) {
@@ -1329,8 +1322,8 @@ class CustomApi
           }
         }
       }
-      $postData['store_id'] = $google_detail['setting']->store_id;
-      $postData['subscription_id'] = $google_detail['setting']->id;
+      $postData['store_id'] = $this->conv_get_store_id();
+      $postData['subscription_id'] = $this->get_subscriptionId();
       $url = $this->apiDomain . "/products/batch-all";
       $args = array(
         'timeout' => 300,
@@ -1354,7 +1347,7 @@ class CustomApi
         $return->error = false;
         return $return;
       } else {
-
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
         $TVC_Admin_Helper->plugin_log("woow 1232 error-feed_wise_products_sync():" . json_encode($response), 'product_sync');
         $return->error = true;
         $return->arges =  $args;
@@ -1419,9 +1412,7 @@ class CustomApi
 
   public function store_business_center($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-    $postData['store_id'] = $google_detail['setting']->store_id;
+    $postData['store_id'] = $this->conv_get_store_id();
     try {
       if ($postData != "") {
         $url = $this->apiDomain . '/tiktok/storeBusinessCenter';
@@ -1445,9 +1436,7 @@ class CustomApi
 
   public function store_user_catalog($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-    $postData['store_id'] = $google_detail['setting']->store_id;
+    $postData['store_id'] = $this->conv_get_store_id();
     try {
       if ($postData != "") {
         $url = $this->apiDomain . '/tiktok/storeUserCatalog';
@@ -1517,10 +1506,8 @@ class CustomApi
 
   public function createPmaxCampaign($postData)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
-    $postData['store_id'] = $google_detail['setting']->store_id;
-    $postData['subscription_id'] = $google_detail['setting']->id;
+    $postData['store_id'] = $this->conv_get_store_id();
+    $postData['subscription_id'] = $this->get_subscriptionId();
     try {
       if ($postData != "") {
         $url = $this->apiDomain . '/pmax/retail';
@@ -1640,8 +1627,6 @@ class CustomApi
   }
   public function storeUserBusiness($data)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if (isset($data)) {
         $url = $this->apiDomain . '/facebook/storeUserBusiness';
@@ -1649,7 +1634,7 @@ class CustomApi
           "Authorization: Bearer " . $this->token,
           "Content-Type" => "application/json"
         );
-        $data['store_id'] = $google_detail['setting']->store_id;
+        $data['store_id'] = $this->conv_get_store_id();
         $args = array(
           'headers' => $header,
           'method' => 'POST',
@@ -1671,7 +1656,7 @@ class CustomApi
           "Authorization: Bearer " . $this->token,
           "Content-Type" => "application/json"
         );
-
+        $data['store_id'] = $this->conv_get_store_id();
         $args = array(
           'headers' => $header,
           'method' => 'POST',
@@ -1710,8 +1695,6 @@ class CustomApi
 
   public function ads_checkMcc($subscription_id, $ads_accountId)
   {
-    $TVC_Admin_Helper = new TVC_Admin_Helper();
-    $google_detail = $TVC_Admin_Helper->get_ee_options_data();
     try {
       if ($subscription_id != "" && $ads_accountId != "") {
         $url = $this->apiDomain . '/adwords/check-manager-account';
@@ -1722,7 +1705,7 @@ class CustomApi
         $data = array(
           "subscription_id" => $subscription_id,
           "customer_id" => $ads_accountId,
-          'store_id' => $google_detail['setting']->store_id
+          'store_id' => $this->conv_get_store_id()
         );
         $args = array(
           'headers' => $header,
@@ -1742,9 +1725,7 @@ class CustomApi
   public function get_gads_info($google_ads_id, $api_type)
   {
     try {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
-      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id)) {
         $url = $this->apiDomain . '/adwords/get-google-ads-status';
         $header = array(
@@ -1753,7 +1734,7 @@ class CustomApi
         );
         $postData = array(
           "subscription_id" => $subscription_id,
-          "store_id" => $google_detail['setting']->store_id,
+          "store_id" => $this->conv_get_store_id(),
           "api_type" => $api_type,
           "customer_id" => $google_ads_id
         );
@@ -1773,9 +1754,7 @@ class CustomApi
   public function get_gmc_business_info($google_merchant_id)
   {
     try {
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
-      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id)) {
         $url = $this->apiDomain . '/gmc/get-gmc-business-detail';
         $header = array(
@@ -1784,7 +1763,7 @@ class CustomApi
         );
         $postData = array(
           "subscription_id" => $subscription_id,
-          "store_id" => $google_detail['setting']->store_id,
+          "store_id" => $this->conv_get_store_id(),
           "account_id" => $google_merchant_id
         );
         $args = array(

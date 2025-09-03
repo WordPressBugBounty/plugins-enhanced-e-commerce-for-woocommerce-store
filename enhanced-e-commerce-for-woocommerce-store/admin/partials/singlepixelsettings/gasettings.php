@@ -584,7 +584,7 @@ $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc
             selected_vals["conv_track_page_scroll"] = document.getElementById('conv_track_page_scroll').checked ? "1" : "0";
             selected_vals["conv_track_file_download"] = document.getElementById('conv_track_file_download').checked ? "1" : "0";
             // console.log(selected_vals);
-            if (has_error == 1) {
+            if (has_error == 2) {
                 jQuery(".conv-btn-connect").addClass("conv-btn-connect-disabled");
                 jQuery(".conv-btn-connect").removeClass("conv-btn-connect-enabled-google");
                 jQuery(".conv-btn-connect").text('Save');

@@ -51,7 +51,6 @@ if (!class_exists('TVC_Ajax_File')) :
 
       // Not in use after product sync from backend
       //add_action('wp_ajax_tvcajax_product_sync_bantch_wise', array($this, 'tvcajax_product_sync_bantch_wise'));//deprecated!
-      add_action('wp_ajax_update_user_tracking_data', array($this, 'update_user_tracking_data'));
       add_action('init_product_sync_process_scheduler', array($this, 'tvc_call_start_product_sync_process'), 10, 1);
       add_action('wp_ajax_auto_product_sync_process_scheduler', array($this, 'tvc_call_start_product_sync_process'));
 
@@ -521,42 +520,6 @@ if (!class_exists('TVC_Ajax_File')) :
       exit;
     }
 
-    public function update_user_tracking_data()
-    {
-      $nonce = filter_input(INPUT_POST, 'TVCNonce', FILTER_UNSAFE_RAW);
-      if ($nonce && wp_verify_nonce($nonce, 'update_user_tracking_data-nonce')) {
-        $event_name = isset($_POST['event_name']) ? sanitize_text_field(wp_unslash($_POST['event_name'])) : "";
-        $screen_name = isset($_POST['screen_name']) ? sanitize_text_field(wp_unslash($_POST['screen_name'])) : "";
-        $error_msg = isset($_POST['error_msg']) ? sanitize_text_field(wp_unslash($_POST['error_msg'])) : "";
-        $event_label = isset($_POST['event_label']) ? sanitize_text_field(wp_unslash($_POST['event_label'])) : "";
-        // $timestamp = isset($_POST['timestamp'])?sanitize_text_field(wp_unslash($_POST['timestamp'])) : "";
-        $timestamp = gmdate("YmdHis");
-        $t_data = array(
-          'event_name' => esc_sql($event_name),
-          'screen_name' => esc_sql($screen_name),
-          'timestamp' => esc_sql($timestamp),
-          'error_msg' => esc_sql($error_msg),
-          'event_label' => esc_sql($event_label),
-        );
-        if (!empty($t_data)) {
-
-          $options_val = get_option('ee_ut');
-          if (!empty($options_val)) {
-            $odata = (array) maybe_unserialize($options_val);
-            array_push($odata, $t_data);
-            update_option("ee_ut", serialize($odata));
-          } else {
-            $t_d[] = $t_data;
-            update_option("ee_ut", serialize($t_d));
-          }
-        }
-        wp_die();
-      } else {
-        echo wp_json_encode(array("error" => true, "message" => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
-      }
-      // IMPORTANT: don't forget to exit
-      exit;
-    }
 
 
     function tvc_call_start_product_sync_process()
@@ -1644,6 +1607,76 @@ if (!class_exists('TVC_Ajax_File')) :
 
       if ($nonce && wp_verify_nonce($nonce, 'conv_onboarding_nonce')) {
         $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
+        $productFilter = isset($_POST['productData']) && $_POST['productData'] != '' ? explode(',', sanitize_text_field(wp_unslash($_POST['productData']))) : '';
+        $conditionFilter = isset($_POST['conditionData']) && $_POST['conditionData'] != '' ? explode(',', sanitize_text_field(wp_unslash($_POST['conditionData']))) : '';
+        $valueFilter = isset($_POST['valueData']) && $_POST['valueData'] != '' ? explode(',', sanitize_text_field(wp_unslash($_POST['valueData']))) : '';
+        $filters = array();
+        if (!empty($productFilter)) {
+          foreach ($productFilter as $key => $val) {
+            $filters[$key]['attr'] = sanitize_text_field($val);
+            $filters[$key]['condition'] = sanitize_text_field($conditionFilter[$key]);
+            $filters[$key]['value'] = sanitize_text_field($valueFilter[$key]);
+          }
+        }
+
+        $cat_data = isset($_POST['cat_data']) ? $_POST['cat_data'] : "";
+        $mappedCatsDB = [];
+        parse_str($cat_data, $formArrayCat);
+        if (!empty($formArrayCat)) {
+          foreach ($formArrayCat as $key => $value) {
+            $formArrayCat[$key] = $value;
+          }
+          foreach ($formArrayCat as $key => $value) {
+            if (preg_match("/^category-name-/i", $key)) {
+              if ($value != '') {
+                $keyArray = explode("name-", $key);
+                $mappedCatsDB[$keyArray[1]]['name'] = sanitize_text_field($value);
+              }
+              unset($formArrayCat[$key]);
+            } else if (preg_match("/^category-/i", $key)) {
+              if ($value != '' && $value > 0) {
+                $keyArray = explode("-", $key);
+                $mappedCats[$keyArray[1]] = $value;
+                $mappedCatsDB[$keyArray[1]]['id'] = sanitize_text_field($value);
+              }
+              unset($formArrayCat[$key]);
+            }
+          }
+          update_option("ee_prod_mapped_cats", serialize($mappedCatsDB));
+        }
+
+        $attr_data = isset($_POST['attr_data']) ? $_POST['attr_data'] : "";
+        parse_str($attr_data, $formArrayAttr);
+        if (!empty($formArrayAttr)) {
+          foreach ($formArrayAttr as $key => $value) {
+            if ($key == 'additional_attr_') {
+              $additional_attr = $value;
+              unset($formArrayAttr['additional_attr_']);
+            }
+            if ($key == 'additional_attr_value_') {
+              $additional_attr_value = $value;
+              unset($formArrayAttr['additional_attr_value_']);
+            }
+            if (is_array($value) !== 1) {
+              $formArrayAttr[$key] = sanitize_text_field($value);
+            }
+          }
+          unset($formArrayAttr['additional_attr_']);
+          unset($formArrayAttr['additional_attr_value_']);
+          if (isset($additional_attr)) {
+            foreach ($additional_attr as $key => $value) {
+              $formArrayAttr[$value] = $additional_attr_value[$key];
+            }
+          }
+          foreach ($formArrayAttr as $key => $value) {
+            $mappedAttrs[$key] = sanitize_text_field($value);
+          }
+
+          //If additional_attr_value_ 
+          unset($mappedAttrs['additional_attr_value_']);
+          update_option("ee_prod_mapped_attrs", serialize($mappedAttrs));
+        }
+
         $channel_id = array();
         if (isset($_POST['google_merchant_center']) && $_POST['google_merchant_center'] == 1) {
           $channel_id['google_merchant_center'] = sanitize_text_field(wp_unslash($_POST['google_merchant_center']));
@@ -1736,7 +1769,13 @@ if (!class_exists('TVC_Ajax_File')) :
             'updated_date' => esc_sql(gmdate('Y-m-d H:i:s', current_time('timestamp'))),
             'next_schedule_date' => $next_schedule_date,
             'target_country' => isset($_POST['target_country']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['target_country']))) : '',
-            'tiktok_catalog_id' => isset($tiktok_catalog_id) ? esc_sql(sanitize_text_field($tiktok_catalog_id)) : ''
+            'tiktok_catalog_id' => isset($tiktok_catalog_id) ? esc_sql(sanitize_text_field($tiktok_catalog_id)) : '',
+            'IncProductVar' => isset($_POST['IncProductVar']) ? intval($_POST['IncProductVar']) : 1,
+            'IncDefProductVar' => isset($_POST['IncDefProductVar']) ? intval($_POST['IncDefProductVar']) : 0,
+            'IncLowestPriceProductVar' => isset($_POST['IncLowestPriceProductVar']) ? intval($_POST['IncLowestPriceProductVar']) : 0,
+            "filters" => wp_json_encode($filters),
+            'categories' => wp_json_encode($mappedCatsDB),
+            'attributes' => wp_json_encode($mappedAttrs),
           );
 
           if (isset($_POST['is_mapping_update']) && $_POST['is_mapping_update'] != 1) {
@@ -1763,6 +1802,12 @@ if (!class_exists('TVC_Ajax_File')) :
             'fb_status' => isset($channel_ids) && strpos($channel_ids, '2') !== false ? esc_sql('Draft') : '',
             'tiktok_status' => isset($channel_ids) && strpos(sanitize_text_field($channel_ids), '3') !== false ? esc_sql('Draft') : '',
             'ms_status' => isset($channel_ids) && strpos($channel_ids, '4') !== false ? esc_sql('Draft') : '',
+            'IncProductVar' => isset($_POST['IncProductVar']) ? intval($_POST['IncProductVar']) : 1,
+            'IncDefProductVar' => isset($_POST['IncDefProductVar']) ? intval($_POST['IncDefProductVar']) : 0,
+            'IncLowestPriceProductVar' => isset($_POST['IncLowestPriceProductVar']) ? intval($_POST['IncLowestPriceProductVar']) : 0,
+            "filters" => wp_json_encode($filters),
+            'categories' => wp_json_encode($mappedCatsDB),
+            'attributes' => wp_json_encode($mappedAttrs),
           );
           $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s"));
           $result = $TVC_Admin_DB_Helper->tvc_get_last_row("ee_product_feed", array("id"));
@@ -1803,6 +1848,12 @@ if (!class_exists('TVC_Ajax_File')) :
           'last_sync_date',
           'target_country',
           'tiktok_catalog_id',
+          'IncProductVar',
+          'IncDefProductVar',
+          'IncLowestPriceProductVar',
+          'categories',
+          'attributes',
+          'filters'
         );
         $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
         echo wp_json_encode($result);
@@ -1843,6 +1894,9 @@ if (!class_exists('TVC_Ajax_File')) :
           'total_product',
           'target_country',
           'tiktok_catalog_id',
+          'IncProductVar',
+          'IncDefProductVar',
+          'IncLowestPriceProductVar',
         );
         $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
         $profile_data = array(
@@ -1858,6 +1912,9 @@ if (!class_exists('TVC_Ajax_File')) :
           'target_country' => esc_sql($result[0]['target_country']),
           'tiktok_catalog_id' => esc_sql($result[0]['tiktok_catalog_id']),
           'tiktok_status' => strpos($result[0]['channel_ids'], '3') !== false ? esc_sql('Draft') : '',
+          'IncProductVar' => esc_sql($result[0]['IncProductVar']),
+          'IncDefProductVar' => esc_sql($result[0]['IncDefProductVar']),
+          'IncLowestPriceProductVar' => esc_sql($result[0]['IncLowestPriceProductVar']),
         );
 
         $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s"));
@@ -1913,7 +1970,7 @@ if (!class_exists('TVC_Ajax_File')) :
         // }
         $soft_delete_id = array('status' => 'Deleted', 'tiktok_status' => 'Deleted', 'fb_status' => 'Deleted', 'ms_status' => 'Deleted', 'is_delete' => esc_sql(1), 'auto_schedule' => 0);
         if (isset($_POST['id'])) {
-          $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $soft_delete_id, array("id" => sanitize_text_field(wp_unslash($_POST['id']))));
+          $TVC_Admin_DB_Helper->tvc_delete_row("ee_product_feed", array("id" => sanitize_text_field(wp_unslash($_POST['id']))));
         }
         echo wp_json_encode(array("error" => false, "message" => esc_html__("Feed Deleted Successfully.", "enhanced-e-commerce-for-woocommerce-store")));
       } else {
@@ -1995,6 +2052,7 @@ if (!class_exists('TVC_Ajax_File')) :
         $data['tiktok_business_id'] = $tiktok_business_id;
         $data['ms_catalog_id']     = $microsoft_catalog_id;
         $data['catalog_id']     = $fb_catalog_id;
+        $data["store_id"] = $google_detail['setting']->store_id;
         /**
          * Api Call to delete product from GMC
          */
@@ -2486,100 +2544,25 @@ if (!class_exists('TVC_Ajax_File')) :
         $TVC_Admin_Helper->plugin_log("Start", 'product_sync');
         $conv_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
         try {
-          $selecetedCat = [];
-          $feed_MappedCat = [];
-          $mappedCats = [];
-          $mappedAttrs = [];
-          $mappedCatsDB = [];
           $product_batch_size = isset($_POST['product_batch_size']) ? sanitize_text_field(wp_unslash($_POST['product_batch_size'])) : "25"; // barch size for inser product in GMC
           $product_id_prefix = isset($_POST['product_id_prefix']) ? sanitize_text_field(wp_unslash($_POST['product_id_prefix'])) : "";
+          $feedId = isset($_POST['feedId']) ? sanitize_text_field(wp_unslash($_POST['feedId'])) : "";
           $data = isset($_POST['conv_data']) ? wp_unslash($_POST['conv_data']) : "";
           wp_parse_str($data, $formArray);
-
           $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
 
-          if (!empty($formArray)) {
-            foreach ($formArray as $key => $value) {
-              //$formArray[$key] = sanitize_text_field($value);
-              if ($key == 'additional_attr_') {
-                $additional_attr = $value;
-                unset($formArray['additional_attr_']);
-              }
-              if ($key == 'additional_attr_value_') {
-                $additional_attr_value = $value;
-                unset($formArray['additional_attr_value_']);
-              }
-              if (is_array($value) !== 1) {
-                $formArray[$key] = $value;
-              }
-            }
-            unset($formArray['additional_attr_']);
-            unset($formArray['additional_attr_value_']);
-            if (isset($additional_attr)) {
-              foreach ($additional_attr as $key => $value) {
-                $formArray[$value] = $additional_attr_value[$key];
-              }
-            }
-          }
-          /**
-           * Filter data
-           */
-          $productFilter = isset($_POST['productData']) && $_POST['productData'] != '' ? explode(',', sanitize_text_field(wp_unslash($_POST['productData']))) : '';
-          $conditionFilter = isset($_POST['conditionData']) && $_POST['conditionData'] != '' ? explode(',', sanitize_text_field(wp_unslash($_POST['conditionData']))) : '';
-          $valueFilter = isset($_POST['valueData']) && $_POST['valueData'] != '' ? explode(',', sanitize_text_field(wp_unslash($_POST['valueData']))) : '';
-          $filters = array();
-          if (!empty($productFilter)) {
-            foreach ($productFilter as $key => $val) {
-              $filters[$key]['attr'] = sanitize_text_field($val);
-              $filters[$key]['condition'] = sanitize_text_field($conditionFilter[$key]);
-              $filters[$key]['value'] = sanitize_text_field($valueFilter[$key]);
-            }
-          }
-          $selecetedCat = explode(',', $formArray['selectedCategory']);
-          /*
-           * Collect Attribute/Categories Mapping
-           */
-          foreach ($formArray as $key => $value) {
-            if (preg_match("/^category-name-/i", $key)) {
-              if ($value != '') {
-                $keyArray = explode("name-", $key);
-                $mappedCatsDB[$keyArray[1]]['name'] = $value;
-                if (in_array($keyArray[1], $selecetedCat)) {
-                  $feed_MappedCat[$keyArray[1]]['name'] = $value;
-                }
-              }
-              unset($formArray[$key]);
-            } else if (preg_match("/^category-/i", $key)) {
-              if ($value != '' && $value > 0) {
-                $keyArray = explode("-", $key);
-                $mappedCats[$keyArray[1]] = $value;
-                $mappedCatsDB[$keyArray[1]]['id'] = $value;
-                if (in_array($keyArray[1], $selecetedCat)) {
-                  $feed_MappedCat[$keyArray[1]]['id'] = $value;
-                  $w_cat_id = $keyArray[1];
-                  $g_cat_id = $value;
-                }
-              }
-              unset($formArray[$key]);
-            } else {
-              if ($value && $key != 'selectedCategory') {
-                $mappedAttrs[$key] = $value;
-              }
-            }
-          }
-
-          //add/update data in default profile
-          $profile_data = array("profile_title" => esc_sql("Default"), "g_attribute_mapping" => wp_json_encode($mappedAttrs), "update_date" => gmdate('Y-m-d H:i:s', current_time('timestamp')));
-          if ($TVC_Admin_DB_Helper->tvc_row_count("ee_product_sync_profile") == 0) {
-            $TVC_Admin_DB_Helper->tvc_add_row("ee_product_sync_profile", $profile_data, array("%s", "%s", "%s"));
-          } else {
-            $TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_profile", $profile_data, array("id" => 1));
-          }
-
-          // Update settings Product Mapping
-          update_option("ee_prod_mapped_cats", serialize($mappedCatsDB));
-          update_option("ee_prod_mapped_attrs", serialize($mappedAttrs));
-
+          // foreach ($formArray as $key => $value) {
+          //   if (preg_match("/^category-/i", $key)) {
+          //     if ($value != '' && $value > 0) {
+          //       $keyArray = explode("-", $key);
+          //       if (in_array($keyArray[1], $selecetedCat)) {
+          //         $w_cat_id = $keyArray[1];
+          //         $g_cat_id = $value;
+          //       }
+          //     }
+          //     unset($formArray[$key]);
+          //   }
+          // }
           // Batch settings
           $conv_additional_data['is_mapping_update'] = true;
           $conv_additional_data['is_process_start'] = false;
@@ -2594,23 +2577,43 @@ if (!class_exists('TVC_Ajax_File')) :
             include ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
           }
           $TVCProductSyncHelper = new TVCProductSyncHelper();
-
           $TVC_Admin_Helper->plugin_log("wooww 2411 Update Product Feed Table", 'product_sync');
           //Update Product Feed Table          
           $key = "id";
           $val = isset($_POST['feedId']) ? sanitize_text_field(wp_unslash($_POST['feedId'])) : '';
-          if ($TVC_Admin_DB_Helper->tvc_check_row("ee_product_feed", $key, $val)) {
+          $where = '`id` = ' . esc_sql(filter_input(INPUT_POST, 'feedId'));
+          $filed = [
+            'id',
+            'channel_ids',
+            'auto_sync_interval',
+            'auto_schedule',
+            'categories',
+            'attributes',
+            'filters',
+            'include_product',
+            'exclude_product',
+            'product_id_prefix',
+            'tiktok_catalog_id'
+          ];
+          $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
+          if ($result) {
+            $mappedAttrs = json_decode(stripslashes($result[0]['attributes']), true);
+            $feed_MappedCat = json_decode(stripslashes($result[0]['categories']), true);
+            $filters = json_decode(stripslashes($result[0]['filters']), true);
+            $filtersjson = wp_json_encode($filters);
+            $feed_MappedCatjson = wp_json_encode($feed_MappedCat);
+            $mappedAttrsjson = wp_json_encode($mappedAttrs);
+
+            //add/update data in default profile
+            $profile_data = array("profile_title" => esc_sql("Default"), "g_attribute_mapping" => wp_json_encode($mappedAttrs), "update_date" => gmdate('Y-m-d H:i:s', current_time('timestamp')));
+            if ($TVC_Admin_DB_Helper->tvc_row_count("ee_product_sync_profile") == 0) {
+              $TVC_Admin_DB_Helper->tvc_add_row("ee_product_sync_profile", $profile_data, array("%s", "%s", "%s"));
+            } else {
+              $TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_profile", $profile_data, array("id" => 1));
+            }
+
             /***Single product sync for already synced product feed ******/
             if (isset($_POST['inculdeExtraProduct']) && $_POST['inculdeExtraProduct'] != '') {
-
-              $TVC_Admin_Helper->plugin_log("woow 2419 Single product sync for already synced product feed", 'product_sync');
-              $feed_datas = array(
-                "attributes" => wp_json_encode($mappedAttrs),
-              );
-
-              //update attribute in ee_product_feed table
-              $TVC_Admin_DB_Helper->tvc_update_row("ee_product_feed", $feed_datas, array("id" => sanitize_text_field(wp_unslash($_POST['feedId']))));
-
               global $wpdb;
               $product_batch_size = (isset($conv_additional_data['product_sync_batch_size']) && $conv_additional_data['product_sync_batch_size']) ? $conv_additional_data['product_sync_batch_size'] : 100;
               $tvc_currency = sanitize_text_field($TVC_Admin_Helper->get_woo_currency());
@@ -2630,10 +2633,8 @@ if (!class_exists('TVC_Ajax_File')) :
                   'g_cat_id' => $g_cat_id
                 )
               );
-
               //map each product with category and attribute
-              $p_map_attribute = $TVCProductSyncHelper->conv_get_feed_wise_map_product_attribute($object, $tvc_currency, $merchantId, $product_batch_size, $mappedAttrs, $product_id_prefix);
-
+              $p_map_attribute = $TVCProductSyncHelper->conv_get_feed_wise_map_product_attribute($object, $tvc_currency, $merchantId, $feedId, $product_batch_size, $mappedAttrs, $product_id_prefix);
               $TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
               //update ee_product_sync_data
               if (isset($p_map_attribute['valid_products'])) {
@@ -2715,9 +2716,9 @@ if (!class_exists('TVC_Ajax_File')) :
               $TVC_Admin_Helper->plugin_log("woow 2527 Update feed data in DB start", 'product_sync');
               /*******Update feed data in DB start**********************/
               $feed_data = array(
-                "categories" => wp_json_encode($feed_MappedCat),
-                "attributes" => wp_json_encode($mappedAttrs),
-                "filters" => wp_json_encode($filters),
+                "categories" => $feed_MappedCatjson,
+                "attributes" => $mappedAttrsjson,
+                "filters" => $filtersjson,
                 "include_product" => esc_sql(sanitize_text_field(wp_unslash($_POST['include']))),
                 "exclude_product" => isset($_POST['exclude']) && $_POST['exclude'] != '' ? esc_sql(sanitize_text_field(wp_unslash($_POST['exclude']))) : '',
                 "is_mapping_update" => true,
@@ -2744,18 +2745,15 @@ if (!class_exists('TVC_Ajax_File')) :
               $feed_data_api = array(
                 "store_id" => $google_detail['setting']->store_id,
                 "store_feed_id" => sanitize_text_field(wp_unslash($_POST['feedId'])),
-                "map_categories" => wp_json_encode($feed_MappedCat),
-                "map_attributes" => wp_json_encode($mappedAttrs),
-                "filter" => wp_json_encode($filters),
+                "map_categories" => $feed_MappedCatjson,
+                "map_attributes" => $mappedAttrsjson,
+                "filter" => $filtersjson,
                 "include" => isset($_POST['include']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['include']))) : '',
                 "exclude" => isset($_POST['exclude']) && $_POST['exclude'] != '' ? esc_sql(sanitize_text_field(wp_unslash($_POST['exclude']))) : '',
                 "channel_ids" => isset($_POST['channel_ids']) ? sanitize_text_field(wp_unslash($_POST['channel_ids'])) : '',
                 "interval" => isset($_POST['autoSyncInterval']) ? sanitize_text_field(wp_unslash($_POST['autoSyncInterval'])) : '',
                 "tiktok_catalog_id" => isset($_POST['tiktok_catalog_id']) ? sanitize_text_field(wp_unslash($_POST['tiktok_catalog_id'])) : '',
               );
-
-
-
               $TVC_Admin_Helper->plugin_log("mapping saved and product sync process scheduled", 'product_sync'); // Add logs
               $TVC_Admin_Helper->plugin_log("sending data to api" . wp_json_encode($feed_data_api), 'feed_data_api');
               $CustomApi = new CustomApi();
@@ -3937,11 +3935,6 @@ if (!class_exists('TVC_Ajax_File')) :
               if (isset($ee_options['google_ads_id']) === TRUE && $ee_options['google_ads_id'] !== '') {
                 $google_ads_id = $ee_options['google_ads_id'];
                 $PMax_Helper = new Conversios_PMax_Helper();
-                $currency_code_rs = $PMax_Helper->get_campaign_currency_code($google_ads_id);
-                if (isset($currency_code_rs->data->currencyCode)) {
-                  $currency_code = $currency_code_rs->data->currencyCode;
-                  $currency_symbol = $tvc_admin_helper->get_currency_symbols($currency_code);
-                }
               }
 
               $href = esc_url_raw('admin.php?page=conversios&wizard=productFeedOdd'); //Odd

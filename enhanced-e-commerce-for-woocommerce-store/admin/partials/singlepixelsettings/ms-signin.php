@@ -94,19 +94,17 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
         <?php } ?>
 
     </div>
-
     <div class="col convgauthcol">
         <div class="convpixsetting-inner-box ps-3" style="border-left: 3px solid #09bd83;">
             <?php
-            $g_email =  (isset($tvc_data['microsoft_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['microsoft_mail']) : "";
+            $g_email = get_option('ee_customer_msmail');
             ?>
             <?php if ($g_email != "") { ?>
                 <h5 class="fw-normal mb-1">
                     <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h5>
                 <span>
-                    <?php echo (isset($tvc_data['microsoft_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['microsoft_mail']) : ""; ?>
-
+                    <?php echo $g_email ?>
                     <?php if (isset($_GET['subpage']) && $_GET['subpage'] != "mmcsettings") { ?>
                         <span class="conv-link-blue ps-0 tvc_microsoft_signinbtn">
                             <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -166,9 +164,9 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                     $woo_currency = get_option('woocommerce_currency');
                     $timezone = get_option('timezone_string');
 
-                    
+
                     $confirm_url = urlencode(string: "admin.php?page=conversios-google-analytics&subpage=bingsettings");
-                    $ms_redirect_uri = TVC_API_CALL_URL_TEMP.'/auth/microsoft/callback';
+                    $ms_redirect_uri = TVC_API_CALL_URL_TEMP . '/auth/microsoft/callback';
                     $state = ['confirm_url' => admin_url() . $confirm_url, 'subscription_id' => $subscriptionId, 'ms_redirect_uri' => $ms_redirect_uri];
                     $microsoft_auth_url = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=892127ea-3496-4e25-8909-12705e629eae&response_type=code&redirect_uri=$ms_redirect_uri&response_mode=query&tenant=d6545bb5-03a2-461a-880a-14ce7ce63143&scope=openid email profile offline_access https://ads.microsoft.com/msads.manage User.Read&state=" . urlencode(wp_json_encode($state));
 

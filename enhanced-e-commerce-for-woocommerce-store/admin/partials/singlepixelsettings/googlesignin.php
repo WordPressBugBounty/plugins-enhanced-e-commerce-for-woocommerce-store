@@ -31,7 +31,7 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
 $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'subpage'))) : "";
 ?>
 
-<div class="convwiz_pixtitle mt-0 mb-3 d-flex justify-content-between align-items-center py-0">
+<div class="convwiz_pixtitle mt-0 mb-3 py-0">
     <div class="col-7">
         <?php if ($sub_page == "gasettings") { ?>
             <ul class="conv-green-checklis list-unstyled mt-3">

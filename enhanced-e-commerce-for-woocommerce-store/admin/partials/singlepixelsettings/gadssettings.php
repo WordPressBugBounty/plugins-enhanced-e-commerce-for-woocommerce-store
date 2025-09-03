@@ -32,7 +32,7 @@ $gtm_container_id = isset($ee_options['gtm_settings']['gtm_container_id']) ? $ee
             <?php
             $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-analytics', "gadssettings");
             require_once("googlesignin.php");
-            $site_url_feedlist = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
+            $site_url_feedlist = "admin.php?page=conversios-google-shopping-feed";
             ?>
 
             <!-- Google Ads  -->

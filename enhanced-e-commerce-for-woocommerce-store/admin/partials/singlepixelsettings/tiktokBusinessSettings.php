@@ -57,23 +57,11 @@ $contData = json_decode($getCountris);
         display: none;
     }
 </style>
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm">
-    <?php if (isset($pixel_settings_arr[$subpage]['topnoti']) && $pixel_settings_arr[$subpage]['topnoti'] != "") { ?>
-        <div class="alert d-flex align-items-cente p-0" role="alert">
-            <div class="text-light conv-success-bg rounded-start d-flex">
-                <span class="p-2 material-symbols-outlined align-self-center">verified</span>
-            </div>
-            <div class="p-2 w-100 rounded-end border border-start-0 shadow-sm conv-notification-alert bg-white">
-                <div class="">
-                    <?php printf('%s', esc_html($pixel_settings_arr[$subpage]['topnoti'])); ?>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
+<div class="convcard p-4 mt-0 rounded-3 shadow-sm d-none tiktoksettingscard" style="background-color: #f0f0f1;">
     <?php
     $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-shopping-feed', "tiktokBusinessSettings");
     /**************Tiktok Auth start ********************************************************/
-    $confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=tiktokBusinessSettings";
+    $confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=tiktok";
     $state = ['confirm_url' => admin_url() . $confirm_url, 'subscription_id' => $subscriptionId];
     $tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://connect.conversios.io/laravelapi/public/auth/tiktok/callback&rid=q6uerfg9osn&state=" . urlencode(wp_json_encode($state));
 
@@ -149,6 +137,14 @@ $contData = json_decode($getCountris);
                     </table>
                 </div>
             </div>
+        </div>
+        <div style="width: 100%; margin-top: 20px;">
+            <button class="conv-btn-connect-enabled-gmc" style="padding: 4px 15px; background-color: #0062ee; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Save
+            </button>
+            <button id="closeButtontiktok" style="padding: 4px 15px; background-color: #5c636a; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                Close
+            </button>
         </div>
     </form>
 
@@ -266,7 +262,7 @@ $contData = json_decode($getCountris);
 
                                         </p>
                                         <div class="attribute-btn">
-                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&tab=feed_list&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
+                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
                                         </div>
                                     </div>
                                 </div>
@@ -312,6 +308,14 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
     /**
      * Get TikTok business Account List
      */
+
+    jQuery(document).ready(function() {
+        if (jQuery('#tiktok_business_id').hasClass("select2-hidden-accessible")) {
+            jQuery('#tiktok_business_id').select2('destroy');
+        }
+        jQuery('#tiktok_business_id').select2();
+    });
+
     function list_tiktok_business_account() {
         conv_change_loadingbar("show");
         var conversios_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
@@ -482,14 +486,26 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
         <?php } ?>
 
         <?php if (!empty($tiktok_business_id)) { ?>
-            jQuery('#tiktok_business_id').trigger("change");
+            jQuery(function() {
+                if (!jQuery('.tiktoksettingscard').hasClass('d-none')) {
+                    jQuery('#tiktok_business_id').trigger('change');
+                }
+            });
         <?php } ?>
+
+        jQuery("#opentiktoksettings").on("click", function() {
+            <?php if ($tiktok_mail != "" || $tiktok_business_id != "") { ?>
+                jQuery('#tiktok_business_id').trigger('change');
+            <?php } ?>
+        });
+
         jQuery(document).on('change', '#tiktok_business_id', function() {
             jQuery('.selection').find("[aria-labelledby='select2-tiktok_business_id-container']")
                 .removeClass('selectError');
         });
         /********************************Save TikTok id and other data  start ********************************************************/
-        jQuery(document).on("click", ".conv-btn-connect-enabled-gmc", function() {
+        jQuery(document).on("click", ".conv-btn-connect-enabled-gmc", function(e) {
+            e.preventDefault();
             var catalogData = {};
             jQuery('.catalogId').each(function() {
                 catalogData[jQuery(this).find(":selected").data("catalog_country")] = [jQuery(this)
@@ -533,7 +549,8 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
                     if (response == "0" || response == "1") {
                         jQuery(".conv-btn-connect-enabled-gmc").text("Save");
                         jQuery('.gmcAccount').html(tiktok_data["tiktok_user_id"])
-                        jQuery("#conv_save_success_modal_cta").modal("show");
+                        jQuery("#conv_save_success_modal_").modal("show");
+                        window.location.href = window.location.origin + window.location.pathname + '?page=conversios-google-shopping-feed&subpage=tiktok';
                     }
                 }
             });

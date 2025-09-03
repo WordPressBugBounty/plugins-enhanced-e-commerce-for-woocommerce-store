@@ -6,10 +6,12 @@ $sch_custom_email = isset($ee_options['sch_custom_email']) ? sanitize_text_field
 $sch_email_frequency = isset($ee_options['sch_email_frequency']) ? sanitize_text_field($ee_options['sch_email_frequency']) : 'Weekly';
 $g_mail = get_option('ee_customer_gmail');
 $ga4_measurement_id = isset($ee_options['gm_id']) && $ee_options['gm_id'] != "" ? $ee_options['gm_id'] : "";
+$ga4_analytic_account_id = isset($ee_options['ga4_analytic_account_id']) && $ee_options['ga4_analytic_account_id'] != "" ? $ee_options['ga4_analytic_account_id'] : "";
 $google_ads_id = isset($ee_options['google_ads_id']) && $ee_options['google_ads_id'] != "" ? $ee_options['google_ads_id'] : "";
 $last_fetched_prompt_date = isset($ee_options['last_fetched_prompt_date']) && $ee_options['last_fetched_prompt_date'] != "" ? $ee_options['last_fetched_prompt_date'] : "";
 $ecom_reports_ga_currency = isset($ee_options['ecom_reports_ga_currency']) ? sanitize_text_field($ee_options['ecom_reports_ga_currency']) : '';
 $ecom_reports_gads_currency = isset($ee_options['ecom_reports_gads_currency']) ? sanitize_text_field($ee_options['ecom_reports_gads_currency']) : '';
+
 
 $subpage = (isset($_GET["subpage"]) && $_GET["subpage"] != "") ? sanitize_text_field(wp_unslash($_GET['subpage'])) : "ga4general";
 
@@ -119,7 +121,7 @@ if ($subpage == "ga4ecommerce") {
             <?php } ?>
         </div>
 
-        <?php if ($subpage == "ga4general" && (empty($g_mail) || empty($ga4_measurement_id))) { ?>
+        <?php if ($subpage == "ga4general" && (empty($g_mail) || empty($ga4_measurement_id) || empty($ga4_analytic_account_id))) { ?>
             <div class="alert alert-info mt-4 w-100" role="alert">
                 <div class="mx-auto" style="max-width: 600px;">
                     <h5 class="alert-heading">Connect Google Analytics to View Reports</h5>

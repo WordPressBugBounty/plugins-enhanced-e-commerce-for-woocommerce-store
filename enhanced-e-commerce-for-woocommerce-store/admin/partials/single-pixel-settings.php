@@ -407,7 +407,7 @@ if ($subscriptionId != "") {
                 redirectscreen = "1";
             }
             if (redirectscreen == "1") {
-                location.href = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
+                location.href = "admin.php?page=conversios-google-shopping-feed";
             } else {
                 location.href = "admin.php?page=conversios-google-analytics";
             }

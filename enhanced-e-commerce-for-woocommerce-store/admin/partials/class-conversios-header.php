@@ -69,8 +69,8 @@ if (class_exists('Conversios_Header') === FALSE) {
 						<div class="promoleft">
 							<div class="promobandmsg text-center fs-6 d-flex align-items-center">
 								<div class="h5 mb-0 fw-normal">
-									Celebrate Independence with <span style="color: #ff0000;">65% Savings</span> using code <span style="color: #ff0000;">Independence15</span>
-									<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn btn-sm text-white fw-normal ms-3" style="background: #07BB4F">Buy Now</a>
+									Limited-time Pre-OND offer. Activate Pro and get ahead.
+									<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaidpreond&plugin_name=aio" class="btn btn-sm text-white fw-normal ms-3" style="background: #07BB4F">PREOND65</a>
 								</div>
 							</div>
 						</div>
@@ -109,7 +109,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 								"title" => "Pixels & Analytics"
 							),
 							"conversios-google-shopping-feed" => array(
-								"page" => "conversios-google-shopping-feed&tab=feed_list",
+								"page" => "conversios-google-shopping-feed&subpage=gmc",
 								"title" => "Product Feed",
 								/*"sub_menus" => array(
 									"conversios-google-shopping-feed" => array(
@@ -134,7 +134,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 								"title" => "Dashboard"
 							),
 							"conversios-google-shopping-feed" => array(
-								"page" => "conversios-google-shopping-feed&tab=feed_list",
+								"page" => "conversios-google-shopping-feed&subpage=gmc",
 								"title" => "Product Feed"
 							),
 							"conversios-pricings" => array(
@@ -248,8 +248,8 @@ if (class_exists('Conversios_Header') === FALSE) {
 											} ?>
 
 											<li class="nav-item fs-14 mt-1 fw-400 position-relative">
-												<a class="nav-link text-secondary" aria-current="page" href="https://www.conversios.io/price-mot/?utm_source=woo_aiofree_plugin&amp;utm_medium=adminmenu&amp;utm_campaign=pricemot" target="_blank">
-													<span>PriceMot</span>
+												<a class="nav-link text-secondary" aria-current="page" href="https://www.conversios.io/website-tracking-checker-tool/?utm_source=woo_aiofree_plugin&amp;utm_medium=topmenu&amp;utm_campaign=trackingcheckedr" target="_blank">
+													<span>Tracking Checker Tool</span>
 													<span class="badge-new">New</span>
 												</a>
 											</li>
