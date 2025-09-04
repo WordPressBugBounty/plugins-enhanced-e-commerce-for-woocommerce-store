@@ -16,7 +16,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.9
+ * Version:           7.2.10
  * Author:            Conversios
  * Author URI:        https://conversios.io
  * License:           GPLv3
@@ -119,7 +119,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.2.9');
+define('PLUGIN_TVC_VERSION', '7.2.10');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 
@@ -232,7 +232,7 @@ function my_plugin_update_db()
 }
 add_action('plugins_loaded', 'my_plugin_update_db');
 
-add_action('action_scheduler_init', 'conv_clear_ut_cron', 1);
+//add_action('action_scheduler_init', 'conv_clear_ut_cron', 1);
 add_action('admin_init', 'conv_clear_ut_cron', 1);
 //add_action('init', 'conv_clear_ut_cron', 1);
 
@@ -290,7 +290,7 @@ function conv_clear_ut_cron() {
     // If ActionScheduler store exists, cancel + delete via API (safe)
     if ( function_exists('as_get_scheduled_actions') && class_exists('ActionScheduler') ) {
         $store = ActionScheduler::store();
-        $statuses = array('pending','in-progress','complete','failed','canceled','paused','running');
+        $statuses = array('pending','complete','failed');
 
         foreach ($statuses as $status) {
             $offset = 0;
