@@ -1416,6 +1416,12 @@ input[type="checkbox"] {
   margin: auto;
 }
 
+#reportrange {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 6px;
+}
+
 .stepper-conv-bg-grey {
   background: #f1f2f4 !important;
   color: #1967d2 !important;
@@ -1471,7 +1477,7 @@ button:disabled {
 .navbar-light .navbar-nav .nav-link:focus,
 .navbar-light .navbar-nav .nav-link:hover {
   box-shadow: none;
-  color: #000 !important;
+  color: #1b263b !important;
   font-family: system-ui;
 }
 
@@ -2078,8 +2084,8 @@ button:disabled {
 }
 
 #conversioshead_notice {
-  background: #e13129e6 ;
-  color: #fff;
+  background: #FFF8E7;
+  color: #FF6B35;
 }
 
 .promoright .btn {
@@ -2109,7 +2115,6 @@ button:disabled {
 
 .promobandmsg span {
   color: #ffc700;
-  font-weight: bold;
 }
 
 #convga360_left {
@@ -2119,7 +2124,6 @@ button:disabled {
 
 .promobandmsg span {
   color: #ffc700;
-  font-weight: bold;
 }
 
 .prmoupgrdbtn button {
@@ -3197,8 +3201,8 @@ ul.conv-green-checklis.fb-kapi li .text-success {
   font-size: 14px;
   text-decoration: none;
 }
-.btn label
-{
+
+.btn label {
   cursor: pointer;
 }
 

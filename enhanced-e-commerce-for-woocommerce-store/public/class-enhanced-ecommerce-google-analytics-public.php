@@ -603,7 +603,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
       $con_ordered_item_list["affiliation"] = esc_js(get_bloginfo('name'));
       $con_ordered_item_list["tax"] = esc_js($order->get_total_tax());
       $con_ordered_item_list["shipping"] = esc_js($order->get_shipping_total());
-      $con_ordered_item_list["coupon"] = esc_js(implode(', ', ($woocommerce->version > "3.7" ? $order->get_coupon_codes() : $order->get_used_coupons())));
+      $con_ordered_item_list["coupon"] = esc_js(implode(', ', $order->get_coupon_codes()));
     }
     $order->update_meta_data('_tracked', 1);
     $order->save();

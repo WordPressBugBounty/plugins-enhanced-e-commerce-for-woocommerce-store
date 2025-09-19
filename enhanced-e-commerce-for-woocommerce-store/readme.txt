@@ -4,10 +4,10 @@ Contributors: Tatvic, Conversios
 Tags: Google Analytics 4, Google Ads, Facebook Pixel, Conversion Tracking, Woocommerce
 Author: Conversios
 Requires at least: 4.6
-Tested up to: 6.8.1
+Tested up to: 6.8
 Requires PHP: 7.3
-Stable tag: 7.2.10
-Version: 7.2.10
+Stable tag: 7.2.11
+Version: 7.2.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

@@ -462,7 +462,7 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
+                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         Oops! No feeds found yet — start by creating one.
                     </p>
@@ -522,7 +522,7 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
+                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         Oops! No feeds found yet — start by creating one.
                     </p>
@@ -582,7 +582,7 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
+                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         Oops! No feeds found yet — start by creating one.
                     </p>
@@ -642,7 +642,7 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
+                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         Oops! No feeds found yet — start by creating one.
                     </p>
@@ -1422,7 +1422,7 @@ if ($edit_id > 0) {
                                 </th>
                             <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] === 'microsoft') { ?>
                                 <th style="text-align: left; padding: 10px;">
-                                    <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png.png'); ?>" alt="Conversios Logo" style="vertical-align: middle;" />
+                                    <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" alt="Conversios Logo" style="vertical-align: middle;" />
                                     <span style="font-size: 14px; font-weight: normal; color: #6c757d; margin-left: 8px;">
                                         <?php esc_html_e("Microsoft Product Category", "enhanced-e-commerce-for-woocommerce-store") ?>
                                     </span>
@@ -1746,6 +1746,44 @@ $str = json_decode($str);
                 </td>
             </tr>`;
                 jQuery('#filterTableBody').append(newRow);
+
+                // After appending, trigger the product change to convert field type if needed
+                let $row = jQuery('#filterTableBody tr.filterRow').last();
+                let $productSelect = $row.find('.product');
+                let productValue = $productSelect.val();
+
+                // If it's a dropdown field type, convert the input to select
+                if (productValue === 'product_cat' || productValue === '_stock_status' || productValue === 'main_image') {
+                    let $valueContainer = $row.find('.textValue');
+                    let currentValue = filter.value;
+
+                    if (productValue === 'product_cat') {
+                        var category = <?php echo json_encode($category); ?>;
+                        let option = '<option value="0">Select Category</option>';
+                        jQuery.each(category, function(key, value) {
+                            let selected = (key == currentValue) ? 'selected' : '';
+                            option += '<option value="' + key + '" ' + selected + '>' + value + '</option>';
+                        });
+                        $valueContainer.empty();
+                        var html = '<select class="category" name="value[]" style="width:100%">' + option + '</select>';
+                        $valueContainer.append(html);
+                    } else if (productValue === '_stock_status') {
+                        $valueContainer.empty();
+                        var html = '<select class="category" name="value[]" style="width:100%">' +
+                            '<option value="0">Select Stock Status</option>' +
+                            '<option value="instock" ' + (currentValue === 'instock' ? 'selected' : '') + '>In Stock</option>' +
+                            '<option value="outofstock" ' + (currentValue === 'outofstock' ? 'selected' : '') + '>Out Of Stock</option>' +
+                            '</select>';
+                        $valueContainer.append(html);
+                    } else if (productValue === 'main_image') {
+                        $valueContainer.empty();
+                        var html = '<select class="category" name="value[]" style="width:100%">' +
+                            '<option value="0">Select Image State</option>' +
+                            '<option value="EXISTS" ' + (currentValue === 'EXISTS' ? 'selected' : '') + '>Not Empty</option>' +
+                            '</select>';
+                        $valueContainer.append(html);
+                    }
+                }
             });
         } else {
             console.warn("Saved filters is not an array:", savedFilters);
@@ -1799,6 +1837,7 @@ $str = json_decode($str);
         switchToTab('#pills-enter-feed-details');
     });
     jQuery('#goBackToCategory').on('click', function() {
+        jQuery('#filterError').hide();
         switchToTab('#pills-map-product-category');
     });
     jQuery(document).ready(function(jQuery) {
@@ -2778,7 +2817,7 @@ $str = json_decode($str);
     });
 
     var selected = Array();
-    var cnt = <?php echo $cnt ?>;
+    var cnt = <?php echo esc_js($cnt) ?>;
     jQuery(document).on('click', '.add_additional_attr', function() {
         var additionalAttribute = [{
                 "field": "condition"
@@ -3080,10 +3119,10 @@ $str = json_decode($str);
         let value = jQuery("input[name='value[]']").map(function() {
             return jQuery(this).val();
         }).get();
-        let seltext = jQuery("select[name='value[]'] option:selected").map(function() {
+        let seltext = jQuery("select[name='value[]'] option:selected, .category option:selected").map(function() {
             return jQuery(this).text();
         }).get();
-        let selVal = jQuery("select[name='value[]'] option:selected").map(function() {
+        let selVal = jQuery("select[name='value[]'] option:selected, .category option:selected").map(function() {
             return jQuery(this).val() ? jQuery(this).val() : '';
         }).get();
 
@@ -3095,12 +3134,18 @@ $str = json_decode($str);
         // Clear old error styles
         jQuery("#filterTableBody").find('.errorInput').removeClass('errorInput');
         jQuery("#filterTableBody").find('.select2-selection').css('border', '');
+        jQuery("#filterTableBody").find('.value').css('border', '');
+        jQuery("#filterTableBody").find('.category').siblings('.select2').find('.select2-selection').css('border', '');
 
         jQuery("#filterTableBody tr.filterRow").each(function(index) {
             let $row = jQuery(this);
             let attr = $row.find('.product').val();
             let condition = $row.find('.condition').val();
-            let value = $row.find('.category').val(); // value field
+
+            // Check for both input (.value) and select (.category) field types
+            let valueInput = $row.find('.value').val();
+            let valueSelect = $row.find('.category').val();
+            let value = valueInput || valueSelect; // Use whichever has a value
 
             let rowHasError = false;
 
@@ -3113,6 +3158,8 @@ $str = json_decode($str);
                 rowHasError = true;
             }
             if (value === "0" || !value) {
+                // Apply error styling to both possible field types
+                $row.find('.value').css('border', '1px solid #ef1717');
                 $row.find('.category').siblings('.select2').find('.select2-selection').css('border', '1px solid #ef1717');
                 rowHasError = true;
             }
@@ -3127,7 +3174,7 @@ $str = json_decode($str);
             hasError = true;
         }
 
-        if (hasError) {
+        if (hasError || filterValidation) {
             let errorDiv = jQuery('#validationErrors');
             if (errorDiv.length === 0) {
                 errorDiv = jQuery('<div id="validationErrors" class="alert alert-danger" style="position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 500px;"></div>');
@@ -3140,6 +3187,9 @@ $str = json_decode($str);
             setTimeout(function() {
                 errorDiv.fadeOut();
             }, 5000);
+
+            // RE-ENABLE BUTTONS when validation fails
+            jQuery("#goBackToCategory, .addButton, #filterReset, #filterSubmit").prop("disabled", false);
 
             jQuery('[data-bs-target="#pills-map-filters"]').trigger('click');
             return false; // stop execution if invalid
@@ -3394,4 +3444,104 @@ $str = json_decode($str);
         });
     });
     /**************** Remove filter card end*******************************************************************/
+    jQuery(document).ready(function($) {
+        jQuery(document).on('click', '.copy-down', function() {
+            let row = jQuery(this).closest('.row');
+            let currentSelect = row.find('select.categorySelect');
+
+            if (currentSelect.length) {
+                let selectedVal = currentSelect.val();
+                let selectedText = currentSelect.find("option:selected").text();
+
+                if (!selectedVal || selectedVal === "0") {
+                    alert("Please select a valid category before copying!");
+                    return;
+                }
+
+                // Loop through all rows below and copy value
+                row.nextAll('.row').find('select.categorySelect').each(function() {
+                    let targetSelect = jQuery(this);
+
+                    // If target select doesn’t have this value, append it
+                    if (targetSelect.find("option[value='" + selectedVal + "']").length === 0) {
+                        targetSelect.append(
+                            jQuery("<option>", {
+                                value: selectedVal,
+                                text: selectedText
+                            })
+                        );
+                    }
+
+                    // Set the value and trigger change (important for Select2 UI)
+                    targetSelect.val(selectedVal).trigger('change');
+                });
+
+				alert("Category '" + selectedText + "' copied to all below rows!");
+            }
+        });
+
+		// Copy mapping only to descendant child rows of this parent category
+		jQuery(document).on('click', '.copy-children', function() {
+			let row = jQuery(this).closest('.catTermId');
+			function getDepth($row) {
+				let d = parseInt(String($row.attr('data-depth') || '').trim(), 10);
+				if (!isNaN(d)) { return d; }
+				let labelText = $row.find('.shop-category label').text() || '';
+				let matches = (labelText.match(/—/g) || []).length; // count em-dash
+				return matches;
+			}
+			let parentDepth = getDepth(row);
+			let currentSelect = row.find('select.categorySelect');
+
+			if (currentSelect.length) {
+				let selectedVal = currentSelect.val();
+				let selectedText = currentSelect.find("option:selected").text();
+
+				if (!selectedVal || selectedVal === "0") {
+					alert("Please select a valid category before copying!");
+					return;
+				}
+
+				let copiedCount = 0;
+				row.nextAll().each(function() {
+					let $el = jQuery(this);
+					if (!$el.hasClass('catTermId')) {
+						return; // skip non-category rows
+					}
+					let depth = getDepth($el);
+					if (depth <= parentDepth) {
+						return false; // reached sibling or higher level; stop
+					}
+					let targetSelect = $el.find('select.categorySelect');
+					if (targetSelect.length) {
+						if (targetSelect.find("option[value='" + selectedVal + "']").length === 0) {
+							targetSelect.append(jQuery("<option>", { value: selectedVal, text: selectedText }));
+						}
+						targetSelect.val(selectedVal).trigger('change');
+						copiedCount++;
+					}
+				});
+
+				if (copiedCount > 0) {
+					alert("Category '" + selectedText + "' copied to " + copiedCount + " child row(s)!");
+				} else {
+					alert("No child rows found to copy to.");
+				}
+			}
+		});
+    });
+    var target = document.getElementById('filterError');
+
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (jQuery('#filterError').is(':visible')) {
+                jQuery("#goBackToCategory, .addButton, #filterReset, #filterSubmit").prop("disabled", false);
+            }
+        });
+    });
+
+    observer.observe(target, {
+        childList: true,
+        subtree: true
+    });
 </script>

@@ -94,7 +94,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Google analytics  -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
 
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
@@ -119,7 +119,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
 
                             <div class="d-flex align-items-start flex-column">
                                 <?php if ((empty($pixel_not_connected['ga_id']) || empty($pixel_not_connected['gm_id'])) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
@@ -141,7 +141,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Google Ads -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -166,7 +166,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['gads_remarketing_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1">
@@ -188,7 +188,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- FB Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -212,7 +212,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['fb_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1">
@@ -229,7 +229,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- MS Bing Ads -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_bing_logo.png'); ?>" />
@@ -244,7 +244,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['microsoft_ads_pixel_id'])  && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <?php if (isset($data['microsoft_ads_pixel_id']) && $data['microsoft_ads_pixel_id'] != '') { ?>
@@ -263,7 +263,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- MS Bing Clarity -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_clarity_logo.png'); ?>" />
@@ -277,7 +277,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['msclarity_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <?php if (isset($data['msclarity_pixel_id']) && $data['msclarity_pixel_id'] != '') { ?>
@@ -296,7 +296,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Linkedin Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <img class="align-self-center" src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_linkedin_logo.png'); ?>" />
@@ -310,7 +310,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['linkedin_insight_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
@@ -327,7 +327,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Tiktok -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -350,7 +350,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                             </a>
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['tiKtok_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1">
@@ -366,7 +366,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Snapchat Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -389,7 +389,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                             </a>
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['snapchat_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1">
@@ -405,7 +405,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Pinterest Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -429,7 +429,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['pinterest_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1">
@@ -448,7 +448,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Twitter Pixel -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -471,7 +471,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                             </a>
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <div class="d-flex align-items-start flex-column">
                                 <?php if (empty($pixel_not_connected['twitter_ads_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
@@ -487,7 +487,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Hotjar -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -510,7 +510,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                             </a>
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc">
+                        <div class="py-1 pixel-desc">
                             <?php if (empty($pixel_not_connected['hotjar_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                 <div class="d-flex align-items-start flex-column">
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
@@ -526,7 +526,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 
                 <!-- Crazyegg -->
                 <div class="col-md-4 p-3">
-                    <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                    <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                         <div class="conv-pixel-logo d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <?php echo wp_kses(
@@ -549,7 +549,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                             </a>
                         </div>
 
-                        <div class="pt-3 pb-3 pixel-desc align-items-start flex-column">
+                        <div class="py-1 pixel-desc align-items-start flex-column">
                             <?php if (empty($pixel_not_connected['crazyegg_pixel_id']) && $conv_gtm_not_connected == "conv-gtm-connected") { ?>
                                 <div class="d-flex">
                                     <div class="d-flex align-items-center pb-1 mb-1 border-bottom-n">
@@ -569,7 +569,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                 <!-- Advanced option -->
                 <?php if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) { ?>
                     <div class="col-md-4 p-3">
-                        <div class="p-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
+                        <div class="p-2 px-3 convcard d-flex justify-content-between-no flex-column conv-pixel-list-item border <?php echo esc_attr($conv_gtm_not_connected); ?>">
                             <div class="conv-pixel-logo d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
                                     <?php echo wp_kses(
@@ -592,14 +592,14 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                                 </a>
                             </div>
 
-                            <div class="pt-3 pb-3 pixel-desc d-flex align-items-start">
+                            <div class="py-1 pixel-desc d-flex align-items-start">
                                 <span class="material-symbols-outlined align-text-bottom pe-1 fs-18">settings</span>
                                 <span class="fw-bold">
                                     <?php esc_html_e("Events Tracking - Custom Integration", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
 
-                            <div class="pt-3 pb-3 pixel-desc align-items-start flex-column">
+                            <div class="py-1 pixel-desc align-items-start flex-column">
                                 <span><?php esc_html_e("This feature is for the woocommerce store which has changed standard woocommerce hooks or implemented custom woocommerce hooks.", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                                 <div class="d-flex">
                                     <span class="pe-2 m-0">

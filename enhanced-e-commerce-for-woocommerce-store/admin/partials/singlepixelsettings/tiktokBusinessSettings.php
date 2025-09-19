@@ -285,20 +285,6 @@ $contData = json_decode($getCountris);
 </div>
 <!--------------------------------CTA popup End -------------------------------------->
 <?php
-$google_merchant_center_id = '';
-if (isset($googleDetail->google_merchant_center_id) === TRUE && $googleDetail->google_merchant_center_id !== '') {
-    $google_merchant_center_id = $googleDetail->google_merchant_center_id;
-}
-$facebook_business_account = '';
-$fb_catalog_id = '';
-if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDetail->facebook_setting->fb_business_id !== '') {
-    $facebook_business_account = $googleDetail->facebook_setting->fb_business_id;
-    $fb_catalog_id = $googleDetail->facebook_setting->fb_catalog_id;
-}
-$microsoft_merchant_center_id = "";
-if (isset($googleDetail->microsoft_merchant_center_id) === TRUE && $googleDetail->microsoft_merchant_center_id !== "") {
-    $microsoft_merchant_center_id = $googleDetail->microsoft_merchant_center_id;
-}
 $tiktok_business_account = '';
 if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $googleDetail->tiktok_setting->tiktok_business_id !== '') {
     $tiktok_business_account = esc_html($googleDetail->tiktok_setting->tiktok_business_id);

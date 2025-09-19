@@ -139,7 +139,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                                 <option value="">Select Microsoft Merchant Center Store</option>
                             </select>
                         </div>
-                        <div class="col-2 conv-enable-selection conv-link-blue">
+                        <div class="col-3 conv-enable-selection conv-link-blue">
                             <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
                         </div>
                     </div>
@@ -157,7 +157,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                                 <option value="">Select Microsoft Merchant Catalog ID</option>
                             </select>
                         </div>
-                        <div class="col-2 conv-enable-catalog-selection conv-link-blue">
+                        <div class="col-3 conv-enable-catalog-selection conv-link-blue">
                             <span class="material-symbols-outlined pt-1 ps-2">edit</span><label class="mb-2 fs-6 text">Edit</label>
                         </div>
                     </div>
@@ -609,7 +609,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         const $microsoft_ads_pixel_id = <?php echo !empty($microsoft_ads_pixel_id) ? 'true' : 'false'; ?>;
 
         jQuery("#openmmcsettings").on("click", function() {
-            <?php if ($microsoft_ads_pixel_id == "" || $ms_catalog_id == "") { ?>
+            <?php if (($microsoft_ads_pixel_id == "" || $ms_catalog_id == "") && ($microsoft_ads_manager_id != "" || $microsoft_ads_subaccount_id != "")) { ?>
                 list_microsoft_merchant_account(tvc_data);
             <?php } ?>
         });

@@ -191,6 +191,9 @@ if (isset($google_detail['setting'])) {
     }
 }
 $conv_data['subscription_id'] = $googleDetail->id;
+$categories = json_decode($result[0]['categories'], true);
+$attributes = json_decode($result[0]['attributes'], true);
+$filters    = json_decode($result[0]['filters'], true);
 ?>
 <style>
     #categoryModal .modal-dialog .modal-content {
@@ -267,7 +270,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
         ) {
             $class_column = 'col-12';
         } else {
-            $class_column = 'col-8';
+            $class_column = 'col-9';
         }
         ?>
         <div class="woow-292 m-0 p-0 <?php echo esc_attr($class_column); ?>">
@@ -314,6 +317,17 @@ $conv_data['subscription_id'] = $googleDetail->id;
                         }
                         ?>
                     </label>
+                    <span class="ms-1 me-1">|</span>
+                    <label class="fs-14 fw-500">
+                        <?php esc_html_e("Feed Details: ", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </label>
+                    <a href="javascript:void(0);"
+                        class="text-primary text-decoration-none fw-medium d-inline-flex align-items-center"
+                        data-bs-toggle="modal"
+                        data-bs-target="#feedDetailsModal"
+                        title="View Feed Details">
+                        Check here
+                    </a>
                 </span>
             </div>
         </div>
@@ -339,7 +353,7 @@ $conv_data['subscription_id'] = $googleDetail->id;
             $class_1 = 'col-12';
             $class_2 = 'alert alert-danger';
         } else {
-            $class_1 = 'col-4 d-flex justify-content-end';
+            $class_1 = 'col-3 d-flex justify-content-end';
             $class_2 = '';
         }
         ?>
@@ -392,6 +406,114 @@ $conv_data['subscription_id'] = $googleDetail->id;
                     <?php
                     esc_html_e("Sync 0 Products", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="feedDetailsModal" tabindex="-1" aria-labelledby="feedDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?php echo esc_html("Feed Details"); ?></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+
+                <h6>Categories Mapped</h6>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($categories)) : ?>
+                            <?php foreach ($categories as $key => $cat): ?>
+                                <?php
+                                $term = get_term($key, 'product_cat');
+                                $term_name = (!is_wp_error($term) && $term) ? $term->name : $key;
+                                ?>
+                                <tr>
+                                    <td><?php echo esc_html($term_name); ?></td>
+                                    <td><?php echo esc_html($cat['name']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="3">No categories mapped</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+
+                <h6>Attributes Mapped</h6>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Mapped To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($attributes)) : ?>
+                            <?php foreach ($attributes as $attrs => $map): ?>
+                                <tr>
+                                    <td><?php echo esc_html($attrs); ?></td>
+                                    <td><?php echo esc_html($map); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="2">No attributes mapped</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+
+                <h6>Filters Applied</h6>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Condition</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($filters)) : ?>
+                            <?php foreach ($filters as $f) : ?>
+                                <tr>
+                                    <td>
+                                        <?php
+                                        // Map human-friendly labels for common attributes
+                                        if ($f['attr'] === 'product_cat') {
+                                            echo 'Product Category';
+                                        } else {
+                                            echo esc_html($f['attr']);
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?php echo esc_html($f['condition']); ?></td>
+                                    <td>
+                                        <?php
+                                        if ($f['attr'] === 'product_cat') {
+                                            $term = get_term($f['value'], 'product_cat');
+                                            echo (!is_wp_error($term) && $term) ? esc_html($term->name) : esc_html($f['value']);
+                                        } else {
+                                            echo esc_html($f['value']);
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="3">No filters applied</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

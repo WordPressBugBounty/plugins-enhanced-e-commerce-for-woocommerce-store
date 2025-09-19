@@ -1,3 +1,10 @@
+<?php
+$ee_options = unserialize(get_option('ee_options'));
+$g_mail = get_option('ee_customer_gmail');
+$ga4_measurement_id = isset($ee_options['gm_id']) && $ee_options['gm_id'] != "" ? $ee_options['gm_id'] : "";
+$ga4_analytic_account_id = isset($ee_options['ga4_analytic_account_id']) && $ee_options['ga4_analytic_account_id'] != "" ? $ee_options['ga4_analytic_account_id'] : "";
+?>
+
 <div class="conv_reportsec_box g-0">
     <div id="conv_gridrepbox_row" class="row px-0">
         <input type="hidden" id="ecom_reports_ga_currency" value="">
@@ -537,58 +544,103 @@
                         }
                     } else {
                         console.log("Error in data fetching");
+                        jQuery("#ga4Modal").modal("show");
+                        jQuery("#configurationMessage").removeClass("d-none");
                     }
                 },
             });
         }
 
         function conv_daily_visitors_create_chart(data) {
-            let chartStatus_dailyVisitors = Chart.getChart("conv_daily_visitors_chart"); // <canvas> id
+
+            let chartStatus_dailyVisitors = Chart.getChart("conv_daily_visitors_chart");
             if (chartStatus_dailyVisitors != undefined) {
                 chartStatus_dailyVisitors.destroy();
             }
+
             var dateArray = [];
             var visitorsArray = [];
-            dailyVisitors_count = 0;
-            //console.log("visitor response",data);
-            jQuery.each(data, function(index, obj) {
-                jQuery.each(obj, function(key, value) {
-                    dateArray.push(key);
-                    visitorsArray.push(value);
-                    dailyVisitors_count = dailyVisitors_count + +value;
+            var dailyVisitors_count = 0;
+
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach((item, index) => {
+                    const dateKey = Object.keys(item)[0]; // Get the first (and only) key
+                    const visitors = item[dateKey]; // Get the value for that key
+                    dateArray.push(dateKey);
+                    visitorsArray.push(parseInt(visitors)); // Convert string to number
+                    dailyVisitors_count += parseInt(visitors);
                 });
-            });
-            //console.log("key array",dateArray);
-            //console.log("value array",visitorsArray);
+                const combinedData = dateArray.map((date, index) => ({
+                    date: date,
+                    visitors: visitorsArray[index]
+                })).sort((a, b) => new Date(a.date) - new Date(b.date));
+                dateArray = combinedData.map(item => item.date);
+                visitorsArray = combinedData.map(item => item.visitors);
+
+            } else if (data.rows && Array.isArray(data.rows) && data.rows.length > 0) {
+
+                data.rows.forEach(row => {
+                    let date = row.dimensionValues[0].value;
+                    let visitors = row.metricValues[0].value;
+
+                    dateArray.push(date);
+                    visitorsArray.push(parseInt(visitors));
+                    dailyVisitors_count += parseInt(visitors);
+                });
+            } else {
+                jQuery("#conv_daily_visitors_total").html("No data available");
+                return;
+            }
+
             jQuery("#conv_daily_visitors_total").html("Total Users " + dailyVisitors_count);
+
             const visitors_graphData = {
                 labels: dateArray,
                 datasets: [{
-                        label: "Daily Visitors",
-                        data: visitorsArray,
-                        borderColor: '#1085F1',
-                        backgroundColor: '#1085F1',
-                        order: 0
-                    }
-
-                ]
+                    label: "Daily Visitors",
+                    data: visitorsArray,
+                    borderColor: '#1085F1',
+                    backgroundColor: '#1085F1',
+                    order: 0
+                }]
             };
+
             var options = {
                 responsive: true,
                 maintainAspectRatio: false,
-                title: {
-                    display: true,
-                    text: "Daily Visitors"
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Daily Visitors"
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1 // Show integer steps since we're dealing with visitor counts
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45, // Rotate date labels if they're too long
+                            minRotation: 0
+                        }
+                    }
                 }
             };
 
             var graphTarget = jQuery("#conv_daily_visitors_chart");
-            var barGraph = new Chart(graphTarget, {
-                type: 'bar',
-                data: visitors_graphData,
-                options: options,
-            });
 
+            try {
+                new Chart(graphTarget, {
+                    type: 'bar',
+                    data: visitors_graphData,
+                    options: options,
+                });
+            } catch (error) {
+                console.error("Error creating chart:", error);
+            }
         }
 
         function conv_realtime_create_chart(data) {
@@ -1143,8 +1195,10 @@
 
         }
 
-
         function cb(start, end) {
+            <?php if ($g_mail == "" || $ga4_measurement_id == "" || $ga4_analytic_account_id == "") { ?>
+                return;
+            <?php } ?>
             start_date = start.format('DD/MM/YYYY') || 0,
                 end_date = end.format('DD/MM/YYYY') || 0;
             var datdiff = end.diff(start, 'days') + 1;

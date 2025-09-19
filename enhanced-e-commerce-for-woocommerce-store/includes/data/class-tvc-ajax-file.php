@@ -1775,7 +1775,7 @@ if (!class_exists('TVC_Ajax_File')) :
             'IncLowestPriceProductVar' => isset($_POST['IncLowestPriceProductVar']) ? intval($_POST['IncLowestPriceProductVar']) : 0,
             "filters" => wp_json_encode($filters),
             'categories' => wp_json_encode($mappedCatsDB),
-            'attributes' => wp_json_encode($mappedAttrs),
+            'attributes' => wp_json_encode($mappedAttrs)
           );
 
           if (isset($_POST['is_mapping_update']) && $_POST['is_mapping_update'] != 1) {
@@ -1807,7 +1807,7 @@ if (!class_exists('TVC_Ajax_File')) :
             'IncLowestPriceProductVar' => isset($_POST['IncLowestPriceProductVar']) ? intval($_POST['IncLowestPriceProductVar']) : 0,
             "filters" => wp_json_encode($filters),
             'categories' => wp_json_encode($mappedCatsDB),
-            'attributes' => wp_json_encode($mappedAttrs),
+            'attributes' => wp_json_encode($mappedAttrs)
           );
           $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s"));
           $result = $TVC_Admin_DB_Helper->tvc_get_last_row("ee_product_feed", array("id"));
@@ -1905,6 +1905,8 @@ if (!class_exists('TVC_Ajax_File')) :
           'auto_sync_interval' => esc_sql($result[0]['auto_sync_interval']),
           'auto_schedule' => esc_sql($result[0]['auto_schedule']),
           'filters' => $result[0]['filters'],
+          'categories' => $result[0]['categories'],
+          'attributes' => $result[0]['attributes'],
           'include_product' => esc_sql($result[0]['include_product']),
           'exclude_product' => esc_sql($result[0]['exclude_product']),
           'created_date' => esc_sql(gmdate('Y-m-d H:i:s', current_time('timestamp'))),

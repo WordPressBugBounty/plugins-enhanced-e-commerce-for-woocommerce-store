@@ -64,18 +64,23 @@ if (class_exists('Conversios_Header') === FALSE) {
 
 			?>
 				<!--- Promotion box start -->
-				<div id="conversioshead_notice" class="promobandtop">
-					<div class="d-flex justify-content-center fixedcontainer_conversios_notice align-items-center">
-						<div class="promoleft">
-							<div class="promobandmsg text-center fs-6 d-flex align-items-center">
-								<div class="h5 mb-0 fw-normal">
-									Limited-time Pre-OND offer. Activate Pro and get ahead.
-									<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaidpreond&plugin_name=aio" class="btn btn-sm text-white fw-normal ms-3" style="background: #07BB4F">PREOND65</a>
-								</div>
-							</div>
+				<div id="conversioshead_notice" class="promobandtop" style="background: linear-gradient(90deg,#0d1b2a,#1b263b); color:#f1f1f1;">
+					<div class="d-flex justify-content-center fixedcontainer_conversios_notice align-items-center py-2">
+						<div class="promobandmsg fs-6 d-flex justify-content-center align-items-center">
+							<span class="icon-beer d-flex align-items-center pe-3" style="font-size:2em; line-height:1;">
+								🍺
+							</span>
+							<span class="fw-normal me-3" style="max-width: 720px; line-height:1.4;">
+								This Oktoberfest, go Pro! Get <b style="color: #fff;">65% OFF</b> Conversios Pro Plan <br> <span style="color: #fff;"> Enhance Conversion | FBCAPI | Server-side Tracking | Premium reports.</span>
+								<span class="fw-bold ms-2" style="color:#ffd700;">Code: Oktober25</span>
+							</span>
+							<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaidoktfest&plugin_name=aio" class="btn btn-sm fw-normal ms-3" style="background:#ffd700; color:#0d1b2a; border-radius:6px;">
+								Upgrade Now →
+							</a>
 						</div>
 					</div>
 				</div>
+
 
 				<!--- Promotion box end -->
 				<?php
@@ -177,9 +182,9 @@ if (class_exists('Conversios_Header') === FALSE) {
 				$menu_list = $this->conversios_menu_list();
 				if (!empty($menu_list)) {
 				?>
-					<header id="conversioshead" class="border-bottom bg-white">
+					<header id="conversioshead" class="border-bottom" style="background: #e6f3ff">
 						<div class="container-fluid col-12 p-0">
-							<nav class="navbar navbar-expand-lg navbar-light bg-white ps-4 p-0" style="">
+							<nav class="navbar navbar-expand-lg navbar-light ps-4 p-0" style="">
 								<div class="container-fluid py-0">
 									<a class="navbar-brand link-dark fs-16 fw-400">
 										<?php echo wp_kses(
@@ -261,7 +266,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 											<a href="javascript:void(0)" class="btn btn-warning rounded-pill text-white border-0 fw-bold fs-12 px-2 py-0" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
 												<?php echo esc_attr($plan_name) ?>
 											</a>
-											<a target="_blank" class="ms-2 fs-12 fw-400 px-2 py-0 fw-bold btn-newgreen text-white rounded-pill text-center" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
+											<a target="_blank" class="d-none ms-2 fs-12 fw-400 px-2 py-0 fw-bold btn-newgreen text-white rounded-pill text-center" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
 												<?php esc_html_e("Get Premium", "enhanced-e-commerce-for-woocommerce-store"); ?>
 											</a>
 											<a target="_blank" title="help center" class="px-2 py-0 text-dark lh-0" href="<?php echo esc_url('https://www.conversios.io/docs-category/woocommerce-2/?utm_source=woo_aiofree_plugin&utm_medium=top_menu&utm_campaign=help_center'); ?>" style="lh-0">

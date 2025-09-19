@@ -32,7 +32,9 @@ class CustomApi
     if (!empty($store_id)) {
       return $store_id;
     } else {
-      return '';
+      $TVC_Admin_Helper->update_subscription_details_api_to_db();
+      $google_detail_new = $TVC_Admin_Helper->get_ee_options_data();
+      return $google_detail_new['setting']->store_id;
     }
   }
   public function tc_wp_remot_call_post($url, $args)

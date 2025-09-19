@@ -11,8 +11,7 @@ $google_ads_id = isset($ee_options['google_ads_id']) && $ee_options['google_ads_
 $last_fetched_prompt_date = isset($ee_options['last_fetched_prompt_date']) && $ee_options['last_fetched_prompt_date'] != "" ? $ee_options['last_fetched_prompt_date'] : "";
 $ecom_reports_ga_currency = isset($ee_options['ecom_reports_ga_currency']) ? sanitize_text_field($ee_options['ecom_reports_ga_currency']) : '';
 $ecom_reports_gads_currency = isset($ee_options['ecom_reports_gads_currency']) ? sanitize_text_field($ee_options['ecom_reports_gads_currency']) : '';
-
-
+$connect_url = $TVC_Admin_Helper->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios-analytics-reports');
 $subpage = (isset($_GET["subpage"]) && $_GET["subpage"] != "") ? sanitize_text_field(wp_unslash($_GET['subpage'])) : "ga4general";
 
 $options = get_option("ee_options");
@@ -37,7 +36,30 @@ if ($subpage == "ga4ecommerce") {
     $gadspage_cls = "btn-outline-secondary alt-btn-reports";
     $ga4general_cls = "btn-outline-primary";
 }
+if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
+    $g_mail = sanitize_email($_GET['g_mail']);
+    update_option('ee_customer_gmail', $g_mail);
+}
 ?>
+<style>
+    ol,
+    ul {
+        padding-left: 0rem;
+    }
+
+    .big-checkbox {
+        transform: scale(1.3);
+        /* makes checkbox bigger */
+        margin-right: 8px;
+    }
+
+    #configurationMessage {
+        font-size: 13px;
+        padding: 4px 8px;
+        margin: 5px 0;
+        line-height: 1.3;
+    }
+</style>
 <div id="conv-report-main-div" class="container-fluid conv_report_mainbox p-4">
 
     <div class="row">
@@ -121,7 +143,7 @@ if ($subpage == "ga4ecommerce") {
             <?php } ?>
         </div>
 
-        <?php if ($subpage == "ga4general" && (empty($g_mail) || empty($ga4_measurement_id) || empty($ga4_analytic_account_id))) { ?>
+        <?php if ($subpage == "ga4general" && (empty($g_mail) || empty($ga4_analytic_account_id))) { ?>
             <div class="alert alert-info mt-4 w-100" role="alert">
                 <div class="mx-auto" style="max-width: 600px;">
                     <h5 class="alert-heading">Connect Google Analytics to View Reports</h5>
@@ -134,11 +156,174 @@ if ($subpage == "ga4ecommerce") {
                         <li>After saving, a success message will appear. Click <strong>"View Reports"</strong> to access your analytics.</li>
                     </ol>
                     <div class="mt-3">
-                        <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-analytics&subpage=gasettings"'); ?>" class="btn btn-primary">Click here to connect Google</a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prega4AuthModal">
+                            Click here to connect Google
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <?php } else { ?>
+            <div class="gadetails" style="padding: 16px 11px;background-color: #f0f0f1;font-size: medium;">
+                <div style="display: flex; flex-wrap: wrap; align-items: center;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
+                        <strong>Google Analytics Account ID :</strong>
+                        <?php echo !empty($ga4_analytic_account_id) ? esc_attr($ga4_analytic_account_id) : '-'; ?>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
+                        <strong>Google Analytics Measurement ID :</strong>
+                        <?php echo !empty($ga4_measurement_id) ? esc_attr($ga4_measurement_id) : '-'; ?>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
+                        <strong>Status:</strong>
+                        <span style="margin-left: 6px; color: <?php echo !empty($ga4_measurement_id) ? 'green' : 'red'; ?>;">
+                            <?php echo !empty($ga4_measurement_id) ? 'Connected' : 'Not Connected'; ?>
+                        </span>
+                    </div>
+                    <div style="text-align: right; margin-bottom: 10px; margin-right: 30px;">
+                        <button id="opengasettings" style="padding: 4px 7px; background-color: #1967D2; border: none; color: white; border-radius: 4px; cursor: pointer;">
+                            Edit Details
+                        </button>
                     </div>
                 </div>
             </div>
         <?php } ?>
+
+        <div class="modal fade" id="prega4AuthModal" tabindex="-1" aria-labelledby="prega4AuthModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content shadow rounded-3">
+                    <div class="modal-header border-bottom-0">
+                        <div class="modal-footer border-top-0 justify-content-center">
+                            <small class="text-danger text-fw-bold">Please use Chrome browser if you face any issues during setup.</small>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <!-- Left Column: Google Button -->
+                            <div class="col-md-5 d-flex align-items-center justify-content-center mb-4 mb-md-0">
+                                <?php if ($g_mail == "") { ?>
+                                    <button id="googleSignInBtn" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 shadow-sm google_connect_url">
+                                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" alt="Google Logo" width="20" height="20">
+                                        <span class="fw-semibold">Sign in with Google</span>
+                                    </button>
+                                <?php  } else { ?>
+                                    <button id="googleSignInBtn" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 shadow-sm google_connect_url">
+                                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" alt="Google Logo" width="20" height="20">
+                                        <span class="fw-semibold">Reauthorize</span>
+                                    </button>
+                                <?php } ?>
+                            </div>
+
+                            <!-- Right Column: Why we need it -->
+                            <div class="col-md-7">
+                                <p class="mb-2 h4"><strong>Why do we need your permission?</strong></p>
+                                <ul class="mb-0">
+                                    <li class="pt-2"><strong>Access to Google Analytics 4 (GA4):</strong> We use your GA4 data to generate intelligent profit predictions based on your traffic, conversion, and revenue metrics.</li>
+                                    <li class="pt-2">Your data is used only to show you insights <br> we never store or share your analytics data with anyone.</li>
+                                    <li class="pt-2">You can revoke access at any time by visiting your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">Google account permissions</a>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="ga4Modal" tabindex="-1" aria-labelledby="ga4ModalLabel" aria-hidden="true"
+            data-bs-backdrop="static" data-bs-keyboard="false"> <!-- prevents closing on outside click or Esc -->
+            <div class="modal-dialog modal-dialog-centered mt-5">
+                <div class="modal-content shadow rounded-4 border-0">
+
+                    <!-- Header with Logo + Close button -->
+                    <div class="modal-header border-bottom-0 flex-column text-center bg-light pt-4 pb-3 position-relative">
+                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                        <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>"
+                            alt="GA4 Logo" width="48" height="48" class="mb-2">
+                        <h5 class="modal-title fw-semibold" id="ga4ModalLabel">Connect Your GA4 Property</h5>
+                    </div>
+
+                    <div class="modal-body px-4 pt-4">
+                        <div id="ga4ErrorMessage" class="alert alert-danger d-none" role="alert"></div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px; justify-content: center;" class="alert alert-info">
+                            <strong>Successfully logged in with:</strong>
+                            <span style="margin-left: 6px;"><?php echo !empty($g_mail) ? esc_attr($g_mail) : '-'; ?></span>
+                            <span class="conv-link-blue ps-0 ms-2 tvc_google_signinbtn">
+                                <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                            </span>
+                        </div>
+                        <div id="configurationMessage"
+                            class="alert alert-danger d-none p-1 small mx-1 mb-4"
+                            role="alert">
+                            To view reports, please configure the following and save.
+                        </div>
+                        <form id="ga4SelectionForm" style="margin: 0px 30px;">
+
+                            <!-- GA4 Account -->
+                            <div class="mb-4 d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <label for="ga4_analytic_account_id" class="form-label fw-bolder">GA4 Account</label>
+                                    <select class="form-select" id="ga4_analytic_account_id" name="ga4_account">
+                                        <option value="">-- Select Account --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- GA4 Property -->
+                            <div class="mb-4 d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <label for="measurement_id" class="form-label fw-bolder">GA4 Measurement ID</label>
+                                    <select class="form-select" id="measurement_id" name="ga4_property">
+                                        <option value="">-- Select Measurement ID --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Confirmation Checkbox -->
+                            <div class="mb-3 form-check ms-1">
+                                <input type="checkbox" class="form-check-input big-checkbox" id="ga4midconfirm">
+                                <label class="form-check-label" for="ga4midconfirm" id="ga4ConfirmLabel">
+                                    Events will be tracked using the selected GA4 Measurement ID, and the in-built reports will reflect data from the same GA4 account.
+                                </label>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button id="savereportsettings" type="button" class="btn btn-primary w-100 py-2" disabled>
+                            <span class="d-inline-flex align-items-center">
+                                Save
+                                <div class="spinner-border text-light spinner-border-sm ms-2 d-none" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const accountSelect = document.getElementById("ga4_analytic_account_id");
+                const propertySelect = document.getElementById("measurement_id");
+                const confirmCheckbox = document.getElementById("ga4midconfirm");
+                const saveButton = document.getElementById("savereportsettings");
+
+                function toggleSaveButton() {
+                    const accountSelected = accountSelect.value.trim() !== "";
+                    const propertySelected = propertySelect.value.trim() !== "";
+                    const confirmed = confirmCheckbox.checked;
+
+                    saveButton.disabled = !(accountSelected && propertySelected && confirmed);
+                }
+
+                accountSelect.addEventListener("change", toggleSaveButton);
+                propertySelect.addEventListener("change", toggleSaveButton);
+                confirmCheckbox.addEventListener("change", toggleSaveButton);
+            });
+        </script>
 
 
         <?php
@@ -337,7 +522,236 @@ if ($subpage == "ga4ecommerce") {
         cb(start, end);
     <?php } ?>
 
+    const url = window.location.href;
 
+    const params = new URLSearchParams(window.location.search);
+    let storedMeasurementId = "<?php echo esc_js($ga4_measurement_id); ?>";
+
+
+    function showGA4ModalInfo(message) {
+        jQuery("#ga4Modal .modal-body").prepend(
+            '<div class="ga4-info-box alert alert-info rounded-3 py-2 px-3 mb-3">' + message + '</div>'
+        );
+    }
+
+    jQuery('#measurement_id').on('change', function() {
+        let selectedValue = jQuery(this).val().trim();
+        if (selectedValue) {
+            jQuery('#ga4ConfirmLabel').html(
+                `Events will be tracked using the selected GA4 Measurement ID - <strong>${selectedValue}</strong>, and the in-built reports will reflect data from the same GA4 account.`
+            );
+        } else {
+            jQuery('#ga4ConfirmLabel').html(
+                `Events will be tracked using the selected GA4 Measurement ID, and the in-built reports will reflect data from the same GA4 account.`
+            );
+        }
+    });
+
+    if (params.has("subscription_id") && params.has("g_mail")) {
+        const subscriptionId = params.get("subscription_id");
+        const gMail = params.get("g_mail");
+        const myModal = new bootstrap.Modal(document.getElementById("ga4Modal"));
+        myModal.show();
+        list_analytics_account();
+    }
+    jQuery(document).on("click", "#opengasettings", function(e) {
+        e.preventDefault();
+        jQuery("#ga4Modal").modal("show");
+        list_analytics_account();
+    });
+    jQuery(document).on("click", ".tvc_google_signinbtn", function(e) {
+        jQuery("#ga4Modal").modal("hide");
+        e.preventDefault();
+        jQuery("#prega4AuthModal").modal("show");
+    });
+
+    jQuery(document).on('change', '#ga4_analytic_account_id', function() {
+        let accountId = jQuery(this).val();
+
+        if (accountId) {
+            jQuery("#measurement_id").html('<option>Loading...</option>');
+            list_analytics_web_properties("GA4", accountId);
+        } else {
+            jQuery("#measurement_id").html('<option value="">-- Select Property --</option>');
+        }
+    });
+
+    function showGA4ModalError(message) {
+        jQuery("#ga4Modal .modal-body").prepend(
+            '<div class="ga4-error-box alert alert-danger rounded-2 py-1 px-2 mb-3">' + message + '</div>'
+        );
+    }
+
+    function list_analytics_account(page = 1) {
+        var conversios_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
+        jQuery("#ga4_analytic_account_id").html('<option>Loading...</option>');
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: {
+                action: "get_analytics_account_list",
+                page: page,
+                conversios_onboarding_nonce: conversios_onboarding_nonce
+            },
+            success: function(response) {
+                // console.log(response);
+                if (response && response.error == false) {
+                    var error_msg = 'null';
+                    if (response?.data?.items.length > 0) {
+                        jQuery('#ga4_analytic_account_id').html('<option value="">-- Select Account --</option>');
+                        var AccOptions = '';
+                        response.data.items.forEach(function(item) {
+                            AccOptions += '<option value="' + item.id + '">' + item.name + ' - ' + item.id + '</option>';
+                        });
+                        jQuery('#ga4_analytic_account_id').append(AccOptions);
+                    } else {
+                        showGA4ModalError("There are no Google Analytics accounts associated with this email.");
+                    }
+
+                } else if (response && response.error == true && response.error != undefined) {
+                    const errors = response.errors;
+                    showGA4ModalError(errors);
+                    var error_msg = errors;
+                } else {
+                    showGA4ModalError("There are no Google Analytics accounts associated with this email.");
+                }
+                jQuery("#tvc-ga4-acc-edit-acc_box")?.removeClass('tvc-disable-edits');
+                jQuery(".conv-enable-selection").removeClass('disabled');
+            }
+        });
+    }
+
+    function list_analytics_web_properties(type, account_id) {
+        jQuery("#measurement_id").html('<option>Loading...</option>');
+
+        var conversios_onboarding_nonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
+
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: {
+                action: "get_analytics_web_properties",
+                account_id: account_id,
+                type: type,
+                conversios_onboarding_nonce: conversios_onboarding_nonce
+            },
+            success: function(response) {
+                if (response && response.error == false) {
+                    if (type === "GA4") {
+                        jQuery('#measurement_id').empty();
+
+                        if (response?.data?.wep_measurement?.length > 0) {
+                            let streamOptions = '<option value="">-- Select Measurement Id --</option>';
+                            response.data.wep_measurement.forEach(function(item) {
+                                streamOptions += `<option value="${item.measurementId}">
+                                ${item.measurementId} - ${item.displayName}
+                            </option>`;
+                            });
+                            jQuery('#measurement_id').html(streamOptions).prop("disabled", false);
+                        } else {
+                            jQuery('#measurement_id')
+                                .html('<option value="">No GA4 Property Found</option>')
+                                .prop("disabled", true);
+
+                            showGA4ModalError("There are no Google Analytics 4 Properties associated with this analytics account.");
+                        }
+                    }
+                } else if (response && response.error === true) {
+                    const errors = response.errors || "Something went wrong";
+                    showGA4ModalError(errors);
+                } else {
+                    jQuery('#measurement_id')
+                        .html('<option value="">No Properties Found</option>')
+                        .prop("disabled", true);
+
+                    showGA4ModalError("No properties found for this account.");
+                }
+            },
+            error: function() {
+                jQuery('#measurement_id')
+                    .html('<option value="">Request Failed</option>')
+                    .prop("disabled", true);
+
+                showGA4ModalError("Failed to fetch GA4 properties. Please try again.");
+            }
+        });
+    }
+
+    jQuery("#savereportsettings").on("click", function() {
+        jQuery("#savereportsettings").addClass("disabled");
+        var ga4Account = jQuery("#ga4_analytic_account_id").val();
+        var ga4Property = jQuery("#measurement_id").val();
+
+        if (!ga4Account || !ga4Property) {
+            alert("Please select both Account and Property to continue.");
+            return;
+        }
+        var selected_vals = {
+            ga4_analytic_account_id: ga4Account,
+            measurement_id: ga4Property
+        };
+        // Show spinner
+        jQuery("#savereportsettings .spinner-border").removeClass("d-none");
+
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: {
+                action: "conv_save_pixel_data",
+                pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                conv_options_data: selected_vals,
+                conv_options_type: ["eeoptions", "eeapidata", "middleware"],
+            },
+            success: function(response) {
+                jQuery("#savereportsettings .spinner-border").addClass("d-none");
+
+                if (response == "0" || response == "1") {
+                    alert("GA4 settings saved successfully!");
+                    jQuery("#ga4Modal").modal("hide");
+                    setTimeout(function() {
+                        let url = new URL(window.location.href);
+                        url.searchParams.delete("subscription_id");
+                        url.searchParams.delete("g_mail");
+                        window.location.href = url.toString();
+                    }, 500);
+                } else {
+                    alert("Failed to save settings. Please try again.");
+                }
+            },
+            error: function() {
+                jQuery("#savereportsettings .spinner-border").addClass("d-none");
+                alert("Something went wrong. Please try again.");
+            },
+        });
+    });
+
+    jQuery(".google_connect_url").on("click", function() {
+        const w = 800;
+        const h = 650;
+        const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+        const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+        const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+        const systemZoom = width / window.screen.availWidth;
+        const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+        const top = (height - h) / 2 / systemZoom + dualScreenTop;
+        var url = '<?php echo esc_url($connect_url); ?>';
+
+        url = url.replace(/&amp;/g, '&');
+        url = url.replaceAll('&#038;', '&');
+        const newWindow = window.open(url, "newwindow", config = `scrollbars=yes,
+            width=${w / systemZoom}, 
+            height=${h / systemZoom}, 
+            top=${top}, 
+            left=${left},toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,directories=no,status=no
+            `);
+        if (window.focus) newWindow.focus();
+    });
     // Schedule email
     function IsEmail(email) {
         var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;

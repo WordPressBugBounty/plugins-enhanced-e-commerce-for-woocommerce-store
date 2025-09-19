@@ -197,6 +197,9 @@ class TVC_Admin_Helper
     }
     if (!empty($googleDetail)) {
       $get_ee_options_data = $this->get_ee_options_data();
+      if (!is_array($get_ee_options_data)) {
+        $get_ee_options_data = [];
+      }
       $get_ee_options_data["setting"] = $googleDetail;
       $this->set_ee_options_data($get_ee_options_data);
     }
@@ -511,7 +514,7 @@ class TVC_Admin_Helper
   public function get_connect_url()
   {
     $google_detail = $this->get_ee_options_data();
-    $store_id = $google_detail['setting']->store_id;
+    $store_id = $this->conv_get_store_id();
     if (!empty($this->connect_url)) {
       return $this->connect_url;
     } else {
@@ -522,7 +525,7 @@ class TVC_Admin_Helper
   public function get_custom_connect_url($confirm_url = "")
   {
     $google_detail = $this->get_ee_options_data();
-    $store_id = $google_detail['setting']->store_id;
+    $store_id = $this->conv_get_store_id();
     if ($confirm_url == "") {
       $confirm_url = admin_url();
     }
@@ -533,7 +536,7 @@ class TVC_Admin_Helper
   public function get_custom_connect_url_wizard($confirm_url = "")
   {
     $google_detail = $this->get_ee_options_data();
-    $store_id = $google_detail['setting']->store_id;
+    $store_id = $this->conv_get_store_id();
     if ($confirm_url == "") {
       $confirm_url = admin_url();
     }
@@ -544,7 +547,7 @@ class TVC_Admin_Helper
   public function get_custom_connect_url_subpage($confirm_url = "", $subpage = "")
   {
     $google_detail = $this->get_ee_options_data();
-    $store_id = $google_detail['setting']->store_id;
+    $store_id = $this->conv_get_store_id();
 
     if (!empty($this->connect_url)) {
       return $this->connect_url;
@@ -602,16 +605,17 @@ class TVC_Admin_Helper
   public function conv_get_store_id()
   {
     $google_detail = $this->get_ee_options_data();
-    $store_id = $google_detail['setting']->store_id;
-    if(!empty($store_id))
-    {
+    //echo '<pre>'; print_r($google_detail['setting']); echo '</pre>';
+    if (isset($google_detail['setting']->store_id) && !empty($google_detail['setting']->store_id)) {
+      return $google_detail['setting']->store_id;
+    } else {
+      $this->update_subscription_details_api_to_db();
+      $google_detail_res = $this->customApiObj->getGoogleAnalyticDetail();
+      $store_id = $google_detail_res->data->store_id;
       return $store_id;
     }
-    else{
-      return '';
-    }
-
   }
+
 
   public function get_currentCustomerId()
   {
