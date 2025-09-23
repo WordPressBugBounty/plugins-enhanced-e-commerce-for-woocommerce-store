@@ -611,7 +611,7 @@ class TVC_Admin_Helper
     } else {
       $this->update_subscription_details_api_to_db();
       $google_detail_res = $this->customApiObj->getGoogleAnalyticDetail();
-      $store_id = $google_detail_res->data->store_id;
+      $store_id = $google_detail_res->data->store_id ?? '';
       return $store_id;
     }
   }

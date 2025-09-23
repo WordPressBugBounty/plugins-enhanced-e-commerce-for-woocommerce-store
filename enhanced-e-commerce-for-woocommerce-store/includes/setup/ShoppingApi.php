@@ -22,10 +22,14 @@ class ShoppingApi
         $this->merchantId = sanitize_text_field($this->TVC_Admin_Helper->get_merchantId());
         $this->customerId = sanitize_text_field($this->TVC_Admin_Helper->get_currentCustomerId());
         $this->subscriptionId = sanitize_text_field($this->TVC_Admin_Helper->get_subscriptionId());
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $this->store_id = $TVC_Admin_Helper->conv_get_store_id();
     }
 
+    public function conv_get_store_id_ss()
+    {
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $store_id = $TVC_Admin_Helper->conv_get_store_id();
+        return $store_id;
+    }
     public function getCampaigns()
     {
         try {
@@ -299,7 +303,7 @@ class ShoppingApi
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $this->store_id
+                'store_id' => $this->conv_get_store_id_ss()
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -340,7 +344,7 @@ class ShoppingApi
             $data = [
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $this->store_id
+                'store_id' => $this->conv_get_store_id_ss()
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -383,7 +387,7 @@ class ShoppingApi
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $this->store_id
+                'store_id' => $this->conv_get_store_id_ss()
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -426,7 +430,7 @@ class ShoppingApi
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $this->store_id
+                'store_id' => $this->conv_get_store_id_ss()
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -471,7 +475,7 @@ class ShoppingApi
                 'domain' => $domain,
                 'dimension' => $report_name,
                 'limit' => 5,
-                'store_id' => $this->store_id
+                'store_id' => $this->conv_get_store_id_ss()
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -518,7 +522,7 @@ class ShoppingApi
                 'end_date' => sanitize_text_field($to_date),
                 'subscription_id' => sanitize_text_field($this->subscriptionId),
                 'domain' => $domain,
-                'store_id' => $this->store_id
+                'store_id' => $this->conv_get_store_id_ss()
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
@@ -566,7 +570,7 @@ class ShoppingApi
                 'limit' => $limit,
                 'orderbymetric' => 'screenPageViews',
                 'offset' => '0',
-                'store_id' => $this->store_id
+                'store_id' => $this->conv_get_store_id_ss()
             ];
             $header = array(
                 "Authorization: Bearer $this->token",

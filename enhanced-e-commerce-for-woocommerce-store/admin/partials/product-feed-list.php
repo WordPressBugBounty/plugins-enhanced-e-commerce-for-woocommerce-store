@@ -90,7 +90,7 @@ $google_ads_id = '';
 $currency_symbol = '';
 if (isset($ee_options['google_ads_id']) === TRUE && $ee_options['google_ads_id'] !== '') {
     $google_ads_id = esc_html($ee_options['google_ads_id']);
-    $PMax_Helper = new Conversios_PMax_Helper();
+    //$PMax_Helper = new Conversios_PMax_Helper();
 }
 
 $googleConnect_url = '';

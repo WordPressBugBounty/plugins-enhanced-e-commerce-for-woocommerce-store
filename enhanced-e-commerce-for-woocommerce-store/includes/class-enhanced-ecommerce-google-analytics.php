@@ -132,7 +132,7 @@ class Enhanced_Ecommerce_Google_Analytics
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-onboarding-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-dashboard-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-reports-helper.php';
-    require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-pmax-helper.php';
+    //require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-pmax-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-conversios-admin.php';
 
     /**

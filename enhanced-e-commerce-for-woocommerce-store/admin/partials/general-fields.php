@@ -113,7 +113,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                                     <?php esc_html_e("Google Analytics", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </span>
                             </div>
-                            <a href="<?php echo esc_url('admin.php?page=conversios-google-analytics&subpage=gasettings'); ?>" class="align-self-center">
+                            <a href="<?php echo esc_url('admin.php?page=conversios&wizard=pixelandanalytics'); ?>" class="align-self-center">
                                 <span class="material-symbols-outlined fs-2 border-2 border-solid rounded-pill" rouded-pill="">arrow_forward</span>
                             </a>
 

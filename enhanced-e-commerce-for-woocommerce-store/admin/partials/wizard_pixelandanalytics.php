@@ -77,7 +77,7 @@ if ($microsoft_mail) {
 
 $is_sel_disable_ga = 'disabled';
 $cust_g_email = (isset($tvc_data['g_mail']) && esc_attr($subscription_id)) ? esc_attr($tvc_data['g_mail']) : '';
-$tracking_method = (isset($ee_options['tracking_method']) && '' != $ee_options['tracking_method']) ? $ee_options['tracking_method'] : '';
+$tracking_method = 'gtm'; //(isset($ee_options['tracking_method']) && '' != $ee_options['tracking_method']) ? $ee_options['tracking_method'] : '';
 
 global $wp_filesystem;
 
@@ -814,6 +814,7 @@ if ('' != $subscription_id) {
                 selected_vals["cov_remarketing"] = "1";
             }
 
+            selected_vals["tracking_method"] = 'gtm';
             selected_vals["gads_remarketing_id"] = jQuery("#gads_remarketing_id").val();
             selected_vals["fb_pixel_id"] = jQuery("#fb_pixel_id").val();
             selected_vals["tiKtok_ads_pixel_id"] = jQuery("#tiKtok_ads_pixel_id").val();

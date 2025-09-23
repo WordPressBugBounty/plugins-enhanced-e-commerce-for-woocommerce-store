@@ -27,7 +27,7 @@ $info_missing = false;
 $saved_users = [];
 $phone_verification_status = "";
 $customObj = new CustomApi();
-$PMax_Helper = new Conversios_PMax_Helper();
+//$PMax_Helper = new Conversios_PMax_Helper();
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 $subscription_id = sanitize_text_field($TVC_Admin_Helper->get_subscriptionId());
 $google_detail = $TVC_Admin_Helper->get_ee_options_data();
@@ -38,7 +38,7 @@ if ($google_ads_id != "") {
     $gads_billing_info = $customObj->get_gads_info($google_ads_id, "billing");
     $gAds_billing_status = $gads_billing_info->gAds_billing_status;
     if ($gAds_billing_status != "PENDING" && CONV_IS_WC) {
-        $results = $PMax_Helper->campaign_pmax_list($google_ads_id, '10000', '', '');
+        $results = $object = new stdClass(); //$PMax_Helper->campaign_pmax_list($google_ads_id, '10000', '', '');
 
         $campaign_results = $results->data->results ?? [];
 
