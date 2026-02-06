@@ -1,8 +1,8 @@
 <?php
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+global $wp_filesystem;
+TVC_Admin_Helper::get_filesystem();
 
 $microsoft_ads_manager_id = isset($ee_options['microsoft_ads_manager_id']) ? $ee_options['microsoft_ads_manager_id'] : "";
 $microsoft_ads_subaccount_id = isset($ee_options['microsoft_ads_subaccount_id']) ? $ee_options['microsoft_ads_subaccount_id'] : "";
@@ -41,7 +41,6 @@ $TVC_Admin_Helper = new TVC_Admin_Helper();
 $conv_data = $TVC_Admin_Helper->get_store_data();
 //$getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
-global $wp_filesystem;
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
@@ -52,29 +51,27 @@ if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['sub
     if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
         $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
         $is_refresh_token_expire = false;
     }
 }
 if ($subscriptionId != "") {
-    $google_detail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
-
-    if (property_exists($google_detail, "error") && $google_detail->error == false) {
-        if (property_exists($google_detail, "data") && $google_detail->data != "") {
-            $googleDetail = $google_detail->data;
-            $tvc_data['subscription_id'] = $googleDetail->id;
-            $plan_id = $googleDetail->plan_id;
-            $login_customer_id = $googleDetail->customer_id;
-            $tracking_option = $googleDetail->tracking_option;
-            if ($googleDetail->tracking_option != '') {
-                $defaulSelection = 0;
-            }
+    $google_detail = unserialize(get_option("ee_api_data"));
+    if ($google_detail['setting'] && $google_detail['setting'] != "") {
+        $googleDetail = $google_detail['setting'];
+        $tvc_data['subscription_id'] = $googleDetail->id;
+        $plan_id = $googleDetail->plan_id;
+        $login_customer_id = $googleDetail->customer_id;
+        $tracking_option = $googleDetail->tracking_option;
+        if ($googleDetail->tracking_option != '') {
+            $defaulSelection = 0;
         }
     }
 }
-$convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
-$convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 ?>
 <style>
     .tooltip-inner {
@@ -506,94 +503,6 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
     $fb_catalog_id = $googleDetail->facebook_setting->fb_catalog_id;
 }
 ?>
-<!-------------------------CTA super_feed_modal Start ---------------------------------->
-<div class="modal fade" id="conv_super_feed_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 99999">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header justify-content-end connection-header border-0 pb-0">
-                <button type="button" style="margin: 0px; padding:0px;" class="btn-close close_feed_modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center p-4">
-                <div class="connected-content">
-                    <h3>
-                        <?php esc_html_e("Congratulations!", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h3>
-                    <p class="my-3 syncSuccessMessage" style="font-size: 20px;">
-
-                    </p>
-                    <p><?php esc_html_e("And that's not all.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
-                    <h4 class="mb-3">
-                        <?php esc_html_e("Embrace these amazing features:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h4>
-                </div>
-                <div>
-                    <div class="attributemapping-box">
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-6">
-                                <div class="attribute-box mb-3">
-                                    <div class="attribute-icon">
-                                        <?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/Campaign-Management.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>;
-                                    </div>
-                                    <div class="attribute-content para">
-                                        <h3>
-                                            <?php esc_html_e("Effortless Feed Management:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </h3>
-                                        <p>
-                                            <?php esc_html_e("Generate custom feeds, apply filters, and ensure up-to-date product data with auto-sync for targeted regions and successful promotions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-
-                                        </p>
-                                        <div class="attribute-btn">
-                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed'); ?>" class="btn btn-dark">Manage Feeds</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-6">
-                                <div class="attribute-box mb-3">
-                                    <div class="attribute-icon">
-                                        <?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/Integrations.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>;
-                                    </div>
-                                    <div class="attribute-content para">
-                                        <h3>
-                                            <?php esc_html_e("Seamless Integration:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </h3>
-                                        <p>
-                                            <?php esc_html_e("Connect more channels to sync your product data. Map your WooCommerce product attributes and categories for an optimized product feed process.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </p>
-                                        <div class="attribute-btn">
-                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&tab=gaa_config_page'); ?>" class="btn btn-dark">Configure Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--------------------------------super_feed_modal End -------------------------------------->
 <script>
     var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field(wp_unslash($_GET['subscription_id']))) : '' ?>";
     var mmc_id = "<?php echo esc_html($microsoft_merchant_center_id) ?>";
@@ -608,11 +517,11 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         const urlParams = new URLSearchParams(window.location.search);
         const $microsoft_ads_pixel_id = <?php echo !empty($microsoft_ads_pixel_id) ? 'true' : 'false'; ?>;
 
-        jQuery("#openmmcsettings").on("click", function() {
-            <?php if (($microsoft_ads_pixel_id == "" || $ms_catalog_id == "") && ($microsoft_ads_manager_id != "" || $microsoft_ads_subaccount_id != "")) { ?>
-                list_microsoft_merchant_account(tvc_data);
-            <?php } ?>
-        });
+        // jQuery("#openmmcsettings").on("click", function() {
+        //     <?php if (($microsoft_ads_pixel_id == "" || $ms_catalog_id == "") && ($microsoft_ads_manager_id != "" || $microsoft_ads_subaccount_id != "")) { ?>
+        //         list_microsoft_merchant_account(tvc_data);
+        //     <?php } ?>
+        // });
     });
 
 
@@ -718,6 +627,23 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         });
     }
 
+    function getAlertMessageAll(type = 'Success', title = 'Success', message = '', icon = 'success', buttonText =
+        'Done!', buttonColor = '#1967D2', iconImageTag = '') {
+
+        Swal.fire({
+            type: type,
+            icon: icon,
+            title: title,
+            confirmButtonText: buttonText,
+            confirmButtonColor: buttonColor,
+            text: message,
+        })
+        let swalContainer = Swal.getContainer();
+        jQuery(swalContainer).find('.swal2-icon-show').removeClass('swal2-' + icon).removeClass('swal2-icon').addClass(
+            'justify-content-center')
+        jQuery('.swal2-icon-show').html(iconImageTag)
+
+    }
     /**
      * Get Microsoft Merchant Center List
      */
@@ -900,7 +826,6 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
         let plan_id = "<?php echo esc_attr($plan_id); ?>";
         let app_id = "<?php echo esc_attr(CONV_APP_ID); ?>";
         let bagdeVal = "yes";
-        let convBadgeVal = "<?php echo esc_attr($convBadgeVal); ?>";
         let microsoft_merchant_center_id = "<?php echo esc_attr($microsoft_merchant_center_id); ?>";
 
 
@@ -956,17 +881,21 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             jQuery(".conv-enable-selection").addClass("d-none");
         <?php } ?>
 
-        <?php if ((isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field(wp_unslash($_GET['subscription_id']))) !== '') ||
-            (empty($microsoft_merchant_center_id) &&
-                !empty($cust_ms_email) &&
-                !empty($microsoft_ads_manager_id) &&
-                !empty($microsoft_ads_subaccount_id) &&
-                !empty($microsoft_ads_pixel_id))
-        ) { ?>
-
+        <?php if ((isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field(wp_unslash($_GET['subscription_id']))) !== '')) { ?>
             list_microsoft_merchant_account(tvc_data);
         <?php } ?>
 
+        jQuery('#openmmcsettings').on("click", function() {
+            <?php if (
+                empty($microsoft_merchant_center_id) &&
+                !empty($cust_ms_email) &&
+                !empty($microsoft_ads_manager_id) &&
+                !empty($microsoft_ads_subaccount_id) &&
+                !empty($microsoft_ads_pixel_id)
+            ) : ?>
+                list_microsoft_merchant_account(tvc_data);
+            <?php endif; ?>
+        });
         //Save GMC id
         jQuery(document).on("click", ".conv-btn-connect-enabled-mmc", function(e) {
             e.preventDefault();
@@ -1012,10 +941,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
                     if (response == "0" || response == "1") {
                         let microsoft_merchant_center_id = jQuery('#microsoft_merchant_center_id').val();
                         let merchant_id = jQuery('#microsoft_merchant_center_id').find(':selected').data('merchant_id');
-                        // save_merchant_data(microsoft_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, true).then((res) => {
-                        // if (feedType !== '') {
-                        //    // createSuperAIFeed();
-                        // } else {
+
                         conv_change_loadingbar("hide");
                         jQuery(".conv-btn-connect-enabled-mmc").text("Save");
                         jQuery(".conv-btn-connect-enabled-mmc").removeClass('disabled');
@@ -1123,35 +1049,7 @@ if (isset($googleDetail->facebook_setting->fb_business_id) === TRUE && $googleDe
             jQuery('#submitFeed').attr('disabled', false);
         }
     }
-    /*************************Create Super AI Feed Start ************************************************************************/
-    function createSuperAIFeed() {
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: {
-                action: "ee_super_AI_feed",
-                create_superFeed_nonce: "<?php echo esc_js(wp_create_nonce('create_superFeed_nonce_val')); ?>",
-                type: 'GMC',
-            },
-            success: function(response) {
-                conv_change_loadingbar("hide");
-                if (response.status == 'success') {
-                    jQuery('.syncSuccessMessage').html('Your latest ' + response.total_product + ' products are synced to your Microsoft Merchant Center store.')
-                    jQuery("#conv_super_feed_modal").modal("show");
-                }
-            },
-            error: function(error) {
 
-            }
-        });
-    }
-    /*************************Create Super AI Feed End ***************************************************************************/
-    jQuery(document).on('click', '.close_feed_modal', function() {
-        jQuery("#conv_super_feed_modal").modal("hide");
-        location.reload();
-    })
-    /*************************************************************************************************************************** */
     /*************************************Save Feed Data End***************************************************************************/
     function conv_change_loadingbar_header(state = 'show') {
         if (state === 'show') {

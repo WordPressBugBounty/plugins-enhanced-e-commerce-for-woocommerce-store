@@ -7,6 +7,11 @@ $ga4_analytic_account_id = isset($ee_options['ga4_analytic_account_id']) && $ee_
 
 <div class="conv_reportsec_box g-0">
     <div id="conv_gridrepbox_row" class="row px-0">
+        <div id="nodataavailalblega4" class="alert alert-danger" role="alert" style="display: none">
+            <strong>No data is available for the selected Google Analytics account.</strong><br>
+            If you have created this account recently, please allow up to 24 hours for Google to process and populate the data.
+            <a target="_blank" href="https://support.google.com/analytics/answer/12233314?sjid=7558629257456489821-NC#data-processing">Read More</a>
+        </div>
         <input type="hidden" id="ecom_reports_ga_currency" value="">
         <h4 class="pt-3"><?php esc_html_e("Overview Report", "enhanced-e-commerce-for-woocommerce-store") ?></h4>
         <div class="col-xs-12 col-sm-6 col-md-3 col-xl-3 col-xxl conv_rep_gridbox mb-4 conv_rgrid_sessions">
@@ -353,22 +358,6 @@ $ga4_analytic_account_id = isset($ee_options['ga4_analytic_account_id']) && $ee_
 <?php if (!$ga4_measurement_id == "" && !empty($g_mail)) { ?>
 
     <script>
-        jQuery(document).ready(function($) {
-            // Check if the bar has been closed before using localStorage
-            if (!localStorage.getItem('feedbackConvBarClosed')) {
-                setTimeout(function() {
-                    $('#feedback-bar').addClass('show');
-                    console.log('show');
-                }, 5000);
-            }
-
-            // Close the bar and never show again
-            $('#close-feedback-bar').click(function() {
-                $('#feedback-bar').removeClass('show'); // Hide the bar
-                localStorage.setItem('feedbackConvBarClosed', 'true'); // Store the close action
-            });
-        });
-
         jQuery('#conv_reporttab_pill').on('show.bs.tab', function() {
             let tabid = event.target.id;
 
@@ -524,13 +513,8 @@ $ga4_analytic_account_id = isset($ee_options['ga4_analytic_account_id']) && $ee_
                             conv_changeplaceholder("hide");
                         } else if (presentdata != undefined && pastdata == undefined) {
                             jQuery(".conv_rgrid_sessions .conv_rgrid_data_num").html(presentdata.sessions);
-
-
                             jQuery(".conv_rgrid_newUsers .conv_rgrid_data_num").html(presentdata.newUsers);
-
                             jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html((parseFloat(presentdata.averageSessionDuration)).toFixed(2));
-
-
                             jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html((parseFloat(presentdata.bounceRate) * 100).toFixed(2));
                             conv_set_gridboxwidth();
                             conv_changeplaceholder("hide");
@@ -540,11 +524,15 @@ $ga4_analytic_account_id = isset($ee_options['ga4_analytic_account_id']) && $ee_
                             jQuery(".conv_rgrid_avgduration .conv_rgrid_data_num").html('N/A');
                             jQuery(".conv_rgrid_bounce .conv_rgrid_data_num").html('N/A');
                             jQuery(".conv_rgrid_data_per").html('N/A');
+                            jQuery("#nodataavailalblega4").slideDown();
                             console.log("No data");
                         }
                     } else {
                         console.log("Error in data fetching");
-                        jQuery("#ga4Modal").modal("show");
+                        var modalEl = document.getElementById("ga4Modal");
+                        var modal = new bootstrap.Modal(modalEl);
+                        modal.show();
+                        list_analytics_account();
                         jQuery("#configurationMessage").removeClass("d-none");
                     }
                 },

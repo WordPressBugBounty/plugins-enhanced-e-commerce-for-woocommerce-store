@@ -74,7 +74,7 @@ if (!class_exists('TVC_Survey')) {
             if (empty($screen)) {
                 return false;
             }
-            return (!empty($screen->id) && in_array($screen->id, array('plugins', 'plugins-network'), true));
+            return (!empty($screen->id) && in_array($screen->id, array('plugins', 'plugins-network', 'plugin-install'), true));
         }
         public function tvc_js()
         {
@@ -85,11 +85,20 @@ if (!class_exists('TVC_Survey')) {
 ?>
             <script type="text/javascript">
                 jQuery(function($) {
-                    var $deactivateLink = jQuery('#the-list').find(
-                            '[data-slug="<?php echo esc_attr($this->plugin); ?>"] span.deactivate a'),
-                        $overlay = jQuery('#ee-survey-<?php echo esc_attr($this->plugin); ?>'),
-                        $form = $overlay.find('form'),
-                        formOpen = false;
+                    var pluginSlug = "<?php echo esc_attr($this->plugin); ?>";
+                    // Selector for both data-slug and data-plugin (full path)
+                    var $deactivateLink = jQuery('#the-list').find('[data-slug="' + pluginSlug + '"] span.deactivate a, [data-plugin^="' + pluginSlug + '"] span.deactivate a');
+                    var $overlay = jQuery('#ee-survey-<?php echo esc_attr($this->plugin); ?>');
+                    var $form = $overlay.find('form');
+                    var formOpen = false;
+
+                    console.log('Conversios Survey: Link found:', $deactivateLink.length);
+
+                    if ($deactivateLink.length === 0) {
+                        // Fallback selector if data-slug is not present
+                        $deactivateLink = jQuery('#the-list').find('tr#' + pluginSlug + ' span.deactivate a');
+                    }
+
                     // Plugin listing table deactivate link.
                     $deactivateLink.on('click', function(event) {
                         event.preventDefault();
@@ -126,7 +135,7 @@ if (!class_exists('TVC_Survey')) {
                             radio_option_val: $form.find('.feedback-reason.active p').text(),
                             other_reason: 'New message - ' + $form.find('textarea').val(),
                             site_url: '<?php echo esc_url(home_url()); ?>',
-                            plugin_name: 'ee-woocommerce-new',
+                            plugin_name: '<?php echo esc_attr($this->plugin); ?>',
                             tvc_call_add_survey: "<?php echo esc_attr(wp_create_nonce('tvc_call_add_survey-nonce')); ?>"
                         }
                         add_survey(data);
@@ -447,7 +456,7 @@ if (!class_exists('TVC_Survey')) {
                         </b>
                         <b class="ee-survey-title-sub ee-survey-title-sub-green">
                             <?php echo ' ' . esc_html__('🎧 Help: Let us setup event tracking on your website.', 'enhanced-e-commerce-for-woocommerce-store'); ?>
-                            <a target="_blank" href="<?php echo esc_url('https://calendly.com/conversios/30min'); ?>">Set up a call now with us</a>
+                            <a target="_blank" href="<?php echo esc_url('https://conversios.freshdesk.com/support/home'); ?>">Set up a call now with us</a>
                         </b> 
                         <br>
                         <div class="feedback-reasons">

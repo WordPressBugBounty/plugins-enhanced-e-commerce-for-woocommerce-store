@@ -1,8 +1,6 @@
 <?php
 
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 
 class TVC_Admin_Helper
 {
@@ -29,20 +27,32 @@ class TVC_Admin_Helper
   protected $tiktok_business_id;
   public function __construct()
   {
+    self::get_filesystem();
     $this->includes();
     $this->customApiObj = new CustomApi();
     $this->TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
     add_action('init', array($this, 'init'));
-    add_action('init', array($this, 'tvc_upgrade_function'), 9999);
+    // add_action('init', array($this, 'tvc_upgrade_function'), 9999);
+  }
+
+  public static function get_filesystem()
+  {
+    global $wp_filesystem;
+    if (empty($wp_filesystem)) {
+      require_once ABSPATH . 'wp-admin/includes/file.php';
+      WP_Filesystem();
+    }
+    return $wp_filesystem;
   }
 
   public function includes()
   {
-    if (!class_exists('CustomApi.php')) {
+    if (!class_exists('CustomApi')) {
       require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php');
     }
-    if (!class_exists('ShoppingApi')) {
-      require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/ShoppingApi.php');
+
+    if (!class_exists('TVC_Admin_DB_Helper')) {
+      require_once(ENHANCAD_PLUGIN_DIR . 'admin/class-tvc-admin-db-helper.php');
     }
   }
 
@@ -189,7 +199,8 @@ class TVC_Admin_Helper
    */
   public function update_subscription_details_api_to_db($googleDetail = null)
   {
-    $google_detail = $this->customApiObj->getGoogleAnalyticDetail();
+    $caller = "update_subscription_details_function";
+    $google_detail = $this->customApiObj->getGoogleAnalyticDetail($caller);
     if (property_exists($google_detail, "error") && $google_detail->error == false) {
       if (property_exists($google_detail, "data") && $google_detail->data != "") {
         $googleDetail = $google_detail->data;
@@ -205,37 +216,12 @@ class TVC_Admin_Helper
     }
   }
   /*
-   * Update Google shopping product details in DB
-   */
-  public function update_gmc_product_to_db($next_page_token = "")
-  {
-    $merchantId = $this->get_merchantId();
-    $syncProductStat = array("total" => 0, "approved" => 0, "disapproved" => 0, "pending" => 0);
-    if ($merchantId != "") {
-      $api_rs = $this->import_gmc_products_sync_in_db($next_page_token);
-      $product_status = $this->TVC_Admin_DB_Helper->tvc_get_counts_groupby('ee_products_sync_list', 'google_status');
-      if (!empty($product_status)) {
-        foreach ($product_status as $key => $value) {
-          if (isset($value['google_status'])) {
-            $syncProductStat[$value['google_status']] = (isset($value['count']) && $value['count'] > 0) ? $value['count'] : 0;
-          }
-        }
-        $syncProductStat["total"] = $this->TVC_Admin_DB_Helper->tvc_row_count('ee_products_sync_list');
-        $google_detail = $this->get_ee_options_data();
-        $google_detail["prod_sync_status"] = (object) $syncProductStat;
-        $this->set_ee_options_data($google_detail);
-      }
-
-      //}
-      return array("error" => false, "api_rs" => $api_rs, "message" => esc_html__("Details updated successfully.", "enhanced-e-commerce-for-woocommerce-store"));
-    }
-  }
-  /*
    * Update user subscription and shopping details in DB
    */
   public function set_update_api_to_db($googleDetail = null)
   {
-    $google_detail = $this->customApiObj->getGoogleAnalyticDetail();
+    $caller = "set_update_api_to_db_function";
+    $google_detail = $this->customApiObj->getGoogleAnalyticDetail($caller);
     if (property_exists($google_detail, "error") && $google_detail->error == false) {
       if (property_exists($google_detail, "data") && $google_detail->data != "") {
         $googleDetail = $google_detail->data;
@@ -245,9 +231,9 @@ class TVC_Admin_Helper
     }
 
     $campaigns_list = "";
+    $caller = "set_update_api_to_db";
     if (isset($googleDetail->google_ads_id) && $googleDetail->google_ads_id != "") {
-      $shopping_api = new ShoppingApi();
-      $campaigns_list_res = $shopping_api->getCampaigns();
+      $campaigns_list_res = $this->customApiObj->getCampaigns($caller);
       if (isset($campaigns_list_res->data) && isset($campaigns_list_res->status) && $campaigns_list_res->status == 200) {
         if (isset($campaigns_list_res->data['data'])) {
           $campaigns_list = $campaigns_list_res->data['data'];
@@ -259,43 +245,6 @@ class TVC_Admin_Helper
     $prod_sync_status = isset($google_detail_t["prod_sync_status"]) ? $google_detail_t["prod_sync_status"] : $syncProductStat;
     $this->set_ee_options_data(array("setting" => $googleDetail, "prod_sync_status" => (object) $prod_sync_status, "campaigns_list" => $campaigns_list, "sync_time" => current_time('timestamp')));
     return array("error" => false, "message" => esc_html__("Details updated successfully.", "enhanced-e-commerce-for-woocommerce-store"));
-  }
-  /*
-   * update remarketing snippets
-   */
-  public function update_remarketing_snippets()
-  {
-
-    $customer_id = $this->get_currentCustomerId();
-    if ($customer_id != "") {
-      $rs = $this->customApiObj->get_remarketing_snippets($customer_id);
-      $remarketing_snippets = array();
-      if (property_exists($rs, "error") && $rs->error == false) {
-        if (property_exists($rs, "data") && $rs->data != "" && property_exists($rs->data, "snippets")) {
-          $remarketing_snippets["snippets"] = base64_encode($rs->data->snippets);
-          $remarketing_snippets["id"] = $rs->data->id;
-        }
-      }
-      update_option("ee_remarketing_snippets", serialize($remarketing_snippets));
-    }
-  }
-  public function get_conversion_label($con_string)
-  {
-    $con_string = trim(preg_replace('/\s\s+/', '', $con_string));
-    $con_string = str_replace(" ", "", $con_string);
-    $con_string = str_replace("'", "", $con_string);
-    $con_string = str_replace("return false;", "", $con_string);
-    $con_string = str_replace("event,conversion,{", ",event:conversion,", $con_string);
-    $con_array = explode(",", $con_string);
-    $con_val_array = array();
-    if (!empty($con_array) && in_array("event:conversion", $con_array)) {
-      foreach ($con_array as $key => $con_value) {
-        $con_val_array = explode(":", $con_value);
-        if (in_array("send_to", $con_val_array)) {
-          return $con_val_array[1];
-        }
-      }
-    }
   }
   /*
    * update conversion send_to dapricated version 4.8.2
@@ -610,10 +559,15 @@ class TVC_Admin_Helper
       return $google_detail['setting']->store_id;
     } else {
       $this->update_subscription_details_api_to_db();
-      $google_detail_res = $this->customApiObj->getGoogleAnalyticDetail();
-      $store_id = $google_detail_res->data->store_id ?? '';
-      return $store_id;
+      $google_detail = $this->get_ee_options_data();
+      if (isset($google_detail['setting']->store_id) && !empty($google_detail['setting']->store_id)) {
+        return $google_detail['setting']->store_id;
+      }
+      // $google_detail_res = $this->customApiObj->getGoogleAnalyticDetail();
+      // $store_id = $google_detail_res->data->store_id ?? '';
+      // return $store_id;
     }
+    return null;
   }
 
 
@@ -626,23 +580,6 @@ class TVC_Admin_Helper
       return $this->currentCustomerId = (isset($ee_options_settings['google_ads_id'])) ? $ee_options_settings['google_ads_id'] : "";
     }
   }
-  public function get_user_currency_symbol()
-  {
-    if (!empty($this->user_currency_symbol)) {
-      return $this->user_currency_symbol;
-    } else {
-      $currency_symbol = "";
-      $currency_symbol_rs = $this->customApiObj->getCampaignCurrencySymbol(['customer_id' => $this->get_currentCustomerId()]);
-      if (isset($currency_symbol_rs->data) && isset($currency_symbol_rs->data['status']) && $currency_symbol_rs->data['status'] == 200) {
-        $currency_symbol = get_woocommerce_currency_symbol($currency_symbol_rs->data['data']->currency);
-      } else {
-        $currency_symbol = get_woocommerce_currency_symbol("USD");
-      }
-      $this->user_currency_symbol = $currency_symbol;
-      return $this->user_currency_symbol;
-    }
-  }
-
   public function add_spinner_html()
   {
     $spinner_gif = ENHANCAD_PLUGIN_URL . '/admin/images/ajax-loader.gif';
@@ -654,7 +591,7 @@ class TVC_Admin_Helper
   public function get_gmcAttributes()
   {
     $path = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/gmc_attrbutes.json';
-    global $wp_filesystem;
+    $wp_filesystem = self::get_filesystem();
     $str = $wp_filesystem->get_contents($path);
     $attributes = $str ? json_decode($str, true) : [];
     return $attributes;
@@ -662,7 +599,7 @@ class TVC_Admin_Helper
   public function get_gmc_countries_list()
   {
     $path = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/countries.json';
-    global $wp_filesystem;
+    $wp_filesystem = self::get_filesystem();
     $str = $wp_filesystem->get_contents($path);
     $attributes = $str ? json_decode($str, true) : [];
     return $attributes;
@@ -670,7 +607,7 @@ class TVC_Admin_Helper
   public function get_gmc_language_list()
   {
     $path = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/iso_lang.json';
-    global $wp_filesystem;
+    $wp_filesystem = self::get_filesystem();
     $str = $wp_filesystem->get_contents($path);
 
     $attributes = $str ? json_decode($str, true) : [];
@@ -720,7 +657,7 @@ class TVC_Admin_Helper
     <?php
     }
   }
-  public function tvc_select($name, $class_id = "", string $label = "Please Select", string $sel_val = null, bool $require = false, $option_list = array())
+  public function tvc_select($name, $class_id = "", string $label = "Please Select", string $sel_val = "", bool $require = false, $option_list = array())
   {
     if (!empty($option_list) && $name) {
     ?>
@@ -797,7 +734,7 @@ class TVC_Admin_Helper
     }
   }
 
-  public function tvc_text($name, string $type = "text", string $class_id = "", string $label = null, $sel_val = null, bool $require = false)
+  public function tvc_text($name, string $type = "text", string $class_id = "", string $label = "", $sel_val = "", bool $require = false)
   {
     ?>
     <input style="width:100%;" type="<?php echo esc_attr($type); ?>"
@@ -947,7 +884,7 @@ class TVC_Admin_Helper
       }
     }
   }
-  public function call_domain_claim()
+  public function call_domain_claim($merchant_id, $account_id)
   {
     $googleDetail = [];
     $google_detail = $this->get_ee_options_data();
@@ -961,8 +898,13 @@ class TVC_Admin_Helper
           'merchant_id' => sanitize_text_field($googleDetail->merchant_id),
           'website_url' => get_site_url(),
           'subscription_id' => sanitize_text_field($googleDetail->id),
-          'account_id' => sanitize_text_field($googleDetail->google_merchant_center_id)
+          'account_id' => sanitize_text_field($googleDetail->google_merchant_center_id),
+          'caller' => 'call_domain_claim'
         ];
+        if ($postData['merchant_id'] == "" || $postData['account_id'] == "") {
+          $postData['account_id'] = sanitize_text_field($account_id);
+          $postData['merchant_id'] = sanitize_text_field($merchant_id);
+        }
         $claimWebsite = $this->customApiObj->claimWebsite($postData);
         if (isset($claimWebsite->error) && !empty($claimWebsite->errors)) {
           return array('error' => true, 'msg' => $claimWebsite->errors);
@@ -977,7 +919,7 @@ class TVC_Admin_Helper
   }
 
 
-  public function call_site_verified()
+  public function call_site_verified($merchant_id, $account_id)
   {
     $googleDetail = [];
     $google_detail = $this->get_ee_options_data();
@@ -988,15 +930,20 @@ class TVC_Admin_Helper
           'merchant_id' => sanitize_text_field($googleDetail->merchant_id),
           'website_url' => get_site_url(),
           'subscription_id' => sanitize_text_field($googleDetail->id),
-          'account_id' => sanitize_text_field($googleDetail->google_merchant_center_id)
+          'account_id' => sanitize_text_field($googleDetail->google_merchant_center_id),
+          'caller' => 'call_site_verified'
         ];
+        if ($postData['merchant_id'] == "" || $postData['account_id'] == "") {
+          $postData['account_id'] = sanitize_text_field($account_id);
+          $postData['merchant_id'] = sanitize_text_field($merchant_id);
+        }
         $postData['method'] = "file";
         $siteVerificationToken = $this->customApiObj->siteVerificationToken($postData);
         if (isset($siteVerificationToken->error) && !empty($siteVerificationToken->errors)) {
           return array('error' => true, 'msg' => esc_attr($siteVerificationToken->errors));
         } else {
           $myFile = ABSPATH . $siteVerificationToken->data->token;
-          global $wp_filesystem;
+          $wp_filesystem = self::get_filesystem();
           if (!$wp_filesystem->exists($myFile)) {
             $wp_filesystem->put_contents($myFile, "google-site-verification: " . $siteVerificationToken->data->token);
             $wp_filesystem->chmod($myFile, 0777);
@@ -1036,14 +983,14 @@ class TVC_Admin_Helper
     }
   }
 
-  public function update_app_status($status = "1")
+  public function update_app_status($caller, $status = "1")
   {
-    $this->customApiObj->update_app_status($status);
+    $this->customApiObj->update_app_status($caller, $status);
   }
 
-  public function app_activity_detail($status = "")
+  public function app_activity_detail($caller, $status = "")
   {
-    $this->customApiObj->app_activity_detail($status);
+    $this->customApiObj->app_activity_detail($caller, $status);
   }
   public function get_tvc_popup_message()
   {
@@ -1142,7 +1089,8 @@ class TVC_Admin_Helper
   {
     if ($licence_key != "") {
       $customObj = new CustomApi();
-      return $customObj->active_licence_Key($licence_key, $subscription_id);
+      $caller = "active_licence";
+      return $customObj->active_licence_Key($caller, $licence_key, $subscription_id);
     }
   }
 
@@ -1156,14 +1104,6 @@ class TVC_Admin_Helper
     return "https://conversios.io/";
   }
 
-  public function is_show_tracking_method_options($subscription_id = 0)
-  {
-    if ($subscription_id > 0 && $subscription_id <= 31200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   public function is_ga_property()
   {
@@ -1445,6 +1385,7 @@ class TVC_Admin_Helper
     if (isset($google_detail['setting']->store_id)) {
       $data = array(
         "store_id" => $google_detail['setting']->store_id,
+        "caller" => "get_feed_status"
       );
       $response = $this->customApiObj->get_feed_status_by_store_id($data);
       //echo '<pre>'; print_r($response); echo '</pre>'; // woow 1424 - feed list
@@ -1516,5 +1457,23 @@ class TVC_Admin_Helper
       $randomString .= $characters[wp_rand(0, strlen($characters) - 1)];
     }
     return $randomString;
+  }
+
+  public static function domainNormalize($domain)
+  {
+    $domain = preg_replace('#^https?://#i', '', $domain);
+    $domain = preg_replace('#^www\.#i', '', $domain);
+    $domain = rtrim($domain, '/');
+    $domain = strtolower($domain);
+    return $domain;
+  }
+
+  public static function conv_getoriginalsiteurl()
+  {
+    if (is_multisite()) {
+      return get_site_url();
+    }
+    remove_all_filters('option_siteurl');
+    return get_option('siteurl');
   }
 }

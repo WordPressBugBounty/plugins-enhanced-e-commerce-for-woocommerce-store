@@ -99,6 +99,7 @@ $customApiObj = new CustomApi();
 $app_id = CONV_APP_ID;
 //get user data
 $ee_options = $TVC_Admin_Helper->get_ee_options_settings();
+$ee_additional_data = array();
 $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
 $get_ee_options_data = $TVC_Admin_Helper->get_ee_options_data();
 $tvc_data = $TVC_Admin_Helper->get_store_data();
@@ -107,10 +108,6 @@ $subscriptionId = $ee_options['subscription_id'];
 
 $url = $TVC_Admin_Helper->get_onboarding_page_url();
 $is_refresh_token_expire = false;
-
-//get badge settings
-$convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
-$convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 
 // for google
 $g_mail = get_option('ee_customer_gmail');
@@ -135,6 +132,9 @@ if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['sub
     if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
         $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
         $is_refresh_token_expire = false;
@@ -144,6 +144,9 @@ if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['sub
     if (isset($_GET['microsoft_mail']) && sanitize_email(wp_unslash($_GET['microsoft_mail']))) {
         $tvc_data['microsoft_mail'] = sanitize_email(wp_unslash($_GET['microsoft_mail']));
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
         $is_refresh_token_expire = false;
@@ -153,18 +156,15 @@ if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['sub
 $resource_center_data = array();
 //get account settings from the api
 if ($subscriptionId != "") {
-    $google_detail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
-
-    if (property_exists($google_detail, "error") && $google_detail->error == false) {
-        if (property_exists($google_detail, "data") && $google_detail->data != "") {
-            $googleDetail = $google_detail->data;
-            $tvc_data['subscription_id'] = $googleDetail->id;
-            $plan_id = $googleDetail->plan_id;
-            $login_customer_id = $googleDetail->customer_id;
-            $tracking_option = $googleDetail->tracking_option;
-            if ($googleDetail->tracking_option != '') {
-                $defaulSelection = 0;
-            }
+    $google_detail = unserialize(get_option("ee_api_data"));
+    if ($google_detail['setting'] && $google_detail['setting'] != "") {
+        $googleDetail = $google_detail['setting'];
+        $tvc_data['subscription_id'] = $googleDetail->id;
+        $plan_id = $googleDetail->plan_id;
+        $login_customer_id = $googleDetail->customer_id;
+        $tracking_option = $googleDetail->tracking_option;
+        if ($googleDetail->tracking_option != '') {
+            $defaulSelection = 0;
         }
     }
 }

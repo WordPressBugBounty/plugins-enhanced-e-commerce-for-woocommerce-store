@@ -310,9 +310,6 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
       }
     };
 
-    if (this.options.fb_pixel_id != undefined && this.options.fb_pixel_id != null && this.options.fb_pixel_id != "") {
-      add_to_cart_datalayer.fb_event_id = this.options.fb_event_id + 'p' + item.id;
-    }
 
     dataLayer.push(add_to_cart_datalayer);
   }
@@ -356,9 +353,9 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
           varPrice = vari_data.display_regular_price;
         }
       }
-
-      var ecomval = (item.price * jQuery(this_var).parent().find("input[name=quantity]").val()).toFixed(2)
-
+      var ecomqty = parseInt(jQuery(this_var).parent().find("input[name=quantity]").val()) || 1;
+      //var ecomval = (item.price * jQuery(this_var).parent().find("input[name=quantity]").val()).toFixed(2)
+      var ecomval = (varPrice * ecomqty).toFixed(2)
       var add_to_cart_datalayer = {
         event: "add_to_cart",
         ecommerce: {
@@ -367,20 +364,18 @@ class TVC_GTM_Enhanced extends TVC_GTM_WP_Enhanced {
           items: [
             {
               affiliation: item.affiliation,
-              item_id: item.item_id,
+              item_id: variation_id && variation_id !== '' ? variation_id : item.item_id,
               item_name: item.item_name,
               currency: item.currency,
               item_category: item.item_category,
               price: varPrice,
-              quantity: parseInt(jQuery(this_var).parent().find("input[name=quantity]").val()),
+              quantity: ecomqty,
               item_variant: variation_attribute_name
 
             }]
         }
       };
-      if (this.options.fb_pixel_id != undefined && this.options.fb_pixel_id != null && this.options.fb_pixel_id != "") {
-        add_to_cart_datalayer.fb_event_id = this.options.fb_event_id + 'p' + item.item_id;
-      }
+
       dataLayer.push(add_to_cart_datalayer);
 
     }

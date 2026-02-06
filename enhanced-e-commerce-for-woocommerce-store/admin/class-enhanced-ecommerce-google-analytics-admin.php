@@ -1,6 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if (! defined('ABSPATH')) exit; // Exit if accessed directly
 
 /**
  * The admin-specific functionality of the plugin.
@@ -40,11 +40,6 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper
    */
   protected $ga_LC;
 
-  /**
-   * Initialize the class and set its properties.     
-   * @param      string    $ga_eeT    The version of this plugin.
-   */
-  protected $ga_eeT;
 
   /**
    * Initialize the class and set its properties.     
@@ -108,10 +103,9 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper
         wp_register_style('plugin-steps', esc_url(ENHANCAD_PLUGIN_URL . '/includes/setup/plugins/jquery-steps/jquery.steps.css'));
         wp_enqueue_style('plugin-steps');
         wp_register_style('tvc-dataTables-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/dataTables.bootstrap5.min.css'));
-        wp_enqueue_style('tvc-dataTables-css');  
+        wp_enqueue_style('tvc-dataTables-css');
         wp_register_style('product-feed-list-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/product-feed-list.css'));
         wp_enqueue_style('product-feed-list-css');
-        
       } else if ($this->is_current_tab_in(array("shopping_campaigns_page", "add_campaign_page"))) {
         wp_register_style('tvc-bootstrap-datepicker-css', esc_url(ENHANCAD_PLUGIN_URL . '/includes/setup/plugins/datepicker/bootstrap-datepicker.min.css'));
         wp_enqueue_style('tvc-bootstrap-datepicker-css');
@@ -158,10 +152,7 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper
       wp_register_script('atvc_bootstrap', esc_url(ENHANCAD_PLUGIN_URL . '/includes/setup/plugins/bootstrap/js/bootstrap.min.js'));
       wp_enqueue_script('atvc_bootstrap');
       wp_enqueue_script('tvc-ee-custom-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/tvc-ee-custom.js'), array('jquery'), esc_attr($this->version), false);
-      wp_enqueue_script('tvc-ee-slick-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/slick.min.js'), array('jquery'), esc_attr($this->version), false);
-
       wp_enqueue_script('sweetalert', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/sweetalert211.js'), array('jquery'), esc_attr($this->version), false);
-
       wp_register_script('plugin-select2', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/select2.min.js'));
       wp_enqueue_script('plugin-select2');
 

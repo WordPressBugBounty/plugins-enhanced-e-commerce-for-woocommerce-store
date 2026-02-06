@@ -35,24 +35,11 @@ if (class_exists('Conversios_Header') === FALSE) {
 			$ee_options = unserialize(get_option('ee_options'));
 			$this->google_ads_id = isset($ee_options['google_ads_id']) ? $ee_options['google_ads_id'] : "";
 			$this->google_merchant_id = isset($ee_options['google_merchant_id']) ? $ee_options['google_merchant_id'] : "";
-			add_action('add_conversios_header', [$this, 'before_start_header']);
-			add_action('add_conversios_header', [$this, 'header_menu']);
 			add_action('add_conversios_header', array($this, 'header_notices'));
+			add_action('add_conversios_header', [$this, 'header_menu']);
 		} //end __construct()
 
 
-		/**
-		 * before start header section
-		 *
-		 * @since    4.1.4
-		 * @return void
-		 */
-		public function before_start_header()
-		{
-?>
-			<div>
-			<?php
-		}
 
 		/**
 		 * header notices section
@@ -61,28 +48,35 @@ if (class_exists('Conversios_Header') === FALSE) {
 		 */
 		public function header_notices()
 		{
+			$is_localhost_error = get_option('conv_localhost_error');
 
 			?>
 				<!--- Promotion box start -->
-				<div id="conversioshead_notice" class="promobandtop" style="background: linear-gradient(90deg,#0d1b2a,#1b263b); color:#f1f1f1;">
-					<div class="d-flex justify-content-center fixedcontainer_conversios_notice align-items-center py-2">
-						<div class="promobandmsg fs-6 d-flex justify-content-center align-items-center">
-							<span class="icon-beer d-flex align-items-center pe-3" style="font-size:2em; line-height:1;">
-								🍺
-							</span>
-							<span class="fw-normal me-3" style="max-width: 720px; line-height:1.4;">
-								This Oktoberfest, go Pro! Get <b style="color: #fff;">65% OFF</b> Conversios Pro Plan <br> <span style="color: #fff;"> Enhance Conversion | FBCAPI | Server-side Tracking | Premium reports.</span>
-								<span class="fw-bold ms-2" style="color:#ffd700;">Code: Oktober25</span>
-							</span>
-							<a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaidoktfest&plugin_name=aio" class="btn btn-sm fw-normal ms-3" style="background:#ffd700; color:#0d1b2a; border-radius:6px;">
-								Upgrade Now →
-							</a>
-						</div>
+
+				<div id="conversioshead_notice" class="promobandtop fs-16" style="background:linear-gradient(90deg, #4A029A 0%, #180230 100%);">
+					<div class="d-flex justify-content-center fixedcontainer_conversios_notice align-items-center">
+						<div class="promobandmsg text-white d-flex align-items-center" style="word: spacing 7px;">
+								<span class="fs-3 me-2">📢</span>
+							Server-Side Tracking with Unlimited Product Feeds, FB CAPI & Google Ads Enhanced Conversions
 					</div>
+                        <div class="prmoupgrdbtn ms-2">
+                            <a href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn button fs-6 fw-bold" style="background: #07BB4F; color:#fff;" target="_blank">
+								Upgrade to Pro
+							</a>
+                        </div>
+                    </div>
 				</div>
 
-
 				<!--- Promotion box end -->
+				<?php
+				if ($is_localhost_error) {
+					echo '<div class="alert alert-danger">';
+					echo '<p>The localhost domain will not work. Please use a live domain to continue using this feature.</p>';
+					echo '</div>';
+				}
+				?>
+
+
 				<?php
 				//echo esc_attr($this->call_tvc_site_verified_and_domain_claim());
 			}
@@ -263,7 +257,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 											<?php
 											$plan_name = esc_html__("Free Plan", "enhanced-e-commerce-for-woocommerce-store");
 											?>
-											<a href="javascript:void(0)" class="btn btn-warning rounded-pill text-white border-0 fw-bold fs-12 px-2 py-0" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
+											<a href="javascript:void(0)" class="btn btn-warning rounded-pill text-dark border-0 fw-bold fs-12 px-2 py-0" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
 												<?php echo esc_attr($plan_name) ?>
 											</a>
 											<a target="_blank" class="d-none ms-2 fs-12 fw-400 px-2 py-0 fw-bold btn-newgreen text-white rounded-pill text-center" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">

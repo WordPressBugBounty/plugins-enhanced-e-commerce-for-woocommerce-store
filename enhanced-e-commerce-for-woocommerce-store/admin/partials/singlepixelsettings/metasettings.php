@@ -1,8 +1,12 @@
 <?php
-if (!defined('ABSPATH')) exit; // Exit if accessed directly
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+global $wp_filesystem;
+TVC_Admin_Helper::get_filesystem();
+ // Exit if accessed directly
+
 $is_sel_disable = 'disabled';
 $google_merchant_center_id = (isset($googleDetail->google_merchant_center_id) && $googleDetail->google_merchant_center_id != "") ? $googleDetail->google_merchant_center_id : "";
 $microsoft_merchant_center_id = "";
@@ -37,30 +41,24 @@ if (isset($_GET['g_mail']) && !empty($_GET['g_mail'])) {
 $fb_business_id = isset($ee_options['facebook_setting']['fb_business_id']) === TRUE ? esc_html($ee_options['facebook_setting']['fb_business_id']) : '';
 $fb_catalog_id = isset($ee_options['facebook_setting']['fb_catalog_id']) === TRUE ? esc_html($ee_options['facebook_setting']['fb_catalog_id']) : '';
 $conv_data = $TVC_Admin_Helper->get_store_data();
-global $wp_filesystem;
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 $contData = json_decode($getCountris);
 $app_id = CONV_APP_ID;
 $ee_options = $TVC_Admin_Helper->get_ee_options_settings();
 $subscriptionId = $ee_options['subscription_id'];
 if ($subscriptionId != "") {
-    $google_detail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
-
-    if (property_exists($google_detail, "error") && $google_detail->error == false) {
-        if (property_exists($google_detail, "data") && $google_detail->data != "") {
-            $googleDetail = $google_detail->data;
-            $tvc_data['subscription_id'] = $googleDetail->id;
-            $plan_id = $googleDetail->plan_id;
-            $login_customer_id = $googleDetail->customer_id;
-            $tracking_option = $googleDetail->tracking_option;
-            if ($googleDetail->tracking_option != '') {
-                $defaulSelection = 0;
-            }
+    $google_detail = unserialize(get_option("ee_api_data"));
+    if ($google_detail['setting'] && $google_detail['setting'] != "") {
+        $googleDetail = $google_detail['setting'];
+        $tvc_data['subscription_id'] = $googleDetail->id;
+        $plan_id = $googleDetail->plan_id;
+        $login_customer_id = $googleDetail->customer_id;
+        $tracking_option = $googleDetail->tracking_option;
+        if ($googleDetail->tracking_option != '') {
+            $defaulSelection = 0;
         }
     }
 }
-$convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
-$convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 ?>
 <style>
     .tooltip-inner {
@@ -94,7 +92,8 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                 $facebook_auth_url = TVC_API_CALL_URL_TEMP . '/auth/facebook?domain=' . esc_url_raw(get_site_url()) . '&app_id=' . $app_id . '&country=' . $country . '&user_currency=' . $woo_currency . '&subscription_id=' . $subId . '&confirm_url=' . admin_url() . $confirm_url . '&timezone=' . $timezone . '&scope=productFeed';
                 if (isset($_GET['subscription_id']) || $fb_business_id !== '') {
                     $data = array(
-                        "customer_subscription_id" => esc_html($subId)
+                        "customer_subscription_id" => esc_html($subId),
+                        "caller" => "meta_settings_page"
                     );
                     $businessId =  $customApiObj->getUserBusinesses($data);
                 }
@@ -102,6 +101,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                     $cat_data = array(
                         "customer_subscription_id" => esc_html($subId),
                         "business_id" => esc_html($fb_business_id),
+                        "caller" => "meta_settings_page"
                     );
                     $catalogId = $customApiObj->getCatalogList($cat_data);
                 }
@@ -340,8 +340,6 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
         let subscription_id = "<?php echo esc_attr($subId); ?>";
         let plan_id = "<?php echo esc_attr($plan_id); ?>";
         let app_id = "<?php echo esc_attr($app_id); ?>";
-        let bagdeVal = "yes";
-        let convBadgeVal = "<?php echo esc_attr($convBadgeVal); ?>";
         let fb_business_id = "<?php echo esc_attr($fb_business_id); ?>";
         jQuery('#fb_catalog_id').select2({
             dropdownCssClass: "fs-12"

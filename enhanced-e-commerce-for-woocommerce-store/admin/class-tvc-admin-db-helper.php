@@ -104,26 +104,6 @@ if (! class_exists('TVC_Admin_DB_Helper')) {
 				}
 			}
 		}
-
-		public function tvc_get_results_in_array_feed($table, $where, $fields, $concat = false)
-		{
-			global $wpdb;
-			if ($table == "" || $where == "" || $fields == "") {
-				return;
-			} else {
-				$tablename = esc_sql($wpdb->prefix . $table);
-				if ($concat == true) {
-					$fields = implode(',\'_\',', $fields);
-					$sql = $wpdb->prepare("select CONCAT($fields) as p_c_id from `$tablename` where $where", []);
-					return $wpdb->get_col($sql);
-				} else {
-					$fields = esc_sql(implode('`,`', $fields));
-					$sql = $wpdb->prepare("select `$fields` from `$tablename` where $where", []);
-					return $wpdb->get_results($sql, ARRAY_A);
-				}
-			}
-		}
-
 		public function tvc_get_results($table)
 		{
 			global $wpdb;

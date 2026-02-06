@@ -1,40 +1,17 @@
 <?php
 class Con_Settings
 {
-    protected $ga_EC;
     protected $is_WC;
-    //content grouping start
-    protected $ga_optimize_id;
-    protected $ga_CG;
-    //content grouping end
     public $tvc_eeVer = PLUGIN_TVC_VERSION;
     protected $ga_LC;
-    protected $ga_Dname;
-
     protected $ga_id;
     protected $gm_id;
     protected $google_ads_id;
     protected $google_merchant_id;
-
     protected $tracking_option;
-
-    protected $ga_ST;
-    protected $ga_eeT;
-    protected $ga_gUser;
-
     protected $ga_imTh;
-
-    protected $ga_IPA;
-    //protected $ga_OPTOUT;
-
-    protected $ads_ert;
-    protected $ads_edrt;
     protected $ads_tracking_id;
-
-    protected $ga_PrivacyPolicy;
-
     protected $ga_gCkout;
-    protected $ga_DF;
     protected $tvc_options;
     protected $TVC_Admin_Helper;
     protected $remarketing_snippet_id;
@@ -43,8 +20,7 @@ class Con_Settings
     protected $ee_options;
     protected $fb_pixel_id;
     protected $c_t_o; //custom_tracking_options
-    protected $tracking_method;
-
+    
     protected $microsoft_ads_pixel_id;
     protected $twitter_ads_pixel_id;
 
@@ -56,14 +32,10 @@ class Con_Settings
     protected $twitter_ads_checkout_initiated_event_id;
     protected $twitter_ads_payment_info_event_id;
     protected $twitter_ads_purchase_event_id;
-
     protected $pinterest_ads_pixel_id;
     protected $snapchat_ads_pixel_id;
     protected $linkedin_insight_id;
     protected $tiKtok_ads_pixel_id;
-
-    protected $want_to_use_your_gtm;
-    protected $use_your_gtm_id;
     protected $tiKtok_business_id;
     protected $tiktok_access_token;
     protected $plan_id;
@@ -86,7 +58,7 @@ class Con_Settings
 
     public function __construct()
     {
-        if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+        if (class_exists('WooCommerce') || is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
             $this->ga_LC = get_woocommerce_currency(); //Local Currency from Back end
             $this->is_WC = true;
         } else {
@@ -96,16 +68,9 @@ class Con_Settings
         $this->plan_id = $this->TVC_Admin_Helper->get_plan_id();
 
         add_action('wp_head', array($this, 'con_set_yith_current_currency'));
-        $this->ga_CG = $this->get_option('ga_CG') == "on" ? true : false; // Content Grouping
-        $this->ga_optimize_id = sanitize_text_field($this->get_option("ga_optimize_id"));
         $this->ee_options = $this->TVC_Admin_Helper->get_ee_options_settings();
 
-        $this->tracking_method = sanitize_text_field($this->get_option("tracking_method"));
-
-        $this->ga_Dname = "auto";
         $this->ga_id = sanitize_text_field($this->get_option("ga_id"));
-        $this->ga_eeT = sanitize_text_field($this->get_option("ga_eeT"));
-        $this->ga_ST = sanitize_text_field($this->get_option("ga_ST")); //add_gtag_snippet
         $this->gm_id = sanitize_text_field($this->get_option("gm_id")); //measurement_id
         $this->google_ads_id = sanitize_text_field($this->get_option("google_ads_id"));
         $this->ga_excT = sanitize_text_field($this->get_option("ga_excT")); //exception_tracking
@@ -114,18 +79,10 @@ class Con_Settings
         $this->google_merchant_id = sanitize_text_field($this->get_option("google_merchant_id"));
         $this->tracking_option = sanitize_text_field($this->get_option("tracking_option"));
         $this->ga_gCkout = sanitize_text_field($this->get_option("ga_gCkout") == "on" ? true : false); //guest checkout
-        $this->ga_gUser = sanitize_text_field($this->get_option("ga_gUser") == "on" ? true : false); //guest checkout
-        $this->ga_DF = sanitize_text_field($this->get_option("ga_DF") == "on" ? true : false);
         $this->ga_imTh = sanitize_text_field($this->get_option("ga_Impr") == "" ? 6 : $this->get_option("ga_Impr"));
-        //$this->ga_OPTOUT = sanitize_text_field($this->get_option("ga_OPTOUT") == "on" ? true : false); //Google Analytics Opt Out
-        $this->ga_PrivacyPolicy = sanitize_text_field($this->get_option("ga_PrivacyPolicy") == "on" ? true : false);
-        $this->ga_IPA = sanitize_text_field($this->get_option("ga_IPA") == "on" ? true : false); //IP Anony.
-        $this->ads_ert = get_option('ads_ert'); //Enable remarketing tags
-        $this->ads_edrt = get_option('ads_edrt'); //Enable dynamic remarketing tags
         $this->ads_tracking_id = sanitize_text_field(get_option('ads_tracking_id'));
         $this->google_ads_currency = sanitize_text_field(get_option("conv_gads_currency"));
         $this->google_ads_conversion_tracking = get_option('google_ads_conversion_tracking');
-        $this->ga_EC = get_option("ga_EC");
         $this->conversio_send_to = get_option('ee_conversio_send_to');
         $this->tiktok_business_id = sanitize_text_field($this->get_option("tiktok_business_id"));
         $this->tiktok_access_token = sanitize_text_field($this->get_option("tiktok_access_token"));
@@ -168,9 +125,7 @@ class Con_Settings
         $this->snapchat_ads_pixel_id = sanitize_text_field($this->get_option('snapchat_ads_pixel_id'));
         $this->linkedin_insight_id = sanitize_text_field($this->get_option('linkedin_insight_id'));
         $this->tiKtok_ads_pixel_id = sanitize_text_field($this->get_option('tiKtok_ads_pixel_id'));
-        /* GTM*/
-        $this->want_to_use_your_gtm = sanitize_text_field($this->get_option('want_to_use_your_gtm'));
-        $this->use_your_gtm_id = sanitize_text_field($this->get_option('use_your_gtm_id'));
+        
 
         //Disabled user roles
         $this->conv_disabled_users = $this->get_option('conv_disabled_users');
@@ -254,37 +209,7 @@ class Con_Settings
         }
     }
 
-    public function conv_check_user_role_disabled()
-    {
-        $current_user_roles = array();
-        if (is_user_logged_in()) {
-            $user = wp_get_current_user();
-            $current_user_roles = (array) $user->roles;
-        }
-        if (!empty($this->conv_disabled_users)) {
-            $matched_user_roles = array_intersect($current_user_roles, $this->conv_disabled_users);
-            if (is_array($matched_user_roles) && count($matched_user_roles) > 0) {
-                return true;
-            }
-        }
-    }
 
-    public function conv_check_pixel_event_disabled($pixel_event)
-    {
-        $conv_selected_events = unserialize(get_option('conv_selected_events'));
-        if (isset($conv_selected_events['ga']) && ($pixel_event != "" && !in_array($pixel_event, $conv_selected_events["ga"]))) {
-            return true;
-        }
-    }
-
-    public function disable_tracking($type, $pixel_event = "")
-    {
-        $is_user_role_disabled = $this->conv_check_user_role_disabled();
-        $is_pixel_event_disabled = $this->conv_check_pixel_event_disabled($pixel_event);
-        if ($type == "" || $is_user_role_disabled || $is_pixel_event_disabled) {
-            return true;
-        }
-    }
     public function tvc_get_order_with_url_order_key()
     {
         $_get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -334,22 +259,7 @@ class Con_Settings
 
         return $ipaddress;
     }
-    public function get_fb_event_id()
-    {
-        $data = openssl_random_pseudo_bytes(16);
 
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
-
-        return vsprintf('%s%s%s%s%s%s%s%s', str_split(bin2hex($data), 4));
-    }
-    public function generate_unique_event_id()
-    {
-        // Generate a unique ID based on the current timestamp
-        $eventId = uniqid();
-
-        return $eventId;
-    }
     public function get_facebook_user_data($enhanced_conversion = array())
     {
         $user_data = array(

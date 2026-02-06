@@ -16,7 +16,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.12
+ * Version:           7.2.15
  * Author:            Conversios
  * Author URI:        https://conversios.io
  * License:           GPLv3
@@ -35,10 +35,7 @@ if (!defined('WPINC')) {
 }
 
 // Check if ABSPATH is defined and not null
-if (defined('ABSPATH') && ABSPATH !== null) {
-    require_once ABSPATH . 'wp-admin/includes/file.php';
-    WP_Filesystem();
-} else {
+if (!defined('ABSPATH') || ABSPATH === null) {
     trigger_error('ABSPATH is not defined or is null', E_USER_ERROR);
 }
 
@@ -80,16 +77,21 @@ function conv_onactive_redirect()
  * This action is documented in includes/class-enhanced-ecommerce-google-analytics-activator.php
  */
 
-function activate_enhanced_ecommerce_google_analytics()
+function activate_enhanced_ecommerce_google_analytics($plugin)
 {
     if (is_EeAioPro_active()) {
         deactivate_plugins(plugin_basename(__FILE__));
         wp_safe_redirect(esc_url(site_url() . "/wp-admin/plugins.php?convmsg=pro_already_installed"));
         exit;
+    } else if (is_multisite() && is_network_admin()) {
+        deactivate_plugins(plugin_basename(__FILE__));
+        wp_safe_redirect(esc_url(site_url() . "/wp-admin/network/plugins.php?convmsg=pro_already_installed"));
+        exit;
+    } else {
+        require_once plugin_dir_path(__FILE__) . 'includes/class-enhanced-ecommerce-google-analytics-activator.php';
+        Enhanced_Ecommerce_Google_Analytics_Activator::activate();
+        set_transient('_conversios_activation_redirect', 1, 999);
     }
-    require_once plugin_dir_path(__FILE__) . 'includes/class-enhanced-ecommerce-google-analytics-activator.php';
-    Enhanced_Ecommerce_Google_Analytics_Activator::activate();
-    set_transient('_conversios_activation_redirect', 1, 999);
 }
 
 add_action('admin_init', 'conv_onactive_redirect', 999);
@@ -119,7 +121,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.2.12');
+define('PLUGIN_TVC_VERSION', '7.2.15');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 
@@ -163,12 +165,12 @@ if (!defined('TVC_AUTH_CONNECT_URL')) {
     define('TVC_AUTH_CONNECT_URL', 'conversios.io');
 }
 
-if (!defined('TVC_Admin_Helper')) {
+if (!class_exists('TVC_Admin_Helper')) {
     include(ENHANCAD_PLUGIN_DIR . '/admin/class-tvc-admin-helper.php');
 }
 
 if (!defined('CONV_IS_WC')) {
-    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    if (class_exists('WooCommerce') || is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
         define('CONV_IS_WC', 1);
     } else {
         define('CONV_IS_WC', 0);
@@ -187,7 +189,8 @@ function tvc_upgrade_function($upgrader_object, $options)
         foreach ($options['plugins'] as $each_plugin) {
             if ($each_plugin == $fullName) {
                 $TVC_Admin_Helper = new TVC_Admin_Helper();
-                $TVC_Admin_Helper->update_app_status();
+                $caller = "tvc_upgrade_function";
+                $TVC_Admin_Helper->update_app_status($caller);
             }
         }
     }
@@ -201,6 +204,11 @@ function my_plugin_update_db()
     if ($current_version !== $new_version) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'ee_product_feed';
+
+        // Check if table exists before proceeding
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name)) !== $table_name) {
+            return;
+        }
 
         // Column name => column definition
         $columns = [
@@ -216,18 +224,12 @@ function my_plugin_update_db()
             );
 
             if (empty($exists)) {
-                $wpdb->query("ALTER TABLE `$table_name` ADD COLUMN `$column_name` $column_definition");
+                $wpdb->query("ALTER TABLE `$table_name` ADD `$column_name` $column_definition");
             }
-            $column_name = 'ms_status';
-
-            $column_exists = $wpdb->get_results("SHOW COLUMNS FROM $table_name LIKE '$column_name'");
-            if (empty($column_exists)) {
-                $wpdb->query("ALTER TABLE $table_name ADD COLUMN $column_name varchar(200) DEFAULT NULL");
-            }
-
-            // Finally update the version
-            update_option('ee_conv_plugin_version', $new_version);
         }
+
+        // Finally update the version
+        update_option('ee_conv_plugin_version', $new_version);
     }
 }
 add_action('plugins_loaded', 'my_plugin_update_db');
@@ -385,7 +387,12 @@ require plugin_dir_path(__FILE__) . 'includes/class-enhanced-ecommerce-google-an
 
 function run_enhanced_ecommerce_google_analytics()
 {
+    global $wp_filesystem;
+    if (empty($wp_filesystem)) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        WP_Filesystem();
+    }
     $plugin = new Enhanced_Ecommerce_Google_Analytics();
     $plugin->run();
 }
-run_enhanced_ecommerce_google_analytics();
+add_action('init', 'run_enhanced_ecommerce_google_analytics');

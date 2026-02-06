@@ -78,8 +78,8 @@ class Enhanced_Ecommerce_Google_Analytics
     $this->load_dependencies();
     $this->set_locale();
     $this->define_admin_hooks();
-    //$this->define_public_hooks();
-    add_action('init', array($this, 'define_public_hooks'));
+    $this->define_public_hooks();
+    // add_action('init', array($this, 'define_public_hooks'));
     $this->check_dependency();
     add_filter('plugin_action_links_' . plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php'), array($this, 'tvc_plugin_action_links'), 10);
   }
@@ -128,11 +128,6 @@ class Enhanced_Ecommerce_Google_Analytics
     /**
      * New conversios UI file list
      */
-    require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-conversios-onboarding.php';
-    require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-onboarding-helper.php';
-    require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-dashboard-helper.php';
-    require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-reports-helper.php';
-    //require_once plugin_dir_path(dirname(__FILE__)) . 'admin/helper/class-pmax-helper.php';
     require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-conversios-admin.php';
 
     /**
@@ -146,7 +141,7 @@ class Enhanced_Ecommerce_Google_Analytics
      * side of the site.
      */
     if (!function_exists('is_plugin_active_for_network')) {
-      require_once(ABSPATH . '/wp-admin/includes/woocommerce.php');
+      require_once(ABSPATH . 'wp-admin/includes/plugin.php');
     }
 
     /**
@@ -154,7 +149,7 @@ class Enhanced_Ecommerce_Google_Analytics
      */
     $TVC_Admin_Helper = new TVC_Admin_Helper();
     require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-enhanced-ecommerce-google-analytics-wordpress.php';
-    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    if (class_exists('WooCommerce') || is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
       require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-enhanced-ecommerce-google-analytics-public.php';
     }
 
@@ -193,14 +188,12 @@ class Enhanced_Ecommerce_Google_Analytics
     $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
     $this->loader->add_action('admin_notice_message', $plugin_admin, 'tvc_add_admin_notice');
 
-    // Delay TVC_Survey creation until init
+    // Instantiate TVC_Survey directly if in admin
     if (is_admin()) {
-      add_action('init', function () {
-        new TVC_Survey(
-          esc_html__("Enhanced ecommerce google analytics plugin for woocommerce", "enhanced-e-commerce-for-woocommerce-store"),
-          ENHANCAD_PLUGIN_NAME
-        );
-      });
+      new TVC_Survey(
+        esc_html__("Enhanced ecommerce google analytics plugin for woocommerce", "enhanced-e-commerce-for-woocommerce-store"),
+        ENHANCAD_PLUGIN_NAME
+      );
     }
   }
 
@@ -216,7 +209,7 @@ class Enhanced_Ecommerce_Google_Analytics
 
     new Enhanced_Ecommerce_Google_Analytics_Wordpress($this->get_plugin_name(), $this->get_version());
 
-    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    if (class_exists('WooCommerce') || is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
       new Enhanced_Ecommerce_Google_Analytics_Public($this->get_plugin_name(), $this->get_version());
     }
   }
@@ -279,18 +272,58 @@ class Enhanced_Ecommerce_Google_Analytics
     return $this->version;
   }
 
+  /**
+   * Modify plugin action links.
+   *
+   * @param array $links Existing action links.
+   *
+   * @return array Modified action links.
+   */
   public function tvc_plugin_action_links($links)
   {
-    $deactivate_link = $links['deactivate'];
-    unset($links['deactivate']);
-    $setting_url = esc_url('admin.php?page=conversios');
-    $links[] = '<a href="' . get_admin_url(null, $setting_url) . '">' . esc_html__("Configuration", "enhanced-e-commerce-for-woocommerce-store") . '</a>';
-    $links[] = '<a href="' . esc_url("https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/#faq") . '" target="_blank">' . esc_html__("FAQ", "enhanced-e-commerce-for-woocommerce-store") . '</a>';
-    $links[] = '<a href="' . esc_url("https://www.conversios.io/docs/how-to-set-up-the-plugin/?utm_source=documentation&utm_medium=pluginlisting&utm_campaign=howtosetup") . '" target="_blank">' . esc_html__("Documentation", "enhanced-e-commerce-for-woocommerce-store") . '</a>';
-    $links[] = '<a href="' . esc_url("https://conversios.io/pricings/?utm_source=EE+Plugin+User+Interface&utm_medium=Plugins+Listing+Page+Upgrade+to+Premium&utm_campaign=Upsell+at+Conversios") . '" target="_blank"><b>' . esc_html__("Upgrade to Premium", "enhanced-e-commerce-for-woocommerce-store") . '</b></a>';
-    $links['deactivate'] = $deactivate_link;
+
+    // Store and remove deactivate link temporarily.
+    if (isset($links['deactivate'])) {
+      $deactivate_link = $links['deactivate'];
+      unset($links['deactivate']);
+    }
+
+    // Configuration link.
+    $links[] = sprintf(
+      '<a href="%s">%s</a>',
+      esc_url(admin_url('admin.php?page=conversios')),
+      esc_html__('Configuration', 'enhanced-e-commerce-for-woocommerce-store')
+    );
+
+    // FAQ link.
+    $links[] = sprintf(
+      '<a href="%s" target="_blank" rel="noopener">%s</a>',
+      esc_url('https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/#faq'),
+      esc_html__('FAQ', 'enhanced-e-commerce-for-woocommerce-store')
+    );
+
+    // Documentation link.
+    $links[] = sprintf(
+      '<a href="%s" target="_blank" rel="noopener">%s</a>',
+      esc_url('https://www.conversios.io/docs/how-to-set-up-the-plugin/?utm_source=documentation&utm_medium=pluginlisting&utm_campaign=howtosetup'),
+      esc_html__('Documentation', 'enhanced-e-commerce-for-woocommerce-store')
+    );
+
+    // Upgrade link.
+    $links[] = sprintf(
+      '<a href="%s" target="_blank" rel="noopener"><strong>%s</strong></a>',
+      esc_url('https://conversios.io/pricings/?utm_source=EE+Plugin+User+Interface&utm_medium=Plugins+Listing+Page+Upgrade+to+Premium&utm_campaign=Upsell+at+Conversios'),
+      esc_html__('Upgrade to Premium', 'enhanced-e-commerce-for-woocommerce-store')
+    );
+
+    // Add deactivate link back at the end.
+    if (isset($deactivate_link)) {
+      $links['deactivate'] = $deactivate_link;
+    }
+
     return $links;
   }
+
 
   /**
    * Check Enhance E-commerce Plugin is Activated

@@ -19,10 +19,16 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
     //is not work for existing user && $ee_additional_data['con_created_at'] != "" 
     if (isset($ee_additional_data['con_created_at'])) {
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['con_updated_at'] = gmdate('Y-m-d');
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
     } else {
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['con_created_at'] = gmdate('Y-m-d');
         $ee_additional_data['con_updated_at'] = gmdate('Y-m-d');
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
@@ -134,31 +140,12 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
 
 
 <script>
-    function cov_save_badge_settings(bagdeVal) {
-        var data = {
-            action: "cov_save_badge_settings",
-            bagdeVal: bagdeVal,
-            conv_nonce: "<?php echo esc_js(wp_create_nonce('conv_nonce_val')); ?>";
-        };
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: data,
-            success: function (response) {
-                // console.log(response);
-                //do nothing
-            }
-        });
-    }
-    jQuery(function () {
+    jQuery(function() {
         var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
         var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
         let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
         let plan_id = "<?php echo esc_attr($plan_id); ?>";
         let app_id = "<?php echo esc_attr(CONV_APP_ID); ?>";
-        let bagdeVal = "yes";
-        let convBadgeVal = "<?php echo esc_attr($convBadgeVal); ?>";
 
         let ua_acc_val = jQuery('#ua_acc_val').val();
         let ga4_acc_val = jQuery('#ga4_acc_val').val();
@@ -172,15 +159,8 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
         //console.log("gmc_field",gmc_field);  
 
         //open google signin popup
-        jQuery(".tvc_google_signinbtn").on("click", function () {
-            jQuery('#tvc_google_signin').addClass('showpopup');
-            jQuery('body').addClass('scrlnone');
-            if (convBadgeVal == "") {
-                cov_save_badge_settings("no");
-            }
-        });
 
-        jQuery(".google_connect_url").on("click", function () {
+        jQuery(".google_connect_url").on("click", function() {
             const w = 800;
             const h = 650;
             const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
@@ -206,22 +186,19 @@ if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"])
             if (window.focus) newWindow.focus();
         });
 
-        jQuery(".clsbtntrgr, .ppblubtn").on("click", function () {
+        jQuery(".clsbtntrgr, .ppblubtn").on("click", function() {
             jQuery(this).closest('.onbrd-popupwrp').removeClass('showpopup');
             jQuery('body').removeClass('scrlnone');
         });
 
-        jQuery('#conv_show_badge_onboardingCheck').change(function () {
+        jQuery('#conv_show_badge_onboardingCheck').change(function() {
             if (jQuery(this).prop("checked")) {
                 jQuery("#badge_label_check").addClass("conv_default_cls_enabled");
                 jQuery("#badge_label_check").removeClass("conv_default_cls_disabled");
-                bagdeVal = "yes";
             } else {
                 jQuery("#badge_label_check").addClass("conv_default_cls_disabled");
                 jQuery("#badge_label_check").removeClass("conv_default_cls_enabled");
-                bagdeVal = "no";
             }
-            cov_save_badge_settings(bagdeVal); //saving badge settings
         });
 
     });

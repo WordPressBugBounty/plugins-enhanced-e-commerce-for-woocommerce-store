@@ -24,6 +24,80 @@ if ($store_country[0]) {
 } else {
     $country = '';
 }
+
+
+// Initialize with defaults
+$conv_woo_details = [
+    'country'   => '',
+    'state'     => '',
+    'city'      => '',
+    'address_1' => '',
+    'address_2' => '',
+    'postcode'  => '',
+    'timezone'  => '',
+    'language'  => '',
+    'currency'  => '',
+];
+
+// Language (sanitize)
+$locale = get_locale();
+$conv_woo_details['language'] = ! empty($locale) ? sanitize_text_field($locale) : '';
+
+// Timezone
+$tz = get_option('timezone_string');
+
+if (empty($tz)) {
+    $offset = get_option('gmt_offset');
+    if ($offset !== '' && is_numeric($offset)) {
+        $tz = timezone_name_from_abbr('', intval($offset) * 3600, 0);
+    }
+}
+
+$conv_woo_details['timezone'] = ! empty($tz) ? sanitize_text_field($tz) : '';
+
+// WooCommerce currency
+if (function_exists('get_woocommerce_currency')) {
+    $currency = get_woocommerce_currency();
+    $conv_woo_details['currency'] = ! empty($currency) ? sanitize_text_field($currency) : '';
+}
+
+// WooCommerce store info
+if (class_exists('WooCommerce')) {
+
+    // Country + State
+    $default_country = get_option('woocommerce_default_country', '');
+
+    if (! empty($default_country)) {
+
+        if (strpos($default_country, ':') !== false) {
+            list($country, $state) = explode(':', $default_country);
+            $conv_woo_details['country'] = sanitize_text_field($country);
+            $conv_woo_details['state']   = sanitize_text_field($state);
+        } else {
+            $conv_woo_details['country'] = sanitize_text_field($default_country);
+        }
+    }
+
+    // Store city
+    $city = get_option('woocommerce_store_city', '');
+    $conv_woo_details['city'] = ! empty($city) ? sanitize_text_field($city) : '';
+
+    // Address 1
+    $address1 = get_option('woocommerce_store_address', '');
+    $conv_woo_details['address_1'] = ! empty($address1) ? sanitize_text_field($address1) : '';
+
+    // Address 2
+    $address2 = get_option('woocommerce_store_address_2', '');
+    $conv_woo_details['address_2'] = ! empty($address2) ? sanitize_text_field($address2) : '';
+
+    // Postcode
+    $postcode = get_option('woocommerce_store_postcode', '');
+    $conv_woo_details['postcode'] = ! empty($postcode) ? sanitize_text_field($postcode) : '';
+}
+
+// Store Name (sanitize)
+$store_name_raw = get_bloginfo('name');
+$conv_woo_details['business_name'] = ! empty($store_name_raw) ? sanitize_text_field($store_name_raw) : '';
 ?>
 <div class="convcard p-4 mt-0 rounded-3 shadow-sm">
     <form id="bingsetings_form" class="convpixsetting-inner-box">
@@ -572,81 +646,81 @@ if ($store_country[0]) {
                                                 <span class="inner-text">Select Timezone</span><span class="text-danger"> *</span><br>
                                                 <select id="timezones" data-placeholder="Select Timezone">
                                                     <option value="">Select Timezone</option>
-                                                    <option value="AbuDhabiMuscat">Abu Dhabi, Muscat</option>
-                                                    <option value="Adelaide">Adelaide</option>
-                                                    <option value="Alaska">Alaska</option>
-                                                    <option value="AlmatyNovosibirsk">Almaty, Novosibirsk</option>
-                                                    <option value="AmsterdamBerlinBernRomeStockholmVienna">Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
-                                                    <option value="Arizona">Arizona</option>
-                                                    <option value="AstanaDhaka">Astana, Dhaka</option>
-                                                    <option value="AthensBuckarestIstanbul">Athens, Bucharest, Istanbul</option>
-                                                    <option value="AtlanticTimeCanada">Atlantic Time (Canada)</option>
-                                                    <option value="AucklandWellington">Auckland, Wellington</option>
-                                                    <option value="Azores">Azores</option>
-                                                    <option value="Baghdad">Baghdad</option>
-                                                    <option value="BakuTbilisiYerevan">Baku, Tbilisi, Yerevan</option>
-                                                    <option value="BangkokHanoiJakarta">Bangkok, Hanoi, Jakarta</option>
-                                                    <option value="BeijingChongqingHongKongUrumqi">Beijing, Chongqing, Hong Kong, Urumqi</option>
-                                                    <option value="BelgradeBratislavaBudapestLjubljanaPrague">Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
-                                                    <option value="BogotaLimaQuito">Bogota, Lima, Quito</option>
-                                                    <option value="Brasilia">Brasilia</option>
-                                                    <option value="Brisbane">Brisbane</option>
-                                                    <option value="BrusselsCopenhagenMadridParis">Brussels, Copenhagen, Madrid, Paris</option>
-                                                    <option value="Bucharest">Bucharest</option>
-                                                    <option value="BuenosAiresGeorgetown">Buenos Aires, Georgetown</option>
-                                                    <option value="Cairo">Cairo</option>
-                                                    <option value="CanberraMelbourneSydney">Canberra, Melbourne, Sydney</option>
-                                                    <option value="CapeVerdeIsland">Cape Verde Island</option>
-                                                    <option value="CaracasLaPaz">Caracas, La Paz</option>
-                                                    <option value="CasablancaMonrovia">Casablanca, Monrovia</option>
-                                                    <option value="CentralAmerica">Central America</option>
-                                                    <option value="CentralTimeUSCanada">Central Time (US & Canada)</option>
-                                                    <option value="ChennaiKolkataMumbaiNewDelhi">Chennai, Kolkata, Mumbai, New Delhi</option>
-                                                    <option value="ChihuahuaLaPazMazatlan">Chihuahua, La Paz, Mazatlan</option>
-                                                    <option value="Darwin">Darwin</option>
-                                                    <option value="EasternTimeUSCanada">Eastern Time (US & Canada)</option>
-                                                    <option value="Ekaterinburg">Ekaterinburg</option>
-                                                    <option value="FijiKamchatkaMarshallIsland">Fiji, Kamchatka, Marshall Island</option>
-                                                    <option value="Greenland">Greenland</option>
-                                                    <option value="GreenwichMeanTimeDublinEdinburghLisbonLondon">Greenwich Mean Time, Dublin, Edinburgh, Lisbon, London</option>
-                                                    <option value="GuadalajaraMexicoCityMonterrey">Guadalajara, Mexico City, Monterrey</option>
-                                                    <option value="GuamPortMoresby">Guam, Port Moresby</option>
-                                                    <option value="HararePretoria">Harare, Pretoria</option>
-                                                    <option value="Hawaii">Hawaii</option>
-                                                    <option value="HelsinkiKyivRigaSofiaTallinnVilnius">Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
-                                                    <option value="Hobart">Hobart</option>
-                                                    <option value="IndianaEast">Indiana (East)</option>
-                                                    <option value="InternationalDateLineWest">International Date Line West</option>
-                                                    <option value="IrkutskUlaanBataar">Irkutsk, Ulaan Bataar</option>
-                                                    <option value="IslamabadKarachiTashkent">Islamabad, Karachi, Tashkent</option>
-                                                    <option value="Jerusalem">Jerusalem</option>
-                                                    <option value="Kabul">Kabul</option>
-                                                    <option value="Kathmandu">Kathmandu</option>
-                                                    <option value="Krasnoyarsk">Krasnoyarsk</option>
-                                                    <option value="KualaLumpurSingapore">Kuala Lumpur, Singapore</option>
-                                                    <option value="KuwaitRiyadh">Kuwait, Riyadh</option>
-                                                    <option value="MidAtlantic">Mid-Atlantic</option>
-                                                    <option value="MidwayIslandAndSamoa">Midway Island and Samoa</option>
-                                                    <option value="MoscowStPetersburgVolgograd">Moscow, St. Petersburg, Volgograd</option>
-                                                    <option value="MountainTimeUSCanada">Mountain Time (US & Canada)</option>
-                                                    <option value="Nairobi">Nairobi</option>
-                                                    <option value="Newfoundland">Newfoundland</option>
-                                                    <option value="Nukualofa">Nukualofa</option>
-                                                    <option value="OsakaSapporoTokyo">Osaka, Sapporo, Tokyo</option>
-                                                    <option value="PacificTimeUSCanadaTijuana">Pacific Time (US & Canada), Tijuana</option>
-                                                    <option value="Perth">Perth</option>
-                                                    <option value="Rangoon">Rangoon</option>
-                                                    <option value="Santiago">Santiago</option>
-                                                    <option value="SarajevoSkopjeWarsawZagreb">Sarajevo, Skopje, Warsaw, Zagreb</option>
-                                                    <option value="Saskatchewan">Saskatchewan</option>
-                                                    <option value="Seoul">Seoul</option>
-                                                    <option value="SolomonIslandNewCaledonia">Solomon Island, New Caledonia</option>
-                                                    <option value="SriJayawardenepura">Sri Jayawardenepura</option>
-                                                    <option value="Taipei">Taipei</option>
-                                                    <option value="Tehran">Tehran</option>
-                                                    <option value="Vladivostok">Vladivostok</option>
-                                                    <option value="WestCentralAfrica">West Central Africa</option>
-                                                    <option value="Yakutsk">Yakutsk</option>
+                                                    <option value="AbuDhabiMuscat" data-wptimezone="Asia/Dubai">Abu Dhabi, Muscat</option>
+                                                    <option value="Adelaide" data-wptimezone="Australia/Adelaide">Adelaide</option>
+                                                    <option value="Alaska" data-wptimezone="America/Anchorage">Alaska</option>
+                                                    <option value="AlmatyNovosibirsk" data-wptimezone="Asia/Almaty">Almaty, Novosibirsk</option>
+                                                    <option value="AmsterdamBerlinBernRomeStockholmVienna" data-wptimezone="Europe/Berlin">Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
+                                                    <option value="Arizona" data-wptimezone="America/Phoenix">Arizona</option>
+                                                    <option value="AstanaDhaka" data-wptimezone="Asia/Dhaka">Astana, Dhaka</option>
+                                                    <option value="AthensBuckarestIstanbul" data-wptimezone="Europe/Athens">Athens, Bucharest, Istanbul</option>
+                                                    <option value="AtlanticTimeCanada" data-wptimezone="America/Halifax">Atlantic Time (Canada)</option>
+                                                    <option value="AucklandWellington" data-wptimezone="Pacific/Auckland">Auckland, Wellington</option>
+                                                    <option value="Azores" data-wptimezone="Atlantic/Azores">Azores</option>
+                                                    <option value="Baghdad" data-wptimezone="Asia/Baghdad">Baghdad</option>
+                                                    <option value="BakuTbilisiYerevan" data-wptimezone="Asia/Baku">Baku, Tbilisi, Yerevan</option>
+                                                    <option value="BangkokHanoiJakarta" data-wptimezone="Asia/Bangkok">Bangkok, Hanoi, Jakarta</option>
+                                                    <option value="BeijingChongqingHongKongUrumqi" data-wptimezone="Asia/Shanghai">Beijing, Chongqing, Hong Kong, Urumqi</option>
+                                                    <option value="BelgradeBratislavaBudapestLjubljanaPrague" data-wptimezone="Europe/Belgrade">Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
+                                                    <potion value="BogotaLimaQuito" data-wptimezone="America/Bogota">Bogota, Lima, Quito</option>
+                                                        <option value="Brasilia" data-wptimezone="America/Sao_Paulo">Brasilia</option>
+                                                        <option value="Brisbane" data-wptimezone="Australia/Brisbane">Brisbane</option>
+                                                        <option value="BrusselsCopenhagenMadridParis" data-wptimezone="Europe/Paris">Brussels, Copenhagen, Madrid, Paris</option>
+                                                        <option value="Bucharest" data-wptimezone="Europe/Bucharest">Bucharest</option>
+                                                        <option value="BuenosAiresGeorgetown" data-wptimezone="America/Argentina/Buenos_Aires">Buenos Aires, Georgetown</option>
+                                                        <option value="Cairo" data-wptimezone="Africa/Cairo">Cairo</option>
+                                                        <option value="CanberraMelbourneSydney" data-wptimezone="Australia/Sydney">Canberra, Melbourne, Sydney</option>
+                                                        <option value="CapeVerdeIsland" data-wptimezone="Atlantic/Cape_Verde">Cape Verde Island</option>
+                                                        <option value="CaracasLaPaz" data-wptimezone="America/Caracas">Caracas, La Paz</option>
+                                                        <option value="CasablancaMonrovia" data-wptimezone="Africa/Casablanca">Casablanca, Monrovia</option>
+                                                        <option value="CentralAmerica" data-wptimezone="America/Guatemala">Central America</option>
+                                                        <option value="CentralTimeUSCanada" data-wptimezone="America/Chicago">Central Time (US & Canada)</option>
+                                                        <option value="ChennaiKolkataMumbaiNewDelhi" data-wptimezone="Asia/Kolkata">Chennai, Kolkata, Mumbai, New Delhi</option>
+                                                        <option value="ChihuahuaLaPazMazatlan" data-wptimezone="America/Chihuahua">Chihuahua, La Paz, Mazatlan</option>
+                                                        <option value="Darwin" data-wptimezone="Australia/Darwin">Darwin</option>
+                                                        <option value="EasternTimeUSCanada" data-wptimezone="America/New_York">Eastern Time (US & Canada)</option>
+                                                        <option value="Ekaterinburg" data-wptimezone="Asia/Yekaterinburg">Ekaterinburg</option>
+                                                        <option value="FijiKamchatkaMarshallIsland" data-wptimezone="Pacific/Fiji">Fiji, Kamchatka, Marshall Island</option>
+                                                        <option value="Greenland" data-wptimezone="America/Godthab">Greenland</option>
+                                                        <option value="GreenwichMeanTimeDublinEdinburghLisbonLondon" data-wptimezone="Europe/London">Greenwich Mean Time, Dublin, Edinburgh, Lisbon, London</option>
+                                                        <option value="GuadalajaraMexicoCityMonterrey" data-wptimezone="America/Mexico_City">Guadalajara, Mexico City, Monterrey</option>
+                                                        <option value="GuamPortMoresby" data-wptimezone="Pacific/Port_Moresby">Guam, Port Moresby</option>
+                                                        <option value="HararePretoria" data-wptimezone="Africa/Harare">Harare, Pretoria</option>
+                                                        <option value="Hawaii" data-wptimezone="Pacific/Honolulu">Hawaii</option>
+                                                        <option value="HelsinkiKyivRigaSofiaTallinnVilnius" data-wptimezone="Europe/Helsinki">Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
+                                                        <option value="Hobart" data-wptimezone="Australia/Hobart">Hobart</option>
+                                                        <option value="IndianaEast" data-wptimezone="America/Indiana/Indianapolis">Indiana (East)</option>
+                                                        <option value="InternationalDateLineWest" data-wptimezone="Pacific/Midway">International Date Line West</option>
+                                                        <option value="IrkutskUlaanBataar" data-wptimezone="Asia/Irkutsk">Irkutsk, Ulaan Bataar</option>
+                                                        <option value="IslamabadKarachiTashkent" data-wptimezone="Asia/Karachi">Islamabad, Karachi, Tashkent</option>
+                                                        <option value="Jerusalem" data-wptimezone="Asia/Jerusalem">Jerusalem</option>
+                                                        <option value="Kabul" data-wptimezone="Asia/Kabul">Kabul</option>
+                                                        <option value="Kathmandu" data-wptimezone="Asia/Kathmandu">Kathmandu</option>
+                                                        <option value="Krasnoyarsk" data-wptimezone="Asia/Krasnoyarsk">Krasnoyarsk</option>
+                                                        <option value="KualaLumpurSingapore" data-wptimezone="Asia/Kuala_Lumpur">Kuala Lumpur, Singapore</option>
+                                                        <option value="KuwaitRiyadh" data-wptimezone="Asia/Riyadh">Kuwait, Riyadh</option>
+                                                        <option value="MidAtlantic" data-wptimezone="Atlantic/South_Georgia">Mid-Atlantic</option>
+                                                        <option value="MidwayIslandAndSamoa" data-wptimezone="Pacific/Pago_Pago">Midway Island and Samoa</option>
+                                                        <option value="MoscowStPetersburgVolgograd" data-wptimezone="Europe/Moscow">Moscow, St. Petersburg, Volgograd</option>
+                                                        <option value="MountainTimeUSCanada" data-wptimezone="America/Denver">Mountain Time (US & Canada)</option>
+                                                        <option value="Nairobi" data-wptimezone="Africa/Nairobi">Nairobi</option>
+                                                        <option value="Newfoundland" data-wptimezone="America/St_Johns">Newfoundland</option>
+                                                        <option value="Nukualofa" data-wptimezone="Pacific/Tongatapu">Nukualofa</option>
+                                                        <option value="OsakaSapporoTokyo" data-wptimezone="Asia/Tokyo">Osaka, Sapporo, Tokyo</option>
+                                                        <option value="PacificTimeUSCanadaTijuana" data-wptimezone="America/Los_Angeles">Pacific Time (US & Canada), Tijuana</option>
+                                                        <option value="Perth" data-wptimezone="Australia/Perth">Perth</option>
+                                                        <option value="Rangoon" data-wptimezone="Asia/Yangon">Rangoon</option>
+                                                        <option value="Santiago" data-wptimezone="America/Santiago">Santiago</option>
+                                                        <option value="SarajevoSkopjeWarsawZagreb" data-wptimezone="Europe/Sarajevo">Sarajevo, Skopje, Warsaw, Zagreb</option>
+                                                        <option value="Saskatchewan" data-wptimezone="America/Regina">Saskatchewan</option>
+                                                        <option value="Seoul" data-wptimezone="Asia/Seoul">Seoul</option>
+                                                        <option value="SolomonIslandNewCaledonia" data-wptimezone="Pacific/Guadalcanal">Solomon Island, New Caledonia</option>
+                                                        <option value="SriJayawardenepura" data-wptimezone="Asia/Colombo">Sri Jayawardenepura</option>
+                                                        <option value="Taipei" data-wptimezone="Asia/Taipei">Taipei</option>
+                                                        <option value="Tehran" data-wptimezone="Asia/Tehran">Tehran</option>
+                                                        <option value="Vladivostok" data-wptimezone="Asia/Vladivostok">Vladivostok</option>
+                                                        <option value="WestCentralAfrica" data-wptimezone="Africa/Lagos">West Central Africa</option>
+                                                        <option value="Yakutsk" data-wptimezone="Asia/Yakutsk">Yakutsk</option>
                                                 </select>
                                             </div>
 
@@ -654,40 +728,41 @@ if ($store_country[0]) {
                                                 <span class="inner-text">Marketing Language</span><span class="text-danger"> *</span><br>
                                                 <select id="language" data-placeholder="Select Marketing Language">
                                                     <option value="">Select Marketing Language</option>
-                                                    <option value="Arabic">Arabic</option>
-                                                    <option value="Bulgarian">Bulgarian</option>
-                                                    <option value="Croatian">Croatian</option>
-                                                    <option value="Czech">Czech</option>
-                                                    <option value="Danish">Danish</option>
-                                                    <option value="Dutch">Dutch</option>
-                                                    <option value="English">English</option>
-                                                    <option value="Filipino">Filipino</option>
-                                                    <option value="Finnish">Finnish</option>
-                                                    <option value="French">French</option>
-                                                    <option value="German">German</option>
-                                                    <option value="Greek">Greek</option>
-                                                    <option value="Hebrew">Hebrew</option>
-                                                    <option value="Hindi">Hindi</option>
-                                                    <option value="Hungarian">Hungarian</option>
-                                                    <option value="Indonesian">Indonesian</option>
-                                                    <option value="Italian">Italian</option>
-                                                    <option value="Japanese">Japanese</option>
-                                                    <option value="Korean">Korean</option>
-                                                    <option value="Lithuanian">Lithuanian</option>
-                                                    <option value="Malay">Malay</option>
-                                                    <option value="Norwegian">Norwegian</option>
-                                                    <option value="Polish">Polish</option>
-                                                    <option value="Portuguese">Portuguese</option>
-                                                    <option value="Romanian">Romanian</option>
-                                                    <option value="Russian">Russian</option>
-                                                    <option value="SimplifiedChinese">SimplifiedChinese</option>
-                                                    <option value="Spanish">Spanish</option>
-                                                    <option value="Swedish">Swedish</option>
-                                                    <option value="Thai">Thai</option>
-                                                    <option value="TraditionalChinese">TraditionalChinese</option>
-                                                    <option value="Turkish">Turkish</option>
-                                                    <option value="Ukrainian">Ukrainian</option>
-                                                    <option value="Vietnamese">Vietnamese</option>
+                                                    <option value="Arabic" data-wplanguage="ar">Arabic</option>
+                                                    <option value="Bulgarian" data-wplanguage="bg_BG">Bulgarian</option>
+                                                    <option value="Croatian" data-wplanguage="hr_HR">Croatian</option>
+                                                    <option value="Czech" data-wplanguage="cs_CZ">Czech</option>
+                                                    <option value="Danish" data-wplanguage="da_DK">Danish</option>
+                                                    <option value="Dutch" data-wplanguage="nl_NL">Dutch</option>
+                                                    <option value="English" data-wplanguage="en_US">English</option>
+                                                    <option value="Filipino" data-wplanguage="fil_PH">Filipino</option>
+                                                    <option value="Finnish" data-wplanguage="fi_FI">Finnish</option>
+                                                    <option value="French" data-wplanguage="fr_FR">French</option>
+                                                    <option value="German" data-wplanguage="de_DE">German</option>
+                                                    <option value="Greek" data-wplanguage="el_GR">Greek</option>
+                                                    <option value="Hebrew" data-wplanguage="he_IL">Hebrew</option>
+                                                    <option value="Hindi" data-wplanguage="hi_IN">Hindi</option>
+                                                    <option value="Hungarian" data-wplanguage="hu_HU">Hungarian</option>
+                                                    <option value="Indonesian" data-wplanguage="id_ID">Indonesian</option>
+                                                    <option value="Italian" data-wplanguage="it_IT">Italian</option>
+                                                    <option value="Japanese" data-wplanguage="ja_JP">Japanese</option>
+                                                    <option value="Korean" data-wplanguage="ko_KR">Korean</option>
+                                                    <option value="Lithuanian" data-wplanguage="lt_LT">Lithuanian</option>
+                                                    <option value="Malay" data-wplanguage="ms_MY">Malay</option>
+                                                    <option value="Norwegian" data-wplanguage="nb_NO">Norwegian</option>
+                                                    <option value="Polish" data-wplanguage="pl_PL">Polish</option>
+                                                    <option value="Portuguese" data-wplanguage="pt_PT">Portuguese</option>
+                                                    <option value="Romanian" data-wplanguage="ro_RO">Romanian</option>
+                                                    <option value="Russian" data-wplanguage="ru_RU">Russian</option>
+                                                    <option value="SimplifiedChinese" data-wplanguage="zh_CN">SimplifiedChinese</option>
+                                                    <option value="Spanish" data-wplanguage="es_ES">Spanish</option>
+                                                    <option value="Swedish" data-wplanguage="sv_SE">Swedish</option>
+                                                    <option value="Thai" data-wplanguage="th_TH">Thai</option>
+                                                    <option value="TraditionalChinese" data-wplanguage="zh_TW">TraditionalChinese</option>
+                                                    <option value="Turkish" data-wplanguage="tr_TR">Turkish</option>
+                                                    <option value="Ukrainian" data-wplanguage="uk_UA">Ukrainian</option>
+                                                    <option value="Vietnamese" data-wplanguage="vi_VN">Vietnamese</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -1137,48 +1212,50 @@ if ($store_country[0]) {
 
     jQuery(document).ready(function() {
         function fetchMicrosoftAdsConversion() {
-            var pix_id = jQuery('#microsoft_ads_pixel_id').val();
-            jQuery(".convcon_create_Purchase, .convcon_create_AddToCart, .convcon_create_BeginCheckout, .convcon_create_SubmitLeadForm").removeClass('disabledsection');
-            jQuery(".microsoft_ads_conversion_acc").addClass('disabledsection');
-            var data = {
-                action: "conv_get_microsoft_ads_conversion",
-                customer_id: jQuery('#microsoft_ads_manager_id').val(),
-                account_id: jQuery('#microsoft_ads_subaccount_id').val(),
-                tag_id: pix_id,
-                TVCNonce: "<?php echo esc_js(wp_create_nonce('con_get_conversion_list-nonce')); ?>"
-            };
+            <?php if ($ms_email != '') : ?>
+                var pix_id = jQuery('#microsoft_ads_pixel_id').val();
+                jQuery(".convcon_create_Purchase, .convcon_create_AddToCart, .convcon_create_BeginCheckout, .convcon_create_SubmitLeadForm").removeClass('disabledsection');
+                jQuery(".microsoft_ads_conversion_acc").addClass('disabledsection');
+                var data = {
+                    action: "conv_get_microsoft_ads_conversion",
+                    customer_id: jQuery('#microsoft_ads_manager_id').val(),
+                    account_id: jQuery('#microsoft_ads_subaccount_id').val(),
+                    tag_id: pix_id,
+                    TVCNonce: "<?php echo esc_js(wp_create_nonce('con_get_conversion_list-nonce')); ?>"
+                };
 
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: tvc_ajax_url,
-                data: data,
-                success: function(response) {
-                    if (response.status == "200" && response.data != undefined && response.data != "") {
-                        const conversionGoals = response.data.ConversionGoals.map(goal => goal.Name);
-                        const conversions = {};
-                        conversions[`Conversios_Purchase_${pix_id}`] = ".convcon_create_Purchase";
-                        conversions[`Conversios_AddToCart_${pix_id}`] = ".convcon_create_AddToCart";
-                        conversions[`Conversios_BeginCheckout_${pix_id}`] = ".convcon_create_BeginCheckout";
-                        conversions[`Conversios_SubmitLeadForm_${pix_id}`] = ".convcon_create_SubmitLeadForm";
-                        let conversionTypes = [];
-                        Object.keys(conversions).forEach(name => {
-                            if (conversionGoals.includes(name)) {
-                                jQuery(conversions[name]).removeClass('btn-outline-primary').addClass('pe-none btn-outline-success').text('Enabled');
-                                let conversionType = conversions[name].split('_').pop();
-                                conversionTypes.push(conversionType);
-                            } else {
-                                jQuery(conversions[name])
-                                    .removeClass('pe-none btn-outline-success')
-                                    .addClass('btn-outline-primary')
-                                    .text('Enable now');
-                            }
-                        });
-                        savemicrosoftadsconversions(conversionTypes);
-                        jQuery(".microsoft_ads_conversion_acc").removeClass('disabledsection');
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: tvc_ajax_url,
+                    data: data,
+                    success: function(response) {
+                        if (response.status == "200" && response.data != undefined && response.data != "") {
+                            const conversionGoals = response.data.ConversionGoals.map(goal => goal.Name);
+                            const conversions = {};
+                            conversions[`Conversios_Purchase_${pix_id}`] = ".convcon_create_Purchase";
+                            conversions[`Conversios_AddToCart_${pix_id}`] = ".convcon_create_AddToCart";
+                            conversions[`Conversios_BeginCheckout_${pix_id}`] = ".convcon_create_BeginCheckout";
+                            conversions[`Conversios_SubmitLeadForm_${pix_id}`] = ".convcon_create_SubmitLeadForm";
+                            let conversionTypes = [];
+                            Object.keys(conversions).forEach(name => {
+                                if (conversionGoals.includes(name)) {
+                                    jQuery(conversions[name]).removeClass('btn-outline-primary').addClass('pe-none btn-outline-success').text('Enabled');
+                                    let conversionType = conversions[name].split('_').pop();
+                                    conversionTypes.push(conversionType);
+                                } else {
+                                    jQuery(conversions[name])
+                                        .removeClass('pe-none btn-outline-success')
+                                        .addClass('btn-outline-primary')
+                                        .text('Enable now');
+                                }
+                            });
+                            savemicrosoftadsconversions(conversionTypes);
+                            jQuery(".microsoft_ads_conversion_acc").removeClass('disabledsection');
+                        }
                     }
-                }
-            });
+                });
+            <?php endif; ?>
         }
 
         if (jQuery("#microsoft_ads_pixel_id").val() != "") {
@@ -1779,7 +1856,7 @@ if ($store_country[0]) {
                         action: "conv_save_pixel_data",
                         pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
                         conv_options_data: selected_vals,
-                        conv_options_type: ["eeoptions", "eeapidata", "middleware"],
+                        conv_options_type: ["eeoptions", "eeapidata"],
                         conv_tvc_data: tvc_data,
                     },
                     beforeSend: function() {
@@ -1825,4 +1902,87 @@ if ($store_country[0]) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
     });
+</script>
+
+<script>
+    var convWooDetails = <?php echo wp_json_encode($conv_woo_details); ?>;
+
+    (function(jQuery) {
+
+        function sanitizeInputValue(value) {
+            if (typeof value !== "string") {
+                return "";
+            }
+            value = value.trim();
+            value = value.replace(/<|>|"|'/g, "");
+            value = value.replace(/<\/?script[^>]*>/gi, "");
+            return value;
+        }
+
+        jQuery(document).ready(function() {
+
+            if (typeof convWooDetails !== "object" || convWooDetails === null) {
+                return;
+            }
+
+            if (jQuery("#currency_code").length) {
+                jQuery("#currency_code").val(sanitizeInputValue(convWooDetails.currency || ""));
+            }
+
+            var tz = sanitizeInputValue(convWooDetails.timezone || "");
+            var $tz = jQuery("#timezones");
+            if ($tz.length) {
+                $tz.find("option").each(function() {
+                    var opt = jQuery(this);
+                    if (tz === opt.val() || tz === opt.data("wptimezone")) {
+                        $tz.val(opt.val()).trigger("change"); // Select2 compatible
+                    }
+                });
+            }
+
+            if (jQuery("#bing_country").length) {
+                jQuery("#bing_country").val(sanitizeInputValue(convWooDetails.country || ""));
+            }
+
+            var lang = sanitizeInputValue(convWooDetails.language || "");
+            var $lang = jQuery("#language");
+
+            if ($lang.length) {
+                $lang.find("option").each(function() {
+                    var opt = jQuery(this);
+                    if (lang === opt.val() || lang === opt.data("wplanguage")) {
+                        $lang.val(opt.val()).trigger("change"); // Select2 compatible
+                    }
+                });
+            }
+
+            if (jQuery("#bussiness_name").length) {
+                jQuery("#bussiness_name").val(sanitizeInputValue(convWooDetails.business_name || ""));
+                jQuery("#bing_sub_account_name").val(sanitizeInputValue(convWooDetails.business_name || "")+" - MS Account");
+                jQuery("#bing_account_name").val(sanitizeInputValue(convWooDetails.business_name || "")+" - MS Ads Account");
+            }
+
+            if (jQuery("#address_1").length) {
+                jQuery("#address_1").val(sanitizeInputValue(convWooDetails.address_1 || ""));
+            }
+
+            if (jQuery("#address_2").length) {
+                jQuery("#address_2").val(sanitizeInputValue(convWooDetails.address_2 || ""));
+            }
+
+            if (jQuery("#city").length) {
+                jQuery("#city").val(sanitizeInputValue(convWooDetails.city || ""));
+            }
+
+            if (jQuery("#state").length) {
+                jQuery("#state").val(sanitizeInputValue(convWooDetails.state || ""));
+            }
+
+            if (jQuery("#zip").length) {
+                jQuery("#zip").val(sanitizeInputValue(convWooDetails.postcode || ""));
+            }
+
+        });
+
+    })(jQuery);
 </script>

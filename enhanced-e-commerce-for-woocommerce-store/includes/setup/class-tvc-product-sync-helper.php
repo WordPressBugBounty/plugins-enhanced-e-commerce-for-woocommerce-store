@@ -385,64 +385,6 @@ if (!class_exists('TVCProductSyncHelper')) {
 				$this->TVC_Admin_Helper->plugin_log($e->getMessage(), 'product_sync');
 			}
 		}
-		/*
-		 * batch wise sync product, its call from ajax fuction
-		 */
-		public function call_batch_wise_sync_product($last_sync_product_id = null, $product_batch_size = 100)
-		{
-			if (!class_exists('CustomApi')) {
-				require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php');
-			}
-			$CustomApi = new CustomApi();
-			$product_count = $this->TVC_Admin_DB_Helper->tvc_row_count('ee_prouct_pre_sync_data');
-			//$count = 0;
-			$pre_last_sync_product_id = sanitize_text_field($last_sync_product_id);
-			if ($product_count > 0) {
-				$tvc_currency = sanitize_text_field($this->TVC_Admin_Helper->get_woo_currency());
-				$merchantId = sanitize_text_field($this->merchantId);
-				$customerId = sanitize_text_field($this->currentCustomerId);
-				$accountId = sanitize_text_field($this->accountId);
-				$subscriptionId = sanitize_text_field($this->subscriptionId);
-				$last_sync_product_id = sanitize_text_field(($last_sync_product_id > 0) ? $last_sync_product_id : 0);
-				global $wpdb;
-				$tablename = $wpdb->prefix . 'ee_prouct_pre_sync_data';
-
-				$last_sync_product_id = esc_sql(intval($last_sync_product_id));
-				$product_batch_size = esc_sql(intval($product_batch_size));
-				$products = $wpdb->get_results($wpdb->prepare("select * from {$wpdb->prefix}ee_prouct_pre_sync_data where `id` > %d LIMIT %d", $last_sync_product_id, $product_batch_size), OBJECT);
-				$entries = [];
-				if (!empty($products)) {
-					$TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
-					$TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db_batch_wise($products, '1');
-					$p_map_attribute = $this->tvc_get_map_product_attribute($products, $tvc_currency, $merchantId, $product_batch_size);
-					if (!empty($p_map_attribute) && isset($p_map_attribute['items']) && !empty($p_map_attribute['items'])) {
-						// call product sync API
-						$data = [
-							'merchant_id' => sanitize_text_field($accountId),
-							'account_id' => sanitize_text_field($merchantId),
-							'subscription_id' => sanitize_text_field($subscriptionId),
-							'entries' => $p_map_attribute['items']
-						];
-						$response = $CustomApi->products_sync($data);
-
-						//$last_sync_product_id =end($products)->id;
-						$last_sync_product_id = $p_map_attribute['last_sync_product_id'];
-						if ($response->error == false) {
-							//"data"=> $p_map_attribute['items']
-							//$products_sync =count($products);
-							$products_sync = $p_map_attribute['products_sync'];
-							return array('error' => false, 'products_sync' => $products_sync, 'skip_products' => $p_map_attribute['skip_products'], 'last_sync_product_id' => $last_sync_product_id, "products" => $products, "p_map_attribute" => $p_map_attribute);
-						} else {
-							return array('error' => true, 'message' => esc_attr($response->message), "products" => $products, "p_map_attribute" => $p_map_attribute);
-						}
-						// End call product sync API
-						$sync_product_ids = (isset($p_map_attribute['product_ids'])) ? $p_map_attribute['product_ids'] : "";
-					} else if (!empty($p_map_attribute['message'])) {
-						return array('error' => true, 'message' => esc_attr($p_map_attribute['message']));
-					}
-				}
-			}
-		}
 
 		/*
 		 * Batch wise sync product, its call from ajax fuction

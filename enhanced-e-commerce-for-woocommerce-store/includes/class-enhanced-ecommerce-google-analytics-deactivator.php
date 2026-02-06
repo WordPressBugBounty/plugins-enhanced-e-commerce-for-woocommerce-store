@@ -36,7 +36,8 @@ class Enhanced_Ecommerce_Google_Analytics_Deactivator
 			return;
 		}
 		$TVC_Admin_Helper = new TVC_Admin_Helper();
-		$TVC_Admin_Helper->update_app_status("0");
-		$TVC_Admin_Helper->app_activity_detail("deactivate");
+		$caller = "deactivate_function";
+		$TVC_Admin_Helper->update_app_status($caller, "0");
+		$TVC_Admin_Helper->app_activity_detail($caller, "deactivate");
 	}
 }

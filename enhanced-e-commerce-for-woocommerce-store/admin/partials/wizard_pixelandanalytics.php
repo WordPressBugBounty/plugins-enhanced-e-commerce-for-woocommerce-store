@@ -13,6 +13,9 @@ if (!defined('ABSPATH')) {
 $tvc_admin_helper = new TVC_Admin_Helper();
 $custom_api_obj = new CustomApi();
 $ee_additional_data = $tvc_admin_helper->get_ee_additional_data();
+if (!is_array($ee_additional_data)) {
+    $ee_additional_data = [];
+}
 $tvc_data = $tvc_admin_helper->get_store_data();
 $is_refresh_token_expire = false;
 if ((isset($_GET['g_mail']) && sanitize_text_field(wp_unslash($_GET['g_mail']))) && (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id'])))) {
@@ -77,23 +80,18 @@ if ($microsoft_mail) {
 
 $is_sel_disable_ga = 'disabled';
 $cust_g_email = (isset($tvc_data['g_mail']) && esc_attr($subscription_id)) ? esc_attr($tvc_data['g_mail']) : '';
-$tracking_method = 'gtm'; //(isset($ee_options['tracking_method']) && '' != $ee_options['tracking_method']) ? $ee_options['tracking_method'] : '';
-
-global $wp_filesystem;
 
 // Get account settings from the api.
 if ('' != $subscription_id) {
-    $google_detail = $custom_api_obj->getGoogleAnalyticDetail($subscription_id);
-    if (property_exists($google_detail, 'error') && false == $google_detail->error) {
-        if (property_exists($google_detail, 'data') && '' != $google_detail->data) {
-            $google_detail = $google_detail->data;
-            $tvc_data['subscription_id'] = $google_detail->id;
-            $plan_id = $google_detail->plan_id;
-            $login_customer_id = $google_detail->customer_id;
-            $tracking_option = $google_detail->tracking_option;
-            if ('' != $google_detail->tracking_option) {
-                $defaul_selection = 0;
-            }
+    $google_detail = unserialize(get_option("ee_api_data"));
+    if ($google_detail['setting'] && $google_detail['setting'] != "") {
+        $google_detail = $google_detail['setting'];
+        $tvc_data['subscription_id'] = $google_detail->id;
+        $plan_id = $google_detail->plan_id;
+        $login_customer_id = $google_detail->customer_id;
+        $tracking_option = $google_detail->tracking_option;
+        if ('' != $google_detail->tracking_option) {
+            $defaul_selection = 0;
         }
     }
 }
@@ -806,15 +804,14 @@ if ('' != $subscription_id) {
             selected_vals["property_id"] = jQuery("#measurement_id").val();
             selected_vals["measurement_id"] = jQuery("#measurement_id").val();
 
-            selected_vals["ga_cid"] = "1";
-            selected_vals["non_woo_tracking"] = "1";
+            // selected_vals["ga_cid"] = "1";
+            // selected_vals["non_woo_tracking"] = "1";
 
             selected_vals["cov_remarketing"] = "0";
             if (jQuery("#gads_remarketing_id").val()) {
                 selected_vals["cov_remarketing"] = "1";
             }
 
-            selected_vals["tracking_method"] = 'gtm';
             selected_vals["gads_remarketing_id"] = jQuery("#gads_remarketing_id").val();
             selected_vals["fb_pixel_id"] = jQuery("#fb_pixel_id").val();
             selected_vals["tiKtok_ads_pixel_id"] = jQuery("#tiKtok_ads_pixel_id").val();

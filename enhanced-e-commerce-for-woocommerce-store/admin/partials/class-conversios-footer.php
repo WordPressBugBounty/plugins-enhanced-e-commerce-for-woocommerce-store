@@ -134,7 +134,7 @@ if (!class_exists('Conversios_Footer')) {
                 jQuery(document).ready(function() {
                     var screen_name = '<?php echo isset($_GET['page']) ? esc_js(sanitize_text_field(wp_unslash($_GET['page']))) : ''; ?>';
                     var error_msg = 'null';
-                    
+
                     var convpricelink = jQuery('#toplevel_page_<?php echo esc_js(CONV_MENU_SLUG); ?>').find('a[href="admin.php?page=conversios-pricings"]');
                     if (convpricelink.length) {
                         convpricelink.attr('href', '<?php echo esc_js("https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro"); ?>');
@@ -200,16 +200,76 @@ if (!class_exists('Conversios_Footer')) {
                     jQuery('#conv_save_success_modal').on('hidden.bs.modal', function() {
                         jQuery('#conv_save_success_modal .leave-a-review').hide();
                     });
-                });
 
+                    jQuery(document).ajaxSuccess(function(event, xhr, settings) {
+                        try {
+                            let params = new URLSearchParams(settings.data);
+                            let action = params.get('action');
+                            const response = JSON.parse(xhr.responseText);
+                            // console.log("AJAX Success detected for action:", action, xhr);
+                            if (response.conv_param_error) {
+                                console.log("got error:", response.conv_param_error);
+                                showConversiosError(response.conv_param_error, "error");
+                            }
+                        } catch (e) {
+                            console.warn("Failed to parse AJAX data", e);
+                        }
+                        return false;
+                    });
+
+                    function showConversiosError(message, type = "error") {
+                        jQuery(".conv-global-toast").remove();
+
+                        let bgColor = "#dc3545",
+                            icon = "❌";
+                        if (type === "success") {
+                            bgColor = "#28a745";
+                            icon = "✅";
+                        } else if (type === "warning") {
+                            bgColor = "#ffc107";
+                            icon = "⚠️";
+                        } else if (type === "info") {
+                            bgColor = "#17a2b8";
+                            icon = "ℹ️";
+                        }
+
+                        const toastHTML = `
+        <div class="conv-global-toast" 
+             style="position:fixed; top:20px; right:20px; z-index:99999;
+                    background:${bgColor}; color:#fff; padding:14px 18px; 
+                    border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.2);
+                    display:flex; align-items:center; justify-content:space-between;
+                    gap:10px; font-size:15px; min-width:300px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span>${message}</span>
+            </div>
+            <span class="conv-toast-close" 
+                  style="cursor:pointer; font-weight:bold; font-size:18px; margin-left:10px;">&times;</span>
+        </div>
+    `;
+
+                        jQuery("body").append(toastHTML);
+
+                        // 🔹 Close on click
+                        jQuery(".conv-toast-close").on("click", function() {
+                            jQuery(this).closest(".conv-global-toast").fadeOut(300, function() {
+                                jQuery(this).remove();
+                            });
+                        });
+
+                        // 🔹 Auto-hide after 10 seconds
+                        setTimeout(() => {
+                            jQuery(".conv-global-toast").fadeOut(400, function() {
+                                jQuery(this).remove();
+                            });
+                        }, 10000);
+                    }
+
+                });
             </script>
 
-            <?php
-            $is_wizard = isset($_GET['wizard']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) : "";
-            ?>
-
-
 <?php
+
         }
     }
 }

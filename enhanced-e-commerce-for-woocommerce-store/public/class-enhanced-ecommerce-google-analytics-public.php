@@ -32,7 +32,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
   //set plugin version
   protected $plugin_name;
   protected $version;
-  protected $fb_page_view_event_id;
   protected $gtm;
 
   /**
@@ -50,8 +49,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
     $this->version  = sanitize_text_field($version);
 
     add_action("wp", array($this, "tvc_call_hooks"));
-
-    $this->fb_page_view_event_id = $this->get_fb_event_id();
 
     /*
      * start tvc_options
@@ -76,28 +73,15 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
       "measurement_id" => esc_js($this->gm_id),
       "google_ads_id" => esc_js($this->google_ads_id),
       "google_merchant_center_id" => esc_js($this->google_merchant_id),
-      "o_add_gtag_snippet" => esc_js($this->ga_ST),
-      "o_enhanced_e_commerce_tracking" => esc_js($this->ga_eeT),
-      "o_log_step_gest_user" => esc_js($this->ga_gUser),
       "o_impression_thresold" => esc_js($this->ga_imTh),
-      "o_ip_anonymization" => esc_js($this->ga_IPA),
-      //"o_ga_OPTOUT"=>esc_js($this->ga_OPTOUT),
       "ads_tracking_id" => esc_js($this->ads_tracking_id),
-      "remarketing_tags" => esc_js($this->ads_ert),
-      "dynamic_remarketing_tags" => esc_js($this->ads_edrt),
       "google_ads_conversion_tracking" => esc_js($this->google_ads_conversion_tracking),
       "conversio_send_to" => esc_js($this->conversio_send_to),
-      "ga_EC" => esc_js($this->ga_EC),
-      "page_type" => esc_js($this->add_page_type()),
       "user_id" => esc_js($user_id),
       "user_type" => esc_js($user_type),
-      "day_type" => esc_js($this->add_day_type()),
       "remarketing_snippet_id" => esc_js($this->remarketing_snippet_id),
       "fb_pixel_id" => esc_js($this->fb_pixel_id),
-      "fb_event_id" => $this->get_fb_event_id(),
       "tvc_ajax_url" => esc_url(admin_url('admin-ajax.php')),
-      "tiktok_event_id" => $this->generate_unique_event_id(),
-      "snapchat_event_id" =>  $this->generate_unique_event_id(),
       "gads_remarketing_id" => esc_js($this->gads_remarketing_id)
     );
     /*
@@ -113,7 +97,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
      * add global site tag js or settings
      **/
 
-    add_action("wp_head", array($this->gtm, "begin_userdata"));
     add_action("wp_body_open", array($this->gtm, "add_gtm_no_script"));
 
     add_action("wp_footer", array($this->gtm, "add_gtm_data_layer"));
@@ -164,59 +147,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
     }
   }
 
-  //Need to check
-  /**
-   * Google Analytics content grouping
-   * Pages: Home, Category, Product, Cart, Checkout, Search ,Shop, Thankyou and Others
-   *
-   * @access public
-   * @return void
-   */
-  function add_page_type()
-  {
-
-    if (is_home() || is_front_page()) {
-      $t_page_name = esc_html__("Home Page", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_product_category()) {
-      $t_page_name = esc_html__("Category Pages", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_product()) {
-      $t_page_name = esc_html__("Product Pages", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_cart()) {
-      $t_page_name = esc_html__("Cart Page", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_order_received_page()) {
-      $t_page_name = esc_html__("Thankyou Page", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_checkout()) {
-      $t_page_name = esc_html__("Checkout Page", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_search()) {
-      $t_page_name = esc_html__("Search Page", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_shop()) {
-      $t_page_name = esc_html__("Shop Page", "enhanced-e-commerce-for-woocommerce-store");
-    } else if (is_404()) {
-      $t_page_name = esc_html__("404 Error Pages", "enhanced-e-commerce-for-woocommerce-store");
-    } else {
-      $t_page_name = esc_html__("Others", "enhanced-e-commerce-for-woocommerce-store");
-    }
-  }
-
-
-  //Need to check
-  /**
-   * Google Analytics Day type
-   *
-   * @access public
-   * @return void
-   */
-  function add_day_type()
-  {
-    $date = gmdate("Y-m-d");
-    $day = strtolower(gmdate('l', strtotime($date)));
-    if (($day == "saturday") || ($day == "sunday")) {
-      $day_type = esc_html__("weekend", "enhanced-e-commerce-for-woocommerce-store");
-    } else {
-      $day_type = esc_html__("weekday", "enhanced-e-commerce-for-woocommerce-store");
-    }
-    return $day_type;
-  }
 
   /*
    * Site verification using tag method
@@ -225,6 +155,9 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
   {
     $TVC_Admin_Helper = new TVC_Admin_Helper();
     $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+    if (!is_array($ee_additional_data)) {
+      $ee_additional_data = [];
+    }
     if (isset($ee_additional_data['add_site_varification_tag']) && isset($ee_additional_data['site_varification_tag_val']) && $ee_additional_data['add_site_varification_tag'] == 1 && $ee_additional_data['site_varification_tag_val'] != "") {
       echo wp_kses(
         html_entity_decode(base64_decode($ee_additional_data['site_varification_tag_val'])),
@@ -256,18 +189,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
       'tvc_wcv' => esc_js($woocommerce->version),
       'tvc_wpv' => esc_js(get_bloginfo('version')),
       'tvc_eev' => esc_js($this->tvc_eeVer),
-      'tvc_cnf' => array(
-        't_cg' => esc_js($this->ga_CG),
-        't_ec' => esc_js($this->ga_EC),
-        't_ee' => esc_js($this->ga_eeT),
-        't_df' => esc_js($this->ga_DF),
-        't_gUser' => esc_js($this->ga_gUser),
-        't_UAen' => esc_js($this->ga_ST),
-        't_thr' => esc_js($this->ga_imTh),
-        't_IPA' => esc_js($this->ga_IPA),
-        //'t_OptOut' => esc_js($this->ga_OPTOUT),
-        't_PrivacyPolicy' => esc_js($this->ga_PrivacyPolicy)
-      ),
       'tvc_sub_data' => array(
         'sub_id' => esc_js(isset($googleDetail->id) ? sanitize_text_field($googleDetail->id) : ""),
         'cu_id' => esc_js(isset($googleDetail->customer_id) ? sanitize_text_field($googleDetail->customer_id) : ""),
@@ -288,8 +209,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public extends Con_Settings
         'gmc_is_domain_claim' => esc_js(isset($googleDetail->is_domain_claim) ? sanitize_text_field($googleDetail->is_domain_claim) : ""),
         'gmc_product_count' => esc_js(isset($googleDetail->product_count) ? sanitize_text_field($googleDetail->product_count) : ""),
         'fb_pixel_id' => esc_js($this->fb_pixel_id),
-        'tracking_method' => esc_js($this->tracking_method),
-        'user_gtm_id' => ($this->tracking_method == 'gtm' && $this->want_to_use_your_gtm == 1) ? esc_js($this->use_your_gtm_id) : (($this->tracking_method == 'gtm') ? "conversios-gtm" : "")
       )
     );
     $this->wc_version_compare("tvc_smd=" . wp_json_encode($tvc_sMetaData) . ";");
@@ -319,7 +238,6 @@ class Con_GTM_WC_Tracking extends Con_Settings
 {
   protected $plugin_name;
   protected $version;
-  protected $user_data;
   public function __construct($plugin_name, $version)
   {
     parent::__construct();
@@ -335,13 +253,10 @@ class Con_GTM_WC_Tracking extends Con_Settings
       "measurement_id" => esc_js($this->gm_id),
       "google_ads_id" => esc_js($this->google_ads_id),
       "fb_pixel_id" => esc_js($this->fb_pixel_id),
-      "fb_event_id" => $this->get_fb_event_id(),
       "tvc_ajax_url" => esc_url(admin_url('admin-ajax.php')),
       "snapchat_ads_pixel_id" => esc_js($this->snapchat_ads_pixel_id),
       "linkedin_insight_id" => esc_js($this->linkedin_insight_id),
-      "snapchat_event_id" => $this->generate_unique_event_id(),
       "tiKtok_ads_pixel_id" => esc_js($this->tiKtok_ads_pixel_id),
-      "tiktok_event_id" => $this->generate_unique_event_id(),
     );
     // Added filter to add data attributes to exclude cloud fare cache
     add_filter('script_loader_tag',  array($this, "exclude_congtm_from_cf_loader"), 10, 2);
@@ -349,115 +264,6 @@ class Con_GTM_WC_Tracking extends Con_Settings
 
 
 
-  /**
-   * begin datalayer like settings
-   **/
-  public function begin_userdata()
-  {
-    if ($this->disable_tracking($this->ga_eeT)) {
-      return;
-    }
-    /*start uset tracking*/
-    $enhanced_conversion = array();
-    global $woocommerce;
-    if ($this->ga_EC) {
-      //login user
-      if (is_user_logged_in() && $this->ga_EC) {
-        global $current_user;
-        wp_get_current_user();
-        $billing_country    = WC()->customer->get_billing_country();
-        $calling_code = WC()->countries->get_country_calling_code($billing_country);
-        $phone = get_user_meta($current_user->ID, 'billing_phone', true);
-        if ($phone != "") {
-          $phone = str_replace($calling_code, "", $phone);
-          $phone = $calling_code . $phone;
-          $enhanced_conversion["phone_number"] = esc_js($phone);
-        }
-        $email = esc_js($current_user->user_email);
-        if ($email != "") {
-          $enhanced_conversion["email"] = esc_js($email);
-        }
-        $first_name         = esc_js($current_user->user_firstname);
-        if ($first_name != "") {
-          $enhanced_conversion["address"]["first_name"] = esc_js($first_name);
-        }
-        $last_name          = $current_user->user_lastname;
-        if ($last_name != "") {
-          $enhanced_conversion["address"]["last_name"] = esc_js($last_name);
-        }
-        $billing_address_1  = WC()->customer->get_billing_address_1();
-        if ($billing_address_1 != "") {
-          $enhanced_conversion["address"]["street"] = esc_js($billing_address_1);
-        }
-        $billing_postcode   = WC()->customer->get_billing_postcode();
-        if ($billing_postcode != "") {
-          $enhanced_conversion["address"]["postal_code"] = esc_js($billing_postcode);
-        }
-        $billing_city       = WC()->customer->get_billing_city();
-        if ($billing_city != "") {
-          $enhanced_conversion["address"]["city"] = esc_js($billing_city);
-        }
-        $billing_state      = WC()->customer->get_billing_state();
-        if ($billing_state != "") {
-          $enhanced_conversion["address"]["region"] = esc_js($billing_state);
-        }
-        $billing_country    = WC()->customer->get_billing_country();
-        if ($billing_country != "") {
-          $enhanced_conversion["address"]["country"] = esc_js($billing_country);
-        }
-      } else if ($this->ga_EC == 1) { // get user       
-        $order = "";
-        $order_id = "";
-        if ($order_id == null && is_order_received_page()) {
-          $order = $this->tvc_get_order_from_order_received_page();
-          $order_id = $order->get_id();
-        }
-        if ($order_id) {
-          $billing_country  = $order->get_billing_country();
-          $calling_code = WC()->countries->get_country_calling_code($billing_country);
-          $billing_email  = $order->get_billing_email();
-          if ($billing_email != "") {
-            $enhanced_conversion["email"] = esc_js($billing_email);
-          }
-          $billing_phone  = $order->get_billing_phone();
-          if ($billing_phone != "") {
-            $billing_phone = str_replace($calling_code, "", $billing_phone);
-            $billing_phone = $calling_code . $billing_phone;
-            $enhanced_conversion["phone_number"] = esc_js($billing_phone);
-          }
-          $billing_first_name = $order->get_billing_first_name();
-          if ($billing_first_name != "") {
-            $enhanced_conversion["address"]["first_name"] = esc_js($billing_first_name);
-          }
-          $billing_last_name = $order->get_billing_last_name();
-          if ($billing_last_name != "") {
-            $enhanced_conversion["address"]["last_name"] = esc_js($billing_last_name);
-          }
-          $billing_address_1 = $order->get_billing_address_1();
-          if ($billing_address_1 != "") {
-            $enhanced_conversion["address"]["street"] = esc_js($billing_address_1);
-          }
-          $billing_city = $order->get_billing_city();
-          if ($billing_city != "") {
-            $enhanced_conversion["address"]["city"] = esc_js($billing_city);
-          }
-          $billing_state = $order->get_billing_state();
-          if ($billing_state != "") {
-            $enhanced_conversion["address"]["region"] = esc_js($billing_state);
-          }
-          $billing_postcode = $order->get_billing_postcode();
-          if ($billing_postcode != "") {
-            $enhanced_conversion["address"]["postal_code"] = esc_js($billing_postcode);
-          }
-          $billing_country = $order->get_billing_country();
-          if ($billing_country != "") {
-            $enhanced_conversion["address"]["country"] = esc_js($billing_country);
-          }
-        }
-      }
-      $this->user_data = $enhanced_conversion;
-    }
-  }
 
 
   /**
@@ -478,9 +284,6 @@ class Con_GTM_WC_Tracking extends Con_Settings
   public function product_list_view()
   {
     global $product, $woocommerce_loop;
-    if ($this->disable_tracking($this->ga_eeT)) {
-      return;
-    }
     $listtype = '';
     if (isset($woocommerce_loop['listtype']) && ('' !== $woocommerce_loop['listtype'])) {
       $listtype = $woocommerce_loop['listtype'];
@@ -492,9 +295,6 @@ class Con_GTM_WC_Tracking extends Con_Settings
    **/
   public function product_detail_view()
   {
-    if ($this->disable_tracking($this->ga_eeT) || !is_product()) {
-      return;
-    }
     global  $wp_query, $woocommerce, $product, $con_view_item;
     $con_view_item = $this->con_item_product(
       $product,
@@ -508,9 +308,6 @@ class Con_GTM_WC_Tracking extends Con_Settings
    **/
   public function product_cart_view()
   {
-    if ($this->disable_tracking($this->ga_eeT)) {
-      return;
-    }
     global $woocommerce, $con_cart_item_list;
     foreach ($woocommerce->cart->get_cart() as $key => $item) {
       $product_id = $item["product_id"];
@@ -573,7 +370,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
       $order = new WC_Order($order_id);
     }
 
-    if ($this->disable_tracking($this->ga_eeT) || get_post_meta($order_id, "_tracked", true) == 1 || $order->get_meta('_tracked') || !is_order_received_page()) {
+    if (get_post_meta($order_id, "_tracked", true) == 1 || $order->get_meta('_tracked') || !is_order_received_page()) {
       return;
     }
 
@@ -674,15 +471,15 @@ class Con_GTM_WC_Tracking extends Con_Settings
   }
   public function add_gtm_no_script()
   {
-    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    if (class_exists('WooCommerce') || is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
       $base_country_code = WC()->countries->get_base_country();
       if ($base_country_code == "US") {
-        $gtm_id = ($this->want_to_use_your_gtm && $this->use_your_gtm_id != "") ? $this->use_your_gtm_id : "GTM-NGTQ2D2P";
+        $gtm_id = "GTM-NGTQ2D2P";
       } else {
-        $gtm_id = ($this->want_to_use_your_gtm && $this->use_your_gtm_id != "") ? $this->use_your_gtm_id : "GTM-K7X94DG";
+        $gtm_id = "GTM-K7X94DG";
       }
     } else {
-      $gtm_id = ($this->want_to_use_your_gtm && $this->use_your_gtm_id != "") ? $this->use_your_gtm_id : "GTM-K7X94DG";
+      $gtm_id = "GTM-K7X94DG";
     }
     $gtm_url = "https://www.googletagmanager.com";
   ?>
@@ -697,10 +494,6 @@ class Con_GTM_WC_Tracking extends Con_Settings
    **/
   public function add_gtm_data_layer()
   {
-    if ($this->disable_tracking($this->ga_eeT)) {
-      return;
-    }
-
     $affiliation = get_bloginfo('name');
     $impression_threshold = $this->ga_imTh;
     global $con_view_item_list, $con_view_item, $con_cart_item_list, $con_checkout_cart_item_list, $con_ordered_item_list;
@@ -708,21 +501,11 @@ class Con_GTM_WC_Tracking extends Con_Settings
     /**
      * Thankyou Page
      **/
-    $fb_event_id = $this->get_fb_event_id();
-    $tiktok_event_id = $this->generate_unique_event_id();
-    $snapchat_event_id =  $this->generate_unique_event_id();
     if (empty($con_ordered_item_list)) {
       $con_ordered_item_list = array(); //define empty array so if empty
     } else {
       $dataLayer = array();
       $dataLayer["event"] = "purchase";
-      if ($this->fb_pixel_id != "") {
-        $dataLayer["fb_event_id"] = $fb_event_id;
-      }
-
-      if ($this->tiKtok_ads_pixel_id != "") {
-        $dataLayer["tiktok_event_id"] = $tiktok_event_id;
-      }
       $content_ids = array();
       $fb_contents = array();
       if (!empty($con_ordered_item_list)) {
@@ -790,20 +573,11 @@ class Con_GTM_WC_Tracking extends Con_Settings
     /**
      * Checkout Page
      **/
-    $fb_event_id = $this->get_fb_event_id();
-    $tiktok_event_id = $this->generate_unique_event_id();
-    $snapchat_event_id =  $this->generate_unique_event_id();
     if (empty($con_checkout_cart_item_list)) {
       $con_checkout_cart_item_list = array(); //define empty array so if empty
     } else {
       $dataLayer = array();
       $dataLayer["event"] = "begin_checkout";
-      if ($this->fb_pixel_id != "") {
-        $dataLayer["fb_event_id"] = $fb_event_id;
-      }
-      if ($this->tiKtok_ads_pixel_id != "") {
-        $dataLayer["tiktok_event_id"] = $tiktok_event_id;
-      }
       $content_ids = array();
       $fb_contents = array();
       if (!empty($con_checkout_cart_item_list)) {
@@ -839,9 +613,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
         }
       }
 
-      if (!$this->disable_tracking($this->ga_eeT, "begin_checkout")) {
-        $this->add_gtm_datalayer_js($dataLayer);
-      }
+      $this->add_gtm_datalayer_js($dataLayer);
 
       $checkout_step_2_selector = (isset($this->c_t_o['tvc_checkout_step_2_selector']) && $this->c_t_o['tvc_checkout_step_2_selector'] == "custom") ? $this->c_t_o : array();
       $checkout_step_2_selector = $this->get_selector_val_from_array_for_gmt($checkout_step_2_selector, 'tvc_checkout_step_2_selector');
@@ -853,19 +625,14 @@ class Con_GTM_WC_Tracking extends Con_Settings
 
     ?>
       <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
-        <?php if (!$this->disable_tracking($this->ga_eeT, "add_shipping_info")) { ?>
-          jQuery(document.body).on("focus", "<?php echo esc_js($checkout_step_2_selector); ?>", function(event) {
-            tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
-            tvc_js.checkout_step_2_tracking();
-          });
-        <?php } ?>
-
-        <?php if (!$this->disable_tracking($this->ga_eeT, "add_payment_info")) { ?>
-          jQuery(document.body).on("click", "<?php echo esc_js($checkout_step_3_selector); ?>", function(event) {
-            tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
-            tvc_js.checkout_step_3_tracking();
-          });
-        <?php } ?>
+        jQuery(document.body).on("focus", "<?php echo esc_js($checkout_step_2_selector); ?>", function(event) {
+          tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
+          tvc_js.checkout_step_2_tracking();
+        });
+        jQuery(document.body).on("click", "<?php echo esc_js($checkout_step_3_selector); ?>", function(event) {
+          tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
+          tvc_js.checkout_step_3_tracking();
+        });
         jQuery(function() {
           if (window.wp && wp.hooks && typeof wp.hooks.addAction === 'function') {
             window.wp.hooks.addAction('experimental__woocommerce_blocks-checkout-submit', 'conv_apinfo_hook', function() {
@@ -876,73 +643,60 @@ class Con_GTM_WC_Tracking extends Con_Settings
         });
       </script>
 
-      <?php
+    <?php
 
     }
 
     /**
      * Cart Page
      **/
-    if (!$this->disable_tracking($this->ga_eeT, "view_cart")) {
-      if (empty($con_cart_item_list)) {
-        $con_cart_item_list = array(); //define empty array so if empty
-      } else {
-        $dataLayer = array();
-        $dataLayer["event"] = "view_cart";
-        if (!empty($con_cart_item_list)) {
-          if (isset($con_cart_item_list["value"]) && $con_cart_item_list["value"]) {
-            $dataLayer["ecommerce"]["value"] = (float) $con_cart_item_list["value"];
-          }
-          $dataLayer["ecommerce"]["currency"] =  $this->ga_LC;
-          unset($con_cart_item_list["value"]);
-          foreach ($con_cart_item_list as $key => $view_item) {
-            $dataLayer["ecommerce"]["items"][] =
-              array(
-                "item_id" => isset($view_item["id"]) ? esc_js($view_item["id"]) : "",
-                "item_name" => isset($view_item["name"]) ? esc_js($view_item["name"]) : "",
-                "affiliation" => $affiliation,
-                "currency" => $this->ga_LC,
-                "item_category" => isset($view_item["category"]) ? esc_js($view_item["category"]) : "",
-                "price" => isset($view_item["price"]) ? (float) esc_js($view_item["price"]) : "",
-                "quantity" => isset($view_item["quantity"]) ? (float) esc_js($view_item["quantity"]) : ""
-              );
-          }
+    if (empty($con_cart_item_list)) {
+      $con_cart_item_list = array(); //define empty array so if empty
+    } else {
+      $dataLayer = array();
+      $dataLayer["event"] = "view_cart";
+      if (!empty($con_cart_item_list)) {
+        if (isset($con_cart_item_list["value"]) && $con_cart_item_list["value"]) {
+          $dataLayer["ecommerce"]["value"] = (float) $con_cart_item_list["value"];
         }
-        $this->add_gtm_datalayer_js($dataLayer);
-
-        /*** Remove Cart item ***/
-        if (!$this->disable_tracking($this->ga_eeT, "remove_from_cart")) {
-      ?>
-          <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
-            window.conCarttList = window.productList || [];
-            conCarttList.push(<?php echo wp_json_encode($con_cart_item_list); ?>);
-            jQuery(document.body).on("click", "a[href*=\"?remove_item\"]", function(event) {
-              tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
-              tvc_js.remove_item_click(this);
-            });
-          </script>
-        <?php
+        $dataLayer["ecommerce"]["currency"] =  $this->ga_LC;
+        unset($con_cart_item_list["value"]);
+        foreach ($con_cart_item_list as $key => $view_item) {
+          $dataLayer["ecommerce"]["items"][] =
+            array(
+              "item_id" => isset($view_item["id"]) ? esc_js($view_item["id"]) : "",
+              "item_name" => isset($view_item["name"]) ? esc_js($view_item["name"]) : "",
+              "affiliation" => $affiliation,
+              "currency" => $this->ga_LC,
+              "item_category" => isset($view_item["category"]) ? esc_js($view_item["category"]) : "",
+              "price" => isset($view_item["price"]) ? (float) esc_js($view_item["price"]) : "",
+              "quantity" => isset($view_item["quantity"]) ? (float) esc_js($view_item["quantity"]) : ""
+            );
         }
       }
+      $this->add_gtm_datalayer_js($dataLayer);
+
+      /*** Remove Cart item ***/
+    ?>
+      <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
+        window.conCarttList = window.productList || [];
+        conCarttList.push(<?php echo wp_json_encode($con_cart_item_list); ?>);
+        jQuery(document.body).on("click", "a[href*=\"?remove_item\"]", function(event) {
+          tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
+          tvc_js.remove_item_click(this);
+        });
+      </script>
+    <?php
     }
 
     /**
      * Product detail page
      **/
-    $fb_event_id = $this->get_fb_event_id();
-    $tiktok_event_id = $this->generate_unique_event_id();
-    $snapchat_event_id =  $this->generate_unique_event_id();
     if (empty($con_view_item)) {
       $con_view_item = array(); //define empty array so if empty
     } else {
       $dataLayer = array();
       $dataLayer["event"] = "view_item";
-      if ($this->fb_pixel_id != "") {
-        $dataLayer["fb_event_id"] = $fb_event_id;
-      }
-      if ($this->tiKtok_ads_pixel_id != "") {
-        $dataLayer["tiktok_event_id"] = $tiktok_event_id;
-      }
       $dataLayer["ecommerce"]["items"][] =
         array(
           "item_id" => isset($con_view_item["id"]) ? esc_js($con_view_item["id"]) : "",
@@ -953,11 +707,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
           "price" => isset($con_view_item["price"]) ? (float) esc_js($con_view_item["price"]) : "",
           "quantity" => 1
         );
-
-      if (!$this->disable_tracking($this->ga_eeT, "view_item")) {
-        $this->add_gtm_datalayer_js($dataLayer);
-      }
-
+      $this->add_gtm_datalayer_js($dataLayer);
 
       $fb_contents = array(
         "id" => isset($con_view_item["id"]) ? esc_js($con_view_item["id"]) : "",
@@ -967,28 +717,26 @@ class Con_GTM_WC_Tracking extends Con_Settings
 
 
       /*** Add to Cart product detail page ***/
-      if (!$this->disable_tracking($this->ga_eeT, "add_to_cart_single")) {
-        global $product, $woocommerce;
-        $variations_data = array();
-        if ($product && $product->is_type('variable')) {
-          $variations_data['default_attributes'] = $product->get_default_attributes();
-          $variations_data['available_variations'] = $product->get_available_variations(); //get all child variations
-          $variations_data['available_attributes'] = $product->get_variation_attributes();
-        }
-        $product_detail_addtocart_selector = (isset($this->c_t_o['tvc_product_detail_addtocart_selector']) && $this->c_t_o['tvc_product_detail_addtocart_selector'] == "custom") ? $this->c_t_o : array();
-        ?>
-        <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
-          window.addEventListener('load', call_tvc_enhanced, true);
-
-          function call_tvc_enhanced() {
-            tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
-            tvc_js.singleProductaddToCartEventBindings(<?php echo wp_json_encode($variations_data); ?>,
-              "<?php echo esc_js($this->get_selector_val_fron_array($product_detail_addtocart_selector, 'tvc_product_detail_addtocart_selector')); ?>"
-            );
-          }
-        </script>
-      <?php
+      global $product, $woocommerce;
+      $variations_data = array();
+      if ($product && $product->is_type('variable')) {
+        $variations_data['default_attributes'] = $product->get_default_attributes();
+        $variations_data['available_variations'] = $product->get_available_variations(); //get all child variations
+        $variations_data['available_attributes'] = $product->get_variation_attributes();
       }
+      $product_detail_addtocart_selector = (isset($this->c_t_o['tvc_product_detail_addtocart_selector']) && $this->c_t_o['tvc_product_detail_addtocart_selector'] == "custom") ? $this->c_t_o : array();
+    ?>
+      <script data-cfasync="false" data-no-optimize="1" data-pagespeed-no-defer>
+        window.addEventListener('load', call_tvc_enhanced, true);
+
+        function call_tvc_enhanced() {
+          tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
+          tvc_js.singleProductaddToCartEventBindings(<?php echo wp_json_encode($variations_data); ?>,
+            "<?php echo esc_js($this->get_selector_val_fron_array($product_detail_addtocart_selector, 'tvc_product_detail_addtocart_selector')); ?>"
+          );
+        }
+      </script>
+      <?php
     }
 
     /**
@@ -1014,9 +762,7 @@ class Con_GTM_WC_Tracking extends Con_Settings
           );
           if (count($items) >= $impression_threshold || $key >= (count($con_view_item_list) - 1)) {
             $dataLayer["ecommerce"]["items"] = $items;
-            if (!$this->disable_tracking($this->ga_eeT, "view_item_list")) {
-              $this->add_gtm_datalayer_js($dataLayer);
-            }
+            $this->add_gtm_datalayer_js($dataLayer);
             $items = array();
           }
         }
@@ -1030,15 +776,8 @@ class Con_GTM_WC_Tracking extends Con_Settings
 
           function call_tvc_enhanced_1ist_product() {
             tvc_js = new TVC_GTM_Enhanced(<?php echo wp_json_encode($this->tvc_options); ?>);
-
-            <?php if (!$this->disable_tracking($this->ga_eeT, "add_to_cart_list")) { ?>
-              tvc_js.ListProductaddToCartEventBindings();
-            <?php } ?>
-
-            <?php if (!$this->disable_tracking($this->ga_eeT, "select_item")) { ?>
-              tvc_js.ListProductSelectItemEventBindings();
-            <?php } ?>
-
+            tvc_js.ListProductaddToCartEventBindings();
+            tvc_js.ListProductSelectItemEventBindings();
           }
         </script>
 <?php

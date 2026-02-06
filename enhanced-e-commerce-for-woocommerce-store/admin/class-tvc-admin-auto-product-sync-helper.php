@@ -2,8 +2,6 @@
 if (! defined('ABSPATH')) {
   exit;
 }
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 
 if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
   class TVC_Admin_Auto_Product_sync_Helper

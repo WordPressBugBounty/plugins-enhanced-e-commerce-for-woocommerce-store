@@ -1,8 +1,12 @@
 <?php
-if (!defined('ABSPATH')) exit; // Exit if accessed directly
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+global $wp_filesystem;
+TVC_Admin_Helper::get_filesystem();
+ // Exit if accessed directly
+
 require_once ENHANCAD_PLUGIN_DIR . 'admin/class-tvc-admin-helper.php';
 $tvcAdminHelper = new TVC_Admin_DB_Helper();
 $catalogData = $tvcAdminHelper->tvc_get_results('ee_tiktok_catalog');
@@ -31,7 +35,6 @@ $site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
 $TVC_Admin_Helper = new TVC_Admin_Helper();
 $plan_id = $TVC_Admin_Helper->get_plan_id();
 $conv_data = $TVC_Admin_Helper->get_store_data();
-global $wp_filesystem;
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 $contData = json_decode($getCountris);
 ?>

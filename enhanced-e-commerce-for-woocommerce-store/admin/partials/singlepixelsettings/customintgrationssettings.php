@@ -401,46 +401,6 @@ $is_sel_disable = 'disabled';
             </div>
             <!-- Checkout Page Step 3  End -->
 
-
-            <!-- <div class="mt-4 py-3 border-top d-none">
-                <h5 class="fw-normal mb-1">
-                    <?php esc_html_e("Show badge:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </h5>
-                <?php $conv_show_badge = (isset($ee_options['conv_show_badge']) && $ee_options['conv_show_badge'] != "") ? $ee_options['conv_show_badge'] : "no" ?>
-
-                <label>
-                    <input type="radio" name="conv_show_badge" <?php echo $conv_show_badge == "yes" ? "checked" : ""; ?>
-                        value="yes">
-                    Yes
-                </label>
-                <label class="ps-3">
-                    <input type="radio" name="conv_show_badge" <?php echo $conv_show_badge == "no" ? "checked" : ""; ?>
-                        value="no">
-                    No
-                </label>
-            </div>
-
-            <div class="py-3 pt-0 d-none">
-                <h5 class="fw-normal mb-1">
-                    <?php esc_html_e("Badge position:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </h5>
-                <?php $conv_badge_position = (isset($ee_options['conv_badge_position']) && $ee_options['conv_badge_position'] != "") ? $ee_options['conv_badge_position'] : "center" ?>
-                <label>
-                    <input type="radio" name="conv_badge_position"
-                        <?php echo $conv_badge_position == "left" ? "checked" : ""; ?> value="left">
-                    Left
-                </label>
-                <label class="ps-3">
-                    <input type="radio" name="conv_badge_position"
-                        <?php echo $conv_badge_position == "center" ? "checked" : ""; ?> value="center">
-                    Center
-                </label>
-                <label class="ps-3">
-                    <input type="radio" name="conv_badge_position"
-                        <?php echo $conv_badge_position == "right" ? "checked" : ""; ?> value="right">
-                    Right
-                </label>
-            </div> -->
         </div>
 
     </form>
@@ -534,8 +494,6 @@ jQuery(function() {
             selected_vals[jQuery(this).attr("name")] = jQuery(this).val();
         });
         selected_vals["subscription_id"] = "<?php echo esc_html($tvc_data['subscription_id']) ?>";
-        selected_vals["conv_show_badge"] = jQuery('input[name="conv_show_badge"]:checked').val();
-        selected_vals["conv_badge_position"] = jQuery('input[name="conv_badge_position"]:checked').val();
 
         var net_revenue_setting = [];
         jQuery(".conv_revnue_checkinput").each(function() {

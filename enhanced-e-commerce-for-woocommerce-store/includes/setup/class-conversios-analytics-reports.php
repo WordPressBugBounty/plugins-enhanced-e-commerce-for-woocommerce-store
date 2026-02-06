@@ -192,9 +192,6 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content shadow rounded-3">
                     <div class="modal-header border-bottom-0">
-                        <div class="modal-footer border-top-0 justify-content-center">
-                            <small class="text-danger text-fw-bold">Please use Chrome browser if you face any issues during setup.</small>
-                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -222,6 +219,9 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                                     <li class="pt-2">Your data is used only to show you insights <br> we never store or share your analytics data with anyone.</li>
                                     <li class="pt-2">You can revoke access at any time by visiting your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">Google account permissions</a>.</li>
                                 </ul>
+
+                                <p class="text-danger text-fw-bold">Please use Chrome browser if you face any issues during setup.</p>
+
                             </div>
                         </div>
                     </div>
@@ -513,20 +513,26 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
 </div>
 
 <script>
-    var start = moment().subtract(45, 'days');
-    var end = moment().subtract(1, 'days');
-    var start_date = "";
-    var end_date = "";
+    jQuery(document).ready(function() {
+        var start = moment().subtract(45, 'days');
+        var end = moment().subtract(1, 'days');
+        var start_date = "";
+        var end_date = "";
+        <?php if (!$ga4_measurement_id == "" && !empty($g_mail)) { ?>
+            cb(start, end);
+        <?php } ?>
 
-    <?php if (!$ga4_measurement_id == "" && !empty($g_mail)) { ?>
-        cb(start, end);
-    <?php } ?>
-
-    const url = window.location.href;
-
-    const params = new URLSearchParams(window.location.search);
-    let storedMeasurementId = "<?php echo esc_js($ga4_measurement_id); ?>";
-
+        const url = window.location.href;
+        const params = new URLSearchParams(window.location.search);
+        let storedMeasurementId = "<?php echo esc_js($ga4_measurement_id); ?>";
+        if (params.has("subscription_id") && params.has("g_mail")) {
+            const subscriptionId = params.get("subscription_id");
+            const gMail = params.get("g_mail");
+            const myModal = new bootstrap.Modal(document.getElementById("ga4Modal"));
+            myModal.show();
+            list_analytics_account();
+        }
+    });
 
     function showGA4ModalInfo(message) {
         jQuery("#ga4Modal .modal-body").prepend(
@@ -547,13 +553,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
         }
     });
 
-    if (params.has("subscription_id") && params.has("g_mail")) {
-        const subscriptionId = params.get("subscription_id");
-        const gMail = params.get("g_mail");
-        const myModal = new bootstrap.Modal(document.getElementById("ga4Modal"));
-        myModal.show();
-        list_analytics_account();
-    }
+
     jQuery(document).on("click", "#opengasettings", function(e) {
         e.preventDefault();
         jQuery("#ga4Modal").modal("show");
@@ -679,7 +679,24 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
         });
     }
 
+    function checkGA4Fields() {
+        var ga4Account = jQuery("#ga4_analytic_account_id").val();
+        var ga4Property = jQuery("#measurement_id").val();
+
+        // Invalid values include: empty, null, undefined, "Loading..."
+        var invalid = ["", null, undefined, "Loading..."];
+
+        if (!invalid.includes(ga4Account) && !invalid.includes(ga4Property)) {
+            jQuery("#savereportsettings").removeClass("disabled");
+        } else {
+            jQuery("#savereportsettings").addClass("disabled");
+        }
+    }
+    jQuery('#ga4_analytic_account_id').on('change', checkGA4Fields);
+    jQuery('#measurement_id').on('change', checkGA4Fields);
+
     jQuery("#savereportsettings").on("click", function() {
+        checkGA4Fields();
         jQuery("#savereportsettings").addClass("disabled");
         var ga4Account = jQuery("#ga4_analytic_account_id").val();
         var ga4Property = jQuery("#measurement_id").val();
@@ -690,7 +707,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
         }
         var selected_vals = {
             ga4_analytic_account_id: ga4Account,
-            measurement_id: ga4Property
+            measurement_id: ga4Property,
         };
         // Show spinner
         jQuery("#savereportsettings .spinner-border").removeClass("d-none");
@@ -711,12 +728,21 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                 if (response == "0" || response == "1") {
                     alert("GA4 settings saved successfully!");
                     jQuery("#ga4Modal").modal("hide");
-                    setTimeout(function() {
+                    jQuery("body").append(`
+                <div class="conv-fullscreen-loader" 
+                     style="position:fixed; top:0; left:0; width:100%; height:100%;
+                            background:rgba(255,255,255,0.8); z-index:9999;
+                            display:flex; justify-content:center; align-items:center;">
+                    <div class="spinner-border text-primary" style="width:4rem; height:4rem;"></div>
+                </div>
+            `);
+                    // Wait for createDimension to finish, then reload
+                    createDimension().then(() => {
                         let url = new URL(window.location.href);
                         url.searchParams.delete("subscription_id");
                         url.searchParams.delete("g_mail");
                         window.location.href = url.toString();
-                    }, 500);
+                    });
                 } else {
                     alert("Failed to save settings. Please try again.");
                 }
@@ -727,6 +753,23 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
             },
         });
     });
+
+    function createDimension() {
+        return jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: {
+                action: "conv_create_ga4_custom_dimension",
+                pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
+                ga_cid: "1",
+                non_woo_tracking: "1"
+            },
+            success: function(response) {
+                console.log('Custom Dimension created successfully');
+            }
+        });
+    }
 
     jQuery(".google_connect_url").on("click", function() {
         const w = 800;

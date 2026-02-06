@@ -24,10 +24,16 @@ if (array_key_exists("microsoft_mail", $tvc_data) && sanitize_email($tvc_data["m
     //is not work for existing user && $ee_additional_data['con_created_at'] != "" 
     if (isset($ee_additional_data['con_created_at'])) {
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['con_updated_at'] = gmdate('Y-m-d');
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
     } else {
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['con_created_at'] = gmdate('Y-m-d');
         $ee_additional_data['con_updated_at'] = gmdate('Y-m-d');
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
@@ -104,7 +110,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                     <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h5>
                 <span>
-                    <?php echo $g_email ?>
+                    <?php echo esc_html($g_email); ?>
                     <?php if (isset($_GET['subpage']) && $_GET['subpage'] != "mmcsettings") { ?>
                         <span class="conv-link-blue ps-0 tvc_microsoft_signinbtn">
                             <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -246,31 +252,12 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
 
 
 <script>
-    function cov_save_badge_settings(bagdeVal) {
-        var data = {
-            action: "cov_save_badge_settings",
-            bagdeVal: bagdeVal,
-            conv_nonce: "<?php echo esc_js(wp_create_nonce('conv_nonce_val')); ?>"
-        };
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: data,
-            success: function(response) {
-                // console.log(response);
-                //do nothing
-            }
-        });
-    }
     jQuery(function() {
         var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
         var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
         let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
         let plan_id = "<?php echo (isset($plan_id)) ? esc_attr($plan_id) : ''; ?>";
         let app_id = "<?php echo esc_attr(CONV_APP_ID); ?>";
-        let bagdeVal = "yes";
-        let convBadgeVal = "<?php echo esc_attr($convBadgeVal); ?>";
 
         let ua_acc_val = jQuery('#ua_acc_val').val();
         let ga4_acc_val = jQuery('#ga4_acc_val').val();
@@ -287,36 +274,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
         jQuery(".tvc_microsoft_signinbtn").on("click", function() {
             jQuery('#tvc_microsoft_signin').addClass('showpopup');
             jQuery('body').addClass('scrlnone');
-            if (convBadgeVal == "") {
-                cov_save_badge_settings("no");
-            }
         });
-
-        /*jQuery(".microsoft_connect_url").on("click", function() {
-            const w = 800;
-            const h = 650;
-            const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-            const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
-
-            const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-            const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-
-            const systemZoom = width / window.screen.availWidth;
-            const left = (width - w) / 2 / systemZoom + dualScreenLeft;
-            const top = (height - h) / 2 / systemZoom + dualScreenTop;
-            var url = '<?php //echo esc_url_raw($connect_url); 
-                        ?>';
-            url = url.replace(/&amp;/g, '&');
-            url = url.replaceAll('&#038;', '&');
-            console.log(url);
-            const newWindow = window.open(url, "newwindow", config = `scrollbars=yes,
-			      width=${w / systemZoom}, 
-			      height=${h / systemZoom}, 
-			      top=${top}, 
-			      left=${left},toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,directories=no,status=no
-			      `);
-            if (window.focus) newWindow.focus();
-        });*/
 
         jQuery(".clsbtntrgr, .ppblubtn").on("click", function() {
             jQuery(this).closest('.onbrd-popupwrp').removeClass('showpopup');
@@ -327,13 +285,10 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
             if (jQuery(this).prop("checked")) {
                 jQuery("#badge_label_check").addClass("conv_default_cls_enabled");
                 jQuery("#badge_label_check").removeClass("conv_default_cls_disabled");
-                bagdeVal = "yes";
             } else {
                 jQuery("#badge_label_check").addClass("conv_default_cls_disabled");
                 jQuery("#badge_label_check").removeClass("conv_default_cls_enabled");
-                bagdeVal = "no";
             }
-            cov_save_badge_settings(bagdeVal); //saving badge settings
         });
 
     });

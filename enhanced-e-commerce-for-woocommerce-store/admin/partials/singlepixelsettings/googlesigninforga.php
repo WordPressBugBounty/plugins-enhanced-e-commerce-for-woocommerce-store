@@ -105,30 +105,12 @@
 
 
 <script>
-    function cov_save_badge_settings(bagdeVal) {
-        var data = {
-            action: "cov_save_badge_settings",
-            bagdeVal: bagdeVal,
-            conv_nonce: "<?php echo esc_js(wp_create_nonce('conv_nonce_val')); ?>"
-        };
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: data,
-            success: function(response) {
-                // console.log(response);
-                //do nothing
-            }
-        });
-    }
     jQuery(function() {
         var tvc_data = "<?php echo esc_js(wp_json_encode($tvc_data)); ?>";
         var tvc_ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
         let subscription_id = "<?php echo esc_attr($subscription_id); ?>";
         let plan_id = "<?php echo esc_attr($plan_id); ?>";
         let app_id = "<?php echo esc_attr($app_id); ?>";
-        let bagdeVal = "yes";
         let ga4_acc_val = jQuery('#ga4_acc_val').val();
         let googleAds = jQuery('#googleAds').val();
         let gmc_field = jQuery('#gmc_field').val();
@@ -178,13 +160,10 @@
             if (jQuery(this).prop("checked")) {
                 jQuery("#badge_label_check").addClass("conv_default_cls_enabled");
                 jQuery("#badge_label_check").removeClass("conv_default_cls_disabled");
-                bagdeVal = "yes";
             } else {
                 jQuery("#badge_label_check").addClass("conv_default_cls_disabled");
                 jQuery("#badge_label_check").removeClass("conv_default_cls_enabled");
-                bagdeVal = "no";
             }
-            cov_save_badge_settings(bagdeVal); //saving badge settings
         });
 
     });

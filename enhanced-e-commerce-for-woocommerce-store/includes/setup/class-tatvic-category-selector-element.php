@@ -144,9 +144,6 @@ if (! class_exists('Tatvic_Category_Selector_Element')) :
 				// }
 
 			}
-			/*if (!class_exists('ShoppingApi')) {
-	            require_once(__DIR__ . '/ShoppingApi.php');
-	        }*/
 
 			$html_code .= '</div>';
 			return $html_code;

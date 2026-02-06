@@ -23,7 +23,6 @@ $conv_selected_events = unserialize(get_option('conv_selected_events'));
 $subscription_id = $TVC_Admin_Helper->get_subscriptionId();
 
 $TVC_Admin_Helper->add_spinner_html();
-$is_show_tracking_method_options =  true;
 $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=wizard&utm_campaign=freetopro";
 ?>
 
@@ -34,20 +33,9 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
     <div class="row row-x-0 justify-content-center">
         <!-- Main col8 center -->
         <div class="convfixedcontainermid-removed col-md-12 px-45 pb-5 border-bottom">
-
-            <!-- GTM Card -->
-            <?php
-            $tracking_method = (isset($data['tracking_method']) && $data['tracking_method'] != "") ? $data['tracking_method'] : "";
-            $want_to_use_your_gtm = (isset($data['want_to_use_your_gtm']) && $data['want_to_use_your_gtm'] != "") ? $data['want_to_use_your_gtm'] : "0";
-            $use_your_gtm_id = "";
-            if (isset($tracking_method) && $tracking_method == "gtm") {
-                $use_your_gtm_id =  ($data['tracking_method'] == 'gtm' && $want_to_use_your_gtm == 1) ? "Your own GTM container - " . $data['use_your_gtm_id'] : (($data['tracking_method'] == 'gtm') ? "Container ID: GTM-K7X94DG (Conversios Default Container) " : esc_attr("Your own GTM container - " . $data['use_your_gtm_id']));
-            }
-            ?>
-
             <!-- All pixel list -->
             <?php
-            $conv_gtm_not_connected = (empty($subscription_id) || $tracking_method != "gtm") ? "conv-gtm-not-connected" : "conv-gtm-connected";
+            $conv_gtm_not_connected = "conv-gtm-connected";
 
             $remarketing = unserialize(get_option('ee_remarketing_snippets'));
             $remarketing_snippet_id = "";
@@ -70,19 +58,6 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
                 "tiKtok_ads_pixel_id" => (isset($data['tiKtok_ads_pixel_id']) && $data['tiKtok_ads_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
                 "hotjar_pixel_id" => (isset($data['hotjar_pixel_id']) && $data['hotjar_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
                 "crazyegg_pixel_id" => (isset($data['hotjar_pixel_id']) && $data['crazyegg_pixel_id'] != '') ? '' : 'conv-pixel-not-connected',
-            );
-
-            $pixel_video_link = array(
-                "gm_id" => "https://www.conversios.io/docs/ecommerce-events-that-will-be-automated-using-conversios/?utm_source=galisting_inapp&utm_medium=resource_center_list&utm_campaign=resource_center",
-                "google_ads_id" => "https://youtu.be/Vr7vEeMIf7c",
-                "fb_pixel_id" => "https://youtu.be/8nIyvQjeEkY",
-                "microsoft_ads_pixel_id" => "https://www.conversios.io/docs/how-to-integrate-microsoft-bing-pixel-with-conversios-plugin/?utm_source=galisting_inapp&utm_medium=resource_center_list&utm_campaign=resource_center",
-                "twitter_ads_pixel_id" => "",
-                "pinterest_ads_pixel_id" => "https://youtu.be/Z0rcP1ItJDk",
-                "snapchat_ads_pixel_id" => "https://youtu.be/uLQqAMQhFUo",
-                "tiKtok_ads_pixel_id" => "https://www.conversios.io/docs/how-to-set-up-tiktok-pixel-using-conversios-plugin/?utm_source=Tiktoklisting_inapp&utm_medium=resource_center_list&utm_campaign=resource_center",
-                "hotjar_pixel_id" => "",
-                "crazyegg_pixel_id" => "https://www.conversios.io/docs/how-to-integrate-crazy-egg-pixel-with-conversios-plugin/?utm_source=galisting_inapp&utm_medium=resource_center_list&utm_campaign=resource_center",
             );
             ?>
 
@@ -620,101 +595,7 @@ $conv_pro_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugi
 </div>
 <!-- Main container End -->
 
-<!-- EC Start -->
-<div class="rounded-3 p-3 bg-white ecbuttonbox d-none hidden">
-    <div class="convcard-left conv-pixel-logo">
-        <div class="convcard-title">
-            <h6 class="mb-0 text-white">
-                <?php esc_html_e("Event Tracking Wizard", "enhanced-e-commerce-for-woocommerce-store"); ?>
-            </h6>
-            <p class="mb-2 text-white mt-2" style="line-height: 15px;">
-                <?php esc_html_e("See in real time if events are being tracked correctly on your website.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-            </p>
-            <small class="mb-3 text-white">
-                <b><?php esc_html_e("Note:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                <?php esc_html_e("Make sure to use this feature in Chrome browser for accurate result. Also, make sure the pop blocker is not enabled in your browser.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-            </small>
-        </div>
-    </div>
 
-    <div id="starttrackingbut" class="w-100 d-flex justify-content-between rounded-3 px-3 align-items-center py-2">
-        <div class="convecbuttext">
-            <?php esc_html_e("Start Wizard", "enhanced-e-commerce-for-woocommerce-store"); ?>
-        </div>
-        <span class="material-symbols-outlined align-self-center">chevron_right</span>
-    </div>
-</div>
-<!-- EC End -->
-<!-- Upgrade to PRO modal End -->
-
-
-<script>
-    // Set GTM on page load. 
-    let tracking_method = "<?php echo esc_js($tracking_method) ?>";
-    if (tracking_method != 'gtm' && tracking_method == '') {
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: {
-                action: "conv_save_pixel_data",
-                pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
-                conv_options_data: {
-                    want_to_use_your_gtm: 0,
-                    tracking_method: 'gtm'
-                },
-                conv_options_type: ["eeoptions", "eeapidata"],
-            },
-            success: function(response) {
-                jQuery('.gtm-badge').removeClass('conv-badge-yellow').addClass('conv-badge-green');
-                jQuery('.gtm-badge').text('Connected')
-                jQuery('.conv-pixel-list-item').removeClass('conv-gtm-not-connected').addClass(
-                    'conv-gtm-connected')
-                jQuery('.gtm-lable').html('Container ID: <b> GTM-K7X94DG (Conversios Default Container)</b>')
-            },
-            error: function(error) {
-                // console.log('error', error)
-                jQuery('.gtm-badge').removeClass('conv-badge-green').addClass('conv-badge-yellow');
-                jQuery('.gtm-badge').text('Mandatory')
-                jQuery('.conv-pixel-list-item').removeClass('conv-gtm-connected').addClass(
-                    'conv-gtm-not-connected')
-            }
-        });
-    }
-    jQuery(function() {
-        var connectedcount = jQuery(
-            "#conv_pixel_list_box .conv-gtm-connected.conv-pixel-list-item .conv-badge.conv-badge-green").length;
-        if (connectedcount == 0) {
-            jQuery(".ecbuttonbox").hide();
-        }
-
-        jQuery(".propixel_card").css("cursor", "pointer").click(function() {
-            window.open("<?php echo esc_js($conv_pro_url); ?>");
-        });
-        jQuery('#starttrackingbut').click(function() {
-            jQuery('#starttrackingbut').addClass('convdisabledbox');
-            var ecrandomstring = "<?php echo esc_js($TVC_Admin_Helper->generateRandomStringConv()); ?>";
-            var subscription_id = "<?php echo esc_js($subscription_id); ?>";
-            var fronturl = '<?php echo esc_url(site_url()); ?>?is_calc_on=1&ec_token=' + ecrandomstring;
-            // console.log(fronturl);
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: tvc_ajax_url,
-                data: {
-                    action: "conv_create_ec_row",
-                    pix_sav_nonce: "<?php echo esc_js(wp_create_nonce('pix_sav_nonce_val')); ?>",
-                    ecrandomstring: ecrandomstring,
-                    subscription_id: subscription_id
-                },
-                success: function(response) {
-                    window.open(fronturl, '_blank');
-                    // console.log(response);
-                }
-            });
-        });
-    });
-</script>
 
 <script>
     // make equale height divs for grid

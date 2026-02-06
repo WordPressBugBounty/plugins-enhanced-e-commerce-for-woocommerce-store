@@ -1,7 +1,11 @@
 <?php
-if (!defined('ABSPATH')) exit; // Exit if accessed directly
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+global $wp_filesystem;
+TVC_Admin_Helper::get_filesystem();
+ // Exit if accessed directly
 $is_sel_disable = 'disabled';
 $google_merchant_center_id = "";
 if (isset($googleDetail->google_merchant_center_id) === TRUE && $googleDetail->google_merchant_center_id !== "") {
@@ -22,7 +26,6 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
 $tvc_store_data = $TVC_Admin_Helper->get_store_data();
 //$getCountris = @file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 $is_refresh_token_expire = false;
-global $wp_filesystem;
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
@@ -32,29 +35,27 @@ if (isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['sub
     if (isset($_GET['g_mail']) && sanitize_email(wp_unslash($_GET['g_mail']))) {
         $tvc_data['g_mail'] = sanitize_email(wp_unslash($_GET['g_mail']));
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
+        if (!is_array($ee_additional_data)) {
+            $ee_additional_data = [];
+        }
         $ee_additional_data['ee_last_login'] = sanitize_text_field(current_time('timestamp'));
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
         $is_refresh_token_expire = false;
     }
 }
 if ($subscriptionId != "") {
-    $google_detail = $customApiObj->getGoogleAnalyticDetail($subscriptionId);
-
-    if (property_exists($google_detail, "error") && $google_detail->error == false) {
-        if (property_exists($google_detail, "data") && $google_detail->data != "") {
-            $googleDetail = $google_detail->data;
-            $tvc_data['subscription_id'] = $googleDetail->id;
-            $plan_id = $googleDetail->plan_id;
-            $login_customer_id = $googleDetail->customer_id;
-            $tracking_option = $googleDetail->tracking_option;
-            if ($googleDetail->tracking_option != '') {
-                $defaulSelection = 0;
-            }
+    $google_detail = unserialize(get_option("ee_api_data"));
+    if ($google_detail['setting'] && $google_detail['setting'] != "") {
+        $googleDetail = $google_detail['setting'];
+        $tvc_data['subscription_id'] = $googleDetail->id;
+        $plan_id = $googleDetail->plan_id;
+        $login_customer_id = $googleDetail->customer_id;
+        $tracking_option = $googleDetail->tracking_option;
+        if ($googleDetail->tracking_option != '') {
+            $defaulSelection = 0;
         }
     }
 }
-$convBadgeVal = isset($ee_options['conv_show_badge']) ? $ee_options['conv_show_badge'] : "";
-$convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options['conv_badge_position'] : "";
 ?>
 <style>
     .tooltip-inner {
@@ -227,7 +228,6 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                                             <option value="">Select Country</option>
                                             <?php
                                             //$getCountris = file_get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
-                                            global $wp_filesystem;
                                             $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
                                             $contData = json_decode($getCountris);
@@ -477,94 +477,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
         </div>
     </div>
 </div>
-<!-------------------------CTA super_feed_modal Start ---------------------------------->
-<div class="modal fade" id="conv_super_feed_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 99999">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header justify-content-end connection-header border-0 pb-0">
-                <button type="button" style="margin: 0px; padding:0px;" class="btn-close close_feed_modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center p-4">
-                <div class="connected-content">
-                    <h3>
-                        <?php esc_html_e("Congratulations!", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h3>
-                    <p class="my-3 syncSuccessMessage" style="font-size: 20px;">
 
-                    </p>
-                    <p><?php esc_html_e("And that's not all.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
-                    <h4 class="mb-3">
-                        <?php esc_html_e("Embrace these amazing features:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    </h4>
-                </div>
-                <div>
-                    <div class="attributemapping-box">
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-6">
-                                <div class="attribute-box mb-3">
-                                    <div class="attribute-icon">
-                                        <?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/Campaign-Management.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>
-                                    </div>
-                                    <div class="attribute-content para">
-                                        <h3>
-                                            <?php esc_html_e("Effortless Feed Management:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </h3>
-                                        <p>
-                                            <?php esc_html_e("Generate custom feeds, apply filters, and ensure up-to-date product data with auto-sync for targeted regions and successful promotions.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-
-                                        </p>
-                                        <div class="attribute-btn">
-                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed'); ?>" class="btn btn-dark">Manage Feeds</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-6">
-                                <div class="attribute-box mb-3">
-                                    <div class="attribute-icon">
-                                        <?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/Integrations.svg', '', '', 'width:35px;filter: drop-shadow(3px 3px 3px #ccc);'),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>
-                                    </div>
-                                    <div class="attribute-content para">
-                                        <h3>
-                                            <?php esc_html_e("Seamless Integration:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </h3>
-                                        <p>
-                                            <?php esc_html_e("Connect more channels to sync your product data. Map your WooCommerce product attributes and categories for an optimized product feed process.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                                        </p>
-                                        <div class="attribute-btn">
-                                            <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&tab=gaa_config_page'); ?>" class="btn btn-dark">Configure Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--------------------------------super_feed_modal End -------------------------------------->
 <script>
     var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field(wp_unslash($_GET['subscription_id']))) : '' ?>";
     var gmc_id = "<?php echo esc_html($google_merchant_center_id) ?>";
@@ -601,6 +514,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                                 jQuery('#google_merchant_center_id').append(jQuery('<option>', {
                                     value: value.account_id,
                                     "data-merchant_id": value.merchant_id,
+                                    "data-account_id": value.merchant_id,
                                     text: value.account_id,
                                     selected: "selected"
                                 }));
@@ -609,6 +523,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                                     jQuery('#google_merchant_center_id').append(jQuery('<option>', {
                                         value: value.account_id,
                                         "data-merchant_id": value.merchant_id,
+                                        "data-account_id": value.merchant_id,
                                         text: value.account_id,
                                         selected: "selected"
                                     }));
@@ -616,6 +531,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                                     jQuery('#google_merchant_center_id').append(jQuery('<option>', {
                                         value: value.account_id,
                                         "data-merchant_id": value.merchant_id,
+                                        "data-account_id": value.merchant_id,
                                         text: value.account_id,
                                     }));
                                 }
@@ -717,8 +633,12 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
     function call_site_verified() {
         conv_change_loadingbar("show");
         jQuery("#wpbody").css("pointer-events", "none");
+        var merchantId = jQuery('#google_merchant_center_id').val();
+        var accountId = jQuery('#google_merchant_center_id').find(':selected').data('account_id');
         jQuery.post(tvc_ajax_url, {
             action: "tvc_call_site_verified",
+            merchant_id: merchantId,
+            account_id: accountId,
             SiteVerifiedNonce: "<?php echo esc_js(wp_create_nonce('tvc_call_site_verified-nonce')); ?>"
         }, function(response) {
             conv_change_loadingbar("hide");
@@ -739,8 +659,12 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
     function call_domain_claim() {
         conv_change_loadingbar("show");
         jQuery("#wpbody").css("pointer-events", "none");
+        var merchantId = jQuery('#google_merchant_center_id').val();
+        var accountId = jQuery('#google_merchant_center_id').find(':selected').data('account_id');
         jQuery.post(tvc_ajax_url, {
             action: "tvc_call_domain_claim",
+            merchant_id: merchantId,
+            account_id: accountId,
             apiDomainClaimNonce: "<?php echo esc_js(wp_create_nonce('tvc_call_domain_claim-nonce')); ?>"
         }, function(response) {
             conv_change_loadingbar("hide");
@@ -755,7 +679,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                 jQuery("#conv_save_error_txt").html(rsp.message);
                 jQuery("#conv_save_error_modal").modal("show");
             }
-            
+
         });
     }
     //Onload functions
@@ -777,8 +701,6 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
         let subscription_id = "<?php echo esc_attr($subscriptionId); ?>";
         let plan_id = "<?php echo esc_attr($plan_id); ?>";
         let app_id = "<?php echo esc_attr(CONV_APP_ID); ?>";
-        let bagdeVal = "yes";
-        let convBadgeVal = "<?php echo esc_attr($convBadgeVal); ?>";
         let google_merchant_center_id = "<?php echo esc_attr($google_merchant_center_id); ?>";
 
 
@@ -825,7 +747,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
         <?php } ?>
 
 
-        <?php if ((isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field(wp_unslash($_GET['subscription_id']))) !== '') || (empty($google_merchant_center_id) && !empty($cust_g_email))) { ?>
+        <?php if ((isset($_GET['subscription_id']) === TRUE && esc_attr(sanitize_text_field(wp_unslash($_GET['subscription_id']))) !== '')) { ?>
             list_google_merchant_account(tvc_data);
         <?php } ?>
 
@@ -873,10 +795,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
                     if (response == "0" || response == "1") {
                         let google_merchant_center_id = jQuery('#google_merchant_center_id').val();
                         let merchant_id = jQuery('#google_merchant_center_id').find(':selected').data('merchant_id');
-                        // save_merchant_data(google_merchant_center_id, merchant_id, tvc_data, subscription_id, plan_id, true).then((res) => {
-                        // if (feedType !== '') {
-                        //    // createSuperAIFeed();
-                        // } else {
+
                         conv_change_loadingbar("hide");
                         jQuery(".conv-btn-connect-enabled-gmc").text("Save");
                         jQuery('.gmcAccount').html(selected_vals["google_merchant_id"])
@@ -989,35 +908,7 @@ $convBadgePositionVal = isset($ee_options['conv_badge_position']) ? $ee_options[
             jQuery('#submitFeed').attr('disabled', false);
         }
     }
-    /*************************Create Super AI Feed Start ************************************************************************/
-    function createSuperAIFeed() {
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: tvc_ajax_url,
-            data: {
-                action: "ee_super_AI_feed",
-                create_superFeed_nonce: "<?php echo esc_js(wp_create_nonce('create_superFeed_nonce_val')); ?>",
-                type: 'GMC',
-            },
-            success: function(response) {
-                conv_change_loadingbar("hide");
-                if (response.status == 'success') {
-                    jQuery('.syncSuccessMessage').html('Your latest ' + response.total_product + ' products are synced to your Google Merchant Center account.')
-                    jQuery("#conv_super_feed_modal").modal("show");
-                }
-            },
-            error: function(error) {
 
-            }
-        });
-    }
-    /*************************Create Super AI Feed End ***************************************************************************/
-    jQuery(document).on('click', '.close_feed_modal', function() {
-        jQuery("#conv_super_feed_modal").modal("hide");
-        location.reload();
-    })
-    /*************************************************************************************************************************** */
     /*************************************Save Feed Data End***************************************************************************/
     function conv_change_loadingbar_header(state = 'show') {
         if (state === 'show') {

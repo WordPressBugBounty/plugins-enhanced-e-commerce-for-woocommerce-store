@@ -62,6 +62,36 @@ if (class_exists('Conversios_Admin') === FALSE) {
     {
       add_action('admin_enqueue_scripts', array($this, 'enqueue_styles'));
       add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+
+      $optionValue = get_option("conv_active_domain");
+      if (!$optionValue) {
+        $activeDomain = '';
+      } else {
+        $decoded = base64_decode($optionValue, true);
+        $activeDomain = ($decoded !== false) ? $decoded : '';
+      }
+      
+      if (empty($activeDomain)) {
+        if (!class_exists('CustomApi.php')) {
+          require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php');
+        }
+        $customApiObj = new CustomApi();
+        $caller = "init_function";
+        $google_detail_res = $customApiObj->getGoogleAnalyticDetail($caller);
+        $activeDomain = $google_detail_res->data->active_domain ?? '';
+        update_option("conv_active_domain", base64_encode($activeDomain));
+      }
+
+      $normalizedActiveDomain = $this->domainNormalize($activeDomain);
+      $originalsiteurl = $this->conv_getoriginalsiteurl();
+      $normalizedCurrentDomain = $this->domainNormalize($originalsiteurl);
+      if ($normalizedActiveDomain != $normalizedCurrentDomain) {
+        if (!class_exists('CustomApi.php')) {
+          require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php');
+        }
+        $customApiObj = new CustomApi();
+        $customApiObj->createNewSubscription();
+      }
     }
 
     function dequeue_css()
@@ -78,116 +108,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
         }
       }
     }
-    /**
-     * Woo Full order refund.
-     *
-     * @since    1.0.0
-     */
-    public function action_woocommerce_order_refunded($order_id, $refund_id)
-    {
-      $data = unserialize(get_option('ee_options'));
-      if (
-        empty($data['ga_eeT']) ||
-        get_post_meta($order_id, "tvc_tracked_refund", true) == 1
-      ) {
-        return;
-      }
-      $refund = wc_get_order($refund_id);
-      $value = $refund->get_amount();
-      $query = urlencode('/refundorders/');
-      $currency = $this->get_woo_currency();
-      $client_id = wp_rand(1000000000, 9999999999) . "." . time();
-      $ga_id = $data['ga_id'];
-      if ($ga_id) {
-        $url = "https://www.google-analytics.com/collect?v=1&t=event&ni=1&cu=" . $currency . "&ec=Enhanced-Ecommerce&ea=click&el=full_refund&tid=" . $ga_id . "&cid=" . $client_id . "&ti=" . $order_id . "&pa=refund&tr=" . $value . "&dp=" . $query;
-        $request = wp_remote_get(esc_url($url), array('timeout' => 120));
-      }
 
-      $gm_id = sanitize_text_field($data['gm_id']);
-      $api_secret = sanitize_text_field($data['ga4_api_secret']);
-      if ($gm_id && $api_secret) {
-        $postData = array(
-          "client_id" => $client_id,
-          "non_personalized_ads" => true,
-          "events" => [array(
-            "name" => "refund",
-            "params" => array(
-              "currency" => $currency,
-              "transaction_id" => $order_id,
-              "value" => $value
-            )
-          )]
-        );
-        $args = array(
-          'method' => 'POST',
-          'body' => wp_json_encode($postData)
-        );
-        $url = "https://www.google-analytics.com/mp/collect?measurement_id=" . $gm_id . "&api_secret=" . $api_secret;
-        $request = wp_remote_post(esc_url_raw($url), $args);
-      }
-
-      update_post_meta($order_id, "tvc_tracked_refund", 1);
-    }
-
-    /**
-     * Woo Partial order refund.
-     *
-     * @since    1.0.0
-     */
-    public function woocommerce_partial_order_refunded($order_id, $refund_id)
-    {
-      $data = unserialize(get_option('ee_options'));
-      if (empty($data['ga_eeT'])) {
-        return;
-      }
-      $refund         = wc_get_order($refund_id);
-      $value = $refund->get_amount();
-      $currency = $this->get_woo_currency();
-      $client_id = wp_rand(1000000000, 9999999999) . "." . time();
-      $query_params = array();
-      $i = 1;
-      //GA3
-      $ga_id = $data['ga_id'];
-      if ($ga_id) {
-        foreach ($refund->get_items('line_item') as $item_id => $item) {
-          $query_params["pr{$i}id"] = $item['product_id'];
-          $query_params["pr{$i}qt"] = abs($item['qty']);
-          $query_params["pr{$i}pr"] = abs($item['total']);
-          $i++;
-        }
-        $param_url = http_build_query($query_params, '', '&');
-        $url = "https://www.google-analytics.com/collect?v=1&t=event&ni=1&cu=" . $currency . "&ec=Enhanced-Ecommerce&ea=Refund&el=partial_refunded&tid=" . sanitize_text_field($ga_id) . "&cid=" . $client_id . "&tr=" . $value . "&ti=" . $order_id . "&pa=refund&" . $param_url;
-        $request = wp_remote_get(esc_url_raw($url), array('timeout' => 120));
-      }
-      //GA4
-      $gm_id = sanitize_text_field($data['gm_id']);
-      $api_secret = sanitize_text_field($data['ga4_api_secret']);
-      if ($gm_id && $api_secret) {
-        $items = array();
-        foreach ($refund->get_items('line_item') as $item_id => $item) {
-          $items[] = array("item_id" => $item['product_id'], "item_name" => $item['name'], "quantity" => abs($item['qty']), "price" => abs($item['total']), "currency" => $currency);
-        }
-        $postData = array(
-          "client_id" => $client_id,
-          "non_personalized_ads" => true,
-          "events" => [array(
-            "name" => "refund",
-            "params" => array(
-              "items" => $items,
-              "currency" => $currency,
-              "transaction_id" => $order_id,
-              "value" => $value
-            )
-          )]
-        );
-        $args = array(
-          'method' => 'POST',
-          'body' => wp_json_encode($postData)
-        );
-        $url = "https://www.google-analytics.com/mp/collect?measurement_id=" . $gm_id . "&api_secret=" . $api_secret;
-        $request = wp_remote_post(esc_url_raw($url), $args);
-      }
-    }
 
     /**
      * Register the stylesheets for the admin area.
@@ -198,23 +119,11 @@ if (class_exists('Conversios_Admin') === FALSE) {
     {
       $screen = get_current_screen();
       if ($screen->id === 'toplevel_page_conversios'  || (isset($_GET['page']) === TRUE && strpos(sanitize_text_field(wp_unslash($_GET['page'])), 'conversios') !== false)) {
-        //developres hook to custom css
         do_action('add_conversios_css_' . sanitize_text_field(wp_unslash($_GET['page'])));
-        //conversios page css
         if (sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'page'))) == "conversios-analytics-reports" || sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'page'))) == "conversios") {
-          wp_register_style('conversios-slick-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/slick.css'));
-          wp_enqueue_style('conversios-slick-css');
           wp_register_style('conversios-daterangepicker-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/daterangepicker.css'));
           wp_enqueue_style('conversios-daterangepicker-css');
-        } else if (sanitize_text_field(wp_unslash($_GET['page'])) === "conversios-pmax") {
-          wp_register_style('jquery-ui', esc_url(ENHANCAD_PLUGIN_URL . '/includes/setup/plugins/datepicker/jquery-ui.css'));
-          wp_enqueue_style('jquery-ui');
         }
-        //if ($screen->id != "conversios_page_conversios-google-shopping-feed") {
-        //wp_enqueue_style('conversios-style-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/style.css'), array(), esc_attr($this->version), 'all');
-        //}
-
-        //all conversios page css        
         wp_enqueue_style('conversios-responsive-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/responsive.css'), array(), esc_attr($this->version), 'all');
         if (sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) == "campaignManagement") {
           wp_register_style('tvc-dataTables-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/dataTables.bootstrap5.min.css'));
@@ -231,37 +140,24 @@ if (class_exists('Conversios_Admin') === FALSE) {
     public function enqueue_scripts()
     {
       $screen = get_current_screen();
-
-      if (isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios-analytics-reports") {
+      $page = sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'page')));
+      if ($page === 'conversios-analytics-reports' || $page === 'conversios') {
         wp_enqueue_script('conversios-chart-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/chart.js'));
         wp_enqueue_script('conversios-chart-datalabels-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/chartjs-plugin-datalabels.js'));
         wp_enqueue_script('conversios-basictable-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.basictable.min.js'));
         wp_enqueue_script('conversios-htmlcanvas', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/html2canvas.min.js'));
         wp_enqueue_script('conversios-jspdf', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/jspdf.umd.min.js'));
         wp_enqueue_media();
-        //wp_register_script( 'wk-admin-script', plugins_url( __FILE__ ), array('jquery') );
-        //wp_enqueue_script( 'wk-admin-script' );
         if (!wp_script_is('moment', 'enqueued')) {
-          // Enqueue Moment.js only if it's not already enqueued
           wp_enqueue_script('conversios-moment-js', ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js', array(), '2.22.1', false);
         }
         wp_enqueue_script('conversios-daterangepicker-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/daterangepicker.js'));
         wp_enqueue_script('conversios-custom-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/tvc-ee-custom.js'), array('jquery'), esc_attr($this->version), false);
-      } else if (sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) == "campaignManagement" || isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios-pmax") {
-        wp_enqueue_script('conversios-pmax-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/pmax-custom.js'), array('jquery'), esc_attr($this->version), false);
-        wp_register_script('tvc-bootstrap-datepicker-js', esc_url(ENHANCAD_PLUGIN_URL . '/includes/setup/plugins/datepicker/bootstrap-datepicker.min.js'));
-        wp_enqueue_script('tvc-bootstrap-datepicker-js');
-        wp_enqueue_script('jquery-ui-datepicker');
-        wp_enqueue_script('tvc-ee-dataTables-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.dataTables.min.js'), array('jquery'), esc_attr($this->version), false);
-        wp_enqueue_script('tvc-ee-dataTables-v5-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/dataTables.bootstrap5.min.js'), array('jquery'), esc_attr($this->version), false);
       } else if (isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios") {
         if (!wp_script_is('moment', 'enqueued')) {
-          // Enqueue Moment.js only if it's not already enqueued
           wp_enqueue_script('conversios-moment-js', ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js', array(), '2.22.1', false);
         }
       } else if (isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios-audience-manager") {
-        wp_register_style('tvc-customer-segment-css', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/css/customer-segment.css'));
-        wp_enqueue_style('tvc-customer-segment-css');
         wp_enqueue_script('tvc-ee-dataTables-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.dataTables.min.js'), array('jquery'), esc_attr($this->version), false);
         wp_enqueue_script('tvc-ee-dataTables-v5-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/dataTables.bootstrap5.min.js'), array('jquery'), esc_attr($this->version), false);
       }
@@ -291,7 +187,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
         26
       );
       if (!function_exists('is_plugin_active_for_network')) {
-        require_once(ABSPATH . '/wp-admin/includes/woocommerce.php');
+        require_once(ABSPATH . 'wp-admin/includes/plugin.php');
       }
 
       add_submenu_page(
@@ -315,7 +211,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
         );
       }
 
-      if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+      if (class_exists('WooCommerce') || is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
         if (CONV_APP_ID == 1) {
           add_submenu_page(
             CONV_MENU_SLUG,
@@ -503,18 +399,15 @@ if (class_exists('Conversios_Admin') === FALSE) {
 
     public function conversios_account()
     {
-      require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
       require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/account.php');
       new TVC_Account();
     }
     public function conversios_google_analytics()
     {
-      //require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');      
       $sub_page = (isset($_GET['subpage']) === TRUE) ? sanitize_text_field(wp_unslash($_GET['subpage'])) : "";
       if (!empty($sub_page)) {
         require_once('partials/single-pixel-settings.php');
       } else {
-        require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
         require_once('partials/general-fields.php');
       }
     }
@@ -530,7 +423,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
         $this->product_list();
       }
       if (!isset($_GET['subpage']) && $action_tab !== 'product_list') {
-        wp_redirect(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=gmc'));
+        wp_safe_redirect(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=gmc'));
         exit;
       }
       $action_tab = isset($_GET['subpage']) ? sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'subpage'))) : '';
@@ -540,33 +433,27 @@ if (class_exists('Conversios_Admin') === FALSE) {
       } else {
         //new GoogleShoppingFeed();
         require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
-        require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
         //require_once 'partials/product-feed-list.php';
-        // require_once('partials/general-fields-product-feed.php');
       }
     }
     public function gaa_config_page()
     {
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
-      require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
-      require_once('partials/general-fields-product-feed.php');
     }
     public function load_channel_feed()
     {
-      require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php';
       require_once ENHANCAD_PLUGIN_DIR . 'admin/class-tvc-admin-helper.php';
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php';
-      require_once 'partials/product-feed-list.php';
+      require_once 'partials/productfeed/product-feed-list.php';
     }
     public function product_list()
     {
-      require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php';
       require_once ENHANCAD_PLUGIN_DIR . 'admin/class-tvc-admin-helper.php';
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php';
       require_once ENHANCAD_PLUGIN_DIR . 'admin/class-tvc-admin-db-helper.php';
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/tatvic-category-wrapper.php';
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
-      require_once 'partials/feedwise-product-list.php';
+      require_once 'partials/productfeed/feedwise-product-list.php';
     }
   }
 }

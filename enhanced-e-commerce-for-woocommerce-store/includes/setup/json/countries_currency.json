@@ -64,14 +64,6 @@
         "continentName": "Africa"
     },
     {
-        "countryCode": "AQ",
-        "countryName": "Antarctica",
-        "currencyCode": "",
-        "population": "0",
-        "capital": "",
-        "continentName": "Antarctica"
-    },
-    {
         "countryCode": "AR",
         "countryName": "Argentina",
         "currencyCode": "ARS",
