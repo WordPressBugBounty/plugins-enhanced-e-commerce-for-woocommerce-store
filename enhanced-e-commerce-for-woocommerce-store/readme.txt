@@ -6,7 +6,7 @@ Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-st
 Tags: Google Analytics 4, Google Ads, Facebook Pixel, Conversion Tracking, Woocommerce
 Author: Conversios
 Requires at least: 4.6
-Tested up to: 6.9
+Tested up to: 6.9.1
 Requires PHP: 7.4
 Stable tag: 7.2.15
 Version: 7.2.15
@@ -23,13 +23,15 @@ Conversios Plugin connects Google Analytics 4 (GA4), Google Ads, Microsoft Ads, 
 
 Sync products to Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok, and manage your tracking and feed setup from inside WordPress.
 
+Conversios also offers this capability as part of the Server-Side Tracking (SST) [Pro plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme), enabling WooCommerce products to be discovered and purchased within Google Gemini, with purchases tracked accurately using server-side tracking (requires Google Merchant Center approval).
+
 Built for WooCommerce stores that want more reliable tracking and cleaner reporting across analytics and ad platforms.
 
 == Walkthrough Video ==
 
 Watch the full Conversios setup walkthrough covering GA4 tracking, Google Ads conversions, Meta Pixel + CAPI, Microsoft Ads UET, and product feed syncing.
 
-[youtube https://www.youtube.com/watch?v=1295LfrExWU]
+[youtube https://www.youtube.com/watch?v=pRt5JxNfH_Y&t]
 
 == Customer Feedback ==
 
@@ -157,6 +159,7 @@ Have a look at the full feature list over [here](https://www.conversios.io/docs/
 * **GA4 eCommerce and Ads reports:** Advanced GA4 eCommerce reports plus Google Ads and Meta reports inside WordPress.
 * **White-label PDF reports:** Export branded reports for clients and stakeholders.
 * **Advanced event controls and custom mappings:** Fine-grained options for enabling, disabling and customizing events.
+* **Universal Commerce Protocol (UCP) [Pro Plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme):** Enables WooCommerce products to be discovered and purchased within Google Gemini. Conversios syncs products via Google Merchant Center and tracks purchases from Google Gemini using server-side tracking, ensuring ensuring accurate conversion reporting in GA4 and ad platforms. *(Requires Google Merchant Center approval.)*
 
 Have a look at the full feature list over [here](https://www.conversios.io/docs/woocommerce/all-in-one-plugin/features/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
 
@@ -287,6 +290,15 @@ Yes. Conversios tracks both. Pro supports advanced mappings such as user ID and 
 = Does Conversios track purchases from third-party payment gateways? =
 Yes, as long as the gateway returns to the WooCommerce thank-you page. Server-side tracking in Pro can help recover some offsite gateway cases.
 
+= What is Universal Commerce Protocol (UCP)? =
+Universal Commerce Protocol allows WooCommerce products to be discovered and purchased within Google Gemini. Conversios enables this by syncing your product catalog with Google Merchant Center and tracking purchases originating from Google Gemini using server-side tracking, so conversions are accurately reported in GA4 and supported ad platforms.
+
+= Is Universal Commerce Protocol (UCP) included in the free plugin? =
+No. Universal Commerce Protocol (UCP) is available only as part of the Conversios [Server-Side Tracking (SST) Pro plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
+
+= Do I need Google Merchant Center for UCP? =
+Yes. An approved Google Merchant Center account is required, as product data is synced through Merchant Center for Google Gemini shopping experiences.
+
 = Can I customize which events are tracked? =
 Yes. You can enable or disable GA4, Ads and Meta events in settings. Pro adds advanced controls and custom mappings.
 
@@ -303,6 +315,11 @@ Whitelist Conversios scripts and exclude key endpoints from caching to ensure ev
 Open a support thread on WordPress.org or email [support@conversios.io](mailto:support@conversios.io).
 
 == Changelog ==
+
+= Conversios 7.2.15 =
+
+February 02, 2026
+* Added Universal Commerce Protocol (UCP) support under Server-Side Tracking (Pro) for Google Gemini shopping experiences.
 
 = Conversios 7.2.14 =
 December 01, 2025
