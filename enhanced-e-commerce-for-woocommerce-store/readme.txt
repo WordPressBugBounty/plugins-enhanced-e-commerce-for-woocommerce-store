@@ -1,6 +1,8 @@
 === Conversios: Google Analytics (GA4), Google Ads, Conversion and Analytics Tracking for Multi-Channels ===
 
 Contributors: Tatvic, Conversios
+Plugin Name: Conversios: Google Analytics (GA4), Google Ads, Conversion and Analytics Tracking for Multi-Channels
+Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/
 Tags: Google Analytics 4, Google Ads, Facebook Pixel, Conversion Tracking, Woocommerce
 Author: Conversios
 Requires at least: 4.6
@@ -19,15 +21,15 @@ Track GA4 Analytics, Google Ads, Microsoft Ads, and Conversion with server-side 
 
 Conversios Plugin connects Google Analytics 4 (GA4), Google Ads, Microsoft Ads, Meta Pixel (Facebook), TikTok,snapchat and more. It automatically tracks purchase tracking and 15+ eCommerce events (purchase, add_to_cart, view_item, begin_checkout). For higher accuracy, Server-Side Tracking (Pro) and Conversions API (CAPI) (Pro) are available, and Google Ads Dynamic Remarketing is supported.
 
-Sync products to Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok, and launch or manage campaigns inside WordPress. Includes Consent Mode v2, lightweight performance, and full WooCommerce HPOS compatibility.
+Sync products to Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok, and manage your tracking and feed setup from inside WordPress.
 
-Trusted by 60,000+ stores to boost attribution accuracy, ROAS, and growth without custom code.
+Built for WooCommerce stores that want more reliable tracking and cleaner reporting across analytics and ad platforms.
 
 == Walkthrough Video ==
 
 Watch the full Conversios setup walkthrough covering GA4 tracking, Google Ads conversions, Meta Pixel + CAPI, Microsoft Ads UET, and product feed syncing.
 
-[youtube https://www.youtube.com/watch?v=Kryym-l2ASs]
+[youtube https://www.youtube.com/watch?v=1295LfrExWU]
 
 == Customer Feedback ==
 
@@ -36,6 +38,50 @@ Watch the full Conversios setup walkthrough covering GA4 tracking, Google Ads co
 
 “Essential for e-commerce at scale; helped us move to managed first-party tracking and keep revenue reporting in sync across platforms and POS.”
 [@boomstudio](https://wordpress.org/support/topic/highly-recommended-plugin-excellent-support-essential-for-e-commerce/)
+
+== Best Fit for Which Stores ==
+
+**Conversios All-in-one Plugin is the ideal tracking and analytics solution for:**
+
+* Direct-to-Consumer (DTC) brands and catalog-driven stores selling physical or digital products.
+* High-Volume and High-Traffic Stores that require server-side tracking (CAPI) to prevent data loss and maintain site speed under heavy load.
+* Businesses running active paid campaigns on Google, Meta, or TikTok that require reliable server-side data to maximize ROAS.
+* Stores prioritizing data compliance (GDPR/CCPA) and aiming for near-perfect revenue reconciliation between WooCommerce and analytics reports.
+
+== Payment Gateway Compatibility & Tracking ==
+
+**Conversios is designed for maximum purchase tracking accuracy. Tracking is automatically verified when the user returns to the standard WooCommerce "Thank You" page.**
+
+* **Supported Gateways (Guaranteed Tracking):**
+    * Stripe (Standard Checkout)
+    * PayPal Standard/Express
+    * Direct Bank Transfer / BACS
+    * Cash on Delivery (COD)
+    * **Klarna Payments**
+    * **WooCommerce Payments**
+
+* **Known Custom or Offsite Checkouts (Intervention Required):**
+    Tracking accuracy is **NOT** guaranteed for custom-built checkouts or gateways that redirect fully offsite without returning to the standard WooCommerce thank-you page. Examples include:
+    * **WooCommerce Subscriptions** (via custom checkout flows)
+    * **Mollie Payments** (certain offsite modes)
+    * **Custom one-page checkouts**
+
+**ACTION: If you use a custom payment solution (e.g., a one-page checkout builder) or a subscription plugin, please contact us for validation at support@conversios.io before launching your campaigns.**
+
+== Event Tracking Accuracy & Customization ==
+
+**Conversios automatically tracks 15+ standard eCommerce events (purchase, add_to_cart, view_item, etc.) across all connected pixels.**
+
+* **Custom Theme & Cart Flow Warning:**
+    Event tracking accuracy (especially `add_to_cart` and `begin_checkout`) is **not guaranteed** for highly customized themes or stores using heavy AJAX functionality to manage the cart. This includes common scenarios such as:
+    * **Cart-Drawer Plugins** (e.g., side-cart overlays that skip the standard cart page)
+    * **High-Performance Themes** built entirely with JavaScript (React/Vue-based storefronts)
+    * **Single-Page Checkout Plugins** that modify the default WooCommerce flow.
+
+* **Customization Support:**
+    If you experience tracking issues on a custom theme or using a third-party cart plugin (e.g., a side-cart drawer), the Conversios team can provide customization support. Reach out to info@conversios.io for validation and setup assistance.
+
+(Note: This exclusion is not applicable to the Product Feed Manager plugin.)
 
 == Key Benefits ==
 
