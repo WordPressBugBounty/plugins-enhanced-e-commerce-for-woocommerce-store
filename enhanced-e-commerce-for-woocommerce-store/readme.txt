@@ -1,15 +1,13 @@
 === Conversios: Google Analytics (GA4), Google Ads, Conversion and Analytics Tracking for Multi-Channels ===
 
 Contributors: Tatvic, Conversios
-Plugin Name: Conversios: Google Analytics (GA4), Google Ads, Conversion and Analytics Tracking for Multi-Channels
-Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/
 Tags: Google Analytics 4, Google Ads, Facebook Pixel, Conversion Tracking, Woocommerce
 Author: Conversios
 Requires at least: 4.6
-Tested up to: 6.9.1
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 7.2.15
-Version: 7.2.15
+Stable tag: 7.2.16
+Version: 7.2.16
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -21,17 +19,15 @@ Track GA4 Analytics, Google Ads, Microsoft Ads, and Conversion with server-side 
 
 Conversios Plugin connects Google Analytics 4 (GA4), Google Ads, Microsoft Ads, Meta Pixel (Facebook), TikTok,snapchat and more. It automatically tracks purchase tracking and 15+ eCommerce events (purchase, add_to_cart, view_item, begin_checkout). For higher accuracy, Server-Side Tracking (Pro) and Conversions API (CAPI) (Pro) are available, and Google Ads Dynamic Remarketing is supported.
 
-Sync products to Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok, and manage your tracking and feed setup from inside WordPress.
+Sync products to Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok, and launch or manage campaigns inside WordPress. Includes Consent Mode v2, lightweight performance, and full WooCommerce HPOS compatibility.
 
-Conversios also offers this capability as part of the Server-Side Tracking (SST) [Pro plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme), enabling WooCommerce products to be discovered and purchased within Google Gemini, with purchases tracked accurately using server-side tracking (requires Google Merchant Center approval).
-
-Built for WooCommerce stores that want more reliable tracking and cleaner reporting across analytics and ad platforms.
+Trusted by 60,000+ stores to boost attribution accuracy, ROAS, and growth without custom code.
 
 == Walkthrough Video ==
 
 Watch the full Conversios setup walkthrough covering GA4 tracking, Google Ads conversions, Meta Pixel + CAPI, Microsoft Ads UET, and product feed syncing.
 
-[youtube https://www.youtube.com/watch?v=pRt5JxNfH_Y&t]
+[youtube https://www.youtube.com/watch?v=Kryym-l2ASs]
 
 == Customer Feedback ==
 
@@ -40,50 +36,6 @@ Watch the full Conversios setup walkthrough covering GA4 tracking, Google Ads co
 
 “Essential for e-commerce at scale; helped us move to managed first-party tracking and keep revenue reporting in sync across platforms and POS.”
 [@boomstudio](https://wordpress.org/support/topic/highly-recommended-plugin-excellent-support-essential-for-e-commerce/)
-
-== Best Fit for Which Stores ==
-
-**Conversios All-in-one Plugin is the ideal tracking and analytics solution for:**
-
-* Direct-to-Consumer (DTC) brands and catalog-driven stores selling physical or digital products.
-* High-Volume and High-Traffic Stores that require server-side tracking (CAPI) to prevent data loss and maintain site speed under heavy load.
-* Businesses running active paid campaigns on Google, Meta, or TikTok that require reliable server-side data to maximize ROAS.
-* Stores prioritizing data compliance (GDPR/CCPA) and aiming for near-perfect revenue reconciliation between WooCommerce and analytics reports.
-
-== Payment Gateway Compatibility & Tracking ==
-
-**Conversios is designed for maximum purchase tracking accuracy. Tracking is automatically verified when the user returns to the standard WooCommerce "Thank You" page.**
-
-* **Supported Gateways (Guaranteed Tracking):**
-    * Stripe (Standard Checkout)
-    * PayPal Standard/Express
-    * Direct Bank Transfer / BACS
-    * Cash on Delivery (COD)
-    * **Klarna Payments**
-    * **WooCommerce Payments**
-
-* **Known Custom or Offsite Checkouts (Intervention Required):**
-    Tracking accuracy is **NOT** guaranteed for custom-built checkouts or gateways that redirect fully offsite without returning to the standard WooCommerce thank-you page. Examples include:
-    * **WooCommerce Subscriptions** (via custom checkout flows)
-    * **Mollie Payments** (certain offsite modes)
-    * **Custom one-page checkouts**
-
-**ACTION: If you use a custom payment solution (e.g., a one-page checkout builder) or a subscription plugin, please contact us for validation at support@conversios.io before launching your campaigns.**
-
-== Event Tracking Accuracy & Customization ==
-
-**Conversios automatically tracks 15+ standard eCommerce events (purchase, add_to_cart, view_item, etc.) across all connected pixels.**
-
-* **Custom Theme & Cart Flow Warning:**
-    Event tracking accuracy (especially `add_to_cart` and `begin_checkout`) is **not guaranteed** for highly customized themes or stores using heavy AJAX functionality to manage the cart. This includes common scenarios such as:
-    * **Cart-Drawer Plugins** (e.g., side-cart overlays that skip the standard cart page)
-    * **High-Performance Themes** built entirely with JavaScript (React/Vue-based storefronts)
-    * **Single-Page Checkout Plugins** that modify the default WooCommerce flow.
-
-* **Customization Support:**
-    If you experience tracking issues on a custom theme or using a third-party cart plugin (e.g., a side-cart drawer), the Conversios team can provide customization support. Reach out to info@conversios.io for validation and setup assistance.
-
-(Note: This exclusion is not applicable to the Product Feed Manager plugin.)
 
 == Key Benefits ==
 
@@ -159,7 +111,6 @@ Have a look at the full feature list over [here](https://www.conversios.io/docs/
 * **GA4 eCommerce and Ads reports:** Advanced GA4 eCommerce reports plus Google Ads and Meta reports inside WordPress.
 * **White-label PDF reports:** Export branded reports for clients and stakeholders.
 * **Advanced event controls and custom mappings:** Fine-grained options for enabling, disabling and customizing events.
-* **Universal Commerce Protocol (UCP) [Pro Plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme):** Enables WooCommerce products to be discovered and purchased within Google Gemini. Conversios syncs products via Google Merchant Center and tracks purchases from Google Gemini using server-side tracking, ensuring ensuring accurate conversion reporting in GA4 and ad platforms. *(Requires Google Merchant Center approval.)*
 
 Have a look at the full feature list over [here](https://www.conversios.io/docs/woocommerce/all-in-one-plugin/features/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
 
@@ -290,15 +241,6 @@ Yes. Conversios tracks both. Pro supports advanced mappings such as user ID and 
 = Does Conversios track purchases from third-party payment gateways? =
 Yes, as long as the gateway returns to the WooCommerce thank-you page. Server-side tracking in Pro can help recover some offsite gateway cases.
 
-= What is Universal Commerce Protocol (UCP)? =
-Universal Commerce Protocol allows WooCommerce products to be discovered and purchased within Google Gemini. Conversios enables this by syncing your product catalog with Google Merchant Center and tracking purchases originating from Google Gemini using server-side tracking, so conversions are accurately reported in GA4 and supported ad platforms.
-
-= Is Universal Commerce Protocol (UCP) included in the free plugin? =
-No. Universal Commerce Protocol (UCP) is available only as part of the Conversios [Server-Side Tracking (SST) Pro plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
-
-= Do I need Google Merchant Center for UCP? =
-Yes. An approved Google Merchant Center account is required, as product data is synced through Merchant Center for Google Gemini shopping experiences.
-
 = Can I customize which events are tracked? =
 Yes. You can enable or disable GA4, Ads and Meta events in settings. Pro adds advanced controls and custom mappings.
 
@@ -315,11 +257,6 @@ Whitelist Conversios scripts and exclude key endpoints from caching to ensure ev
 Open a support thread on WordPress.org or email [support@conversios.io](mailto:support@conversios.io).
 
 == Changelog ==
-
-= Conversios 7.2.15 =
-
-February 02, 2026
-* Added Universal Commerce Protocol (UCP) support under Server-Side Tracking (Pro) for Google Gemini shopping experiences.
 
 = Conversios 7.2.14 =
 December 01, 2025

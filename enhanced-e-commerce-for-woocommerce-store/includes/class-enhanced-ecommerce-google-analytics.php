@@ -1,4 +1,5 @@
 <?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 /**
  * The file that defines the core plugin class
@@ -171,7 +172,7 @@ class Enhanced_Ecommerce_Google_Analytics
   private function set_locale()
   {
     $plugin_i18n = new Enhanced_Ecommerce_Google_Analytics_i18n();
-    $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
+    $this->loader->add_action('init', $plugin_i18n, 'load_plugin_textdomain');
   }
 
   /**

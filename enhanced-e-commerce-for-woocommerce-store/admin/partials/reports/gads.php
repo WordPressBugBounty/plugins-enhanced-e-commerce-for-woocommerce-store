@@ -1,3 +1,4 @@
+<?php if (!defined('ABSPATH')) exit; // Exit if accessed directly ?>
 <div style="position:relative;">
     <div class="modal fade" id="upgradetopromodalotherReports" data-bs-keyboard="false" data-bs-backdrop="static"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

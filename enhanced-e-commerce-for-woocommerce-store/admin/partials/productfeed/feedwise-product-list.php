@@ -330,8 +330,8 @@ $filters    = json_decode($result[0]['filters'], true);
                         class="text-primary text-decoration-none fw-medium d-inline-flex align-items-center"
                         data-bs-toggle="modal"
                         data-bs-target="#feedDetailsModal"
-                        title="View Feed Details">
-                        Check here
+                        title="<?php esc_attr_e("View Feed Details", "enhanced-e-commerce-for-woocommerce-store"); ?>">
+                        <?php esc_html_e("Check here", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </a>
                 </span>
             </div>
@@ -339,9 +339,13 @@ $filters    = json_decode($result[0]['filters'], true);
 
         <!-- Below in commented before 07 feb 2025 -->
         <div class="m-0 p-0 col-8 d-none">
-            <span class="float-start fs-12">Note:
+            <span class="float-start fs-12"><?php esc_html_e("Note:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 <label class="fs-12 fw-400 text-secondary defaultPointer">
-                    <?php echo esc_html('You have reached ' . number_format_i18n(round(($google_detail_api->data->product_count / $google_detail_api->data->max_limit) * 100)) . ' % of your product limit for the product feed, with a maximum allowance of ' . number_format_i18n($google_detail_api->data->max_limit));
+                    <?php echo esc_html(sprintf(
+                        __('You have reached %1$s%% of your product limit for the product feed, with a maximum allowance of %2$s', 'enhanced-e-commerce-for-woocommerce-store'),
+                        number_format_i18n(round(($google_detail_api->data->product_count / max(1, $google_detail_api->data->max_limit)) * 100)),
+                        number_format_i18n($google_detail_api->data->max_limit)
+                    ));
                     ?>
                 </label>
             </span>
@@ -366,9 +370,9 @@ $filters    = json_decode($result[0]['filters'], true);
             <div class="<?php echo esc_attr($class_2); ?> m-0 d-flex align-items-center justify-content-end fs-6">
                 <?php if ($class_2 != '') : ?>
                     <div>
-                        <span>Your feed is in draft mode. Sync your products by clicking here.</span>
+                        <span><?php esc_html_e("Your feed is in draft mode. Sync your products by clicking here.", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                         <div class="">
-                            <span>Products will typically appear in the platform within 24 to 48 hours.</span>
+                            <span><?php esc_html_e("Products will typically appear in the platform within 24 to 48 hours.", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                         </div>
                     </div>
 
@@ -419,17 +423,17 @@ $filters    = json_decode($result[0]['filters'], true);
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><?php echo esc_html("Feed Details"); ?></h5>
+                <h5 class="modal-title"><?php echo esc_html__("Feed Details", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
 
-                <h6>Categories Mapped</h6>
+                <h6><?php esc_html_e("Categories Mapped", "enhanced-e-commerce-for-woocommerce-store"); ?></h6>
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <th>Key</th>
-                            <th>Name</th>
+                            <th><?php esc_html_e("Key", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                            <th><?php esc_html_e("Name", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -446,18 +450,18 @@ $filters    = json_decode($result[0]['filters'], true);
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="3">No categories mapped</td>
+                                <td colspan="3"><?php esc_html_e("No categories mapped", "enhanced-e-commerce-for-woocommerce-store"); ?></td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
 
-                <h6>Attributes Mapped</h6>
+                <h6><?php esc_html_e("Attributes Mapped", "enhanced-e-commerce-for-woocommerce-store"); ?></h6>
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <th>Attribute</th>
-                            <th>Mapped To</th>
+                            <th><?php esc_html_e("Attribute", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                            <th><?php esc_html_e("Mapped To", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -470,19 +474,19 @@ $filters    = json_decode($result[0]['filters'], true);
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="2">No attributes mapped</td>
+                                <td colspan="2"><?php esc_html_e("No attributes mapped", "enhanced-e-commerce-for-woocommerce-store"); ?></td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
 
-                <h6>Filters Applied</h6>
+                <h6><?php esc_html_e("Filters Applied", "enhanced-e-commerce-for-woocommerce-store"); ?></h6>
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <th>Attribute</th>
-                            <th>Condition</th>
-                            <th>Value</th>
+                            <th><?php esc_html_e("Attribute", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                            <th><?php esc_html_e("Condition", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                            <th><?php esc_html_e("Value", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -493,7 +497,7 @@ $filters    = json_decode($result[0]['filters'], true);
                                         <?php
                                         // Map human-friendly labels for common attributes
                                         if ($f['attr'] === 'product_cat') {
-                                            echo 'Product Category';
+                                            esc_html_e('Product Category', 'enhanced-e-commerce-for-woocommerce-store');
                                         } else {
                                             echo esc_html($f['attr']);
                                         }
@@ -514,7 +518,7 @@ $filters    = json_decode($result[0]['filters'], true);
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="3">No filters applied</td>
+                                <td colspan="3"><?php esc_html_e("No filters applied", "enhanced-e-commerce-for-woocommerce-store"); ?></td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -550,7 +554,7 @@ $filters    = json_decode($result[0]['filters'], true);
             </div>
             <div class="col-3 pb-1">
                 <span class="pb-2">
-                    <input class="form-control me-2 " type="search" placeholder="Search" aria-label="Search" id="searchName" name="searchName" aria-controls="product_list_table">
+                    <input class="form-control me-2 " type="search" placeholder="<?php esc_attr_e("Search", "enhanced-e-commerce-for-woocommerce-store"); ?>" aria-label="Search" id="searchName" name="searchName" aria-controls="product_list_table">
                 </span>
             </div>
             <div class="col-12 row pe-0">
@@ -586,14 +590,14 @@ $filters    = json_decode($result[0]['filters'], true);
                     </th>
                     <th scope="col" class="text-center sorting_disabled">
                         <select class="selectStatus" id="selectStatus">
-                            <?php if (in_array('1', $channel_id)) { ?> <option value="1" <?php echo isset($channel_id[0]) && $channel_id[0] == 1 ? 'selected' : '' ?>>GMC Status
-                                </option> <?php } ?>
-                            <?php if (in_array('3', $channel_id)) { ?><option value="3" <?php echo isset($channel_id[0]) && $channel_id[0] == 3 ? 'selected' : '' ?>>Tiktok
-                                    Status</option> <?php } ?>
-                            <?php if (in_array('2', $channel_id)) { ?><option value="2" <?php echo isset($channel_id[0]) && $channel_id[0] == 2 ? 'selected' : '' ?>>Facebook
-                                    Status</option> <?php } ?>
-                            <?php if (in_array('4', $channel_id)) { ?><option value="4" <?php echo isset($channel_id[0]) && $channel_id[0] == 4 ? 'selected' : '' ?>>MMC
-                                    Status</option> <?php } ?>
+                            <?php if (in_array('1', $channel_id)) { ?> <option value="1" <?php echo isset($channel_id[0]) && $channel_id[0] == 1 ? 'selected' : '' ?>>
+                                    <?php esc_html_e("GMC Status", "enhanced-e-commerce-for-woocommerce-store"); ?></option> <?php } ?>
+                            <?php if (in_array('3', $channel_id)) { ?><option value="3" <?php echo isset($channel_id[0]) && $channel_id[0] == 3 ? 'selected' : '' ?>>
+                                    <?php esc_html_e("Tiktok Status", "enhanced-e-commerce-for-woocommerce-store"); ?></option> <?php } ?>
+                            <?php if (in_array('2', $channel_id)) { ?><option value="2" <?php echo isset($channel_id[0]) && $channel_id[0] == 2 ? 'selected' : '' ?>>
+                                    <?php esc_html_e("Facebook Status", "enhanced-e-commerce-for-woocommerce-store"); ?></option> <?php } ?>
+                            <?php if (in_array('4', $channel_id)) { ?><option value="4" <?php echo isset($channel_id[0]) && $channel_id[0] == 4 ? 'selected' : '' ?>>
+                                    <?php esc_html_e("MMC Status", "enhanced-e-commerce-for-woocommerce-store"); ?></option> <?php } ?>
                         </select>
 
                     </th>
@@ -650,7 +654,7 @@ $filters    = json_decode($result[0]['filters'], true);
                                 </select>
                             </div>
                             <div class="col-4 textValue">
-                                <input type="text" class="form-control from-control-overload value" placeholder="Add value" name="value[]">
+                                <input type="text" class="form-control from-control-overload value" placeholder="<?php esc_attr_e("Add value", "enhanced-e-commerce-for-woocommerce-store"); ?>" name="value[]">
                             </div>
                         </div>
                         <div class="col-1">
@@ -701,17 +705,17 @@ $filters    = json_decode($result[0]['filters'], true);
                         <label for="feed_name" class="col-form-label text-dark fs-14 fw-500">
                             <?php esc_html_e("Feed Name", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </label>
-                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="Add a name to your feed for your reference, for example, 'April end-of-season sales' or 'Black Friday sales for the USA'.">
+                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="<?php esc_attr_e("Add a name to your feed for your reference, for example, 'April end-of-season sales' or 'Black Friday sales for the USA'.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                             info
                         </span>
-                        <input type="text" class="form-control fs-14" name="feedName" id="feedName" placeholder="e.g. New Summer Collection">
+                        <input type="text" class="form-control fs-14" name="feedName" id="feedName" placeholder="<?php esc_attr_e("e.g. New Summer Collection", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                     </div>
                     <div class="mb-2 row">
                         <div class="col-5">
                             <label for="auto_sync" class="col-form-label text-dark fs-14 fw-500">
                                 <?php esc_html_e("Auto Sync", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
-                            <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="Turn on this feature to schedule an automated product feed to keep your products up to date with the changes made in the products. You can come and change this any time.">
+                            <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="<?php esc_attr_e("Turn on this feature to schedule an automated product feed to keep your products up to date with the changes made in the products. You can come and change this any time.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                                 info
                             </span>
                         </div>
@@ -724,7 +728,7 @@ $filters    = json_decode($result[0]['filters'], true);
                             <label for="auto_sync_interval" class="col-form-label text-dark fs-14 fw-500">
                                 <?php esc_html_e("Auto Sync Interval", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
-                            <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="Set the number of days to schedule the next auto-sync for the products in this feed. You can come and change this any time.">
+                            <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="<?php esc_attr_e("Set the number of days to schedule the next auto-sync for the products in this feed. You can come and change this any time.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                                 info
                             </span>
                         </div>
@@ -735,7 +739,7 @@ $filters    = json_decode($result[0]['filters'], true);
                             </label>
                             <span>
                                 <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=productlist&utm_campaign=Pricing"><b>
-                                        Upgrade To Pro</b></a>
+                                        <?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></b></a>
                             </span>
                         </div>
                     </div>
@@ -744,19 +748,19 @@ $filters    = json_decode($result[0]['filters'], true);
                             <label for="target_country_feed" class="col-form-label text-dark fs-14 fw-500" name="">
                                 <?php esc_html_e("Target Country", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
-                            <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="Specify the target country for your product feed. Select the country where you intend to promote and sell your products.">
+                            <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="<?php esc_attr_e("Specify the target country for your product feed. Select the country where you intend to promote and sell your products.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                                 info
                             </span>
                         </div>
                         <div class="col-7">
                             <select class="select2 form-select form-select-sm mb-3" aria-label="form-select-sm example" style="width: 100%" name="target_country_feed" id="target_country_feed">
-                                <option value="">Select Country</option>
+                                <option value=""><?php esc_html_e("Select Country", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
                                 <?php
                                 $selecetdCountry = $conv_data['user_country'];
                                 foreach ($contData as $key => $value) {
                                 ?>
                                     <option value="<?php echo esc_attr($value->code) ?>" <?php echo  $selecetdCountry == $value->code ? 'selected = "selecetd"' : '' ?>>
-                                        <?php echo esc_html($value->name) ?></option>"
+                                        <?php echo esc_html($value->name) ?></option>
                                 <?php
                                 }
 
@@ -768,7 +772,7 @@ $filters    = json_decode($result[0]['filters'], true);
                         <label for="auto_sync_interval" class="col-form-label text-dark fs-14 fw-500">
                             <?php esc_html_e("Select Channel", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </label>
-                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="Below is the list of channels that you have linked for product feed. Please note you will not be able to make any changes in the selected channels once product feed process is done.">
+                        <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="<?php esc_attr_e("Below is the list of channels that you have linked for product feed. Please note you will not be able to make any changes in the selected channels once product feed process is done.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                             info
                         </span>
                     </div>
@@ -776,7 +780,7 @@ $filters    = json_decode($result[0]['filters'], true);
                         <div class="form-check form-check-custom">
                             <input class="form-check-input check-height fs-14 errorChannel" type="checkbox" value="<?php echo esc_attr($microsoft_merchant_center_id); ?>" id="mmc_id" name="mmc_id" <?php echo $microsoft_merchant_center_id !== '' ? "checked" : 'disabled' ?>>
                             <label for="" class="col-form-label fs-14 pt-0 text-dark fw-500">
-                                <?php esc_html_e("microsoft Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                <?php esc_html_e("Microsoft Merchant Center Account :", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <label class="col-form-label fs-14 pt-0 fw-400">
                                 <?php echo esc_html(sanitize_text_field($microsoft_merchant_center_id));  ?>
@@ -817,7 +821,7 @@ $filters    = json_decode($result[0]['filters'], true);
                     <input type="hidden" id="autoSyncInterval" name="autoSyncInterval" value="<?php echo esc_attr(sanitize_text_field($result[0]['auto_sync_interval'])); ?>">
                     <input type="hidden" id="edit" name="edit">
                     <input type="hidden" id="loginCustomerId" name="loginCustomerId" value="<?php echo esc_attr($googleDetail->customer_id); ?>">
-                    <input type="hidden" value="<?php echo esc_attr($conv_data['user_domain']); ?>" class="fromfiled" name="url" id="url" placeholder="Enter Website">
+                    <input type="hidden" value="<?php echo esc_attr($conv_data['user_domain']); ?>" class="fromfiled" name="url" id="url" placeholder="<?php esc_attr_e("Enter Website", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                     <input type="hidden" id="is_mapping_update" name="is_mapping_update" value="">
                     <input type="hidden" id="tiktok_catalog_id" name="tiktok_catalog_id" value="<?php echo esc_attr(sanitize_text_field($result[0]['tiktok_catalog_id'])); ?>">
                     <input type="hidden" id="last_sync_date" name="last_sync_date" value="">
@@ -851,7 +855,7 @@ $filters    = json_decode($result[0]['filters'], true);
                     <p class="top-desc pt-2" style="display:none">
                         <?php esc_html_e("Map the categories and other attributed of your WooCommerce products with Conversios categories and attributes. At Conversios we automatically maps your product categories and other attributes to the categories and attributes of the selected channels respectively.", "enhanced-e-commerce-for-woocommerce-store") ?>
                     </p>
-                    <h2 class="top-title text-center">Please select your choice:</h2>
+                    <h2 class="top-title text-center"><?php esc_html_e("Please select your choice:", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
                     <span class="Outofstock fs-12 asterisk"> </span><span class="catCount fs-12 fw-500"></span>
 
                     <div class="tab productButtons">
@@ -1025,7 +1029,7 @@ $filters    = json_decode($result[0]['filters'], true);
                                         <div class="float-end">
                                             <?php
                                             if ($attribute["field"] == 'id') { ?>
-                                                <input type="text" class="form-control" name="product_id_prefix" id="product_id_prefix" placeholder="Add Prefix" value="" <?php echo $disabled_attr == true ? 'readonly=    "readonly"' : '' ?>>
+                                                <input type="text" class="form-control" name="product_id_prefix" id="product_id_prefix" placeholder="<?php esc_attr_e("Add Prefix", "enhanced-e-commerce-for-woocommerce-store"); ?>" value="" <?php echo $disabled_attr == true ? 'readonly=    "readonly"' : '' ?>>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -1041,7 +1045,7 @@ $filters    = json_decode($result[0]['filters'], true);
                                             $TVC_Admin_Helper->tvc_text($attribute["field"], 'number', '', esc_html__('Add shipping flat rate', 'enhanced-e-commerce-for-woocommerce-store'), $sel_val, $require);
                                         } else if ($attribute["field"] === 'tax') {
                                             $sel_val = (isset($ee_mapped_attrs[$attribute["field"]])) ? esc_attr($ee_mapped_attrs[$attribute["field"]]) : esc_attr($sel_val_def);
-                                            $TVC_Admin_Helper->tvc_text($attribute["field"], 'number', '', 'Add TAX flat (%)', $sel_val, $require);
+                                            $TVC_Admin_Helper->tvc_text($attribute["field"], 'number', '', esc_html__('Add TAX flat (%)', 'enhanced-e-commerce-for-woocommerce-store'), $sel_val, $require);
                                         } else if ($attribute["field"] === 'content_language') {
                                             $TVC_Admin_Helper->tvc_language_select($attribute["field"], 'content_language', esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), 'en', $require);
                                         } else if ($attribute["field"] === 'target_country') {
@@ -1226,7 +1230,7 @@ $filters    = json_decode($result[0]['filters'], true);
                         </div>
                         <div class="col-12 p-2">
                             <div style="float:right;">
-                                <label>Product Batch Size <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="If you are facing an issue with the product feed process with the current batch change the size of the batch according to your count of products.">
+                                <label><?php esc_html_e("Product Batch Size", "enhanced-e-commerce-for-woocommerce-store"); ?> <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="<?php esc_attr_e("If you are facing an issue with the product feed process with the current batch change the size of the batch according to your count of products.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                                         info
                                     </span></label>
                                 <select id="product_batch_size" style="border-radius:15px;">
@@ -1251,10 +1255,9 @@ $filters    = json_decode($result[0]['filters'], true);
                     </div>
                     <div style="overflow:auto;" class="pt-2">
                         <div style="" class="allBtn">
-                            <button class="btn btn-soft-primary me-1 ms-1" type="button" id="prevBtn" onclick="nextPrev(-1)" style="min-width:130px; height:38px;">Previous</button>
-                            <button class="btn btn-soft-secondary m-1" type="button" id="nextBtn" onclick="nextPrev(1)" style="height:38px;">Next</button>
-                            <button class="btn btn-soft-primary btn-success m-1" type="button" id="syncBtn" onclick="snyNowAutomatic()" style="display:none;height:38px;">Allow us to complete this
-                                automatically</button>
+                            <button class="btn btn-soft-primary me-1 ms-1" type="button" id="prevBtn" onclick="nextPrev(-1)" style="min-width:130px; height:38px;"><?php esc_html_e("Previous", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
+                            <button class="btn btn-soft-secondary m-1" type="button" id="nextBtn" onclick="nextPrev(1)" style="height:38px;"><?php esc_html_e("Next", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
+                            <button class="btn btn-soft-primary btn-success m-1" type="button" id="syncBtn" onclick="snyNowAutomatic()" style="display:none;height:38px;"><?php esc_html_e("Allow us to complete this automatically", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
                         </div>
                     </div>
 
@@ -1292,7 +1295,7 @@ $filters    = json_decode($result[0]['filters'], true);
                         ),
                     )
                 ); ?>
-                <h3 class="fw-normal pt-3 errorText">Error</h3>
+                <h3 class="fw-normal pt-3 errorText"><?php esc_html_e("Error", "enhanced-e-commerce-for-woocommerce-store"); ?></h3>
                 <span id="conv_save_error_txt" class="mb-1 lh-lg"></span>
             </div>
             <div class="modal-footer border-0 pb-4 mb-1 errorFooter m-auto">
@@ -1316,7 +1319,7 @@ $filters    = json_decode($result[0]['filters'], true);
                 <span id="conv_save_success_txt" class="mb-1 d-flex text-dark justify-content-center fs-16 px-2"></span>
             </div>
             <div class="modal-footer px-4 pb-4 mb-1 modalFooterSuccess">
-                <button class="btn btn-secondary fs-20 fw-normal text-white dismissModal" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-secondary fs-20 fw-normal text-white dismissModal" data-bs-dismiss="modal"><?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
             </div>
         </div>
     </div>

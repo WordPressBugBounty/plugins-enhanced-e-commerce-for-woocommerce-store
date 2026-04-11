@@ -63,12 +63,13 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
 <div id="conv-report-main-div" class="container-fluid conv_report_mainbox p-4">
 
     <div class="row">
-        <div class="d-flex">
-            <div class="conv_pageheading d-flex align-items-end">
-                <h2>
+        <!-- Header & Date Picker -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div class="conv_pageheading d-flex align-items-center m-0">
+                <h2 class="mb-0 fw-bold" style="font-size: 28px;">
                     <?php esc_html_e("Analytics reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </h2>
-                <h5 id="conv_pdf_logo" class="d-none ms-2">by <?php echo wp_kses(
+                <h5 id="conv_pdf_logo" class="d-none ms-3 mb-0">by <?php echo wp_kses(
                                                                     enhancad_get_plugin_image('/admin/images/logo.png', '', '', 'width:120px;'),
                                                                     array(
                                                                         'img' => array(
@@ -80,11 +81,19 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                                                                     )
                                                                 ); ?></h5>
             </div>
-            <div class="ms-auto p-2 bd-highlight">
-                <div id="reportrange" class="dshtpdaterange upgradetopro_badge d-flex" popupopener="generalreport">
-                    <div class="dateclndicn">
+            
+            <div class="d-flex align-items-center">
+                <style>
+                    /* Tooltip for locked date range */
+                    .conv-pro-locked-daterange { transition: all 0.2s ease; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; background-color: #ffffff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+                    .conv-pro-locked-daterange:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+                    .conv-hover-text { transition: color 0.2s ease; }
+                    .conv-hover-text:hover { color: #0284c7 !important; }
+                </style>
+                <div id="reportrange" class="dshtpdaterange conv-pro-locked-daterange d-flex align-items-center gap-2" style="cursor:default;" onclick="jQuery('#conv_reports_pro_nudge_modal').modal('show')">
+                    <div class="dateclndicn d-flex align-items-center text-secondary">
                         <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/claendar-icon.png'),
+                            enhancad_get_plugin_image('/admin/images/claendar-icon.png', '', '', 'width: 18px;'),
                             array(
                                 'img' => array(
                                     'src' => true,
@@ -95,93 +104,101 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                             )
                         ); ?>
                     </div>
-                    <span class="daterangearea report_range_val"></span>
-                    <div class="careticn">
-                        <?php echo wp_kses(
-                            enhancad_get_plugin_image('/admin/images/caret-down.png'),
-                            array(
-                                'img' => array(
-                                    'src' => true,
-                                    'alt' => true,
-                                    'class' => true,
-                                    'style' => true,
-                                ),
-                            )
-                        ); ?>
-                    </div>
+                    <span class="daterangearea report_range_val fw-medium text-dark" style="user-select:none; font-size: 14px;"></span>
+                    <span class="d-flex align-items-center ms-2 conv-hover-text" style="color:#64748b; font-size:13px; font-weight:500; cursor:pointer;" onclick="event.stopPropagation(); window.open('https://www.conversios.io/pricing/?plugin_name=aio&utm_source=woo_aiofree_plugin&utm_medium=daterange_lock&utm_campaign=daterange','_blank')">
+                        <span class="material-symbols-outlined pe-1" style="font-size:15px;">lock</span>Unlock custom range
+                    </span>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex">
+        <!-- Report Tabs Navigation -->
+        <div class="d-flex flex-wrap align-items-center mb-4" style="gap: 12px; row-gap: 12px;">
 
-            <div class="conv_pageheading">
-                <a href="admin.php?page=conversios-analytics-reports" class="btn <?php echo esc_attr($ga4general_cls); ?> bg-white me-3">
+                <a href="admin.php?page=conversios-analytics-reports" class="btn <?php echo esc_attr($ga4general_cls); ?> bg-white text-nowrap d-flex align-items-center justify-content-center shadow-sm" style="border-radius: 8px; font-weight: 500; border-color: #e2e8f0;">
                     <?php esc_html_e("General Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
                 </a>
-                <a class="btn <?php echo esc_attr($ga4page_cls); ?> bg-white me-3" data-bs-toggle="modal" data-bs-target="#upgradetopromodalotherReports">
+                <a href="javascript:void(0)" class="btn <?php echo esc_attr($ga4page_cls); ?> bg-white text-nowrap d-flex align-items-center justify-content-center shadow-sm" style="border-radius: 8px; font-weight: 500; border-color: #e2e8f0;" onclick="jQuery('#conv_reports_pro_nudge_modal').modal('show')">
                     <?php esc_html_e("Ecommerce Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
+                    <span class="badge ms-2" style="background:#e0f2fe;color:#0369a1;font-size:10px;padding:3px 6px;vertical-align:middle;line-height: normal; border-radius: 4px;">Pro</span>
                 </a>
-                <a class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white me-3" data-bs-toggle="modal" data-bs-target="#upgradetopromodalotherReports">
+                <a href="javascript:void(0)" class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white text-nowrap d-flex align-items-center justify-content-center shadow-sm" style="border-radius: 8px; font-weight: 500; border-color: #e2e8f0;" onclick="jQuery('#conv_reports_pro_nudge_modal').modal('show')">
                     <?php esc_html_e("Google Ads Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
+                    <span class="badge ms-2" style="background:#e0f2fe;color:#0369a1;font-size:10px;padding:3px 6px;vertical-align:middle;line-height: normal; border-radius: 4px;">Pro</span>
                 </a>
-                <a class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white me-3" data-bs-toggle="modal" data-bs-target="#upgradetopromodalotherReports">
+                <a href="javascript:void(0)" class="btn <?php echo esc_attr($gadspage_cls); ?> bg-white text-nowrap d-flex align-items-center justify-content-center shadow-sm" style="border-radius: 8px; font-weight: 500; border-color: #e2e8f0;" onclick="jQuery('#conv_reports_pro_nudge_modal').modal('show')">
                     <?php esc_html_e("Facebook (Meta) Reports", "enhanced-e-commerce-for-woocommerce-store") ?>
+                    <span class="badge ms-2" style="background:#e0f2fe;color:#0369a1;font-size:10px;padding:3px 6px;vertical-align:middle;line-height: normal; border-radius: 4px;">Pro</span>
                 </a>
-            </div>
+
             <?php if ($ga4_measurement_id != "" && $g_mail != "") { ?>
-                <div id="conv_report_opright" class="ms-auto p-2 bd-highlight d-flex">
-                    <h4 class="conv-link-blue d-flex pe-2" data-bs-toggle="modal" data-bs-target="#schedule_email_modal">
-                        <span class="material-symbols-outlined conv-link-blue pe-1">check_circle</span>
-                        <?php esc_html_e("Schedule Email", "enhanced-e-commerce-for-woocommerce-store") ?>
-                    </h4>
-                    <h4 class="conv-link-blue d-flex" data-bs-toggle="modal" data-bs-target="#convpdflogoModal">
-                        <span class="material-symbols-outlined conv-link-blue pe-1">cloud_download</span>
-                        <?php esc_html_e("Download PDF", "enhanced-e-commerce-for-woocommerce-store") ?>
-                    </h4>
+                <div id="conv_report_opright" class="ms-auto d-flex flex-wrap align-items-center justify-content-end" style="gap:20px;">
+                    <a class="d-flex align-items-center text-nowrap" data-bs-toggle="modal" data-bs-target="#schedule_email_modal" style="cursor:pointer; color: #475569; font-weight: 500; font-size: 14px; text-decoration: none;">
+                        <span class="material-symbols-outlined pe-1" style="font-size:18px; color: #64748b;">check_circle</span>
+                        <span class="conv-hover-text"><?php esc_html_e("Schedule Email", "enhanced-e-commerce-for-woocommerce-store") ?></span>
+                    </a>
+                    <a class="d-flex align-items-center text-nowrap" data-bs-toggle="modal" data-bs-target="#convpdflogoModal" style="cursor:pointer; color: #475569; font-weight: 500; font-size: 14px; text-decoration: none;">
+                        <span class="material-symbols-outlined pe-1" style="font-size:18px; color: #64748b;">cloud_download</span>
+                        <span class="conv-hover-text"><?php esc_html_e("Download PDF", "enhanced-e-commerce-for-woocommerce-store") ?></span>
+                    </a>
+                    <style>
+                        .conv-hover-text { transition: color 0.2s ease; }
+                        .conv-hover-text:hover { color: #0284c7; }
+                    </style>
                 </div>
             <?php } ?>
         </div>
 
         <?php if ($subpage == "ga4general" && (empty($g_mail) || empty($ga4_analytic_account_id))) { ?>
-            <div class="alert alert-info mt-4 w-100" role="alert">
-                <div class="mx-auto" style="max-width: 600px;">
-                    <h5 class="alert-heading">Connect Google Analytics to View Reports</h5>
-                    <p>To view reports in the plugin, please connect your Google account and complete the Google Analytics setup:</p>
-                    <ol class="ms-0">
-                        <li>Click the button below to start the connection.</li>
-                        <li>Authorize access through the Google authentication screen.</li>
-                        <li>Select your <strong>Google Analytics Account ID</strong>.</li>
-                        <li>Choose your <strong>Measurement ID</strong> and click <strong>Save</strong>.</li>
-                        <li>After saving, a success message will appear. Click <strong>"View Reports"</strong> to access your analytics.</li>
+            <!-- Alert unchanged -->
+            <div class="alert alert-info mt-3 w-100 shadow-sm border-0 rounded-4" role="alert">
+                <div class="mx-auto" style="max-width: 600px; padding: 10px;">
+                    <h5 class="alert-heading fw-bold mb-3"><?php esc_html_e("Connect Google Analytics to View Reports", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
+                    <p class="text-secondary"><?php esc_html_e("To view reports in the plugin, please connect your Google account and complete the Google Analytics setup:", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
+                    <ol class="ms-0 ps-3 text-secondary mb-4">
+                        <li class="pb-2"><?php esc_html_e("Click the button below to start the connection.", "enhanced-e-commerce-for-woocommerce-store"); ?></li>
+                        <li class="pb-2"><?php esc_html_e("Authorize access through the Google authentication screen.", "enhanced-e-commerce-for-woocommerce-store"); ?></li>
+                        <li class="pb-2"><?php echo sprintf(esc_html__("Select your %sGoogle Analytics Account ID%s.", "enhanced-e-commerce-for-woocommerce-store"), '<strong class="text-dark">', '</strong>'); ?></li>
+                        <li class="pb-2"><?php echo sprintf(esc_html__("Choose your %sMeasurement ID%s and click %sSave%s.", "enhanced-e-commerce-for-woocommerce-store"), '<strong class="text-dark">', '</strong>', '<strong class="text-dark">', '</strong>'); ?></li>
+                        <li class="pb-1"><?php echo sprintf(esc_html__("After saving, a success message will appear. Click %s\"View Reports\"%s to access your analytics.", "enhanced-e-commerce-for-woocommerce-store"), '<strong class="text-dark">', '</strong>'); ?></li>
                     </ol>
-                    <div class="mt-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prega4AuthModal">
-                            Click here to connect Google
+                    <div>
+                        <button type="button" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm" style="border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#prega4AuthModal">
+                            <?php esc_html_e("Click here to connect Google", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </button>
                     </div>
                 </div>
             </div>
         <?php } else { ?>
-            <div class="gadetails" style="padding: 16px 11px;background-color: #f0f0f1;font-size: medium;">
-                <div style="display: flex; flex-wrap: wrap; align-items: center;">
-                    <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Google Analytics Account ID :</strong>
-                        <?php echo !empty($ga4_analytic_account_id) ? esc_attr($ga4_analytic_account_id) : '-'; ?>
+            <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: #ffffff;">
+                <div class="card-body d-flex flex-wrap align-items-center justify-content-between p-3 gap-3">
+                    <div class="d-flex flex-wrap align-items-center gap-4">
+                        <div class="d-flex flex-column">
+                            <span class="text-secondary" style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;"><?php esc_html_e("Google Analytics Account ID", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
+                            <span class="text-dark fw-bold" style="font-size: 15px;"><?php echo !empty($ga4_analytic_account_id) ? esc_attr($ga4_analytic_account_id) : '-'; ?></span>
+                        </div>
+                        <div class="border-start d-none d-md-block" style="height: 30px; border-color: #e2e8f0 !important;"></div>
+                        <div class="d-flex flex-column">
+                            <span class="text-secondary" style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;"><?php esc_html_e("Google Analytics Measurement ID", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
+                            <span class="text-dark fw-bold" style="font-size: 15px;"><?php echo !empty($ga4_measurement_id) ? esc_attr($ga4_measurement_id) : '-'; ?></span>
+                        </div>
+                        <div class="border-start d-none d-md-block" style="height: 30px; border-color: #e2e8f0 !important;"></div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="text-secondary" style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px;"><?php esc_html_e("Status", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
+                            <?php if (!empty($ga4_measurement_id)) { ?>
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1" style="font-size: 12px; font-weight: 600; border-radius: 6px;">
+                                    <span class="material-symbols-outlined d-inline-block align-middle pe-1" style="font-size: 14px; margin-top: -2px;">verified</span><?php esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            <?php } else { ?>
+                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-2 py-1" style="font-size: 12px; font-weight: 600; border-radius: 6px;">
+                                    <span class="material-symbols-outlined d-inline-block align-middle pe-1" style="font-size: 14px; margin-top: -2px;">error</span><?php esc_html_e("Not Connected", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </span>
+                            <?php } ?>
+                        </div>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Google Analytics Measurement ID :</strong>
-                        <?php echo !empty($ga4_measurement_id) ? esc_attr($ga4_measurement_id) : '-'; ?>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Status:</strong>
-                        <span style="margin-left: 6px; color: <?php echo !empty($ga4_measurement_id) ? 'green' : 'red'; ?>;">
-                            <?php echo !empty($ga4_measurement_id) ? 'Connected' : 'Not Connected'; ?>
-                        </span>
-                    </div>
-                    <div style="text-align: right; margin-bottom: 10px; margin-right: 30px;">
-                        <button id="opengasettings" style="padding: 4px 7px; background-color: #1967D2; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                            Edit Details
+                    <div class="ms-auto" style="text-align: right;">
+                        <button id="opengasettings" class="btn btn-outline-primary d-flex align-items-center fw-medium shadow-sm py-2 px-3" style="border-radius: 8px;">
+                            <span class="material-symbols-outlined pe-2" style="font-size: 18px;">edit</span><?php esc_html_e("Edit Details", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </button>
                     </div>
                 </div>
@@ -201,26 +218,26 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                                 <?php if ($g_mail == "") { ?>
                                     <button id="googleSignInBtn" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 shadow-sm google_connect_url">
                                         <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" alt="Google Logo" width="20" height="20">
-                                        <span class="fw-semibold">Sign in with Google</span>
+                                        <span class="fw-semibold"><?php esc_html_e("Sign in with Google", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                                     </button>
                                 <?php  } else { ?>
                                     <button id="googleSignInBtn" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 shadow-sm google_connect_url">
                                         <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/g-logo.png'); ?>" alt="Google Logo" width="20" height="20">
-                                        <span class="fw-semibold">Reauthorize</span>
+                                        <span class="fw-semibold"><?php esc_html_e("Reauthorize", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                                     </button>
                                 <?php } ?>
                             </div>
 
                             <!-- Right Column: Why we need it -->
                             <div class="col-md-7">
-                                <p class="mb-2 h4"><strong>Why do we need your permission?</strong></p>
+                                <p class="mb-2 h4"><strong><?php esc_html_e("Why do we need your permission?", "enhanced-e-commerce-for-woocommerce-store"); ?></strong></p>
                                 <ul class="mb-0">
-                                    <li class="pt-2"><strong>Access to Google Analytics 4 (GA4):</strong> We use your GA4 data to generate intelligent profit predictions based on your traffic, conversion, and revenue metrics.</li>
-                                    <li class="pt-2">Your data is used only to show you insights <br> we never store or share your analytics data with anyone.</li>
-                                    <li class="pt-2">You can revoke access at any time by visiting your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">Google account permissions</a>.</li>
+                                    <li class="pt-2"><strong><?php esc_html_e("Access to Google Analytics 4 (GA4):", "enhanced-e-commerce-for-woocommerce-store"); ?></strong> <?php esc_html_e("We use your GA4 data to generate intelligent profit predictions based on your traffic, conversion, and revenue metrics.", "enhanced-e-commerce-for-woocommerce-store"); ?></li>
+                                    <li class="pt-2"><?php echo sprintf(esc_html__("Your data is used only to show you insights %s we never store or share your analytics data with anyone.", "enhanced-e-commerce-for-woocommerce-store"), '<br>'); ?></li>
+                                    <li class="pt-2"><?php echo sprintf(esc_html__("You can revoke access at any time by visiting your %sGoogle account permissions%s.", "enhanced-e-commerce-for-woocommerce-store"), '<a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">', '</a>'); ?></li>
                                 </ul>
 
-                                <p class="text-danger text-fw-bold">Please use Chrome browser if you face any issues during setup.</p>
+                                <p class="text-danger text-fw-bold"><?php esc_html_e("Please use Chrome browser if you face any issues during setup.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
 
                             </div>
                         </div>
@@ -240,13 +257,13 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                             data-bs-dismiss="modal" aria-label="Close"></button>
                         <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png'); ?>"
                             alt="GA4 Logo" width="48" height="48" class="mb-2">
-                        <h5 class="modal-title fw-semibold" id="ga4ModalLabel">Connect Your GA4 Property</h5>
+                        <h5 class="modal-title fw-semibold" id="ga4ModalLabel"><?php esc_html_e("Connect Your GA4 Property", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
                     </div>
 
                     <div class="modal-body px-4 pt-4">
                         <div id="ga4ErrorMessage" class="alert alert-danger d-none" role="alert"></div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px; justify-content: center;" class="alert alert-info">
-                            <strong>Successfully logged in with:</strong>
+                            <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                             <span style="margin-left: 6px;"><?php echo !empty($g_mail) ? esc_attr($g_mail) : '-'; ?></span>
                             <span class="conv-link-blue ps-0 ms-2 tvc_google_signinbtn">
                                 <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -255,16 +272,16 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                         <div id="configurationMessage"
                             class="alert alert-danger d-none p-1 small mx-1 mb-4"
                             role="alert">
-                            To view reports, please configure the following and save.
+                            <?php esc_html_e("To view reports, please configure the following and save.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </div>
                         <form id="ga4SelectionForm" style="margin: 0px 30px;">
 
                             <!-- GA4 Account -->
                             <div class="mb-4 d-flex align-items-center">
                                 <div class="flex-grow-1">
-                                    <label for="ga4_analytic_account_id" class="form-label fw-bolder">GA4 Account</label>
+                                    <label for="ga4_analytic_account_id" class="form-label fw-bolder"><?php esc_html_e("GA4 Account", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
                                     <select class="form-select" id="ga4_analytic_account_id" name="ga4_account">
-                                        <option value="">-- Select Account --</option>
+                                        <option value=""><?php esc_html_e("-- Select Account --", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
                                     </select>
                                 </div>
                             </div>
@@ -272,9 +289,9 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                             <!-- GA4 Property -->
                             <div class="mb-4 d-flex align-items-center">
                                 <div class="flex-grow-1">
-                                    <label for="measurement_id" class="form-label fw-bolder">GA4 Measurement ID</label>
+                                    <label for="measurement_id" class="form-label fw-bolder"><?php esc_html_e("GA4 Measurement ID", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
                                     <select class="form-select" id="measurement_id" name="ga4_property">
-                                        <option value="">-- Select Measurement ID --</option>
+                                        <option value=""><?php esc_html_e("-- Select Measurement ID --", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
                                     </select>
                                 </div>
                             </div>
@@ -342,14 +359,14 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5 class="modal-title" id="convpdflogoModalLabel">Download Report</h5>
+                <h5 class="modal-title" id="convpdflogoModalLabel"><?php esc_html_e("Download Report", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <!-- Size Message -->
             <div class="alert alert-success text-center text-underline text-success">
                 <a href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=modal_setlogo&utm_campaign=upgrade" target="_blank">
-                    Upgrade to Premium to set your logo in report PDF
+                    <?php esc_html_e("Upgrade to Premium to set your logo in report PDF", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </a>
             </div>
 
@@ -357,7 +374,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
             <div class="modal-body d-flex justify-content-center align-items-center flex-column disabledsection">
                 <!-- Image Preview Container -->
                 <div id="image-preview-container" class="border d-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 36px; background-color: #f8f9fa;">
-                    <span id="no-image-text" class="text-muted small">No image selected</span>
+                    <span id="no-image-text" class="text-muted small"><?php esc_html_e("No image selected", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                     <?php echo wp_kses(
                         enhancad_get_plugin_image('/admin/images/claendar-icon.png', 'Selected Media Preview', 'd-none img-fluid', 'max-width: 120px; max-height: 36px;', 'selected-media-preview'),
                         array(
@@ -374,11 +391,11 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                 <!-- Buttons -->
                 <div class="d-flex justify-content-between align-items-center">
                     <button id="select-media-button" class="btn btn-outline-primary me-2">
-                        <i class="bi bi-upload"></i> Select Logo
+                        <i class="bi bi-upload"></i> <?php esc_html_e("Select Logo", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </button>
                     <input type="hidden" id="attachment-id" name="attachment_id" value="">
                     <button id="save-logo-button" class="btn btn-success">
-                        <i class="bi bi-save"></i> Save
+                        <i class="bi bi-save"></i> <?php esc_html_e("Save", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </button>
                 </div>
             </div>
@@ -386,7 +403,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" id="conv-download-pdf" class="btn btn-primary w-100">
-                    <i class="bi bi-file-earmark-pdf"></i>Download Now
+                    <i class="bi bi-file-earmark-pdf"></i><?php esc_html_e("Download Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
             </div>
         </div>
@@ -410,17 +427,18 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                         <br>
                         <?php esc_html_e("data-driven insights", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
+                    
+                    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin:10px 0 20px 0;font-size:13px;color:#92400e;text-align:left;">
+                        <strong><?php esc_html_e("🔒 PRO FEATURE: ", "enhanced-e-commerce-for-woocommerce-store"); ?></strong> <?php esc_html_e("Customizing Smart Email schedules and alternate sender addresses is available in the Pro version. Upgrade to configure daily, weekly, or monthly automated reports exactly how you want.", "enhanced-e-commerce-for-woocommerce-store"); ?> <br><a href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=smart_emails_modal&utm_campaign=upgrade" target="_blank" style="color:#0284c7;font-weight:bold;margin-top:6px;display:inline-block;"><?php esc_html_e("Upgrade to Pro →", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+                    </div>
+
                     <?php
-                    if ($sch_email_toggle_check == '0') { //enabled
-                        $switch_cls = 'convEmail_default_cls_enabled';
-                        $switch_checked = 'checked';
-                        $txtcls = "form-fields-dark";
-                    } else { //disabled
-                        $switch_cls = 'convEmail_default_cls_disabled';
-                        $switch_checked = '';
-                        $txtcls = "form-fields-light";
-                    } ?>
-                    <div class="schedule-formbox">
+                    // Pro restriction: force UI to disabled view
+                    $switch_cls = 'convEmail_default_cls_disabled';
+                    $switch_checked = 'disabled';
+                    $txtcls = "form-fields-light"; 
+                    ?>
+                    <div class="schedule-formbox" style="opacity: 0.7; pointer-events: none;">
                         <div class="toggle-switch">
                             <div class="form-check form-switch">
                                 <div class="form-check form-switch">
@@ -438,7 +456,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                             </div>
                             <div class="form-box">
                                 <h5>
-                                    <?php esc_html_e("To get emails on your alternate address. ", "enhanced-e-commerce-for-woocommerce-store"); ?><a style="color:  #1085F1;cursor: pointer;" href="https://www.conversios.io/pricing/?utm_source=EE+Plugin+User+Interface&amp;utm_medium=dashboard&amp;utm_campaign=Upsell+at+Conversios" target="_blank"><?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+                                    <?php esc_html_e("To get emails on your alternate address. ", "enhanced-e-commerce-for-woocommerce-store"); ?><a style="color:  #1085F1;cursor: pointer;"><?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                                 </h5>
                             </div>
                             <div class="form-box">
@@ -451,13 +469,13 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
 
                             <div class="form-box">
                                 <h5>
-                                    <?php esc_html_e("By default, you will receive a Weekly report in your email inbox.", "enhanced-e-commerce-for-woocommerce-store"); ?><br><?php esc_html_e("To get report ", "enhanced-e-commerce-for-woocommerce-store"); ?><strong>Daily</strong>
-                                    . <a href="https://www.conversios.io/pricing/?utm_source=EE+Plugin+User+Interface&amp;utm_medium=dashboard&amp;utm_campaign=Upsell+at+Conversios" target="_blank" style="color:  #1085F1;"><?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+                                    <?php esc_html_e("By default, you will receive a Weekly report in your email inbox.", "enhanced-e-commerce-for-woocommerce-store"); ?><br><?php esc_html_e("To get report ", "enhanced-e-commerce-for-woocommerce-store"); ?><strong><?php esc_html_e("Daily", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
+                                    . <a style="color:  #1085F1;"><?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                                 </h5>
                             </div>
                             <div class="form-box">
                                 <div class="save">
-                                    <button id="schedule_email_save_config" class="btn  save-btn"><?php esc_html_e("Save", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
+                                    <button class="btn save-btn" disabled style="opacity: 0.5; background: #94a3b8; border-color: #94a3b8;"><?php esc_html_e("Save (Pro Only)", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
                                 </div>
                             </div>
                             <div class="form-box">
@@ -469,8 +487,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                             <div id="schedule_email_alert" class="d-none">
                                 <div class="alert alert-info" role="alert">
                                     <div id="schedule_email_alert_msg"></div>
-                                    <div role="button" class="fw-bold pt-3" data-bs-dismiss="modal">Click here to close
-                                        the popup</div>
+                                    <div role="button" class="fw-bold pt-3" data-bs-dismiss="modal"><?php esc_html_e("Click here to close the popup", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
                                 </div>
 
                             </div>
@@ -511,6 +528,65 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
         </div>
     </div>
 </div>
+
+<!-- Reports Pro Nudge Modal -->
+<div class="modal fade" id="conv_reports_pro_nudge_modal" tabindex="-1" aria-labelledby="convReportsNudgeLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:520px;">
+    <div class="modal-content" style="border:none;border-radius:16px;overflow:hidden;">
+      <div class="modal-body p-0">
+        <!-- Header gradient -->
+        <div style="background:linear-gradient(135deg,#0284c7,#0369a1);padding:28px 28px 20px;text-align:center;">
+          <span class="material-symbols-outlined" style="font-size:44px;color:#fff;opacity:0.9;">analytics</span>
+          <h4 style="color:#fff;font-weight:700;margin:12px 0 4px;font-size:20px;"><?php esc_html_e("Unlock Advanced Reports", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
+          <p style="color:#e0f2fe;font-size:13px;margin:0;"><?php esc_html_e("Get deeper insights with Ecommerce, Google Ads & Facebook reporting", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
+        </div>
+        <!-- Content -->
+        <div style="padding:24px 28px;">
+          <!-- What Pro unlocks -->
+          <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:16px;margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;"><?php esc_html_e("🚀 Pro Unlocks", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#0c4a6e;">
+                <span class="material-symbols-outlined" style="color:#0284c7;font-size:18px;">star</span>
+                <?php esc_html_e("Ecommerce Reports — Orders, Revenue, Top Products", "enhanced-e-commerce-for-woocommerce-store"); ?>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#0c4a6e;">
+                <span class="material-symbols-outlined" style="color:#0284c7;font-size:18px;">star</span>
+                <?php esc_html_e("Google Ads & Facebook Reports — Campaign & ROAS Data", "enhanced-e-commerce-for-woocommerce-store"); ?>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#0c4a6e;">
+                <span class="material-symbols-outlined" style="color:#0284c7;font-size:18px;">star</span>
+                <?php esc_html_e("Full 30/90 Day Trends & Custom Date Range", "enhanced-e-commerce-for-woocommerce-store"); ?>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#0c4a6e;">
+                <span class="material-symbols-outlined" style="color:#0284c7;font-size:18px;">star</span>
+                <?php esc_html_e("Revenue by Source/Medium Attribution", "enhanced-e-commerce-for-woocommerce-store"); ?>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#0c4a6e;">
+                <span class="material-symbols-outlined" style="color:#0284c7;font-size:18px;">star</span>
+                <?php esc_html_e("Scheduled Email Reports (Daily/Weekly/Monthly)", "enhanced-e-commerce-for-woocommerce-store"); ?>
+              </div>
+            </div>
+          </div>
+          <!-- Impact note -->
+          <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#92400e;">
+            <strong><?php esc_html_e("💡 Did you know?", "enhanced-e-commerce-for-woocommerce-store"); ?></strong> <?php esc_html_e("Businesses using advanced analytics reports make 23% more profitable decisions. Don't fly blind — see the full picture.", "enhanced-e-commerce-for-woocommerce-store"); ?>
+          </div>
+          <!-- Buttons -->
+          <div style="display:flex;gap:10px;">
+            <a href="https://www.conversios.io/pricing/?plugin_name=aio&utm_source=woo_aiofree_plugin&utm_medium=reports_nudge_modal&utm_campaign=upgrade_cta" target="_blank" class="btn" style="flex:1;background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;font-weight:600;font-size:14px;border-radius:10px;padding:12px;">
+              <?php esc_html_e("Upgrade to Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
+            </a>
+            <button type="button" class="btn" data-bs-dismiss="modal" style="flex:1;background:#f1f5f9;color:#334155;font-weight:600;font-size:14px;border-radius:10px;padding:12px;border:1px solid #e2e8f0;">
+              <?php esc_html_e("Continue Free →", "enhanced-e-commerce-for-woocommerce-store"); ?>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Reports Pro Nudge Modal -->
 
 <script>
     jQuery(document).ready(function() {

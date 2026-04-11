@@ -72,6 +72,44 @@ class CustomApi
     }
   }
 
+  public function getNotificationBanner($postData)
+  {
+    try {
+      $url = $this->apiDomain . '/resourceCenter/getNotificationBanner';
+      $header = array(
+        "Authorization" => "Bearer " . $this->token,
+        "Content-Type"  => "application/json"
+      );
+      
+      $args = array(
+        'timeout' => 15,
+        'headers' => $header,
+        'method'  => 'POST',
+        'body'    => wp_json_encode($postData)
+      );
+
+      $request = wp_remote_post(esc_url_raw($url), $args);
+      $return = new \stdClass();
+
+      if (!is_wp_error($request)) {
+        $body = json_decode(wp_remote_retrieve_body($request), true);
+        if (isset($body['data']) && !empty($body['data'])) {
+          $return->error = false;
+          $return->data = $body['data'];
+          return $return;
+        }
+      }
+      $return->error = false;
+      $return->data = null;
+      return $return;
+    } catch (Exception $e) {
+      $return = new \stdClass();
+      $return->error = true;
+      $return->data = null;
+      return $return;
+    }
+  }
+
   public function update_app_status($caller, $status = 1)
   {
     try {

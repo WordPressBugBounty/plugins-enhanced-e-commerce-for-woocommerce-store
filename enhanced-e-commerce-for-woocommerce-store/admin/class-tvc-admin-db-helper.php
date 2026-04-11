@@ -66,8 +66,8 @@ if (! class_exists('TVC_Admin_DB_Helper')) {
 				return;
 			} else {
 				$tablename = esc_sql($wpdb->prefix . $table);
-				$sql = $wpdb->prepare("select count(*) from `$tablename` where {$key}=%s", $value);
-				return $wpdb->get_var($sql);
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				return $wpdb->get_var( $wpdb->prepare("select count(*) from `$tablename` where {$key}=%s", $value) );
 			}
 		}
 
@@ -84,22 +84,24 @@ if (! class_exists('TVC_Admin_DB_Helper')) {
 				if ($operator == "IN") {
 					if ($concat == true) {
 						$fields = implode(',\'_\',', $fields);
-						$sql = $wpdb->prepare("select CONCAT(%s) as p_c_id from `$tablename` where {$key} IN {$val}", $fields);
-						return $wpdb->get_col($sql);
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						return $wpdb->get_col( $wpdb->prepare("select CONCAT(%s) as p_c_id from `$tablename` where {$key} IN {$val}", $fields) );
 					} else {
 						$fields = esc_sql(implode('`,`', $fields));
-						$sql = $wpdb->prepare("select `$fields` from %i where {$key} IN {$val}", $tablename);
+						// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter
+						$sql = $wpdb->prepare("select `$fields` from `$tablename` where {$key} IN {$val}");
+						// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 						return $wpdb->get_results($sql, ARRAY_A);
 					}
 				} else { // when $operator is '='
 					if ($concat == true) {
 						$fields = implode(',\'_\',', $fields);
-						$sql = $wpdb->prepare("select CONCAT(%s) as p_c_id from `$tablename` where {$key}=%s", $fields, $val);
-						return $wpdb->get_col($sql);
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						return $wpdb->get_col( $wpdb->prepare("select CONCAT(%s) as p_c_id from `$tablename` where {$key}=%s", $fields, $val) );
 					} else {
 						$fields = esc_sql(implode('`,`', $fields));
-						$sql = $wpdb->prepare("select `$fields` from `$tablename` where {$key} = %s", $val);
-						return $wpdb->get_results($sql, ARRAY_A);
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						return $wpdb->get_results( $wpdb->prepare("select `$fields` from `$tablename` where {$key} = %s", $val), ARRAY_A );
 					}
 				}
 			}
@@ -126,8 +128,10 @@ if (! class_exists('TVC_Admin_DB_Helper')) {
 				$sql = $wpdb->prepare("select * from %i ORDER BY id DESC LIMIT 1", $tablename);
 				if ($fields) {
 					$fields = implode('`,`', $fields);
-					$sql = $wpdb->prepare("select `$fields` from %i ORDER BY id DESC LIMIT 1", $tablename);
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$sql = $wpdb->prepare("select `$fields` from `$tablename` ORDER BY id DESC LIMIT 1");
 				}
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				return $wpdb->get_row($sql, ARRAY_A);
 			}
 		}
@@ -139,8 +143,8 @@ if (! class_exists('TVC_Admin_DB_Helper')) {
 				return;
 			} else {
 				$tablename = esc_sql($wpdb->prefix . $table);
-				$sql = $wpdb->prepare("select`$fields_by`, count(*) as count from %i GROUP BY `$fields_by` ORDER BY count DESC ", $tablename);
-				return $wpdb->get_results($sql, ARRAY_A);
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				return $wpdb->get_results( $wpdb->prepare("select `$fields_by`, count(*) as count from `$tablename` GROUP BY `$fields_by` ORDER BY count DESC ") , ARRAY_A);
 			}
 		}
 

@@ -1062,6 +1062,7 @@ class TVC_Admin_Helper
   {
     global $wpdb;
     $table = esc_sql($table);
+    // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
     return $wpdb->get_results("SELECT column_name as field FROM information_schema.columns WHERE table_name = '$table'");
   }
 
@@ -1073,6 +1074,7 @@ class TVC_Admin_Helper
     }
     $table = esc_sql($table);
     $columns = implode('`,`', $columns);
+    // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
     return $wpdb->get_results("SELECT  DISTINCT `$columns` as field FROM `$table`");
   }
   /* message notification */

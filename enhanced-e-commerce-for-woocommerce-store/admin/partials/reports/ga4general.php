@@ -1,4 +1,5 @@
 <?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 $ee_options = unserialize(get_option('ee_options'));
 $g_mail = get_option('ee_customer_gmail');
 $ga4_measurement_id = isset($ee_options['gm_id']) && $ee_options['gm_id'] != "" ? $ee_options['gm_id'] : "";
@@ -181,7 +182,7 @@ $ga4_analytic_account_id = isset($ee_options['ga4_analytic_account_id']) && $ee_
 
                     </tbody>
                     </table>
-                    <a class="conv_viewfre_link conv-link-blue float-end p-3 fw-bold upgradetopro_badge" popupopener="generalreport">
+                    <a class="conv_viewfre_link conv-link-blue float-end p-3 fw-bold" onclick="jQuery('#conv_reports_pro_nudge_modal').modal('show');">
                         View Full Report
                     </a>
                 </div>

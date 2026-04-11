@@ -107,7 +107,7 @@ if ($subscriptionId != "") {
             </div>
             <div class="col-12 flex-row pt-3">
                 <div class="col-12 py-2">
-                    <label>Do not have an account?</label>
+                    <label><?php esc_html_e("Do not have an account?", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
                     <a id="conv_create_gmc_new_btn" class="" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#conv_create_gmc_new">
                         <?php esc_html_e("Create New", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </a>
@@ -115,8 +115,8 @@ if ($subscriptionId != "") {
             </div>
             <div class="col-12 flex-row pt-3 row">
                 <div class="col-5">
-                    <label class="text-dark">Site Verified (Click red icon to verify now)</label>
-                    <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you verify your website, you let Google know that you're the owner of the website. You're the website owner if you have the ability to make edits to your website content. Not the website owner? Work together with your website owner or admin to verify the website.">
+                    <label class="text-dark"><?php esc_html_e("Site Verified (Click red icon to verify now)", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
+                    <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="<?php esc_attr_e("When you verify your website, you let Google know that you're the owner of the website. You're the website owner if you have the ability to make edits to your website content. Not the website owner? Work together with your website owner or admin to verify the website.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                         info
                     </span>
                 </div>
@@ -136,8 +136,8 @@ if ($subscriptionId != "") {
             </div>
             <div class="col-12 flex-row pt-3 row domain_claimDiv">
                 <div class="col-5">
-                    <label class="text-dark">Domain Claim (Click red icon to claim now)</label>
-                    <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="When you claim your website, it gives you the right to use your website in connection with your Merchant Center account. First you need to verify your website and then you can claim it. Only the user who verified the website can claim it.">
+                    <label class="text-dark"><?php esc_html_e("Domain Claim (Click red icon to claim now)", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
+                    <span class="material-symbols-outlined fs-6" data-bs-toggle="tooltip" data-bs-placement="right" data-container="body" title="<?php esc_attr_e("When you claim your website, it gives you the right to use your website in connection with your Merchant Center account. First you need to verify your website and then you can claim it. Only the user who verified the website can claim it.", "enhanced-e-commerce-for-woocommerce-store"); ?>">
                         info
                     </span>
                 </div>
@@ -156,10 +156,10 @@ if ($subscriptionId != "") {
             </div>
             <div style="width: 100%; margin-top: 20px;">
                 <button class="conv-btn-connect-enabled-gmc" style="padding: 4px 15px; background-color: #0062ee; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                    Save
+                    <?php esc_html_e("Save", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
                 <button id="closeButtongmc" style="padding: 4px 15px; background-color: #5c636a; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
-                    Close
+                    <?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
             </div>
         </div>
@@ -204,9 +204,9 @@ if ($subscriptionId != "") {
                             </div>
                             <form id="conv_form_new_gmc">
                                 <div class="mb-3">
-                                    <input class="form-control mb-4" type="text" id="gmc_website_url" name="website_url" value="<?php echo esc_attr($tvc_store_data['user_domain']); ?>" placeholder="Enter Website" required>
+                                    <input class="form-control mb-4" type="text" id="gmc_website_url" name="website_url" value="<?php echo esc_attr($tvc_store_data['user_domain']); ?>" placeholder="<?php esc_attr_e("Enter Website", "enhanced-e-commerce-for-woocommerce-store"); ?>" required>
 
-                                    <input class="form-control mb-4" type="text" id="gmc_email_address" name="email_address" value="<?php echo isset($tvc_data['g_mail']) === TRUE ? esc_attr($tvc_data['g_mail']) : ""; ?>" placeholder="Enter email address" required>
+                                    <input class="form-control mb-4" type="text" id="gmc_email_address" name="email_address" value="<?php echo isset($tvc_data['g_mail']) === TRUE ? esc_attr($tvc_data['g_mail']) : ""; ?>" placeholder="<?php esc_attr_e("Enter email address", "enhanced-e-commerce-for-woocommerce-store"); ?>" required>
 
                                     <div class="form-check mb-4">
                                         <input class="form-check-input" type="checkbox" id="gmc_adult_content" name="adult_content" value="1" style="float:none">
@@ -218,7 +218,7 @@ if ($subscriptionId != "") {
                                         </label>
                                     </div>
 
-                                    <input class="form-control mb-0" type="text" id="gmc_store_name" name="store_name" value="" placeholder="Enter Store Name" required>
+                                    <input class="form-control mb-0" type="text" id="gmc_store_name" name="store_name" value="" placeholder="<?php esc_attr_e("Enter Store Name", "enhanced-e-commerce-for-woocommerce-store"); ?>" required>
                                     <small class="mb-4">
                                         <?php esc_html_e("This name will appear in your Shopping Ads.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </small>
@@ -345,11 +345,11 @@ if ($subscriptionId != "") {
                         ),
                     )
                 ); ?>
-                <h3 class="fw-normal pt-3">Error</h3>
+                <h3 class="fw-normal pt-3"><?php esc_html_e("Error", "enhanced-e-commerce-for-woocommerce-store"); ?></h3>
                 <span id="conv_save_error_txt" class="mb-1 lh-lg"></span>
             </div>
             <div class="modal-footer border-0 pb-4 mb-1">
-                <button class="btn conv-yellow-bg m-auto text-white" data-bs-dismiss="modal">Close</button>
+                <button class="btn conv-yellow-bg m-auto text-white" data-bs-dismiss="modal"><?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
             </div>
         </div>
     </div>
@@ -378,7 +378,7 @@ if ($subscriptionId != "") {
                 <span id="conv_save_success_txt_" class="mb-1 lh-lg d-flex px-2"></span>
             </div>
             <div class="modal-footer border-0 pb-4 mb-1">
-                <button type="button" class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal">Done!</button>
+                <button type="button" class="btn conv-blue-bg m-auto text-white" data-bs-dismiss="modal"><?php esc_html_e("Done!", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
             </div>
         </div>
     </div>
@@ -428,8 +428,9 @@ if ($subscriptionId != "") {
             <div class="modal-body text-center p-4">
                 <div class="connected-content">
                     <h4><?php esc_html_e("Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
-                    <p><span class="fw-bolder">Google Merchant Center Account -</span> <span class="gmcAccount fw-bolder"></span>
-                        Has Been Saved Successfully</p>
+                    <p>
+                        <?php printf(esc_html__("%sGoogle Merchant Center Account -%s %s Has Been Saved Successfully", "enhanced-e-commerce-for-woocommerce-store"), '<span class="fw-bolder">', '</span> <span class="gmcAccount fw-bolder"></span>', ''); ?>
+                    </p>
                     <p class="my-3"><?php esc_html_e("By this step you have expanded your product presence on Google Search, Google
                         Shopping,
                         Google Images, YouTube, Google Maps, and more, you're maximizing your reach and unlocking new
@@ -460,14 +461,13 @@ if ($subscriptionId != "") {
                                             <?php esc_html_e("A feed management tool centralizes updates, optimizes listings, and boosts data quality, streamlining product feed management for better efficiency and effectiveness.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                         </p>
                                         <div class="attribute-btn">
-                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&createfeed=yes'); ?>" class="btn btn-primary common-bt">Create Feed</a>
+                                            <a href="<?php echo esc_url_raw('admin.php?page=conversios-google-shopping-feed&createfeed=yes'); ?>" class="btn btn-primary common-bt"><?php esc_html_e("Create Feed", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <span>
-                                <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>">Connect
-                                    to Facebook Business Account</a>
+                                <a href="<?php echo esc_url('admin.php?page=conversios-google-shopping-feed&subpage=metasettings'); ?>"><?php esc_html_e("Connect to Facebook Business Account", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                             </span>
 
                         </div>

@@ -101,6 +101,10 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
       $tablename = $wpdb->prefix . "ee_product_feed";
       $query = $wpdb->prepare('SHOW TABLES LIKE %s', '%' . $wpdb->esc_like($tablename) . '%');
       if ($wpdb->get_var($query) === $tablename) {
+        
+        // Fix for "Row size too large" on legacy COMPACT tables
+        $wpdb->query("ALTER TABLE `{$tablename}` ROW_FORMAT=DYNAMIC");
+
         $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('is_default') . '%');
         $result = $wpdb->get_var($query);
         if ($result == '') {
@@ -125,35 +129,51 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
         }
 
         $querytiktok = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('tiktok_status') . '%');
-        $resulttiktok = $wpdb->get_var($querytiktok);
-        if ($resulttiktok == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `tiktok_status` varchar(200) NULL  AFTER `tiktok_catalog_id`", $tablename));
+        $resulttiktok = $wpdb->get_row($querytiktok);
+        if (empty($resulttiktok)) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `tiktok_status` TEXT NULL  AFTER `tiktok_catalog_id`", $tablename));
+        } elseif (isset($resulttiktok->Type) && stripos($resulttiktok->Type, 'varchar(200)') !== false) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i MODIFY `tiktok_status` TEXT NULL", $tablename));
         }
 
         $queryfb = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('fb_status') . '%');
-        $resultfb = $wpdb->get_var($queryfb);
-        if ($resultfb == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `fb_status` varchar(200) NULL  AFTER `tiktok_status`", $tablename));
+        $resultfb = $wpdb->get_row($queryfb);
+        if (empty($resultfb)) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `fb_status` TEXT NULL  AFTER `tiktok_status`", $tablename));
+        } elseif (isset($resultfb->Type) && stripos($resultfb->Type, 'varchar(200)') !== false) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i MODIFY `fb_status` TEXT NULL", $tablename));
         }
+        
         $queryms = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('ms_status') . '%');
-        $resultms = $wpdb->get_var($queryms);
-        if ($resultms == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `ms_status` varchar(200) NULL  AFTER `fb_status`", $tablename));
+        $resultms = $wpdb->get_row($queryms);
+        if (empty($resultms)) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `ms_status` TEXT NULL  AFTER `fb_status`", $tablename));
+        } elseif (isset($resultms->Type) && stripos($resultms->Type, 'varchar(200)') !== false) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i MODIFY `ms_status` TEXT NULL", $tablename));
         }
+        
         $queryIncProductVar = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('IncProductVar') . '%');
-        $resultIncProductVar = $wpdb->get_var($queryIncProductVar);
-        if ($resultIncProductVar == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `IncProductVar` varchar(200) NULL  AFTER `ms_status`", $tablename));
+        $resultIncProductVar = $wpdb->get_row($queryIncProductVar);
+        if (empty($resultIncProductVar)) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `IncProductVar` varchar(20) NOT NULL DEFAULT '0' AFTER `ms_status`", $tablename));
+        } elseif (isset($resultIncProductVar->Type) && stripos($resultIncProductVar->Type, 'varchar(200)') !== false) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i MODIFY `IncProductVar` varchar(20) NOT NULL DEFAULT '0'", $tablename));
         }
+        
         $queryIncDefProductVar = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('IncDefProductVar') . '%');
-        $resultIncDefProductVar = $wpdb->get_var($queryIncDefProductVar);
-        if ($resultIncDefProductVar == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `IncDefProductVar` varchar(200) NULL  AFTER `IncProductVar`", $tablename));
+        $resultIncDefProductVar = $wpdb->get_row($queryIncDefProductVar);
+        if (empty($resultIncDefProductVar)) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `IncDefProductVar` varchar(20) NOT NULL DEFAULT '0' AFTER `IncProductVar`", $tablename));
+        } elseif (isset($resultIncDefProductVar->Type) && stripos($resultIncDefProductVar->Type, 'varchar(200)') !== false) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i MODIFY `IncDefProductVar` varchar(20) NOT NULL DEFAULT '0'", $tablename));
         }
+        
         $queryIncLowestPriceProductVar = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('IncLowestPriceProductVar') . '%');
-        $resultIncLowestPriceProductVar = $wpdb->get_var($queryIncLowestPriceProductVar);
-        if ($resultIncLowestPriceProductVar == '') {
-          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `IncLowestPriceProductVar` varchar(200) NULL  AFTER `IncDefProductVar`", $tablename));
+        $resultIncLowestPriceProductVar = $wpdb->get_row($queryIncLowestPriceProductVar);
+        if (empty($resultIncLowestPriceProductVar)) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i ADD `IncLowestPriceProductVar` varchar(20) NOT NULL DEFAULT '0' AFTER `IncDefProductVar`", $tablename));
+        } elseif (isset($resultIncLowestPriceProductVar->Type) && stripos($resultIncLowestPriceProductVar->Type, 'varchar(200)') !== false) {
+          $wpdb->query($wpdb->prepare("ALTER TABLE %i MODIFY `IncLowestPriceProductVar` varchar(20) NOT NULL DEFAULT '0'", $tablename));
         }
       } else {
         $sql_create = "CREATE TABLE `$tablename` (  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -184,12 +204,12 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
                                                       `target_country` varchar(50) DEFAULT NULL,
                                                       `is_super_feed` int(11) NOT NULL DEFAULT '0',
                                                       `tiktok_catalog_id` varchar(100) DEFAULT NULL,
-                                                      `tiktok_status` varchar(200) DEFAULT NULL,
-                                                      `fb_status` varchar(200) DEFAULT NULL,
-                                                      `ms_status` varchar(200) DEFAULT NULL,
-                                                      `IncProductVar` VARCHAR(200) NOT NULL DEFAULT '0',
-                                                      `IncDefProductVar` VARCHAR(200) NOT NULL DEFAULT '0',
-                                                      `IncLowestPriceProductVar` VARCHAR(200) NOT NULL DEFAULT '0',
+                                                      `tiktok_status` TEXT DEFAULT NULL,
+                                                      `fb_status` TEXT DEFAULT NULL,
+                                                      `ms_status` TEXT DEFAULT NULL,
+                                                      `IncProductVar` VARCHAR(20) NOT NULL DEFAULT '0',
+                                                      `IncDefProductVar` VARCHAR(20) NOT NULL DEFAULT '0',
+                                                      `IncLowestPriceProductVar` VARCHAR(20) NOT NULL DEFAULT '0',
                                                       PRIMARY KEY (`id`) );";
         if (maybe_create_table($tablename, $sql_create)) {
         }
@@ -360,8 +380,8 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
           // $pids = $TVC_Admin_DB_Helper->tvc_get_results_in_array('ee_product_sync_data', $where, array('w_product_id'), true, 'IN'); 
           $tablenamesync = $wpdb->prefix . "ee_product_sync_data";
           $fields = implode(',\'_\',', array('w_product_id'));
-          $sql = $wpdb->prepare("select CONCAT($fields) as p_c_id from %i where $where", $tablenamesync);
-          $pids = $wpdb->get_col($sql);
+          // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+          $pids = $wpdb->get_col( $wpdb->prepare("select CONCAT($fields) as p_c_id from %i where $where", $tablenamesync) );
           foreach ($products as $key => $product) {
             $t_data = array(
               'w_product_id' => esc_sql($product->w_product_id),
@@ -686,9 +706,10 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
             //Delete the variant product which does not have children
             if (!empty($p_map_attribute) && isset($p_map_attribute['deleted_products']) && !empty($p_map_attribute['deleted_products'])) {
 
-              $dids = implode(', ', array_map('intval', $p_map_attribute['deleted_products']));
-              $placeholders = rtrim(str_repeat('%d, ', count($p_map_attribute['deleted_products'])), ', ');
-              $wpdb->query($wpdb->prepare("DELETE from {$wpdb->prefix}ee_product_sync_data WHERE w_product_id IN ($placeholders)", $dids));
+              $deleted_products = array_map('intval', $p_map_attribute['deleted_products']);
+              $placeholders = rtrim(str_repeat('%d, ', count($deleted_products)), ', ');
+              // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+              $wpdb->query( $wpdb->prepare("DELETE from {$wpdb->prefix}ee_product_sync_data WHERE w_product_id IN ($placeholders)", ...$deleted_products) );
             }
             if (!empty($p_map_attribute) && isset($p_map_attribute['items']) && !empty($p_map_attribute['items'])) {
               // call product sync API

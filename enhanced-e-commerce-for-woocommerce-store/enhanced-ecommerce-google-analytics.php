@@ -16,7 +16,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.15
+ * Version:           7.2.16
  * Author:            Conversios
  * Author URI:        https://conversios.io
  * License:           GPLv3
@@ -121,7 +121,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.2.15');
+define('PLUGIN_TVC_VERSION', '7.2.16');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 
@@ -155,7 +155,7 @@ if (!defined('ENHANCAD_PLUGIN_URL')) {
 }
 
 if (!defined('TVC_API_CALL_URL')) {
-    define('TVC_API_CALL_URL', 'https://connect.conversios.io/laravelapi/public/api/v1');
+    define('TVC_API_CALL_URL', 'https://connect.conversios.io/laravelapi/public/api/v2');
 }
 if (!defined('TVC_API_CALL_URL_TEMP')) {
     define('TVC_API_CALL_URL_TEMP', 'https://connect.conversios.io/laravelapi/public');
@@ -210,12 +210,15 @@ function my_plugin_update_db()
             return;
         }
 
+        // Fix for "Row size too large" on legacy COMPACT tables
+        $wpdb->query("ALTER TABLE `$table_name` ROW_FORMAT=DYNAMIC");
+
         // Column name => column definition
         $columns = [
-            'ms_status' => "VARCHAR(200) DEFAULT NULL",
-            'IncProductVar' => "VARCHAR(200) DEFAULT 1",
-            'IncDefProductVar' => "VARCHAR(200) DEFAULT 0",
-            'IncLowestPriceProductVar' => "VARCHAR(200) DEFAULT 0",
+            'ms_status' => "TEXT DEFAULT NULL",
+            'IncProductVar' => "VARCHAR(20) DEFAULT 1",
+            'IncDefProductVar' => "VARCHAR(20) DEFAULT 0",
+            'IncLowestPriceProductVar' => "VARCHAR(20) DEFAULT 0",
         ];
 
         foreach ($columns as $column_name => $column_definition) {

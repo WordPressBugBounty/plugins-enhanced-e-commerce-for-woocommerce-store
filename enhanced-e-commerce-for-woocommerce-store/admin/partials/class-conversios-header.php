@@ -51,23 +51,9 @@ if (class_exists('Conversios_Header') === FALSE) {
 			$is_localhost_error = get_option('conv_localhost_error');
 
 			?>
-				<!--- Promotion box start -->
-
-				<div id="conversioshead_notice" class="promobandtop fs-16" style="background:linear-gradient(90deg, #4A029A 0%, #180230 100%);">
-					<div class="d-flex justify-content-center fixedcontainer_conversios_notice align-items-center">
-						<div class="promobandmsg text-white d-flex align-items-center" style="word: spacing 7px;">
-								<span class="fs-3 me-2">📢</span>
-							Server-Side Tracking with Unlimited Product Feeds, FB CAPI & Google Ads Enhanced Conversions
-					</div>
-                        <div class="prmoupgrdbtn ms-2">
-                            <a href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=headerbanner&utm_campaign=freetopaid&plugin_name=aio" class="btn button fs-6 fw-bold" style="background: #07BB4F; color:#fff;" target="_blank">
-								Upgrade to Pro
-							</a>
-                        </div>
-                    </div>
-				</div>
-
-				<!--- Promotion box end -->
+				<!--- Notification Bar (AJAX) -->
+				<div id="convaio-notification-bar" style="display:none; padding:10px; text-align:center; transition: all .3s ease;"></div>
+				
 				<?php
 				if ($is_localhost_error) {
 					echo '<div class="alert alert-danger">';
@@ -176,13 +162,98 @@ if (class_exists('Conversios_Header') === FALSE) {
 				$menu_list = $this->conversios_menu_list();
 				if (!empty($menu_list)) {
 				?>
-					<header id="conversioshead" class="border-bottom" style="background: #e6f3ff">
+					<style>
+					/* Premium Header Styles */
+					#conversioshead {
+						background: #ffffff !important;
+						box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+						border-bottom: 1px solid #e5e7eb !important;
+						z-index: 100;
+						position: relative;
+					}
+					#conversioshead .navbar {
+						padding-top: 8px !important;
+						padding-bottom: 8px !important;
+					}
+					#conversioshead .nav-link {
+						color: #4b5563 !important;
+						transition: all 0.2s ease-in-out;
+						padding: 6px 12px !important;
+						margin: 0 4px;
+						border-radius: 6px;
+						border: none !important;
+						box-shadow: none !important;
+						text-decoration: none !important;
+					}
+					#conversioshead .nav-link:hover {
+						color: #0369a1 !important;
+						background-color: transparent !important;
+						border: none !important;
+						box-shadow: none !important;
+						text-decoration: none !important;
+						outline: none !important;
+					}
+					#conversioshead .nav-link.text-rich-blue {
+						color: #0284c7 !important;
+						font-weight: 600;
+						background-color: #e0f2fe;
+					}
+					#conversioshead .badge-new {
+						background: #ecfdf5;
+						color: #059669;
+						border: 1px solid #10b981;
+						font-size: 9px;
+						font-weight: 700;
+						text-transform: uppercase;
+						letter-spacing: 0.5px;
+						padding: 1px 5px;
+						border-radius: 4px;
+						position: absolute;
+						top: -4px;
+						right: -12px;
+						box-shadow: none;
+					}
+					#conversioshead .action-pill {
+						color: #4b5563;
+						background-color: #f3f4f6;
+						transition: all 0.2s ease;
+						padding: 4px 12px;
+						border-radius: 20px;
+						display: flex;
+						align-items: center;
+						gap: 6px;
+						text-decoration: none;
+						border: 1px solid transparent;
+					}
+					#conversioshead .action-pill label {
+						cursor: pointer;
+						margin: 0;
+						font-weight: 500;
+						font-size: 13px;
+					}
+					#conversioshead .action-pill:hover {
+						background-color: #e5e7eb;
+						color: #111827;
+						border-color: #d1d5db;
+					}
+					.conv-plan-pill {
+						background-color: #fefce8;
+						color: #b45309;
+						border: 1px solid #fde047;
+						transition: all 0.2s ease;
+					}
+					.conv-plan-pill:hover {
+						background-color: #fef08a;
+						color: #92400e;
+					}
+					</style>
+					<header id="conversioshead">
 						<div class="container-fluid col-12 p-0">
-							<nav class="navbar navbar-expand-lg navbar-light ps-4 p-0" style="">
-								<div class="container-fluid py-0">
+							<nav class="navbar navbar-expand-lg navbar-light ps-4 pe-4">
+								<div class="container-fluid py-0 px-0">
 									<a class="navbar-brand link-dark fs-16 fw-400">
 										<?php echo wp_kses(
-											enhancad_get_plugin_image('/admin/images/logo.png', '', '', 'width: 120px;'),
+											enhancad_get_plugin_image('/admin/images/logo.png', '', '', 'width: 140px; margin-right: 15px;'),
 											array(
 												'img' => array(
 													'src' => true,
@@ -194,7 +265,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 										); ?>
 									</a>
 									<div class="collapse navbar-collapse" id="navbarSupportedContent">
-										<ul class="navbar-nav me-auto mb-lg-0">
+										<ul class="navbar-nav me-auto mb-lg-0 align-items-center">
 											<?php
 											foreach ($menu_list as $key => $value) {
 												$value['title'] = str_replace(array(" & Insights", " Management"), " ", $value['title']);
@@ -206,71 +277,68 @@ if (class_exists('Conversios_Header') === FALSE) {
 														$menu_url = $this->site_url . $value['page'];
 													}
 
-													$openinnew = "";
+													$openinnew = false;
 													if ($key == "conversios-pricings") {
 														$menu_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro";
-														$openinnew = "target='_blank'";
+														$openinnew = true;
 													}
 													$is_parent_menu = "";
-													$is_parent_menu_link = "";
 													if (isset($value['sub_menus']) && !empty($value['sub_menus'])) {
 														$is_parent_menu = "dropdown";
 													}
 											?>
-													<li class="nav-item fs-14 mt-1 fw-400 <?php echo esc_attr($active); ?> <?php echo esc_attr($is_parent_menu); ?>">
+													<li class="nav-item fs-14 fw-400 <?php echo esc_attr($is_parent_menu); ?>">
 														<?php if ($is_parent_menu == "") { ?>
-															<a class="nav-link text-<?php echo esc_attr($is_active); ?> " aria-current="page" href="<?php echo esc_url($menu_url); ?>" <?php echo esc_attr($openinnew); ?>>
+															<a class="nav-link text-<?php echo esc_attr($active ? $active : 'secondary'); ?> " aria-current="page" href="<?php echo esc_url($menu_url); ?>" <?php if ( $openinnew ) { echo 'target="_blank"'; } ?>>
 																<?php echo esc_attr($value['title']); ?>
 															</a>
 														<?php } else { ?>
-															<a class="new-badge nav-link dropdown-toggle text-<?php echo esc_attr($is_active); ?> " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+															<a class="nav-link dropdown-toggle text-<?php echo esc_attr($active ? $active : 'secondary'); ?> " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 																<?php echo esc_attr($value['title']); ?>
 															</a>
-															<ul class="dropdown-menu fs-12 fw-400" aria-labelledby="navbarDropdown">
+															<ul class="dropdown-menu fs-13 fw-400 shadow-sm border-0 mt-2" aria-labelledby="navbarDropdown" style="border-radius:8px;">
 																<?php
 																foreach ($value['sub_menus'] as $sub_key => $sub_value) {
 																	$sub_menu_url = $this->site_url . $sub_value['page'];
 																?>
 																	<li>
-																		<a class="dropdown-item" href="<?php echo esc_url($sub_menu_url); ?>">
+																		<a class="dropdown-item py-2" href="<?php echo esc_url($sub_menu_url); ?>">
 																			<?php echo esc_attr($sub_value['title']); ?>
 																		</a>
 																	</li>
-																<?php }
-																?>
+																<?php } ?>
 															</ul>
 														<?php } ?>
-
 													</li>
 											<?php
 												}
 											} ?>
 
-											<li class="nav-item fs-14 mt-1 fw-400 position-relative">
-												<a class="nav-link text-secondary" aria-current="page" href="https://www.conversios.io/website-tracking-checker-tool/?utm_source=woo_aiofree_plugin&amp;utm_medium=topmenu&amp;utm_campaign=trackingcheckedr" target="_blank">
-													<span>Tracking Checker Tool</span>
-													<span class="badge-new">New</span>
+											<li class="nav-item fs-14 fw-400 ms-2 position-relative">
+												<a class="nav-link text-secondary" style="position:relative;" aria-current="page" href="https://www.conversios.io/website-tracking-checker-tool/?utm_source=woo_aiofree_plugin&amp;utm_medium=topmenu&amp;utm_campaign=trackingcheckedr" target="_blank">
+													<span><?php esc_html_e( 'Tracking Checker Tool', 'enhanced-e-commerce-for-woocommerce-store' ); ?></span>
+													<span class="badge-new"><?php esc_html_e( 'New', 'enhanced-e-commerce-for-woocommerce-store' ); ?></span>
 												</a>
 											</li>
 										</ul>
-										<div class="d-flex align-items-center">
+										<div class="d-flex align-items-center gap-2">
 											<?php
 											$plan_name = esc_html__("Free Plan", "enhanced-e-commerce-for-woocommerce-store");
 											?>
-											<a href="javascript:void(0)" class="btn btn-warning rounded-pill text-dark border-0 fw-bold fs-12 px-2 py-0" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
+											<a href="javascript:void(0)" class="btn conv-plan-pill rounded-pill fw-bold fs-12 px-3 py-1 me-2" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
 												<?php echo esc_attr($plan_name) ?>
 											</a>
-											<a target="_blank" class="d-none ms-2 fs-12 fw-400 px-2 py-0 fw-bold btn-newgreen text-white rounded-pill text-center" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
+											<a target="_blank" class="d-none fs-12 fw-400 px-3 py-1 fw-bold btn-newgreen text-white rounded-pill text-center me-2" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
 												<?php esc_html_e("Get Premium", "enhanced-e-commerce-for-woocommerce-store"); ?>
 											</a>
-											<a target="_blank" title="help center" class="px-2 py-0 text-dark lh-0" href="<?php echo esc_url('https://www.conversios.io/docs-category/woocommerce-2/?utm_source=woo_aiofree_plugin&utm_medium=top_menu&utm_campaign=help_center'); ?>" style="lh-0">
-												<!-- <u><?php esc_html_e("Help Center", "enhanced-e-commerce-for-woocommerce-store"); ?></u> -->
-												<span class="material-symbols-outlined">help_center</span>
+											<a target="_blank" title="<?php esc_attr_e("Help Center", "enhanced-e-commerce-for-woocommerce-store"); ?>" class="action-pill" href="<?php echo esc_url('https://www.conversios.io/docs-category/aio-free/?utm_source=woo_aiofree_plugin&utm_medium=top_menu&utm_campaign=help_center'); ?>">
+												<span class="material-symbols-outlined" style="font-size: 18px;">help_center</span>
+												<label><?php esc_html_e("Docs", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
 											</a>
-											<a target="_blank" href="https://conversios.freshdesk.com/support/tickets/new" id="conv_freshwork_chat" title="Support" class="btn p-0 lh-0">
-												<span class="material-symbols-outlined">sms</span>
+											<a target="_blank" href="https://conversios.freshdesk.com/support/tickets/new" id="conv_freshwork_chat" title="<?php esc_attr_e("Support", "enhanced-e-commerce-for-woocommerce-store"); ?>" class="action-pill">
+												<span class="material-symbols-outlined" style="font-size: 18px;">sms</span>
+												<label><?php esc_html_e("Support", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
 											</a>
-
 										</div>
 									</div>
 								</div>

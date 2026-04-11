@@ -419,22 +419,22 @@ if ($edit_id > 0) {
         <h2 class="nav-tab-wrapper">
             <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=gmc')); ?>" class="nav-tab <?php echo (!isset($_GET['subpage']) || $_GET['subpage'] === 'gmc') ? 'nav-tab-active' : ''; ?>">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/google_channel_logo.png'); ?>" alt="GMC" style="width: 30px; vertical-align: middle;">
-                Google Merchant Center
+                <?php esc_html_e("Google Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
             </a>
 
             <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=microsoft')); ?>" class="nav-tab <?php echo (isset($_GET['subpage']) && $_GET['subpage'] === 'microsoft') ? 'nav-tab-active' : ''; ?>">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms-logo.png'); ?>" alt="Microsoft" style="width: 30px; vertical-align: middle; margin-right: 5px;">
-                Microsoft Merchant Center
+                <?php esc_html_e("Microsoft Merchant Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
             </a>
 
             <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=tiktok')); ?>" class="nav-tab <?php echo (isset($_GET['subpage']) && $_GET['subpage'] === 'tiktok') ? 'nav-tab-active' : ''; ?>">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_tiktok_logo.png'); ?>" alt="TikTok" style="width: 28px; vertical-align: middle; margin-right: 5px;">
-                TikTok Business Center
+                <?php esc_html_e("TikTok Business Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
             </a>
 
             <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=meta')); ?>" class="nav-tab <?php echo (isset($_GET['subpage']) && $_GET['subpage'] === 'meta') ? 'nav-tab-active' : ''; ?>">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png'); ?>" alt="Meta" style="width: 30px; vertical-align: middle; margin-right: 5px;">
-                Meta Business Center
+                <?php esc_html_e("Meta Business Center", "enhanced-e-commerce-for-woocommerce-store"); ?>
             </a>
         </h2>
     </div>
@@ -446,22 +446,28 @@ if ($edit_id > 0) {
             <div class="gmcdetails" style="padding: 16px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Successfully logged in with:</strong>
+                        <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px;"><?php echo !empty($g_mail) ? esc_attr($g_mail) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Merchant ID:</strong>
-                        <?php echo !empty($google_merchant_center_id) ? esc_attr($google_merchant_center_id) : '-'; ?>
+                        <strong><?php esc_html_e("Merchant ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
+                        <span style="margin-left: 6px;"><?php echo !empty($google_merchant_center_id) ? esc_attr($google_merchant_center_id) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Status:</strong>
+                        <strong><?php esc_html_e("Status:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px; color: <?php echo !empty($google_merchant_center_id) ? 'green' : 'red'; ?>;">
-                            <?php echo !empty($google_merchant_center_id) ? 'Connected' : 'Disconnected'; ?>
+                            <?php 
+                               if (!empty($google_merchant_center_id)) {
+                                   esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               } else {
+                                   esc_html_e("Disconnected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               }
+                            ?>
                         </span>
                     </div>
                     <div style="text-align: right; margin-bottom: 10px; margin-right: 30px;">
                         <button id="opengmcsettings" style="padding: 4px 7px; background-color: #1967D2; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                            Edit Details
+                            <?php esc_html_e("Edit Details", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </button>
                     </div>
                 </div>
@@ -470,22 +476,22 @@ if ($edit_id > 0) {
                 <div>
                     <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
-                        Oops! No feeds found yet — start by creating one.
+                        <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
                     <div class="get-started-card">
                         <div class="get-started-header">
                             <div class="get-started-icon">🚀</div>
-                            <h2>Let's Get Started!</h2>
+                            <h2><?php esc_html_e("Let's Get Started!", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
                         </div>
                         <p class="get-started-message">
-                            Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.
+                            <?php esc_html_e("Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </p>
                         <div class="create-btn-wrapper">
                             <button class="get-started-secondary-btn"
                                 name="create_new_feed"
                                 id="create_new_feed"
                                 <?php echo $not_connected_any_gmc ? 'disabled' : ''; ?>>
-                                🛠️ Create New Feed
+                                🛠️ <?php esc_html_e("Create New Feed", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </button>
                         </div>
                     </div>
@@ -494,9 +500,9 @@ if ($edit_id > 0) {
         <?php } else { ?>
             <div class="gmcnotconfigured" style="width: 95.5%; margin: 0 auto; padding: 30px 20px; text-align: center;">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Setup Required" style="margin-bottom: 20px; height: 200px;" />
-                <p style="font-size: 16px; color: #555;">Google Merchant Center is not configured yet.</p>
+                <p style="font-size: 16px; color: #555;"><?php esc_html_e("Google Merchant Center is not configured yet.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
                 <button id="opengmcsettings" style="padding: 10px 20px; background-color: #28a745; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                    Configure Now
+                    <?php esc_html_e("Configure Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
             </div>
         <?php } ?>
@@ -506,22 +512,28 @@ if ($edit_id > 0) {
             <div class="mmcdetails" style="padding: 16px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Successfully logged in with:</strong>
+                        <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px;"><?php echo !empty($ms_mail) ? esc_attr($ms_mail) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Catalog ID:</strong>
-                        <?php echo !empty($microsoft_catalog_id) ? esc_attr($microsoft_catalog_id) : '-'; ?>
+                        <strong><?php esc_html_e("Catalog ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
+                        <span style="margin-left: 6px;"><?php echo !empty($microsoft_catalog_id) ? esc_attr($microsoft_catalog_id) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Status:</strong>
+                        <strong><?php esc_html_e("Status:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px; color: <?php echo !empty($microsoft_catalog_id) ? 'green' : 'red'; ?>;">
-                            <?php echo !empty($microsoft_catalog_id) ? 'Connected' : 'Disconnected'; ?>
+                            <?php 
+                               if (!empty($microsoft_catalog_id)) {
+                                   esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               } else {
+                                   esc_html_e("Disconnected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               }
+                            ?>
                         </span>
                     </div>
                     <div style="text-align: right; margin-bottom: 10px; margin-right: 30px;">
                         <button id="openmmcsettings" style="padding: 4px 7px; background-color: #1967D2; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                            Edit Details
+                            <?php esc_html_e("Edit Details", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </button>
                     </div>
                 </div>
@@ -530,22 +542,22 @@ if ($edit_id > 0) {
                 <div>
                     <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
-                        Oops! No feeds found yet — start by creating one.
+                        <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
                     <div class="get-started-card">
                         <div class="get-started-header">
                             <div class="get-started-icon">🚀</div>
-                            <h2>Let's Get Started!</h2>
+                            <h2><?php esc_html_e("Let's Get Started!", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
                         </div>
                         <p class="get-started-message">
-                            Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.
+                            <?php esc_html_e("Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </p>
                         <div class="create-btn-wrapper">
                             <button class="get-started-secondary-btn"
                                 name="create_new_feed"
                                 id="create_new_feed"
                                 <?php echo $not_connected_any_gmc ? 'disabled' : ''; ?>>
-                                🛠️ Create New Feed
+                                🛠️ <?php esc_html_e("Create New Feed", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </button>
                         </div>
                     </div>
@@ -554,9 +566,9 @@ if ($edit_id > 0) {
         <?php } else { ?>
             <div class="mmcnotconfigured" style="width: 95.5%; margin: 0 auto; padding: 30px 20px; text-align: center;">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Setup Required" style="margin-bottom: 20px; height: 200px;" />
-                <p style="font-size: 16px; color: #555;">Microsoft Merchant Center is not configured yet.</p>
+                <p style="font-size: 16px; color: #555;"><?php esc_html_e("Microsoft Merchant Center is not configured yet.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
                 <button id="openmmcsettings" style="padding: 10px 20px; background-color: #28a745; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                    Configure Now
+                    <?php esc_html_e("Configure Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
             </div>
         <?php } ?>
@@ -566,22 +578,28 @@ if ($edit_id > 0) {
             <div class="tiktokdetails" style="padding: 16px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Successfully logged in with:</strong>
+                        <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px;"><?php echo !empty($tiktok_email) ? esc_attr($tiktok_email) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Business ID:</strong>
-                        <?php echo !empty($tiktok_business_account) ? esc_attr($tiktok_business_account) : '-'; ?>
+                        <strong><?php esc_html_e("Business ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
+                        <span style="margin-left: 6px;"><?php echo !empty($tiktok_business_account) ? esc_attr($tiktok_business_account) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Status:</strong>
+                        <strong><?php esc_html_e("Status:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px; color: <?php echo !empty($tiktok_business_account) ? 'green' : 'red'; ?>;">
-                            <?php echo !empty($tiktok_business_account) ? 'Connected' : 'Disconnected'; ?>
+                            <?php 
+                               if (!empty($tiktok_business_account)) {
+                                   esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               } else {
+                                   esc_html_e("Disconnected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               }
+                            ?>
                         </span>
                     </div>
                     <div style="text-align: right; margin-bottom: 10px; margin-right: 30px;">
                         <button id="opentiktoksettings" style="padding: 4px 7px; background-color: #1967D2; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                            Edit Details
+                            <?php esc_html_e("Edit Details", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </button>
                     </div>
                 </div>
@@ -590,22 +608,22 @@ if ($edit_id > 0) {
                 <div>
                     <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
-                        Oops! No feeds found yet — start by creating one.
+                        <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
                     <div class="get-started-card">
                         <div class="get-started-header">
                             <div class="get-started-icon">🚀</div>
-                            <h2>Let's Get Started!</h2>
+                            <h2><?php esc_html_e("Let's Get Started!", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
                         </div>
                         <p class="get-started-message">
-                            Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.
+                            <?php esc_html_e("Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </p>
                         <div class="create-btn-wrapper">
                             <button class="get-started-secondary-btn"
                                 name="create_new_feed"
                                 id="create_new_feed"
                                 <?php echo $not_connected_any_gmc ? 'disabled' : ''; ?>>
-                                🛠️ Create New Feed
+                                🛠️ <?php esc_html_e("Create New Feed", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </button>
                         </div>
                     </div>
@@ -614,9 +632,9 @@ if ($edit_id > 0) {
         <?php } else { ?>
             <div class="tiktoknotconfigured" style="width: 95.5%; margin: 0 auto; padding: 30px 20px; text-align: center;">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Setup Required" style="margin-bottom: 20px; height: 200px;" />
-                <p style="font-size: 16px; color: #555;">Tiktok Business Catalog Is Not Configured Yet.</p>
+                <p style="font-size: 16px; color: #555;"><?php esc_html_e("Tiktok Business Catalog Is Not Configured Yet.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
                 <button id="opentiktoksettings" style="padding: 10px 20px; background-color: #28a745; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                    Configure Now
+                    <?php esc_html_e("Configure Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
             </div>
         <?php } ?>
@@ -626,22 +644,28 @@ if ($edit_id > 0) {
             <div class="metadetails" style="padding: 16px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Successfully logged in with:</strong>
+                        <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px;"><?php echo !empty($fb_mail) ? esc_attr($fb_mail) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Business ID:</strong>
-                        <?php echo !empty($fb_catalog_id) ? esc_attr($fb_catalog_id) : '-'; ?>
+                        <strong><?php esc_html_e("Business ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
+                        <span style="margin-left: 6px;"><?php echo !empty($fb_catalog_id) ? esc_attr($fb_catalog_id) : '-'; ?></span>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
-                        <strong>Status:</strong>
+                        <strong><?php esc_html_e("Status:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                         <span style="margin-left: 6px; color: <?php echo !empty($fb_catalog_id) ? 'green' : 'red'; ?>;">
-                            <?php echo !empty($fb_catalog_id) ? 'Connected' : 'Disconnected'; ?>
+                            <?php 
+                               if (!empty($fb_catalog_id)) {
+                                   esc_html_e("Connected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               } else {
+                                   esc_html_e("Disconnected", "enhanced-e-commerce-for-woocommerce-store"); 
+                               }
+                            ?>
                         </span>
                     </div>
                     <div style="text-align: right; margin-bottom: 10px; margin-right: 30px;">
                         <button id="openmetasettings" style="padding: 4px 7px; background-color: #1967D2; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                            Edit Details
+                            <?php esc_html_e("Edit Details", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </button>
                     </div>
                 </div>
@@ -650,22 +674,22 @@ if ($edit_id > 0) {
                 <div>
                     <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
-                        Oops! No feeds found yet — start by creating one.
+                        <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
                     <div class="get-started-card">
                         <div class="get-started-header">
                             <div class="get-started-icon">🚀</div>
-                            <h2>Let's Get Started!</h2>
+                            <h2><?php esc_html_e("Let's Get Started!", "enhanced-e-commerce-for-woocommerce-store"); ?></h2>
                         </div>
                         <p class="get-started-message">
-                            Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.
+                            <?php esc_html_e("Ready to create your first product feed? Just click the button below to begin. It's quick, easy, and powerful.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </p>
                         <div class="create-btn-wrapper">
                             <button class="get-started-secondary-btn"
                                 name="create_new_feed"
                                 id="create_new_feed"
                                 <?php echo $not_connected_any_gmc ? 'disabled' : ''; ?>>
-                                🛠️ Create New Feed
+                                🛠️ <?php esc_html_e("Create New Feed", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </button>
                         </div>
                     </div>
@@ -674,9 +698,9 @@ if ($edit_id > 0) {
         <?php } else { ?>
             <div class="metanotconfigured" style="width: 95.5%; margin: 0 auto; padding: 30px 20px; text-align: center;">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_not_configured.png'); ?>" alt="Setup Required" style="margin-bottom: 20px; height: 200px;" />
-                <p style="font-size: 16px; color: #555;">Meta Business Catalog Is Not Configured Yet.</p>
+                <p style="font-size: 16px; color: #555;"><?php esc_html_e("Meta Business Catalog Is Not Configured Yet.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
                 <button id="openmetasettings" style="padding: 10px 20px; background-color: #28a745; border: none; color: white; border-radius: 4px; cursor: pointer;">
-                    Configure Now
+                    <?php esc_html_e("Configure Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </button>
             </div>
         <?php } ?>
@@ -709,13 +733,13 @@ if ($edit_id > 0) {
         <div class="col-12 col-md-12 col-sm-12">
             <div class="row">
                 <div class="col-8 col-md-8 col-sm-8 ps-3">
-                    <input type="search" class="form-control border from-control-width empty" placeholder="Search..." aria-label="Search" name="search_feed" id="search_feed" aria-controls="feed_list_table">
+                    <input type="search" class="form-control border from-control-width empty" placeholder="<?php esc_attr_e('Search...', 'enhanced-e-commerce-for-woocommerce-store'); ?>" aria-label="Search" name="search_feed" id="search_feed" aria-controls="feed_list_table">
                 </div>
                 <div class="col-4 d-flex justify-content-end">
                     <div id="create_new_feed_div" class="d-flex align-items-center">
-                        <button class="btn btn-soft-primary fs-14 me-2" name="create_new_feed" id="create_new_feed" <?php echo $not_connected_any_gmc ? 'disabled' : '' ?>>Create New Feed</button>
+                        <button class="btn btn-soft-primary fs-14 me-2" name="create_new_feed" id="create_new_feed" <?php echo $not_connected_any_gmc ? 'disabled' : '' ?>><?php esc_html_e("Create New Feed", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
                         <?php if ($not_connected_any_gmc) : ?>
-                            <span class="material-symbols-outlined fs-6 me-1" data-bs-toggle="tooltip" data-bs-placement="right" title="For create new feed, GMC/FB/Tiktok any one need to setup first">
+                            <span class="material-symbols-outlined fs-6 me-1" data-bs-toggle="tooltip" data-bs-placement="right" title="<?php esc_attr_e('For create new feed, GMC/FB/Tiktok any one need to setup first', 'enhanced-e-commerce-for-woocommerce-store'); ?>">
                                 info
                             </span>
                         <?php endif; ?>
@@ -804,10 +828,10 @@ if ($edit_id > 0) {
                             <td class="align-middle text-center">
                                 <span class="dot <?php echo $value->auto_schedule === '1' ? 'dot-green' : 'dot-red'; ?>"></span>
                                 <span>
-                                    <?php echo $value->auto_schedule === '1' ? 'Yes' : 'No'; ?>
+                                    <?php echo $value->auto_schedule === '1' ? esc_html__('Yes', 'enhanced-e-commerce-for-woocommerce-store') : esc_html__('No', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                 </span>
                                 <p class="fs-10 mb-0">
-                                    <?php echo $value->auto_sync_interval !== 0 && $value->auto_schedule === '1' ? 'Every ' . esc_html($value->auto_sync_interval) . ' Days' : ' '; ?>
+                                    <?php echo $value->auto_sync_interval !== 0 && $value->auto_schedule === '1' ? sprintf(esc_html__('Every %s Days', 'enhanced-e-commerce-for-woocommerce-store'), esc_html($value->auto_sync_interval)) : ' '; ?>
                                 </p>
                             </td>
                             <td class="align-middle text-center" data-sort='" <?php echo esc_html(strtotime($value->created_date)) ?> "'>
@@ -820,7 +844,7 @@ if ($edit_id > 0) {
                             </td>
                             <td class="align-middle text-center" data-sort='" <?php echo esc_html(strtotime($value->last_sync_date ?? '0000-00-00 00:00:00')) ?> "'>
                                 <span>
-                                    <?php echo $value->last_sync_date && $value->last_sync_date != '0000-00-00 00:00:00' ? esc_html(date_format(date_create($value->last_sync_date), "d M Y")) : 'NA'; ?>
+                                    <?php echo $value->last_sync_date && $value->last_sync_date != '0000-00-00 00:00:00' ? esc_html(date_format(date_create($value->last_sync_date), "d M Y")) : esc_html__('NA', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                 </span>
                                 <p class="fs-10 mb-0">
                                     <?php echo $value->last_sync_date && $value->last_sync_date != '0000-00-00 00:00:00' ? esc_html(date_format(date_create($value->last_sync_date), "H:i a")) : ''; ?>
@@ -828,7 +852,7 @@ if ($edit_id > 0) {
                             </td>
                             <td class="align-middle text-center" data-sort="<?php echo isset($value->next_schedule_date) && $value->next_schedule_date !== '0000-00-00 00:00:00' ? esc_html(strtotime($value->next_schedule_date)) : ''; ?>">
                                 <span>
-                                    <?php echo $value->next_schedule_date && $value->next_schedule_date != '0000-00-00 00:00:00' ? esc_html(date_format(date_create($value->next_schedule_date), "d M Y")) : 'NA'; ?>
+                                    <?php echo $value->next_schedule_date && $value->next_schedule_date != '0000-00-00 00:00:00' ? esc_html(date_format(date_create($value->next_schedule_date), "d M Y")) : esc_html__('NA', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                 </span>
                                 <p class="fs-10 mb-0">
                                     <?php echo $value->next_schedule_date && $value->next_schedule_date != '0000-00-00 00:00:00' ? esc_html(date_format(date_create($value->next_schedule_date), "H:i a")) : ''; ?>
@@ -837,7 +861,7 @@ if ($edit_id > 0) {
                             <td class="align-middle text-center">
                                 <?php if ($value->is_delete === '1') { ?>
                                     <span class="badgebox rounded-pill  fs-10 deleted">
-                                        Deleted
+                                        <?php esc_html_e("Deleted", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </span>
                                     <?php } else {
                                     $draft = 0;
@@ -918,7 +942,7 @@ if ($edit_id > 0) {
 
                                     if ($draft !== 0) { ?>
                                         <div class="badgebox draft" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
-                                            <?php echo esc_html('Draft'); ?>
+                                            <?php echo esc_html__('Draft', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                         </div>
                                         <input type="hidden" class="draftGmcImg" value="<?php echo $value->status == 'Draft' ? "<img class='draft-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="draftTiktokImg" value="<?php echo $value->tiktok_status == 'Draft' ? "<img class='draft-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
@@ -927,7 +951,7 @@ if ($edit_id > 0) {
                                     <?php }
                                     if ($inprogress !== 0) { ?>
                                         <div class="badgebox inprogress" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
-                                            <?php echo esc_html('In Progress'); ?>
+                                            <?php echo esc_html__('In Progress', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                         </div>
                                         <input type="hidden" class="inprogressGmcImg" value="<?php echo $value->status == 'In Progress' ? "<img class='inprogress-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="inprogressTiktokImg" value="<?php echo $value->tiktok_status == 'In Progress' ? "<img class='inprogress-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
@@ -936,7 +960,7 @@ if ($edit_id > 0) {
                                     <?php }
                                     if ($synced !== 0) { ?>
                                         <div class="badgebox xyz synced" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
-                                            <?php echo esc_html('Synced'); ?>
+                                            <?php echo esc_html__('Synced', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                         </div>
                                         <input type="hidden" class="syncedGmcImg" value="<?php echo $value->status == 'Synced' ? "<img class='synced-status xyz-s' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="syncedTiktokImg" value="<?php echo $value->tiktok_status == 'Synced' ? "<img class='synced-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
@@ -945,7 +969,7 @@ if ($edit_id > 0) {
                                     <?php }
                                     if ($failed !== 0) { ?>
                                         <div class="badgebox failed" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
-                                            <?php echo esc_html('Failed'); ?>
+                                            <?php echo esc_html__('Failed', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                         </div>
                                         <input type="hidden" class="failedGmcImg" value="<?php echo $value->status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="failedTiktokImg" value="<?php echo $value->tiktok_status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
@@ -970,14 +994,14 @@ if ($edit_id > 0) {
                                             </span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark bg-white">
-                                            <li class="mb-0 pointer"><a class="dropdown-item text-secondary border-bottom fs-12" onclick="editFeed(<?php echo esc_html($value->id); ?>)">Edit</a>
+                                            <li class="mb-0 pointer"><a class="dropdown-item text-secondary border-bottom fs-12" onclick="editFeed(<?php echo esc_html($value->id); ?>)"><?php esc_html_e("Edit", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                                             </li>
-                                            <li class="mb-0 pointer"><a class="dropdown-item text-secondary border-bottom fs-12 " onclick="duplicateFeed(<?php echo esc_html($value->id); ?>)">Duplicate</a>
+                                            <li class="mb-0 pointer"><a class="dropdown-item text-secondary border-bottom fs-12 " onclick="duplicateFeed(<?php echo esc_html($value->id); ?>)"><?php esc_html_e("Duplicate", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                                             </li>
                                             <li class="mb-0 pointer">
                                                 <a class="dropdown-item text-secondary fs-12"
                                                     onclick="deleteFeed(<?php echo esc_js($value->id); ?>, <?php echo esc_js($channel_count); ?>)">
-                                                    Delete
+                                                    <?php esc_html_e("Delete", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                                 </a>
                                             </li>
                                         </ul>
@@ -1008,21 +1032,21 @@ if ($edit_id > 0) {
 <div class="wrap feedFormarea d-none">
     <div class="mb-1">
         <a href="#" class="resetbtn back-link d-inline-flex align-items-center">
-            ←<span>Back to feed list</span>
+            &larr;<span><?php esc_html_e("Back to feed list", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
         </a>
     </div>
     <h2 class="nav-tab-wrapper">
         <a href="#pills-enter-feed-details" class="nav-tab nav-tab-active disabled-tab">
-            Feed Details
+            <?php esc_html_e("Feed Details", "enhanced-e-commerce-for-woocommerce-store"); ?>
         </a>
         <a href="#pills-map-product-attribute" class="nav-tab disabled-tab">
-            Attribute Mapping
+            <?php esc_html_e("Attribute Mapping", "enhanced-e-commerce-for-woocommerce-store"); ?>
         </a>
         <a href="#pills-map-product-category" class="nav-tab disabled-tab">
-            Category Mapping
+            <?php esc_html_e("Category Mapping", "enhanced-e-commerce-for-woocommerce-store"); ?>
         </a>
         <a href="#pills-map-filters" class="nav-tab disabled-tab">
-            Filters
+            <?php esc_html_e("Filters", "enhanced-e-commerce-for-woocommerce-store"); ?>
         </a>
     </h2>
 
@@ -1035,25 +1059,25 @@ if ($edit_id > 0) {
                             <tr>
                                 <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("Feed Name", "enhanced-e-commerce-for-woocommerce-store"); ?><span class="text-danger">*</span></th>
                                 <td class="text-start">
-                                    <input type="text" class="form-control" name="feedName" id="feedName" placeholder="e.g. New Summer Collection">
+                                    <input type="text" class="form-control" name="feedName" id="feedName" placeholder="<?php esc_attr_e('e.g. New Summer Collection', 'enhanced-e-commerce-for-woocommerce-store'); ?>">
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("Target Country", "enhanced-e-commerce-for-woocommerce-store"); ?><span class="text-danger">*</span></th>
                                 <td class="text-start">
                                     <select class="select2 form-select form-select-sm mb-3" aria-label="form-select-sm example" style="width: 100%" name="target_country" id="target_country">
-                                        <option value="">Select Country</option>
+                                        <option value=""><?php esc_html_e("Select Country", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
                                         <?php
                                         foreach ($contData as $key => $value) {
                                         ?>
                                             <option value="<?php echo esc_attr($value->code) ?>">
-                                                <?php echo esc_html($value->name) ?></option>"
+                                                <?php echo esc_html($value->name) ?></option>
                                         <?php
                                         }
                                         ?>
                                     </select>
                                     <div class="tiktok_catalog_message text-muted" style="display:none; margin-top: 5px;">
-                                        <?php echo esc_html("You do not have a catalog associated with the selected target country. Don't worry, we will create a new catalog for you."); ?>
+                                        <?php esc_html_e("You do not have a catalog associated with the selected target country. Don't worry, we will create a new catalog for you.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                     </div>
                                 </td>
                             </tr>
@@ -1073,7 +1097,7 @@ if ($edit_id > 0) {
                                     <input type="text" class="form-control-sm" readonly name="autoSyncIntvl" id="autoSyncIntvl" size="3" value="25">
                                     <span class="ms-2"><?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
                                     <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup&plugin_name=aio" class="ms-2">
-                                        <b>Upgrade To Pro</b>
+                                        <b><?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                                     </a>
                                 </td>
                             </tr>
