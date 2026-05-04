@@ -6,8 +6,8 @@ Author: Conversios
 Requires at least: 4.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 7.2.16
-Version: 7.2.16
+Stable tag: 7.2.17
+Version: 7.2.17
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -257,6 +257,11 @@ Whitelist Conversios scripts and exclude key endpoints from caching to ensure ev
 Open a support thread on WordPress.org or email [support@conversios.io](mailto:support@conversios.io).
 
 == Changelog ==
+
+= Conversios 7.2.17 =
+May 04, 2026
+
+* Feature Preview: Order Recovery Engine - Recover the untracked conversions in the Google Analytics, Google Ads and Meta.
 
 = Conversios 7.2.14 =
 December 01, 2025

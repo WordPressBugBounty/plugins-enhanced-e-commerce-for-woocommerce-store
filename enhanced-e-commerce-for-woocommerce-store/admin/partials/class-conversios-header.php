@@ -96,21 +96,11 @@ if (class_exists('Conversios_Header') === FALSE) {
 							"conversios-google-shopping-feed" => array(
 								"page" => "conversios-google-shopping-feed&subpage=gmc",
 								"title" => "Product Feed",
-								/*"sub_menus" => array(
-									"conversios-google-shopping-feed" => array(
-										"page" => "conversios-google-shopping-feed&tab=gaa_config_page",
-										"title" => "Channel Configuration"
-									),
-									"feed-list" => array(
-										"page" => "conversios-google-shopping-feed&tab=feed_list",
-										"title" => "Feed Management"
-									),
-								)*/
 							),
-							"conversios-pricings" => array(
-								"page" => "conversios-pricings",
-								"title" => "Free Vs Pro"
-							),
+							"conversios-purchase-tracking" => array(
+								"page" => "conversios-purchase-tracking",
+								"title" => "Order Recovery Engine"
+							)
 						);
 					} else {
 						$conversios_menu_arr  = array(
@@ -122,10 +112,10 @@ if (class_exists('Conversios_Header') === FALSE) {
 								"page" => "conversios-google-shopping-feed&subpage=gmc",
 								"title" => "Product Feed"
 							),
-							"conversios-pricings" => array(
-								"page" => "conversios-pricings",
-								"title" => "Free Vs Pro"
-							),
+							"conversios-purchase-tracking" => array(
+								"page" => "conversios-purchase-tracking",
+								"title" => "Order Recovery Engine"
+							)
 						);
 					}
 				} else {
@@ -141,11 +131,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 						"conversios-google-analytics" => array(
 							"page" => "conversios-google-analytics",
 							"title" => "Pixels & Analytics"
-						),
-						"conversios-pricings" => array(
-							"page" => "conversios-pricings",
-							"title" => "Free Vs Pro"
-						),
+						)
 					);
 				}
 
@@ -235,6 +221,15 @@ if (class_exists('Conversios_Header') === FALSE) {
 						background-color: #e5e7eb;
 						color: #111827;
 						border-color: #d1d5db;
+					#conversioshead .action-pill.icon-only {
+						padding: 0;
+						width: 32px;
+						height: 32px;
+						justify-content: center;
+						border-radius: 50%;
+					}
+					#conversioshead .action-pill.dropdown-toggle::after {
+						display: none;
 					}
 					.conv-plan-pill {
 						background-color: #fefce8;
@@ -289,8 +284,11 @@ if (class_exists('Conversios_Header') === FALSE) {
 											?>
 													<li class="nav-item fs-14 fw-400 <?php echo esc_attr($is_parent_menu); ?>">
 														<?php if ($is_parent_menu == "") { ?>
-															<a class="nav-link text-<?php echo esc_attr($active ? $active : 'secondary'); ?> " aria-current="page" href="<?php echo esc_url($menu_url); ?>" <?php if ( $openinnew ) { echo 'target="_blank"'; } ?>>
+															<a class="nav-link text-<?php echo esc_attr($active ? $active : 'secondary'); ?> " style="position:relative;" aria-current="page" href="<?php echo esc_url($menu_url); ?>" <?php if ( $openinnew ) { echo 'target="_blank"'; } ?>>
 																<?php echo esc_attr($value['title']); ?>
+																<?php if ($key == "conversios-purchase-tracking") { ?>
+																	<span class="badge-new"><?php esc_html_e( 'New', 'enhanced-e-commerce-for-woocommerce-store' ); ?></span>
+																<?php } ?>
 															</a>
 														<?php } else { ?>
 															<a class="nav-link dropdown-toggle text-<?php echo esc_attr($active ? $active : 'secondary'); ?> " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -322,29 +320,113 @@ if (class_exists('Conversios_Header') === FALSE) {
 											</li>
 										</ul>
 										<div class="d-flex align-items-center gap-2">
-											<?php
-											$plan_name = esc_html__("Free Plan", "enhanced-e-commerce-for-woocommerce-store");
-											?>
-											<a href="javascript:void(0)" class="btn conv-plan-pill rounded-pill fw-bold fs-12 px-3 py-1 me-2" data-bs-toggle="modal" data-bs-target="#convLicenceInfoMod">
-												<?php echo esc_attr($plan_name) ?>
-											</a>
-											<a target="_blank" class="d-none fs-12 fw-400 px-3 py-1 fw-bold btn-newgreen text-white rounded-pill text-center me-2" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
+
+											<a target="_blank" class="fs-12 fw-400 px-3 py-1 fw-bold btn-newgreen text-white rounded-pill text-center me-2" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
 												<?php esc_html_e("Get Premium", "enhanced-e-commerce-for-woocommerce-store"); ?>
 											</a>
-											<a target="_blank" title="<?php esc_attr_e("Help Center", "enhanced-e-commerce-for-woocommerce-store"); ?>" class="action-pill" href="<?php echo esc_url('https://www.conversios.io/docs-category/aio-free/?utm_source=woo_aiofree_plugin&utm_medium=top_menu&utm_campaign=help_center'); ?>">
-												<span class="material-symbols-outlined" style="font-size: 18px;">help_center</span>
-												<label><?php esc_html_e("Docs", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
-											</a>
-											<a target="_blank" href="https://conversios.freshdesk.com/support/tickets/new" id="conv_freshwork_chat" title="<?php esc_attr_e("Support", "enhanced-e-commerce-for-woocommerce-store"); ?>" class="action-pill">
-												<span class="material-symbols-outlined" style="font-size: 18px;">sms</span>
-												<label><?php esc_html_e("Support", "enhanced-e-commerce-for-woocommerce-store"); ?></label>
-											</a>
+											<div class="dropdown">
+												<a href="#" class="action-pill icon-only dropdown-toggle" id="helpDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="<?php esc_attr_e("Help & Support", "enhanced-e-commerce-for-woocommerce-store"); ?>" style="border:none;">
+													<span class="material-symbols-outlined" style="font-size: 18px;">help</span>
+												</a>
+												<ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2" aria-labelledby="helpDropdown" style="border-radius:8px;">
+													<li>
+														<a class="dropdown-item fs-13 d-flex align-items-center gap-2 py-2" target="_blank" href="<?php echo esc_url('https://conversios.freshdesk.com/support/tickets/new'); ?>">
+															<span class="material-symbols-outlined" style="font-size: 16px;">sms</span>
+															<?php esc_html_e("Connect to support", "enhanced-e-commerce-for-woocommerce-store"); ?>
+														</a>
+													</li>
+													<li>
+														<a class="dropdown-item fs-13 d-flex align-items-center gap-2 py-2" target="_blank" href="<?php echo esc_url('https://www.conversios.io/docs-category/aio-free/?utm_source=woo_aiofree_plugin&utm_medium=top_menu&utm_campaign=help_center'); ?>">
+															<span class="material-symbols-outlined" style="font-size: 16px;">library_books</span>
+															<?php esc_html_e("Check documents", "enhanced-e-commerce-for-woocommerce-store"); ?>
+														</a>
+													</li>
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
 							</nav>
 						</div>
 					</header>
+                    <?php
+                    // Display Global Tracking Loss Notice
+                    $show_fomo_banner = false;
+                    $current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
+                    $current_wizard = isset($_GET['wizard']) ? sanitize_text_field(wp_unslash($_GET['wizard'])) : '';
+                    
+                    // Show only on pixel & tracking related screens
+                    if (
+                        $current_page === 'conversios-google-analytics' || 
+                        $current_page === 'conversios-analytics-reports' || 
+                        $current_wizard === 'pixelandanalytics' ||
+                        $current_wizard === 'campaignManagement'
+                    ) {
+                        $show_fomo_banner = true;
+                    }
+
+                    if ($show_fomo_banner) :
+                        $missed_orders_count = 0;
+                        $tracked_orders_count = 0;
+                        if (class_exists('WooCommerce')) {
+                            $install_date = get_option('conversiosaiofree_install_date');
+                            $start_date = strtotime('-30 days');
+                            
+                            if ($install_date) {
+                                $install_timestamp = strtotime($install_date); // Keep original timestamp
+                                if ($install_timestamp > $start_date) {
+                                    $start_date = $install_timestamp;
+                                }
+                            }
+                            
+                            $date_query_string = '>=' . $start_date;
+
+                            $args_total = [
+                                'type'          => 'shop_order',
+                                'status'        => ['processing', 'completed'],
+                                'date_created'  => $date_query_string,
+                                'limit'         => -1,
+                                'return'        => 'ids'
+                            ];
+                            $total_ids = wc_get_orders($args_total);
+                            $total_orders_count = count($total_ids);
+
+                            $args_untracked = [
+                                'type'          => 'shop_order',
+                                'status'        => ['processing', 'completed'],
+                                'date_created'  => $date_query_string,
+                                'limit'         => -1,
+                                'return'        => 'ids',
+                                'meta_query'    => [
+                                    [
+                                        'key'     => '_tracked',
+                                        'compare' => 'NOT EXISTS'
+                                    ]
+                                ]
+                            ];
+                            $untracked_ids = wc_get_orders($args_untracked);
+                            $missed_orders_count = count($untracked_ids);
+                            
+                            $tracked_orders_count = max(0, $total_orders_count - $missed_orders_count);
+                        }
+                        if ($missed_orders_count > 0) :
+                    ?>
+                    <div style="padding: 10px 24px; background: #fefce8; border-bottom: 1px solid #fde047; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <span class="dashicons dashicons-chart-area" style="color: #ca8a04; font-size: 18px; width: 18px; height: 18px;"></span>
+                            <div style="color: #545454; font-size: 14px; line-height: 1.4;">
+                                You tracked <strong style="color: #000;"><?php echo esc_html($tracked_orders_count); ?> orders</strong>, but lost <strong style="color: #000;"><?php echo esc_html($missed_orders_count); ?></strong> due to ad-blockers, iOS, and strict browser privacy.<br>Recover these <strong style="color: #000;"><?php echo esc_html($missed_orders_count); ?> sales</strong> so you know exactly what's working.
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 16px; align-items: center;">
+                            <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-purchase-tracking')); ?>" style="color: #a16207; font-size: 14px; font-weight: 600; text-decoration: underline;">Preview Potential Data</a>
+                            <a href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=oretopbanner&utm_campaign=upgrade&plugin_name=aio'); ?>" target="_blank" class="button button-small" style="background: #eab308; border-color: #ca8a04; color: #fff; font-size: 14px; font-weight: 600; text-shadow: none; box-shadow: 0 1px 2px rgba(202, 138, 4, 0.2);">Enable Server-Side Tracking &rarr;</a>
+                        </div>
+                    </div>
+                    <?php 
+                        endif; // closes if ($missed_orders_count > 0) 
+                    endif; // closes if ($show_fomo_banner)
+                    ?>
 					<div id="loadingbar_blue_header" class="progress-materializecss d-none ps-2 pe-2" style="width:100%">
 						<div class="indeterminate"></div>
 					</div>

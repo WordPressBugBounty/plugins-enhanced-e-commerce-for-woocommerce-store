@@ -150,13 +150,31 @@ if ('' != $subscription_id) {
         z-index: 10;
         box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
     }
+    
+    .conv-pro-badge {
+        background-color: #fde047 !important;
+        color: #92400e !important;
+        border: 1px solid #eab308;
+        font-weight: bold;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        padding: 3px 8px;
+        text-transform: uppercase;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none !important;
+    }
+    .conv-pro-badge:hover {
+        background-color: #fef08a !important;
+        color: #78350f !important;
+    }
 </style>
 
 <div class="pt-4" style="padding-left: 20px;">
     <h3 class="pb-3 fw-normal"><?php esc_html_e('Pixel & Analytics Settings', 'enhanced-e-commerce-for-woocommerce-store'); ?></h3>
 
     <?php
-
     $remarketing = unserialize(get_option('ee_remarketing_snippets'));
     $remarketing_snippet_id = "";
     if (!empty($remarketing) && isset($remarketing['snippets']) && esc_attr($remarketing['snippets'])) {
@@ -360,7 +378,7 @@ if ('' != $subscription_id) {
                 </th>
                 <td>
                     <input type="text" readonly class="regular-text">
-                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=FBCAPIbadge" class="badge text-light rounded-pill">(Pro)</a>
+                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=FBCAPIbadge" class="badge rounded-pill conv-pro-badge"><span class="dashicons dashicons-lock" style="font-size:12px;width:12px;height:12px;line-height:12px;margin-top:1px;"></span> PRO</a>
                     <a style="margin-left: 15px;" class="convpixeldoclink" target="_blank"
                         href="https://www.conversios.io/blog/how-to-generate-facebook-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span>Doc</span>
@@ -419,7 +437,7 @@ if ('' != $subscription_id) {
                 </th>
                 <td>
                     <input type="text" readonly class="regular-text">
-                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=TikTokCAPIbadge" class="badge text-light rounded-pill">(Pro)</a>
+                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=TikTokCAPIbadge" class="badge rounded-pill conv-pro-badge"><span class="dashicons dashicons-lock" style="font-size:12px;width:12px;height:12px;line-height:12px;margin-top:1px;"></span> PRO</a>
                     <a style="margin-left: 15px;" class="convpixeldoclink" target="_blank"
                         href="https://www.conversios.io/blog/how-to-find-your-tiktok-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span>Doc</span>
@@ -478,7 +496,7 @@ if ('' != $subscription_id) {
                 </th>
                 <td>
                     <input type="text" readonly class="regular-text">
-                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=SnapchatCAPIbadge" class="badge text-light rounded-pill">(Pro)</a>
+                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=pixwizard&utm_campaign=SnapchatCAPIbadge" class="badge rounded-pill conv-pro-badge"><span class="dashicons dashicons-lock" style="font-size:12px;width:12px;height:12px;line-height:12px;margin-top:1px;"></span> PRO</a>
                     <a style="margin-left: 15px;" class="convpixeldoclink" target="_blank"
                         href="https://www.conversios.io/blog/find-your-snapchat-pixel-id-and-conversion-api-token/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin">
                         <span>Doc</span>

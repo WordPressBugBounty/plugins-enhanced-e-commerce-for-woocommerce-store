@@ -97,11 +97,7 @@ if (!class_exists('Conversios_Footer')) {
                     var screen_name = '<?php echo isset($_GET['page']) ? esc_js(sanitize_text_field(wp_unslash($_GET['page']))) : ''; ?>';
                     var error_msg = 'null';
 
-                    var convpricelink = jQuery('#toplevel_page_<?php echo esc_js(CONV_MENU_SLUG); ?>').find('a[href="admin.php?page=conversios-pricings"]');
-                    if (convpricelink.length) {
-                        convpricelink.attr('href', '<?php echo esc_js("https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro"); ?>');
-                        convpricelink.attr('target', '_blank');
-                    }
+
 
 
                     jQuery('#conv_save_success_modal').on('hidden.bs.modal', function() {

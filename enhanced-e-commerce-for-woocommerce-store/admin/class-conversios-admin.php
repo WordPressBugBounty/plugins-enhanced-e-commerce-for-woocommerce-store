@@ -43,6 +43,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
       add_action('admin_menu', array($this, 'add_admin_pages'));
       add_action('admin_init', array($this, 'init'));
       add_action("admin_print_styles", [$this, 'dequeue_css']);
+      add_action('wp_ajax_conv_get_ore_data', [$this, 'conv_get_ore_data_handler']);
     }
 
     /********Include Header and Footer **************************/
@@ -120,12 +121,13 @@ if (class_exists('Conversios_Admin') === FALSE) {
       $screen = get_current_screen();
       if ($screen->id === 'toplevel_page_conversios'  || (isset($_GET['page']) === TRUE && strpos(sanitize_text_field(wp_unslash($_GET['page'])), 'conversios') !== false)) {
         do_action('add_conversios_css_' . sanitize_text_field(wp_unslash($_GET['page'])));
-        if (sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'page'))) == "conversios-analytics-reports" || sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'page'))) == "conversios") {
+        $page = sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'page')));
+        if ($page == "conversios-analytics-reports" || $page == "conversios" || $page == "conversios-purchase-tracking") {
           wp_register_style('conversios-daterangepicker-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/daterangepicker.css'));
           wp_enqueue_style('conversios-daterangepicker-css');
         }
         wp_enqueue_style('conversios-responsive-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/responsive.css'), array(), esc_attr($this->version), 'all');
-        if (sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) == "campaignManagement") {
+        if (sanitize_text_field(wp_unslash(filter_input(INPUT_GET, 'wizard'))) == "campaignManagement" || $page == "conversios-purchase-tracking" || $page == "conversios-audience-manager") {
           wp_register_style('tvc-dataTables-css', esc_url(ENHANCAD_PLUGIN_URL . '/admin/css/dataTables.bootstrap5.min.css'));
           wp_enqueue_style('tvc-dataTables-css');
         }
@@ -153,9 +155,14 @@ if (class_exists('Conversios_Admin') === FALSE) {
         wp_enqueue_script('conversios-daterangepicker-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/daterangepicker.js'));
         wp_enqueue_script('conversios-custom-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/tvc-ee-custom.js'), array('jquery'), esc_attr($this->version), false);
       } else if (isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios") {
-        // Use official WordPress core moment.js script
         wp_enqueue_script('moment');
       } else if (isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios-audience-manager") {
+        wp_enqueue_script('tvc-ee-dataTables-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.dataTables.min.js'), array('jquery'), esc_attr($this->version), false);
+        wp_enqueue_script('tvc-ee-dataTables-v5-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/dataTables.bootstrap5.min.js'), array('jquery'), esc_attr($this->version), false);
+      } else if (isset($_GET['page']) === TRUE && sanitize_text_field(wp_unslash($_GET['page'])) === "conversios-purchase-tracking") {
+        // Enqueue required scripts for ORE table and daterange picker
+        wp_enqueue_script('moment');
+        wp_enqueue_script('conversios-daterangepicker-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/daterangepicker.js'), array('jquery', 'moment'), esc_attr($this->version), false);
         wp_enqueue_script('tvc-ee-dataTables-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.dataTables.min.js'), array('jquery'), esc_attr($this->version), false);
         wp_enqueue_script('tvc-ee-dataTables-v5-js', esc_url(ENHANCAD_PLUGIN_URL . '/admin/js/dataTables.bootstrap5.min.js'), array('jquery'), esc_attr($this->version), false);
       }
@@ -231,6 +238,15 @@ if (class_exists('Conversios_Admin') === FALSE) {
           array($this, 'showPage'),
           3
         );
+        add_submenu_page(
+          CONV_MENU_SLUG,
+          esc_html__('Order Recovery Engine', 'enhanced-e-commerce-for-woocommerce-store'),
+          esc_html__('Order Recovery Engine', 'enhanced-e-commerce-for-woocommerce-store'),
+          'manage_options',
+          'conversios-purchase-tracking',
+          array($this, 'showPage'),
+          5
+        );
       } else { // When no wc
 
         add_submenu_page(
@@ -261,7 +277,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
           esc_html__('Free Vs Pro', 'enhanced-e-commerce-for-woocommerce-store') . '<img style="position: absolute; height: 30px;bottom: 5px; right: 10px;" src="' . esc_url($freevspro) . '">',
           'manage_options',
           'conversios-pricings',
-          '__return_null',
+          array($this, 'showPage'),
           13
         );
       }
@@ -307,6 +323,15 @@ if (class_exists('Conversios_Admin') === FALSE) {
       ));
       do_action('add_conversios_footer');
     }
+
+    /**
+     * Free vs Pro Comparison Page
+     */
+    public function conversios_pricings()
+    {
+      require_once(ENHANCAD_PLUGIN_DIR . 'admin/partials/conversios-pricings.php');
+    }
+
     /**
      * Web Reports ( No WC ) page.
      *
@@ -451,6 +476,122 @@ if (class_exists('Conversios_Admin') === FALSE) {
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/tatvic-category-wrapper.php';
       require_once ENHANCAD_PLUGIN_DIR . 'includes/setup/class-tvc-product-sync-helper.php';
       require_once 'partials/productfeed/feedwise-product-list.php';
+    }
+    public function conversios_purchase_tracking()
+    {
+      require_once(ENHANCAD_PLUGIN_DIR . 'admin/partials/purchase-tracking/purchase-tracking-settings.php');
+      if (class_exists('Conv_Purchase_Tracking_Settings')) {
+        new Conv_Purchase_Tracking_Settings();
+      }
+    }
+
+    public function conv_get_ore_data_handler() {
+      check_ajax_referer('conversios_nonce', 'conversios_nonce');
+      if (!current_user_can('manage_options')) {
+          wp_send_json_error(['message' => 'Unauthorized']);
+      }
+      $start_date = isset($_POST['start_date']) ? sanitize_text_field($_POST['start_date']) : date('Y-m-d', strtotime('-30 days'));
+      $end_date   = isset($_POST['end_date'])   ? sanitize_text_field($_POST['end_date'])   : date('Y-m-d');
+      $draw       = isset($_POST['draw']) ? intval($_POST['draw']) : 1;
+      
+      $start_timestamp = strtotime($start_date);
+      $end_timestamp = strtotime($end_date . ' 23:59:59'); // Include the full end day
+      
+      $install_date = get_option('conversiosaiofree_install_date');
+      if ($install_date) {
+          $install_timestamp = strtotime($install_date);
+          if ($install_timestamp > $start_timestamp) {
+              $start_timestamp = $install_timestamp;
+          }
+      }
+      
+      $date_query_string = $start_timestamp . '...' . $end_timestamp;
+
+      $total = 0;
+      $data = [];
+      
+      if (class_exists('WooCommerce')) {
+          $valid_statuses = ['processing', 'completed'];
+          $args = [
+              'type'          => 'shop_order',
+              'status'        => $valid_statuses,
+              'date_created'  => $date_query_string,
+              'limit'         => -1,
+              'return'        => 'ids',
+          ];
+          $order_ids = wc_get_orders($args);
+          $total = count($order_ids);
+          
+          // Find orders WITHOUT _tracked meta (Missed Conversions)
+          $args_untracked = $args;
+          $args_untracked['meta_query'] = [
+              [
+                  'key'     => '_tracked',
+                  'compare' => 'NOT EXISTS'
+              ]
+          ];
+          $untracked_ids = wc_get_orders($args_untracked);
+          $server_missed = count($untracked_ids);
+          $client_tracked = $total - $server_missed;
+          
+          $total_loss = 0;
+          // Calculate missed revenue for up to 1000 recent orders to maintain performance
+          $loss_ids = array_slice($untracked_ids, 0, 1000);
+          foreach ($loss_ids as $oid) {
+              $order = wc_get_order($oid);
+              if ($order) {
+                  $total_loss += (float) $order->get_total();
+              }
+          }
+          
+          // Slice for pagination
+          $start = isset($_POST['start']) ? intval($_POST['start']) : 0;
+          $length = isset($_POST['length']) ? intval($_POST['length']) : 25;
+          if ($length == -1) $length = $total;
+          $page_ids = array_slice($order_ids, $start, $length);
+          
+          foreach ($page_ids as $order_id) {
+              $order = wc_get_order($order_id);
+              if (!$order) continue;
+              
+              $data[] = [
+                  'number'                 => $order->get_order_number(),
+                  'edit_url'               => $order->get_edit_order_url(),
+                  'date'                   => $order->get_date_created() ? $order->get_date_created()->date('Y-m-d H:i') : '',
+                  'total'                  => $order->get_total(),
+                  'status'                 => '<mark class="order-status status-' . esc_attr($order->get_status()) . '"><span>' . esc_html(wc_get_order_status_name($order->get_status())) . '</span></mark>',
+                  'conv_order_tracked'     => 'none',
+                  '_tracked'               => $order->get_meta('_tracked') ? true : false,
+                  '_ore_synced_channels'   => null,
+                  'conv_gclid'             => '',
+                  'conv_fbclid'            => '',
+                  'conv_wbraid'            => '',
+                  'conv_gbraid'            => '',
+                  '_fbp'                   => '',
+                  '_fbc'                   => '',
+                  '_ga'                    => '',
+                  'conv_ga4_session_id'    => '',
+                  'conv_ga4_session_number'=> '',
+                  '_ga_sessions'           => []
+              ];
+          }
+      }
+
+      $response = [
+          'draw' => $draw,
+          'recordsTotal' => $total,
+          'recordsFiltered' => $total,
+          'data' => $data,
+          'report' => [
+              'total' => $total,
+              'client' => $client_tracked,
+              'server' => $server_missed,
+              'recovered_revenue' => number_format($total_loss, 2, '.', ''),
+              'synced' => 0
+          ]
+      ];
+      
+      wp_send_json($response);
     }
   }
 }

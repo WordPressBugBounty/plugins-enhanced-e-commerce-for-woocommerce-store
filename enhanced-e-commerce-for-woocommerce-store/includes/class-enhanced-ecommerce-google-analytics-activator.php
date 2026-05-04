@@ -33,6 +33,10 @@ class Enhanced_Ecommerce_Google_Analytics_Activator
      */
     public static function activate()
     {
+        if (!get_option('conversiosaiofree_install_date')) {
+            update_option('conversiosaiofree_install_date', current_time('mysql'));
+        }
+
         $ee_options_settings = unserialize(get_option('ee_options'));
 
         $subscriptionId = (isset($ee_options_settings['subscription_id'])) ? $ee_options_settings['subscription_id'] : "";

@@ -415,7 +415,14 @@ if ($edit_id > 0) {
     <div class="indeterminate"></div>
 </div>
 <div class="channel-setup-parent">
-    <div class="wrap">
+    <div class="container-fluid px-2 pt-2 pb-0" style="max-width: 100%;">
+        <div style="background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%); border: 1px solid #facc15; border-radius: 6px; padding: 6px 12px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; color: #92400e; box-shadow: 0 1px 2px rgba(0,0,0,0.05); gap: 10px;">
+            <span class="dashicons dashicons-megaphone" style="font-size: 16px; width: 16px; height: 16px; color: #b45309;"></span>
+            <span><b>Scaling globally? Unlock Pro Features!</b> Get <b>Unlimited Products</b>, <b>Multi-Country Feeds</b>, and <b>Variation-level syncing</b>.</span>
+            <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedlist&utm_campaign=ProFeedUpsell" style="background-color: #ca8a04; color: #fff; padding: 2px 10px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 12px; margin-left: 10px;">View Pro Plans</a>
+        </div>
+    </div>
+    <div class="wrap mt-3">
         <h2 class="nav-tab-wrapper">
             <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=gmc')); ?>" class="nav-tab <?php echo (!isset($_GET['subpage']) || $_GET['subpage'] === 'gmc') ? 'nav-tab-active' : ''; ?>">
                 <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/google_channel_logo.png'); ?>" alt="GMC" style="width: 30px; vertical-align: middle;">
@@ -443,7 +450,7 @@ if ($edit_id > 0) {
     <!-- Details card for All channels -->
     <?php if (isset($_GET['subpage']) && $_GET['subpage'] == 'gmc') { ?>
         <?php if ($google_merchant_center_id != "" && $g_mail != "") { ?>
-            <div class="gmcdetails" style="padding: 16px 11px;background-color: #f0f0f1;">
+            <div class="gmcdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
                         <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
@@ -474,7 +481,6 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
@@ -509,7 +515,7 @@ if ($edit_id > 0) {
         <?php require_once(ENHANCAD_PLUGIN_DIR . '/admin/partials/singlepixelsettings/gmcsettings.php'); ?>
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'microsoft') { ?>
         <?php if ($microsoft_catalog_id != "" && $ms_mail != "") { ?>
-            <div class="mmcdetails" style="padding: 16px 11px;background-color: #f0f0f1;">
+            <div class="mmcdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
                         <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
@@ -540,7 +546,6 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
@@ -575,7 +580,7 @@ if ($edit_id > 0) {
         <?php require_once(ENHANCAD_PLUGIN_DIR . '/admin/partials/singlepixelsettings/mmcsettings.php'); ?>
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'tiktok') { ?>
         <?php if ($tiktok_email != "" && $tiktok_business_account != "") { ?>
-            <div class="tiktokdetails" style="padding: 16px 11px;background-color: #f0f0f1;">
+            <div class="tiktokdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
                         <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
@@ -606,7 +611,6 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
@@ -641,7 +645,7 @@ if ($edit_id > 0) {
         <?php require_once(ENHANCAD_PLUGIN_DIR . '/admin/partials/singlepixelsettings/tiktokBusinessSettings.php'); ?>
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'meta') { ?>
         <?php if ($fb_mail != "" && $fb_catalog_id != "") { ?>
-            <div class="metadetails" style="padding: 16px 11px;background-color: #f0f0f1;">
+            <div class="metadetails" style="padding: 8px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
                         <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
@@ -672,7 +676,6 @@ if ($edit_id > 0) {
             </div>
             <div class="create-feed-section d-none" style="text-align: center; background-color: #f0f0f1;">
                 <div>
-                    <img src="<?php echo esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/conv_feed_not_created.png'); ?>" alt="Create Feed" style="max-width: 200px; margin-bottom: 20px; margin-top: 40px;" />
                     <p class="adt-tw-text-center adt-tw-text-gray-500 adt-tw-text-base adt-tw-font-medium adt-tw-italic" style="font-style: italic; font-size: 16px; color: #6b7280;">
                         <?php esc_html_e("Oops! No feeds found yet &mdash; start by creating one.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </p>
@@ -726,8 +729,8 @@ if ($edit_id > 0) {
                 </span>
             </div> -->
         </div>
-    </div>
 </div>
+
 <div class="container-fluid p-3 pb-2 channel-setup-parent">
     <nav class="navbar navbar-light bg-white shadow-sm d-none" style="opacity:0;">
         <div class="col-12 col-md-12 col-sm-12">
