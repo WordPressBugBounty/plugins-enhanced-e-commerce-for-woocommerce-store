@@ -110,7 +110,7 @@ if ($subscriptionId != "") {
 <?php } ?>
 
 
-<div style="background-color: #f0f0f1;" class="convcard p-4 mt-0 rounded-3 shadow-sm mmcsettingscard d-none <?php echo $required_bing ? 'disabledsection' : ''; ?>">
+<div style="background-color: #ffffff; border: 1px solid #e5e7eb;" class="convcard p-4 mt-0 rounded-3 shadow-sm mmcsettingscard d-none <?php echo $required_bing ? 'disabledsection' : ''; ?>">
     <?php
     $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-shopping-feed', "mmcsettings");
 
@@ -304,7 +304,7 @@ if ($subscriptionId != "") {
                                     <input type="hidden" id="notification_language" name="notification_language" value="en-US" required>
 
                                     <div class="form-group mt-3">
-                                        <input id="bing_concent" name="concent" class="form-check-input" type="checkbox" value="1" required style="float:none">
+                                        <input id="bing_concent" name="concent" class="" type="checkbox" value="1" required style="float:none">
                                         <label class="form-check-label fs-12" for="concent">
                                             <?php esc_html_e("I accept the", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                             <a class="fs-14" target="_blank" href="<?php echo esc_url("https://www.microsoft.com/en-gb/servicesagreement"); ?>"><?php esc_html_e("terms & conditions", "enhanced-e-commerce-for-woocommerce-store"); ?></a>

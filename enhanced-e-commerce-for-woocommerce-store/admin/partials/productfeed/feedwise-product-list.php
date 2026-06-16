@@ -608,6 +608,78 @@ $filters    = json_decode($result[0]['filters'], true);
         </table>
     </div>
 </div>
+
+<!-- Free to Pro Nudge Modal: shown when selected products > 100 -->
+<div class="modal fade" id="convProNudgeModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+        <div class="modal-content" style="border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.10);">
+
+            <!-- White body -->
+            <div style="padding: 24px 24px 0; background:#fff;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+                    <h4 style="font-size:16px; font-weight:700; color:#1a1a1a; margin:0;">Sync More Products</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="font-size:11px; flex-shrink:0;"></button>
+                </div>
+
+                <div style="display:flex; align-items:flex-start; gap:9px; padding:11px 14px; background:#fff4f4; border-radius:8px; border:1px solid #fecaca; margin-bottom:20px;">
+                    <span class="dashicons dashicons-warning" style="color:#dc2626; font-size:18px; width:18px; height:18px; flex-shrink:0; margin-top:1px;"></span>
+                    <div style="font-size:12px; color:#7f1d1d; line-height:1.6;">
+                        Your <strong>Free plan</strong> allows syncing up to <strong>100 products</strong> only.
+                        This feed currently has <strong id="convProNudgeCount">more than 100</strong> products selected.
+                    </div>
+                </div>
+
+                <!-- Feature rows -->
+                <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:22px;">
+
+                    <div style="display:flex; align-items:flex-start; gap:12px;">
+                        <span class="dashicons dashicons-yes-alt" style="color:#22c55e; font-size:22px; width:22px; height:22px; flex-shrink:0; margin-top:1px;"></span>
+                        <div>
+                            <div style="font-size:14px; font-weight:700; color:#1a1a1a; line-height:1.3;">Unlimited Product Sync</div>
+                            <div style="font-size:12px; color:#3b82f6; margin-top:3px; line-height:1.4;">Sync your entire catalogue — no limits, no caps.</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:flex-start; gap:12px;">
+                        <span class="dashicons dashicons-yes-alt" style="color:#22c55e; font-size:22px; width:22px; height:22px; flex-shrink:0; margin-top:1px;"></span>
+                        <div>
+                            <div style="font-size:14px; font-weight:700; color:#1a1a1a; line-height:1.3;">Daily Automatic Sync</div>
+                            <div style="font-size:12px; color:#3b82f6; margin-top:3px; line-height:1.4;">Keep your feed fresh with automatic daily syncing.</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tip section about filters -->
+            <div style="padding:14px 24px 18px; background:#fff; border-top: 1px solid #f0f0f0;">
+                <div style="font-size:12px; color:#555; line-height:1.6; margin-bottom:10px;">
+                    <strong style="color:#1a1a1a;">Stay on the Free plan?</strong>
+                    Edit your feed and apply a <strong>Category or Product filter</strong> to keep the product count under 100.
+                </div>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=' . esc_attr($subpage) . '&edit=' . esc_attr(sanitize_text_field(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT))))); ?>"
+                   style="display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:#f0f7ff; border:1px solid #bfdbfe; border-radius:7px; font-size:12px; font-weight:600; color:#1967D2; text-decoration:none;">
+                    <span class="dashicons dashicons-edit" style="font-size:14px; width:14px; height:14px;"></span>
+                    Edit Feed
+                </a>
+            </div>
+
+            <!-- Light blue footer with yellow CTA -->
+            <div style="padding: 18px 24px; background: #eff6ff; border-top: 1px solid #dbeafe; display:flex; align-items:center; justify-content:space-between; gap:14px;">
+                <div style="font-size:12px; color:#475569; line-height:1.5; flex:1;">
+                    Get the benefit of unlimited product sync &amp; daily refresh with <strong>Conversios Pro</strong>.
+                </div>
+                <a href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedwise_sync_nudge&utm_campaign=ProSyncNudge" target="_blank"
+                   style="display:inline-block; background:#f59e0b; color:#1a1a1a; font-size:13px; font-weight:700; padding:10px 18px; border-radius:8px; text-decoration:none; white-space:nowrap; flex-shrink:0; box-shadow:0 2px 8px rgba(245,158,11,0.35);">
+                    Upgrade to Pro &rarr;
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- /Free to Pro Nudge Modal -->
+
 <hr />
 <!-- Modal -->
 <div class="modal fade" id="filterModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -738,7 +810,7 @@ $filters    = json_decode($result[0]['filters'], true);
                                 <?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <span>
-                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=productlist&utm_campaign=Pricing"><b>
+                                <a target="_blank" href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=productlist&utm_campaign=Pricing"><b>
                                         <?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></b></a>
                             </span>
                         </div>
@@ -2205,6 +2277,13 @@ $filters    = json_decode($result[0]['filters'], true);
                 jQuery('#conv_save_error_txt').html('');
                 jQuery('#conv_save_error_txt').html('You have not selected any products to sync.');
                 jQuery('#conv_save_error_modal').modal('show');
+                return false;
+            }
+            // Free plan nudge: intercept if selected count > 100
+            var syncCount = parseInt(jQuery('#totProduct').val(), 10) || 0;
+            if (syncCount > 100) {
+                jQuery('#convProNudgeCount').text(syncCount.toLocaleString());
+                jQuery('#convProNudgeModal').modal('show');
                 return false;
             }
             submitProductSyncUp();

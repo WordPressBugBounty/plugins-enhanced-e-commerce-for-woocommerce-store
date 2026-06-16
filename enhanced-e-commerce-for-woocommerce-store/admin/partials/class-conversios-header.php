@@ -274,7 +274,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 
 													$openinnew = false;
 													if ($key == "conversios-pricings") {
-														$menu_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro";
+														$menu_url = "https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro";
 														$openinnew = true;
 													}
 													$is_parent_menu = "";
@@ -321,7 +321,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 										</ul>
 										<div class="d-flex align-items-center gap-2">
 
-											<a target="_blank" class="fs-12 fw-400 px-3 py-1 fw-bold btn-newgreen text-white rounded-pill text-center me-2" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
+											<a target="_blank" class="fs-12 fw-400 px-3 py-1 fw-bold btn-newgreen text-white rounded-pill text-center me-2" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
 												<?php esc_html_e("Get Premium", "enhanced-e-commerce-for-woocommerce-store"); ?>
 											</a>
 											<div class="dropdown">
@@ -411,16 +411,32 @@ if (class_exists('Conversios_Header') === FALSE) {
                         }
                         if ($missed_orders_count > 0) :
                     ?>
-                    <div style="padding: 10px 24px; background: #fefce8; border-bottom: 1px solid #fde047; display: flex; align-items: center; justify-content: space-between;">
+                    <?php
+                        // Calculate missed revenue from untracked orders
+                        $missed_revenue = 0;
+                        if (!empty($untracked_ids)) {
+                            foreach ($untracked_ids as $order_id) {
+                                $order = wc_get_order($order_id);
+                                if ($order) {
+                                    $missed_revenue += (float) $order->get_total();
+                                }
+                            }
+                        }
+                        $currency_symbol = function_exists('get_woocommerce_currency_symbol') ? get_woocommerce_currency_symbol() : '$';
+                    ?>
+                    <div style="padding: 12px 24px; background: #fefce8; border-bottom: 1px solid #fde047; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
                         <div style="display: flex; gap: 12px; align-items: center;">
-                            <span class="dashicons dashicons-chart-area" style="color: #ca8a04; font-size: 18px; width: 18px; height: 18px;"></span>
-                            <div style="color: #545454; font-size: 14px; line-height: 1.4;">
-                                You tracked <strong style="color: #000;"><?php echo esc_html($tracked_orders_count); ?> orders</strong>, but lost <strong style="color: #000;"><?php echo esc_html($missed_orders_count); ?></strong> due to ad-blockers, iOS, and strict browser privacy.<br>Recover these <strong style="color: #000;"><?php echo esc_html($missed_orders_count); ?> sales</strong> so you know exactly what's working.
+                            <div style="width: 36px; height: 36px; flex-shrink: 0; background: #fef9c3; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <span class="dashicons dashicons-chart-line" style="color: #ca8a04; font-size: 18px; width: 18px; height: 18px;"></span>
+                            </div>
+                            <div style="color: #545454; font-size: 13px; line-height: 1.5;">
+                                <strong style="color: #92400e; font-size: 14px;"><?php echo esc_html($currency_symbol . number_format($missed_revenue, 2)); ?> in revenue is missing from your reports.</strong>
+                                <span style="color: #78716c;"> Unlock complete revenue tracking and attribution.</span>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 16px; align-items: center;">
-                            <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-purchase-tracking')); ?>" style="color: #a16207; font-size: 14px; font-weight: 600; text-decoration: underline;">Preview Potential Data</a>
-                            <a href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=oretopbanner&utm_campaign=upgrade&plugin_name=aio'); ?>" target="_blank" class="button button-small" style="background: #eab308; border-color: #ca8a04; color: #fff; font-size: 14px; font-weight: 600; text-shadow: none; box-shadow: 0 1px 2px rgba(202, 138, 4, 0.2);">Enable Server-Side Tracking &rarr;</a>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-shrink: 0;">
+                            <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-purchase-tracking')); ?>" style="color: #a16207; font-size: 13px; font-weight: 600; text-decoration: underline; white-space: nowrap;">View Lost Data</a>
+                            <a href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=oretopbanner&utm_campaign=upgrade&plugin_name=aio'); ?>" target="_blank" class="button button-small" style="background: #eab308; border-color: #ca8a04; color: #fff; font-size: 13px; font-weight: 600; text-shadow: none; box-shadow: 0 1px 2px rgba(202, 138, 4, 0.2); white-space: nowrap;">Recover Revenue &rarr;</a>
                         </div>
                     </div>
                     <?php 

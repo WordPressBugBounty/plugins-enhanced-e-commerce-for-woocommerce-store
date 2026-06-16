@@ -82,7 +82,7 @@ if ($subscriptionId != "") {
         display: none;
     }
 </style>
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm metasettingscard d-none" style="background-color: #f0f0f1;">
+<div class="convcard p-4 mt-0 rounded-3 shadow-sm metasettingscard d-none" style="background-color: #ffffff; border: 1px solid #e5e7eb;">
     <div class="alert d-flex align-items-cente p-0">
         <div class="convpixsetting-inner-box">
             <span>

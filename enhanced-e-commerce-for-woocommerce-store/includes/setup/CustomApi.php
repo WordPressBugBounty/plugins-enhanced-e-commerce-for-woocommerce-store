@@ -2647,7 +2647,6 @@ class CustomApi
           'link_google_analytics_with_google_ads' => $eeApiSettings['setting']->link_google_analytics_with_google_ads ?? "",
           'ga4_analytic_account_id' => $eeApiSettings['setting']->ga4_analytic_account_id ?? "",
           'property_id' => $eeApiSettings['setting']->property_id ?? "",
-          'ua_analytic_account_id' => $eeApiSettings['setting']->ua_analytic_account_id ?? "",
           'google_ads_id' => $eeApiSettings['setting']->google_ads_id ?? "",
           'google_merchant_center_id' => $eeApiSettings['setting']->google_merchant_center_id ?? "",
           'merchant_id' => $eeApiSettings['setting']->merchant_id ?? "",

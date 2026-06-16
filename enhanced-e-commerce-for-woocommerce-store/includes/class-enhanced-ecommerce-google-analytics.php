@@ -313,7 +313,7 @@ class Enhanced_Ecommerce_Google_Analytics
     // Upgrade link.
     $links[] = sprintf(
       '<a href="%s" target="_blank" rel="noopener"><strong>%s</strong></a>',
-      esc_url('https://conversios.io/pricings/?utm_source=EE+Plugin+User+Interface&utm_medium=Plugins+Listing+Page+Upgrade+to+Premium&utm_campaign=Upsell+at+Conversios'),
+      esc_url('https://conversios.io/woocommerce-plan-pricings/?utm_source=EE+Plugin+User+Interface&utm_medium=Plugins+Listing+Page+Upgrade+to+Premium&utm_campaign=Upsell+at+Conversios'),
       esc_html__('Upgrade to Premium', 'enhanced-e-commerce-for-woocommerce-store')
     );
 

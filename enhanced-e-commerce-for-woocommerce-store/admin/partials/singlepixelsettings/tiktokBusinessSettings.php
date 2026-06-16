@@ -60,7 +60,7 @@ $contData = json_decode($getCountris);
         display: none;
     }
 </style>
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm d-none tiktoksettingscard" style="background-color: #f0f0f1;">
+<div class="convcard p-4 mt-0 rounded-3 shadow-sm d-none tiktoksettingscard" style="background-color: #ffffff; border: 1px solid #e5e7eb;">
     <?php
     $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-google-shopping-feed', "tiktokBusinessSettings");
     /**************Tiktok Auth start ********************************************************/

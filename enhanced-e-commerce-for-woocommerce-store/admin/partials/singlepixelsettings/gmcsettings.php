@@ -79,7 +79,7 @@ if ($subscriptionId != "") {
         display: none;
     }
 </style>
-<div class="p-4 mt-0 rounded-3 shadow-sm d-none gmcsettingscard" style="background-color: #f0f0f1;">
+<div class="p-4 mt-0 rounded-3 shadow-sm d-none gmcsettingscard" style="background-color: #ffffff; border: 1px solid #e5e7eb;">
     <?php
     $connect_url = $TVC_Admin_Helper->get_custom_connect_url_wizard(admin_url() . 'admin.php?page=conversios-google-shopping-feed&subpage=gmc');
     require_once "googlesignin.php";
@@ -178,7 +178,7 @@ if ($subscriptionId != "") {
         <div class="modal-content">
             <div class="modal-body text-start">
                 <div class="row">
-                    <div class="col-7 pe-4">
+                    <div class="col-6 pe-4">
                         <div id="before_gadsacccreated_text" class="mb-1 fs-6 before-gmc-acc-creation">
                             <h5 class="modal-title my-3" id="staticBackdropLabel">
                                 <span id="before_gadsacccreated_title">
@@ -209,7 +209,7 @@ if ($subscriptionId != "") {
                                     <input class="form-control mb-4" type="text" id="gmc_email_address" name="email_address" value="<?php echo isset($tvc_data['g_mail']) === TRUE ? esc_attr($tvc_data['g_mail']) : ""; ?>" placeholder="<?php esc_attr_e("Enter email address", "enhanced-e-commerce-for-woocommerce-store"); ?>" required>
 
                                     <div class="form-check mb-4">
-                                        <input class="form-check-input" type="checkbox" id="gmc_adult_content" name="adult_content" value="1" style="float:none">
+                                        <input class="" type="checkbox" id="gmc_adult_content" name="adult_content" value="1" style="float:none">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <?php esc_html_e("My site contain", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                             <b>
@@ -245,7 +245,7 @@ if ($subscriptionId != "") {
                                     </div>
 
                                     <div class="form-check mb-4">
-                                        <input id="gmc_concent" name="concent" class="form-check-input" type="checkbox" value="1" required style="float:none">
+                                        <input id="gmc_concent" name="concent" class="" type="checkbox" value="1" required style="float:none">
                                         <label class="form-check-label" for="concent">
                                             <?php esc_html_e("I accept the", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                             <a target="_blank" href="<?php echo esc_url("

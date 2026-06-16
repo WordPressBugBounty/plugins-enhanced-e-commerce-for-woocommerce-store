@@ -1,5 +1,6 @@
 <?php
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
+if (!isset($is_refresh_token_expire)) { $is_refresh_token_expire = false; }
 if (array_key_exists("microsoft_mail", $tvc_data) && sanitize_email($tvc_data["microsoft_mail"]) && isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
     update_option('ee_customer_msmail', sanitize_email($tvc_data["microsoft_mail"]));
 
@@ -44,78 +45,21 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
 
 <div class="convwiz_pixtitle mt-0 mb-3 d-flex justify-content-between align-items-center py-0">
 
-    <div class="col-7">
-
-        <?php if ($sub_page == "bingsettings") { ?>
-            <ul class="conv-green-checklis list-unstyled mt-3">
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("All the e-commerce event tracking including Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="page_view, purchase, view_item_list, view_item, select_item, add_to_cart, remove_from_cart, view_cart, begin_checkout, add_payment_info, and add_shipping_info.">
-                        info
-                    </span>
-                </li>
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("All the lead generation event tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="lead_form_submit. email_click, phone_click, address_click">
-                        info
-                    </span>
-                </li>
-            </ul>
-        <?php } ?>
-        <?php if ($sub_page == "gadssettings") { ?>
-            <ul class="conv-green-checklis list-unstyled mt-3">
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("Microsoft Ads Purchase & Lead Generation Conversion Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </li>
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("Easy-to-Set-Up Microsoft Ads Pmax Campaign Creation", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-html="true" data-bs-original-title="<b>What is Pmax campaigns? </b><br>Performance max campaign are like a personal shopper for your WooCommerce store, automatically finding the best customers and showing them your ads at the perfect time.">
-                        info
-                    </span>
-                </li>
-            </ul>
-        <?php } ?>
-        <?php if ($sub_page == "mmcsettings") { ?>
-            <ul class="conv-green-checklis list-unstyled mt-3">
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("Showcase your products on Bing Shopping", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </li>
-                <!-- Showcase your products on Microsoft Ads -->
-            </ul>
-        <?php } ?>
-
-    </div>
+   
     <div class="col convgauthcol">
         <div class="convpixsetting-inner-box ps-3" style="border-left: 3px solid #09bd83;">
             <?php
-            $g_email = get_option('ee_customer_msmail');
+            $ee_customer_msmail = get_option('ee_customer_msmail');
             ?>
-            <?php if ($g_email != "") { ?>
+            <?php if ($ee_customer_msmail != "") { ?>
                 <h5 class="fw-normal mb-1">
                     <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </h5>
                 <span>
-                    <?php echo esc_html($g_email); ?>
-                    <?php if (isset($_GET['subpage']) && $_GET['subpage'] != "mmcsettings") { ?>
-                        <span class="conv-link-blue ps-0 tvc_microsoft_signinbtn">
-                            <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </span>
-                    <?php } ?>
+                    <?php echo esc_html($ee_customer_msmail); ?>
+                    <span class="conv-link-blue ps-0 tvc_microsoft_signinbtn">
+                        <?php esc_html_e("Login with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    </span>
 
                 </span>
             <?php } else { ?>
@@ -135,7 +79,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                                 )
                             ); ?>
                         </div>
-                        <div class="btn-text"><b><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
+                        <div class="btn-text"><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
                     </div>
                 </div>
             <?php } ?>
@@ -148,7 +92,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
 <div class="pp-modal onbrd-popupwrp" id="tvc_microsoft_signin" tabindex="-1" role="dialog">
     <div class="onbrdppmain" role="document">
         <div class="onbrdnpp-cntner acccretppcntnr">
-            <div class="onbrdnpp-hdr">
+            <div class="onbrdnpp-hdr" style="position: relative; min-height: 36px;">
                 <div class="ppclsbtn clsbtntrgr">
                     <?php echo wp_kses(
                         enhancad_get_plugin_image('/admin/images/close-icon.png', '', 'ppclsbtn clsbtntrgr', ''),
@@ -162,6 +106,9 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                         )
                     ); ?>
                 </div>
+                <button type="button" class="clsbtntrgr" aria-label="Close"
+                    style="position: absolute; top: 6px; right: 12px; background: none; border: none; font-size: 24px; line-height: 1; color: #555; cursor: pointer; padding: 0; z-index: 10;"
+                    onmouseover="this.style.color='#000'" onmouseout="this.style.color='#555'">&times;</button>
             </div>
             <div class="onbrdpp-body">
                 <div class="h6 py-2 px-1" style="background: #d7ffd7;">Please use Chrome browser to configure the plugin if you face any issues during setup.</div>
@@ -181,7 +128,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                     <?php if (!isset($tvc_data['microsoft_mail']) || $tvc_data['microsoft_mail'] == "" || $subscriptionId == "") { ?>
                         <div class="microsoft_connect_url microsoft-btn d-flex align-items-center" onclick='window.open("<?php echo esc_js(esc_url($microsoft_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'>
                             <?php if (isset($ee_options['microsoft_ads_manager_id']) || isset($_GET['subscription_id'])) { ?>
-                                <span>Change</span>
+                                <span>Login with Microsoft</span>
                             <?php } else { ?>
                                 <div class="microsoft-icon-wrapper">
                                     <?php echo wp_kses(
@@ -196,7 +143,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                                         )
                                     ); ?>
                                 </div>
-                                <div class="btn-text"><b><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
+                                <div class="btn-text"><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
                             <?php } ?>
                         </div>
                     <?php } else { ?>
@@ -233,7 +180,7 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                                         )
                                     ); ?>
                                 </div>
-                                <div class="btn-text"><b><?php esc_html_e("Reauthorize Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
+                                <div class="btn-text"><?php esc_html_e("Reauthorize Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
                             </div>
                         <?php } ?>
                     <?php } ?>

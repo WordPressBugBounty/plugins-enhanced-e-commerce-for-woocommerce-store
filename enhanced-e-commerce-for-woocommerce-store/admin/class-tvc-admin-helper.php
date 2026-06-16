@@ -1098,7 +1098,7 @@ class TVC_Admin_Helper
 
   public function get_pro_plan_site()
   {
-    return "https://www.conversios.io/pricing/";
+    return "https://www.conversios.io/woocommerce-plan-pricing/";
   }
 
   public function get_conversios_site_url()

@@ -48,7 +48,7 @@ class TVC_Account
                 <div class="tvc_licence_key_wapper ">
                   <p>
                     <?php esc_html_e("Level up your E-commerce business with full control. Integrate GTM, GA4, FB Conversions API, Google Ads Conversion, Unlimited Product Feed, Dedicated success manager and more.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=notice&utm_campaign=account_summary&plugin_name=aio">Upgrade Now</a>
+                    <a target="_blank" href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=notice&utm_campaign=account_summary&plugin_name=aio">Upgrade Now</a>
                   </p>
                 </div>
               </div>

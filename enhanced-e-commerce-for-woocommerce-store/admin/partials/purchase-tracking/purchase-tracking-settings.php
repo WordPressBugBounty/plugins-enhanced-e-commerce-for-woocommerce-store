@@ -559,61 +559,25 @@ When major tracking parameters are destroyed natively by the user's browser, the
                                     <div class="conv_ore_stat_value" id="stat_server">0</div>
                                     <div id="stat_server_breakdown" style="font-size: 11px; margin-top: 8px; color: #64748b; font-weight: 600; line-height: 1.4; display:none;"></div>
                                 </div>
-                                <div class="conv_ore_stat_tile"><div class="conv_ore_stat_label" style="color:#ef4444">Missed<br>Revenue</div><div class="conv_ore_stat_value" id="stat_recovered_revenue"><?php echo html_entity_decode(get_woocommerce_currency_symbol()); ?>0</div></div>
+                                <div class="conv_ore_stat_tile" style="background: linear-gradient(135deg, #fef3c7, #fef9c3); border: 2px solid #f59e0b; box-shadow: 0 0 12px rgba(245,158,11,0.25);">
+
+                                    <div class="conv_ore_stat_label" style="color:#b45309">Missed<br>Revenue</div><div class="conv_ore_stat_value" id="stat_recovered_revenue" style="color: #92400e;"><?php echo html_entity_decode(get_woocommerce_currency_symbol()); ?>0</div>
+                                </div>
                             </div>
 
-                            <?php
-                                $ore_last_cron = get_option('conv_ore_last_cron', '');
-                                $ore_next_cron_ts = wp_next_scheduled('conv_dbnewfeature_schedule_hook');
-                                $ore_next_cron = $ore_next_cron_ts ? get_date_from_gmt(gmdate('Y-m-d H:i:s', $ore_next_cron_ts), 'M j, Y g:i A') : '';
-                                $ore_last_display = $ore_last_cron ? date('M j, Y g:i A', strtotime($ore_last_cron)) : 'NA';
-                                $ore_next_title = '';
-                                if ($ore_next_cron_ts) {
-                                    $time_diff = $ore_next_cron_ts - time();
-                                    $abs_diff = abs($time_diff);
-                                    $hours = floor($abs_diff / 3600);
-                                    $minutes = floor(($abs_diff % 3600) / 60);
-                                    $time_str = [];
-                                    if ($hours > 0) $time_str[] = $hours . 'h';
-                                    if ($minutes > 0 || empty($time_str)) $time_str[] = $minutes . 'm';
-                                    
-                                    if ($time_diff > 0) {
-                                        $ore_next_title = 'In ' . implode(' ', $time_str);
-                                    } else {
-                                        $ore_next_title = 'Overdue by ' . implode(' ', $time_str);
-                                    }
-                                }
-                            ?>
-                            <div id="ore_cron_info" style="margin: 10px 0 0; font-size: 11px; color: #94a3b8; line-height: 1.8; display: flex; gap: 20px; flex-wrap: wrap;">
-                                <span><span class="dashicons dashicons-backup" style="font-size: 13px; width: 13px; height: 13px; line-height: 1; vertical-align: middle; margin-right: 3px; color: #64748b;"></span> Last Cron: <strong id="ore_last_cron_time" style="color: <?php echo $ore_last_cron ? '#0f172a' : '#000'; ?>"><?php echo esc_html($ore_last_display); ?></strong></span>
-                                <?php if ($ore_next_cron) : ?>
-                                <span title="<?php echo esc_attr($ore_next_title); ?>" style="cursor:help; border-bottom: 1px dotted #94a3b8;"><span class="dashicons dashicons-clock" style="font-size: 13px; width: 13px; height: 13px; line-height: 1; vertical-align: middle; margin-right: 3px; color: #64748b;"></span> Next Cron: <strong style="color: #0f172a;"><?php echo esc_html($ore_next_cron); ?></strong></span>
-                                <?php else : ?>
-                                <span><span class="dashicons dashicons-clock" style="font-size: 13px; width: 13px; height: 13px; line-height: 1; vertical-align: middle; margin-right: 3px; color: #64748b;"></span> Next Cron: <strong style="color: #000;">NA</strong></span>
-                                <?php endif; ?>
-                            </div>
-                            <?php if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON) : ?>
-                            <div style="margin-top: 10px; padding: 10px; background-color: #fffbeb; border-left: 3px solid #f59e0b; font-size: 11px; color: #92400e; border-radius: 4px;">
-                                <strong style="color: #b45309;"><span class="dashicons dashicons-warning" style="font-size: 14px; width: 14px; height: 14px; line-height: 1; vertical-align: middle;"></span> WP-Cron is Disabled:</strong> The <code>DISABLE_WP_CRON</code> constant is set to true on this website. 
-                                <?php if (isset($time_diff) && $time_diff < -3600) : ?>
-                                <br><span style="color: #ef4444; font-weight: 600;">⚠️ Critical Issue:</span> The background synchronization is severely overdue. Your server-level cron job is not configured correctly or is failing. Please set up a server cron (e.g., via cPanel) to trigger <code>wp-cron.php</code> regularly, or remove the constant from <code>wp-config.php</code>.
-                                <?php else : ?>
-                                Ensure that a server-level cron job is configured to trigger <code>wp-cron.php</code> regularly, otherwise background synchronization will not run.
-                                <?php endif; ?>
-                            </div>
-                            <?php endif; ?>
 
-                            <div style="margin-top: 24px; margin-bottom: 24px; padding: 16px 20px; background: #fff5f5; border: 1px solid #fecaca; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+
+                            <div id="conv_ore_missed_banner" style="margin-top: 24px; margin-bottom: 24px; padding: 16px 20px; background: #fff5f5; border: 1px solid #fecaca; border-radius: 8px; display: none; align-items: center; justify-content: space-between; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
                                 <div style="display: flex; align-items: center; gap: 16px;">
                                     <div style="background: #ef4444; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 4px rgba(239,68,68,0.2);">
                                         <span class="dashicons dashicons-warning" style="font-size: 20px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;"></span>
                                     </div>
                                     <div>
-                                        <h4 style="margin: 0 0 4px 0; color: #991b1b; font-size: 16px; font-weight: 700;">You are actively losing tracked revenue!</h4>
-                                        <p style="margin: 0; color: #b91c1c; font-size: 13px;">Ad-blockers and privacy updates are blinding your campaigns. <br> Order Recovery Engine seamlessly restores your lost sales data.</p>
+                                        <h4 id="conv_ore_missed_title" style="margin: 0 0 4px 0; color: #991b1b; font-size: 16px; font-weight: 700;"></h4>
+                                        <p id="conv_ore_missed_desc" style="margin: 0; color: #b91c1c; font-size: 13px;"></p>
                                     </div>
                                 </div>
-                                <a href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=rednudge&utm_campaign=upgrade&plugin_name=aio'); ?>" target="_blank" class="button" style="background: #ef4444; border-color: #dc2626; color: #fff; font-weight: 700; text-shadow: none; font-size: 14px; padding: 4px 16px; height: 38px; line-height: 28px; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); transition: all 0.2s;">Unlock Order Recovery Engine Now &rarr;</a>
+                                <a href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=orepage&utm_campaign=upgrade'); ?>" target="_blank" class="button" style="background: #16a34a; border-color: #15803d; color: #fff; font-weight: 700; text-shadow: none; font-size: 14px; padding: 4px 16px; height: 38px; line-height: 28px; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3); transition: all 0.2s; white-space: nowrap;">Unlock Order Recovery Engine Now &rarr;</a>
                             </div>
 
                             <!-- Order Details Table (DataTables SSP) -->
@@ -1493,6 +1457,24 @@ When major tracking parameters are destroyed natively by the user's browser, the
                     // Last cron timestamp (updates PHP-rendered value after manual sync)
                     if (d.last_cron) {
                         jQuery('#ore_last_cron_time').text(d.last_cron).css('color', '#0f172a');
+                    }
+
+                    // Dynamic missed-revenue banner
+                    var missedCount = parseInt(d.server, 10) || 0;
+                    var missedRev   = parseFloat(d.recovered_revenue) || 0;
+                    var banner      = jQuery('#conv_ore_missed_banner');
+                    if (missedCount > 0 && missedRev > 0) {
+                        var cs = '<?php echo html_entity_decode(get_woocommerce_currency_symbol()); ?>';
+                        jQuery('#conv_ore_missed_title').text(
+                            'You earned ' + cs + missedRev.toFixed(2) + ' that your ads platforms can\u2019t see.'
+                        );
+                        jQuery('#conv_ore_missed_desc').text(
+                            missedCount + (missedCount === 1 ? ' order' : ' orders') +
+                            ' skipped the thank-you page, so no conversion fired.'
+                        );
+                        banner.css('display', 'flex');
+                    } else {
+                        banner.css('display', 'none');
                     }
                 }
 

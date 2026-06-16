@@ -346,7 +346,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
           <div class="card-body" style="padding: 2rem;">
             <h5 class="card-title" style="font-size: 1.5rem; margin-bottom: 1rem;"><?php esc_html_e( 'Feature Coming Soon', 'enhanced-e-commerce-for-woocommerce-store' ); ?></h5>
             <p class="card-text" style="font-size: 1rem; margin-bottom: 1.5rem;"><?php esc_html_e( 'We\'re working hard to bring this feature to you. Stay tuned!', 'enhanced-e-commerce-for-woocommerce-store' ); ?></p>
-            <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list" class="btn btn-primary"><?php esc_html_e( 'Learn More', 'enhanced-e-commerce-for-woocommerce-store' ); ?></a>
+            <a target="_blank" href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list" class="btn btn-primary"><?php esc_html_e( 'Learn More', 'enhanced-e-commerce-for-woocommerce-store' ); ?></a>
           </div>
         </div>
         <?php echo wp_kses(
@@ -390,33 +390,9 @@ if (class_exists('Conversios_Admin') === FALSE) {
       $conv_onboarding_done_step = $ee_options['conv_onboarding_done_step'] ?? "";
       $conv_onboarding_done = $ee_options['conv_onboarding_done'] ?? "";
 
-      // Load onboarding wizard if applicable
-      if (
-        version_compare(PLUGIN_TVC_VERSION, "7.1.2", ">") &&
-        (empty($gm_id) || empty($google_ads_id)) &&
-        (empty($conv_onboarding_done_step) || $conv_onboarding_done_step != "6") &&
-        empty($conv_onboarding_done)
-      ) {
-        require_once 'partials/wizard_pixelandanalytics.php';
-        return;
-      }
-
-      // Load wizard page directly if requested
-      if ($is_wizard === "pixelandanalytics") {
-        require_once 'partials/wizard_pixelandanalytics.php';
-        return;
-      }
-
       // Default: load dashboard
       require_once(ENHANCAD_PLUGIN_DIR . 'includes/setup/class-conversios-analytics-reports.php');
 
-      // Load subpage if specified
-      $sub_page = filter_input(INPUT_GET, 'subpage', FILTER_DEFAULT);
-      if ($sub_page === "pixelandanalytics") {
-        require_once 'partials/wizard_pixelandanalytics.php';
-      } elseif ($sub_page === "productfeed") {
-        require_once 'partials/wizard_productfeed.php';
-      }
     }
 
     public function conversios_account()
@@ -426,12 +402,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
     }
     public function conversios_google_analytics()
     {
-      $sub_page = (isset($_GET['subpage']) === TRUE) ? sanitize_text_field(wp_unslash($_GET['subpage'])) : "";
-      if (!empty($sub_page)) {
-        require_once('partials/single-pixel-settings.php');
-      } else {
-        require_once('partials/general-fields.php');
-      }
+      require_once('partials/general-fields.php');
     }
 
     public function conversios_analytics_reports()

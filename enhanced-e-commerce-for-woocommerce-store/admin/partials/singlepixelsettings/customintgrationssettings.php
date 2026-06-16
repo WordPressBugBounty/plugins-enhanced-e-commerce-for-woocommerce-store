@@ -19,19 +19,19 @@ $is_sel_disable = 'disabled';
             <?php endif; ?>
             <div style="<?php echo !CONV_IS_WC ? 'opacity:0.5;pointer-events:none;' : ''; ?>padding:0 0.5em;">
               <div class="form-check form-check-inline">
-                <input class="form-check-input conv_revnue_checkinput" type="checkbox" id="conv_revnue_subtotal" value="subtotal" <?php echo isset($ee_options['net_revenue_setting']) ? 'checked onclick="return false" style="opacity:0.5"' : ''; ?>>
+                <input class="conv_revnue_checkinput" type="checkbox" id="conv_revnue_subtotal" value="subtotal" <?php echo isset($ee_options['net_revenue_setting']) ? 'checked onclick="return false" style="opacity:0.5"' : ''; ?>>
                 <label class="form-check-label" for="conv_revnue_subtotal">
                   <?php esc_html_e("Product subtotal (Sum of Product prices)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input conv_revnue_checkinput" type="checkbox" id="conv_revnue_shipping" value="shipping" <?php echo isset($ee_options['net_revenue_setting']) && in_array('shipping', $ee_options['net_revenue_setting']) ? "checked" : "" ?>>
+                <input class="conv_revnue_checkinput" type="checkbox" id="conv_revnue_shipping" value="shipping" <?php echo isset($ee_options['net_revenue_setting']) && in_array('shipping', $ee_options['net_revenue_setting']) ? "checked" : "" ?>>
                 <label class="form-check-label" for="conv_revnue_shipping">
                   <?php esc_html_e("Include Shipping", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input conv_revnue_checkinput" type="checkbox" id="conv_revnue_tax" value="tax" <?php echo isset($ee_options['net_revenue_setting']) && in_array('tax', $ee_options['net_revenue_setting']) ? "checked" : "" ?>>
+                <input class="conv_revnue_checkinput" type="checkbox" id="conv_revnue_tax" value="tax" <?php echo isset($ee_options['net_revenue_setting']) && in_array('tax', $ee_options['net_revenue_setting']) ? "checked" : "" ?>>
                 <label class="form-check-label" for="conv_revnue_tax">
                   <?php esc_html_e("Include Tax", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </label>

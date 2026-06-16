@@ -1,5 +1,6 @@
 <?php
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
+if (!isset($is_refresh_token_expire)) { $is_refresh_token_expire = false; }
 if (array_key_exists("g_mail", $tvc_data) && sanitize_email($tvc_data["g_mail"]) && isset($_GET['subscription_id']) && sanitize_text_field(wp_unslash($_GET['subscription_id']))) {
     update_option('ee_customer_gmail', sanitize_email($tvc_data["g_mail"]));
     $eeapidata = unserialize(get_option('ee_api_data'));
@@ -38,60 +39,6 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
 ?>
 
 <div class="convwiz_pixtitle mt-0 mb-3 py-0">
-    <div class="col-7">
-        <?php if ($sub_page == "gasettings") { ?>
-            <ul class="conv-green-checklis list-unstyled mt-3">
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("All the e-commerce event tracking including Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="page_view, purchase, view_item_list, view_item, select_item, add_to_cart, remove_from_cart, view_cart, begin_checkout, add_payment_info, and add_shipping_info.">
-                        info
-                    </span>
-                </li>
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("All the lead generation event tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Lead Form Submit, Lead Email Click, Lead Phone Click, Page Scroll, File Download, Author, Login, Signup">
-                        info
-                    </span>
-                </li>
-            </ul>
-        <?php } ?>
-        <?php if ($sub_page == "gadssettings") { ?>
-            <ul class="conv-green-checklis list-unstyled mt-3">
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("Google Ads Purchase & Lead Generation Conversion Tracking", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </li>
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("Easy-to-Set-Up Google Ads Pmax Campaign Creation", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                    <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-html="true" data-bs-original-title="<b>What is Pmax campaigns? </b><br>Performance max campaign are like a personal shopper for your WooCommerce store, automatically finding the best customers and showing them your ads at the perfect time.">
-                        info
-                    </span>
-                </li>
-            </ul>
-        <?php } ?>
-        <?php if ($sub_page == "gmcsettings") { ?>
-            <ul class="conv-green-checklis list-unstyled mt-3">
-                <li class="d-flex">
-                    <span class="material-symbols-outlined text-success md-18">
-                        check_circle
-                    </span>
-                    <?php esc_html_e("Showcase your products on Google Shopping", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                </li>
-            </ul>
-        <?php } ?>
-
-    </div>
     <div class="col convgauthcol">
         <div class="convpixsetting-inner-box ps-3" style="border-left: 3px solid #09bd83;">
             <?php

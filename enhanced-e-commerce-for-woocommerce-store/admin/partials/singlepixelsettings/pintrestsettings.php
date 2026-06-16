@@ -1,89 +1,41 @@
 <?php
-if (!defined('ABSPATH')) exit; // Exit if accessed directly 
 $is_sel_disable = 'disabled';
 ?>
-<div class="convcard p-4 mt-0 rounded-3 shadow-sm">
-    <ul class="conv-green-checklis list-unstyled mt-3">
-        <li class="d-flex">
-            <span class="material-symbols-outlined text-success md-18">
-                check_circle
-            </span>
-            <?php esc_html_e("E-commerce conversion tracking including Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
-            <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Page Visit, Add to Cart, Checkout (Purchase).">
-                info
-            </span>
-        </li>
-        <li class="d-flex">
-            <span class="material-symbols-outlined text-success md-18">
-                check_circle
-            </span>
-            <?php esc_html_e("Lead generation conversion tracking including Form Submit", "enhanced-e-commerce-for-woocommerce-store"); ?>
-        </li>
-    </ul>
+<div class="conv-card p-4 rounded conv-shadow-sm">
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-3">
+        <?php echo wp_kses(
+            enhancad_get_plugin_image('/admin/images/logos/conv_pint_logo.png', '', 'align-self-center conv-channel-logo'),
+            array(
+                'img' => array(
+                    'src' => true,
+                    'alt' => true,
+                    'class' => true,
+                    'style' => true,
+                ),
+            )
+        ); ?>
+        <h4 class="conv-card-title ms-2">Pinterest Pixel</h4>
+    </div>
+    <hr class="conv-header-hr">
+
     <form id="pixelsetings_form" class="convpixsetting-inner-box">
         <div>
             <!-- Pinterest Pixel -->
             <?php $pinterest_ads_pixel_id = isset($ee_options['pinterest_ads_pixel_id']) ? $ee_options['pinterest_ads_pixel_id'] : ""; ?>
             <div id="pintrest_box" class="py-1">
                 <div class="row pt-2">
-                    <div class="col-7">
-                        <h5 class="d-flex align-items-center mb-1 text-dark">
-                            <b><?php esc_html_e("Pinterest Pixel ID:", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
-                            <?php if (!empty($pinterest_ads_pixel_id)) { ?>
-                                <span class="material-symbols-outlined text-success ms-1 fs-6">check_circle</span>
-                            <?php } ?>
-                            <!-- <span class="material-symbols-outlined text-secondary md-18 ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="The Pinterest Ads pixel ID looks like. 2612831678022">
-                                info
-                            </span> -->
-                        </h5>
-                        <input type="text" name="pinterest_ads_pixel_id" id="pinterest_ads_pixel_id" class="form-control valtoshow_inpopup_this" value="<?php echo esc_attr($pinterest_ads_pixel_id); ?>" placeholder="e.g. 2612831678022">
+                    <div class="col-6">
+                        <label class="conv-field-label d-flex align-items-center"><?php esc_html_e("Pinterest Pixel ID:", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                        </label>
+                        <input type="text" name="pinterest_ads_pixel_id" id="pinterest_ads_pixel_id" class="form-control valtoshow_inpopup_this" value="<?php echo esc_attr($pinterest_ads_pixel_id); ?>">
+                        <a href="https://www.conversios.io/blog/how-to-find-pinterest-pixel-id-from-a-business-manager-account/?utm_source=woo_aiofree_plugin&utm_medium=otherpixelsetting&utm_campaign=woo_aiofree_plugin" target="_blank" style="font-size: 12px; color: #0073aa; font-weight: 500; text-decoration: none; display:inline-block; margin-top:4px;">How to Find Pinterest Pixel ID &rarr;</a>
                     </div>
                 </div>
             </div>
             <!-- Pinterest Pixel End-->
         </div>
 
-        <div class="row row-x-0 d-flex justify-content-between align-items-center conv_create_gads_new_card rounded px-3 py-3 mt-4" style="background: #caf3e3;">
-            <div class="mt-0 mb-2 col-3 d-flex justify-content-center">
-                <?php echo wp_kses(
-                    enhancad_get_plugin_image('/admin/images/sstimpact.png','','rounded shadow'),
-                    array(
-                        'img' => array(
-                            'src' => true,
-                            'alt' => true,
-                            'class' => true,
-                            'style' => true,
-                        ),
-                    )
-                ); ?>
-            </div>
-            <div class="mt-0 mb-2 col-9">
-                <div class="fs-6 fw-bold text-primary">Increase conversions by 40% with the Server-Side Tagging Enterprise Plan</div>
-                <ul class="conv-green-checklis fb-kapi list-unstyled mt-1">
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
-                        Full automation for server-side tracking and web container setup including Datalayer setup
-                    </li>
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">
-                            check_circle
-                        </span>
-                        Custom GTM loader with First party mode enable
-                    </li>
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
-                        Server-side tracking for GA4, Google Ads, Facebook CAPI, Snapchat, and TikTok Events API
-                    </li>
-                    <li class="d-flex fs-14 fw-bold">
-                        <span class="material-symbols-outlined text-success md-18">check_circle</span>
-                        Faster load time with server-side tracking
-
-                    </li>
-                </ul>
-                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&amp;utm_medium=pintinnersetting&amp;utm_campaign=sstnudge&amp;plugin_name=aio" class="align-middle btn btn-sm btn-primary fw-bold-500">
-                    Buy Now! </a>
-            </div>
-        </div>
     </form>
     <input type="hidden" id="valtoshow_inpopup" value="Pinterest Pixel ID:" />
 

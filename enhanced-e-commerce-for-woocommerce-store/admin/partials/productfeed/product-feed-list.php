@@ -179,7 +179,71 @@ if ($edit_id > 0) {
     $ee_prod_mapped_cats = unserialize(get_option('ee_prod_mapped_cats'));
 }
 ?>
+<script>
+(function() {
+    var noticeSelectors = [
+        '.notice:not(.conversios-own-notice)',
+        '.updated:not(.conversios-own-notice)',
+        '.update-nag',
+        '.astra-notices',
+        '[class*="astra-notice"]',
+        '[class*="rank-math-notice"]',
+        '[class*="woocommerce-message"]',
+        '.woocommerce-error',
+        '.woocommerce-info',
+    ];
+
+    function removeThirdPartyNotices() {
+        var container = document.getElementById('wpbody-content');
+        if (!container) return;
+        noticeSelectors.forEach(function(sel) {
+            container.querySelectorAll(':scope > ' + sel).forEach(function(el) {
+                el.remove();
+            });
+        });
+    }
+
+    // Run immediately on load
+    document.addEventListener('DOMContentLoaded', removeThirdPartyNotices);
+
+    // Watch for dynamically injected notices
+    var observer = new MutationObserver(removeThirdPartyNotices);
+    document.addEventListener('DOMContentLoaded', function() {
+        var container = document.getElementById('wpbody-content');
+        if (container) {
+            observer.observe(container, { childList: true, subtree: false });
+        }
+    });
+})();
+</script>
 <style>
+    /* === Suppress third-party admin notices on Product Feed page === */
+    .conversios-product-feed-page .notice,
+    .conversios-product-feed-page .notice-info,
+    .conversios-product-feed-page .notice-warning,
+    .conversios-product-feed-page .notice-error,
+    .conversios-product-feed-page .notice-success,
+    .conversios-product-feed-page .updated,
+    .conversios-product-feed-page .update-nag,
+    .conversios-product-feed-page .astra-notices,
+    .conversios-product-feed-page [class*="astra-notice"],
+    .conversios-product-feed-page [class*="rank-math-notice"],
+    .conversios-product-feed-page [class*="woocommerce-message"],
+    .conversios-product-feed-page [class*="wp-pointer"],
+    /* Global scope fallback — hides notices injected directly into #wpbody-content */
+    #wpbody-content > .notice:not(.conversios-own-notice),
+    #wpbody-content > .updated:not(.conversios-own-notice),
+    #wpbody-content > .update-nag,
+    #wpbody-content > .astra-notices,
+    #wpbody-content > [class*="astra-notice"],
+    #wpbody-content > [class*="rank-math"],
+    #wpbody-content > .woocommerce-message,
+    #wpbody-content > .woocommerce-error,
+    #wpbody-content > .woocommerce-info {
+        display: none !important;
+    }
+
+
     .errorInput {
         border: 1.3px solid #ef1717 !important;
         padding: 0px;
@@ -415,13 +479,6 @@ if ($edit_id > 0) {
     <div class="indeterminate"></div>
 </div>
 <div class="channel-setup-parent">
-    <div class="container-fluid px-2 pt-2 pb-0" style="max-width: 100%;">
-        <div style="background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%); border: 1px solid #facc15; border-radius: 6px; padding: 6px 12px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; color: #92400e; box-shadow: 0 1px 2px rgba(0,0,0,0.05); gap: 10px;">
-            <span class="dashicons dashicons-megaphone" style="font-size: 16px; width: 16px; height: 16px; color: #b45309;"></span>
-            <span><b>Scaling globally? Unlock Pro Features!</b> Get <b>Unlimited Products</b>, <b>Multi-Country Feeds</b>, and <b>Variation-level syncing</b>.</span>
-            <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedlist&utm_campaign=ProFeedUpsell" style="background-color: #ca8a04; color: #fff; padding: 2px 10px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 12px; margin-left: 10px;">View Pro Plans</a>
-        </div>
-    </div>
     <div class="wrap mt-3">
         <h2 class="nav-tab-wrapper">
             <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-google-shopping-feed&subpage=gmc')); ?>" class="nav-tab <?php echo (!isset($_GET['subpage']) || $_GET['subpage'] === 'gmc') ? 'nav-tab-active' : ''; ?>">
@@ -449,8 +506,12 @@ if ($edit_id > 0) {
     <!-- Tabs for all channels end-->
     <!-- Details card for All channels -->
     <?php if (isset($_GET['subpage']) && $_GET['subpage'] == 'gmc') { ?>
+        <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
+            <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_gmc&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+        </div>
         <?php if ($google_merchant_center_id != "" && $g_mail != "") { ?>
-            <div class="gmcdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
+            <div class="gmcdetails" style="padding: 12px 16px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.10); border: 1px solid #e5e7eb; margin-top: 8px;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
                     <div style="display: flex; align-items: center; margin-bottom: 10px; margin-right: 30px;">
                         <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
@@ -514,6 +575,10 @@ if ($edit_id > 0) {
         <?php } ?>
         <?php require_once(ENHANCAD_PLUGIN_DIR . '/admin/partials/singlepixelsettings/gmcsettings.php'); ?>
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'microsoft') { ?>
+        <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
+            <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_microsoft&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+        </div>
         <?php if ($microsoft_catalog_id != "" && $ms_mail != "") { ?>
             <div class="mmcdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
@@ -579,6 +644,10 @@ if ($edit_id > 0) {
         <?php } ?>
         <?php require_once(ENHANCAD_PLUGIN_DIR . '/admin/partials/singlepixelsettings/mmcsettings.php'); ?>
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'tiktok') { ?>
+        <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
+            <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_tiktok&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+        </div>
         <?php if ($tiktok_email != "" && $tiktok_business_account != "") { ?>
             <div class="tiktokdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
@@ -644,6 +713,10 @@ if ($edit_id > 0) {
         <?php } ?>
         <?php require_once(ENHANCAD_PLUGIN_DIR . '/admin/partials/singlepixelsettings/tiktokBusinessSettings.php'); ?>
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'meta') { ?>
+        <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
+            <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_meta&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+        </div>
         <?php if ($fb_mail != "" && $fb_catalog_id != "") { ?>
             <div class="metadetails" style="padding: 8px 11px;background-color: #f0f0f1;">
                 <div style="display: flex; flex-wrap: wrap; align-items: center;">
@@ -1089,8 +1162,8 @@ if ($edit_id > 0) {
                                     <?php esc_html_e("Auto Sync", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </th>
                                 <td class="text-start">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" style="height: 1.5em !important; width: 3em;" type="checkbox" name="autoSync" id="autoSync" checked>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="autoSync" id="autoSync" checked>
                                     </div>
                                 </td>
                             </tr>
@@ -1099,32 +1172,32 @@ if ($edit_id > 0) {
                                 <td class="text-start">
                                     <input type="text" class="form-control-sm" readonly name="autoSyncIntvl" id="autoSyncIntvl" size="3" value="25">
                                     <span class="ms-2"><?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup&plugin_name=aio" class="ms-2">
-                                        <b><?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
+                                    <a target="_blank" href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup&plugin_name=aio" class="ms-2">
+                                        <b><?php esc_html_e("Upgrade To Pro for Daily Sync", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                                     </a>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("Include Product Variations", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
                                 <td class="text-start">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" style="height: 1.5em !important; width: 3em;" type="checkbox" name="IncProductVar" id="IncProductVar" checked>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="IncProductVar" id="IncProductVar" checked>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("Only Include Default Product Variations", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
                                 <td class="text-start">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" style="height: 1.5em !important; width: 3em;" type="checkbox" name="IncDefProductVar" id="IncDefProductVar">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="IncDefProductVar" id="IncDefProductVar">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("Only Include Lowest Price Product Variation", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
                                 <td class="text-start">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" style="height: 1.5em !important; width: 3em;" type="checkbox" name="IncLowestPriceProductVar" id="IncLowestPriceProductVar">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="IncLowestPriceProductVar" id="IncLowestPriceProductVar">
                                     </div>
                                 </td>
                             </tr>
