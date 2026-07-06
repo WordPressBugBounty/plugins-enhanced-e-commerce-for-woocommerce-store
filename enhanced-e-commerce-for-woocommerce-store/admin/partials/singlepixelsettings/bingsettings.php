@@ -2039,8 +2039,13 @@ require_once "ms-signin.php";
                         } else {
                             convSetTabDisconnected('bingsettings');
                         }
+                        <?php if (CONV_IS_WC): ?>
+                        // WooCommerce active but no Microsoft Store connected — show the store nudge
+                        jQuery("#conv_ms_store_nudge_modal").addClass("conv-modal--show");
+                        <?php else: ?>
                         jQuery("#conv_save_success_txt").html("Your settings have been saved successfully.");
                         jQuery("#conv_save_success_modal").addClass("conv-modal--show");
+                        <?php endif; ?>
                     }
                 },
                 complete: function() {

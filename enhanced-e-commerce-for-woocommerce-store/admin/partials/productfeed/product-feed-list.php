@@ -1043,10 +1043,25 @@ if ($edit_id > 0) {
                                         <input type="hidden" class="syncedfbImg" value="<?php echo $value->fb_status == 'Synced' ? "<img class='synced-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/fb_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="syncedmsImg" value="<?php echo $value->ms_status == 'Synced' ? "<img class='synced-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/ms_channel_logo.svg") . "' />" : '' ?>">
                                     <?php }
-                                    if ($failed !== 0) { ?>
-                                        <div class="badgebox failed" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus">
+                                    if ($failed !== 0) {
+                                        // Check if GMC feed is missing DataSource
+                                        $conv_ds_missing = (
+                                            isset($value->channel_ids) && strpos($value->channel_ids, '1') !== false &&
+                                            (empty($value->gmc_datasource_id))
+                                        );
+                                        $conv_failed_tooltip = $conv_ds_missing
+                                            ? esc_attr__('GMC DataSource not linked. Click the feed to link a DataSource.', 'enhanced-e-commerce-for-woocommerce-store')
+                                            : '';
+                                    ?>
+                                        <div class="badgebox failed" <?php if ($conv_failed_tooltip) : ?>data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $conv_failed_tooltip; ?>"<?php else : ?>data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus"<?php endif; ?>>
                                             <?php echo esc_html__('Failed', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                         </div>
+                                        <?php if ($conv_ds_missing) : ?>
+                                        <p class="mb-0 mt-1" style="font-size: 10px; color: #dc3545; line-height: 1.3;">
+                                            <span class="material-symbols-outlined" style="font-size: 12px; vertical-align: middle;">warning</span>
+                                            <?php esc_html_e('DataSource not linked', 'enhanced-e-commerce-for-woocommerce-store'); ?>
+                                        </p>
+                                        <?php endif; ?>
                                         <input type="hidden" class="failedGmcImg" value="<?php echo $value->status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/google_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="failedTiktokImg" value="<?php echo $value->tiktok_status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/tiktok_channel_logo.png") . "' />" : '' ?>">
                                         <input type="hidden" class="failedfbImg" value="<?php echo $value->fb_status == 'Failed' ? "<img class='failed-status' src='" . esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/logos/fb_channel_logo.png") . "' />" : '' ?>">
@@ -1145,10 +1160,7 @@ if ($edit_id > 0) {
                                         <option value=""><?php esc_html_e("Select Country", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
                                         <?php
                                         foreach ($contData as $key => $value) {
-                                        ?>
-                                            <option value="<?php echo esc_attr($value->code) ?>">
-                                                <?php echo esc_html($value->name) ?></option>
-                                        <?php
+                                            echo '<option value="' . esc_attr($value->code) . '">' . esc_html($value->name) . '</option>';
                                         }
                                         ?>
                                     </select>
@@ -1157,6 +1169,44 @@ if ($edit_id > 0) {
                                     </div>
                                 </td>
                             </tr>
+                            <?php if ($subpage === 'gmc') : ?>
+                            <!-- Feed Language (GMC only) -->
+                            <tr id="conv_feed_language_row">
+                                <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("Feed Language", "enhanced-e-commerce-for-woocommerce-store"); ?><span class="text-danger">*</span></th>
+                                <td class="text-start">
+                                    <select class="form-select form-select-sm mb-3" style="width: 100%" name="feed_language" id="conv_feed_language">
+                                        <option value=""><?php esc_html_e("Select Language", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
+                                        <?php
+                                        $conv_gmc_languages = array('en'=>'English','de'=>'German','fr'=>'French','es'=>'Spanish','it'=>'Italian','pt'=>'Portuguese','nl'=>'Dutch','ja'=>'Japanese','ko'=>'Korean','zh'=>'Chinese','ar'=>'Arabic','hi'=>'Hindi','ru'=>'Russian','pl'=>'Polish','sv'=>'Swedish','da'=>'Danish','fi'=>'Finnish','no'=>'Norwegian','tr'=>'Turkish','cs'=>'Czech','hu'=>'Hungarian','ro'=>'Romanian','el'=>'Greek','he'=>'Hebrew','th'=>'Thai','vi'=>'Vietnamese','id'=>'Indonesian','sk'=>'Slovak','uk'=>'Ukrainian');
+                                        foreach ($conv_gmc_languages as $code => $name) {
+                                            echo '<option value="' . esc_attr($code) . '">' . esc_html($name) . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- DataSource (GMC only) -->
+                            <tr id="conv_feed_ds_row">
+                                <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("DataSource", "enhanced-e-commerce-for-woocommerce-store"); ?><span class="text-danger">*</span></th>
+                                <td class="text-start">
+                                    <div id="conv_feed_ds_select_wrap">
+                                        <p id="conv_feed_ds_placeholder" class="text-muted mb-2" style="font-size: 13px; padding: 6px 12px; border: 1px solid #ced4da; border-radius: 4px; background: #f8f9fa;"><?php esc_html_e("Select country & language first", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
+                                        <select class="form-select form-select-sm mb-2" style="width: 100%; display: none;" id="conv_feed_ds_select">
+                                            <option value=""><?php esc_html_e("-- Select DataSource --", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
+                                        </select>
+                                        <div id="conv_feed_ds_loading" style="display:none;"><span class="spinner-border spinner-border-sm"></span> <?php esc_html_e("Fetching datasources...", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                    </div>
+                                    <div id="conv_feed_ds_create_wrap" style="display: none;">
+                                        <p class="text-warning mb-2" style="font-size: 13px;"><span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">info</span> <?php esc_html_e("No datasources found. Create one below.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <input type="text" class="form-control" id="conv_feed_ds_name" placeholder="<?php esc_attr_e('e.g. My Product Feed', 'enhanced-e-commerce-for-woocommerce-store'); ?>">
+                                            <button type="button" class="btn btn-sm" id="conv_feed_ds_create_btn" style="background-color: #009222; color: #fff;"><?php esc_html_e("Create", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="conv_feed_ds_id" name="gmc_datasource_id" value="">
+                                </td>
+                            </tr>
+                            <?php endif; ?>
                             <tr>
                                 <th class="text-start align-middle font-weight-400 text-color">
                                     <?php esc_html_e("Auto Sync", "enhanced-e-commerce-for-woocommerce-store"); ?>
@@ -1312,7 +1362,15 @@ if ($edit_id > 0) {
                                     $sel_val = (isset($ee_mapped_attrs[$attribute["field"]])) ? esc_attr($ee_mapped_attrs[$attribute["field"]]) : esc_attr($sel_val_def);
                                     $TVC_Admin_Helper->tvc_text($attribute["field"], 'number', '', 'Add TAX flat (%)', $sel_val, $require);
                                 } else if ($attribute["field"] === 'content_language') {
-                                    $TVC_Admin_Helper->tvc_language_select($attribute["field"], 'content_language', esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), 'en', $require);
+                                    $conv_cl_val = isset($ee_mapped_attrs['content_language']) ? $ee_mapped_attrs['content_language'] : '';
+                                    if (!empty($conv_cl_val)) {
+                                        $conv_cl_labels = array('en'=>'English','de'=>'German','fr'=>'French','es'=>'Spanish','it'=>'Italian','pt'=>'Portuguese','nl'=>'Dutch','ja'=>'Japanese','ko'=>'Korean','zh'=>'Chinese','ar'=>'Arabic','hi'=>'Hindi','ru'=>'Russian','pl'=>'Polish','sv'=>'Swedish','da'=>'Danish','fi'=>'Finnish','no'=>'Norwegian','tr'=>'Turkish','cs'=>'Czech','hu'=>'Hungarian','ro'=>'Romanian','el'=>'Greek','he'=>'Hebrew','th'=>'Thai','vi'=>'Vietnamese','id'=>'Indonesian','sk'=>'Slovak','uk'=>'Ukrainian');
+                                        $conv_cl_label = isset($conv_cl_labels[$conv_cl_val]) ? $conv_cl_labels[$conv_cl_val] : $conv_cl_val;
+                                        echo '<p class="mb-0" style="font-size:13px;padding:6px 12px;border:1px solid #ced4da;border-radius:4px;background:#f8f9fa;color:#495057;"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:4px;">lock</span>' . esc_html($conv_cl_label) . '</p>';
+                                        echo '<input type="hidden" name="' . esc_attr($attribute["field"]) . '" id="content_language" value="' . esc_attr($conv_cl_val) . '">';
+                                    } else {
+                                        $TVC_Admin_Helper->tvc_language_select($attribute["field"], 'content_language', esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), 'en', $require);
+                                    }
                                 } else if ($attribute["field"] === 'target_country') {
                                     $TVC_Admin_Helper->tvc_countries_select($attribute["field"], 'target_country', esc_html__('Please Select Attribute', 'enhanced-e-commerce-for-woocommerce-store'), $require);
                                 } else {
@@ -2446,6 +2504,8 @@ $str = json_decode($str);
             productData: jQuery("#strProData").val(),
             conditionData: jQuery("#strConditionData").val(),
             valueData: jQuery("#strValueData").val(),
+            gmc_datasource_id: jQuery('#conv_feed_ds_id').val() || '',
+            feed_language: jQuery('#conv_feed_language').val() || '',
             conv_onboarding_nonce: conv_onboarding_nonce
         }
         jQuery.ajax({
@@ -2612,6 +2672,65 @@ $str = json_decode($str);
                         return new bootstrap.Tooltip(tooltipTriggerEl)
                     })
                     validateStep('step1');
+
+                    // Pre-populate Feed Language from saved attributes
+                    if (response[0].attributes) {
+                        try {
+                            var feedAttrs = typeof response[0].attributes === 'string' ? JSON.parse(response[0].attributes) : response[0].attributes;
+                            if (feedAttrs && feedAttrs.content_language) {
+                                jQuery('#conv_feed_language').val(feedAttrs.content_language);
+                            }
+                        } catch(e) { /* ignore parse errors */ }
+                    }
+
+                    // Pre-populate DataSource if feed has one saved (GMC edit flow)
+                    if (response[0].gmc_datasource_id && jQuery('#conv_feed_ds_row').length > 0) {
+                        jQuery('#conv_feed_ds_id').val(response[0].gmc_datasource_id);
+                        var cc = jQuery('#target_country').val();
+                        var lc = jQuery('#conv_feed_language').val();
+                        if (cc && lc) {
+                            // Fetch DS list and auto-select the saved one
+                            jQuery('#conv_feed_ds_placeholder').hide();
+                            jQuery('#conv_feed_ds_select').hide();
+                            jQuery('#conv_feed_ds_loading').show();
+                            jQuery('#conv_feed_ds_create_wrap').hide();
+                            jQuery('#conv_feed_ds_select_wrap').show();
+                            var savedDsId = response[0].gmc_datasource_id;
+                            jQuery.ajax({
+                                url: tvc_ajax_url,
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    action: 'ee_get_datasources',
+                                    conv_onboarding_nonce: "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>",
+                                    country_code: cc,
+                                    language_code: lc
+                                },
+                                success: function(dsResp) {
+                                    jQuery('#conv_feed_ds_loading').hide();
+                                    if (dsResp && !dsResp.error && dsResp.data && dsResp.data.length > 0) {
+                                        var opts = '<option value=""><?php echo esc_js(__("-- Select DataSource --", "enhanced-e-commerce-for-woocommerce-store")); ?></option>';
+                                        jQuery.each(dsResp.data, function(i, ds) {
+                                            var label = ds.displayName ? ds.displayName + ' (' + ds.dataSourceId + ')' : ds.dataSourceId;
+                                            var sel = (ds.dataSourceId == savedDsId) ? ' selected' : '';
+                                            opts += '<option value="' + ds.dataSourceId + '"' + sel + '>' + label + '</option>';
+                                        });
+                                        jQuery('#conv_feed_ds_select').html(opts).show();
+                                    } else {
+                                        // DS not found in list, show it as the only option
+                                        jQuery('#conv_feed_ds_select').html('<option value="' + savedDsId + '" selected>DataSource ' + savedDsId + '</option>').show();
+                                    }
+                                    validateStep('step1');
+                                },
+                                error: function() {
+                                    jQuery('#conv_feed_ds_loading').hide();
+                                    jQuery('#conv_feed_ds_select').html('<option value="' + savedDsId + '" selected>DataSource ' + savedDsId + '</option>').show();
+                                    validateStep('step1');
+                                }
+                            });
+                        }
+                    }
+
                     // Reinitialize Select2 elements after DOM updates
                     setTimeout(function() {
                         jQuery('select.select2').each(function() {
@@ -3109,6 +3228,14 @@ $str = json_decode($str);
                     isValid = false;
                 }
 
+                // GMC feeds require DataSource
+                if (isValid && jQuery('#conv_feed_ds_row').length > 0) {
+                    var dsVal = jQuery('#conv_feed_ds_id').val();
+                    if (!dsVal || dsVal === '') {
+                        isValid = false;
+                    }
+                }
+
                 jQuery('#goToAttributes').prop('disabled', !isValid);
                 break;
 
@@ -3140,6 +3267,135 @@ $str = json_decode($str);
         jQuery(document).on('input change', '#feedName, #target_country', function() {
             validateStep('step1');
         });
+
+        // DataSource fetch/create/select logic (GMC feeds only)
+        if (jQuery('#conv_feed_ds_row').length > 0) {
+            var convFeedNonce = "<?php echo esc_js(wp_create_nonce('conv_onboarding_nonce')); ?>";
+
+            // Auto-fetch on page load if country + language are pre-selected
+            (function() {
+                var cc = jQuery('#target_country').val();
+                var lc = jQuery('#conv_feed_language').val();
+                if (cc && lc) {
+                    convFeedFetchDS(cc, lc);
+                }
+            })();
+
+            // Country or Language change → fetch DataSources
+            function convFeedTriggerDS() {
+                var cc = jQuery('#target_country').val();
+                var lc = jQuery('#conv_feed_language').val();
+                // Reset DS
+                jQuery('#conv_feed_ds_id').val('');
+                validateStep('step1');
+                if (cc && lc) {
+                    convFeedFetchDS(cc, lc);
+                } else {
+                    jQuery('#conv_feed_ds_select').hide();
+                    jQuery('#conv_feed_ds_placeholder').show();
+                    jQuery('#conv_feed_ds_create_wrap').hide();
+                    jQuery('#conv_feed_ds_select_wrap').show();
+                }
+            }
+            // select2 fires 'change' on the original element AND 'select2:select'
+            jQuery('#target_country').on('change select2:select', convFeedTriggerDS);
+            jQuery('#conv_feed_language').on('change', convFeedTriggerDS);
+
+            function convFeedFetchDS(countryCode, languageCode) {
+                jQuery('#conv_feed_ds_placeholder').hide();
+                jQuery('#conv_feed_ds_select').hide();
+                jQuery('#conv_feed_ds_loading').show();
+                jQuery('#conv_feed_ds_create_wrap').hide();
+                jQuery('#conv_feed_ds_select_wrap').show();
+
+                jQuery.ajax({
+                    url: tvc_ajax_url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'ee_get_datasources',
+                        conv_onboarding_nonce: convFeedNonce,
+                        country_code: countryCode,
+                        language_code: languageCode
+                    },
+                    success: function(response) {
+                        jQuery('#conv_feed_ds_loading').hide();
+                        if (response && !response.error && response.data && response.data.length > 0) {
+                            var opts = '<option value=""><?php echo esc_js(__("-- Select DataSource --", "enhanced-e-commerce-for-woocommerce-store")); ?></option>';
+                            jQuery.each(response.data, function(i, ds) {
+                                var label = ds.displayName ? ds.displayName + ' (' + ds.dataSourceId + ')' : ds.dataSourceId;
+                                opts += '<option value="' + ds.dataSourceId + '">' + label + '</option>';
+                            });
+                            jQuery('#conv_feed_ds_select').html(opts).show();
+                            jQuery('#conv_feed_ds_create_wrap').hide();
+                            jQuery('#conv_feed_ds_select_wrap').show();
+                        } else {
+                            jQuery('#conv_feed_ds_select_wrap').hide();
+                            jQuery('#conv_feed_ds_create_wrap').show();
+                        }
+                    },
+                    error: function() {
+                        jQuery('#conv_feed_ds_loading').hide();
+                        jQuery('#conv_feed_ds_select_wrap').hide();
+                        jQuery('#conv_feed_ds_create_wrap').show();
+                    }
+                });
+            }
+
+            // DS dropdown change → set hidden value + validate
+            jQuery(document).on('change', '#conv_feed_ds_select', function() {
+                jQuery('#conv_feed_ds_id').val(jQuery(this).val());
+                validateStep('step1');
+            });
+
+            // Clear red border on input
+            jQuery(document).on('input', '#conv_feed_ds_name', function() {
+                jQuery(this).css('border-color', '').removeClass('is-invalid');
+            });
+
+            // Create DS
+            jQuery(document).on('click', '#conv_feed_ds_create_btn', function() {
+                var displayName = jQuery('#conv_feed_ds_name').val().trim();
+                if (!displayName) {
+                    jQuery('#conv_feed_ds_name').css('border-color', '#dc3545').addClass('is-invalid');
+                    jQuery('#conv_feed_ds_name').focus();
+                    return;
+                }
+                var btnEl = jQuery(this);
+                btnEl.prop('disabled', true).text('<?php echo esc_js(__("Creating...", "enhanced-e-commerce-for-woocommerce-store")); ?>');
+
+                jQuery.ajax({
+                    url: tvc_ajax_url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'ee_create_datasource',
+                        conv_onboarding_nonce: convFeedNonce,
+                        display_name: displayName,
+                        country_code: jQuery('#target_country').val(),
+                        language_code: jQuery('#conv_feed_language').val()
+                    },
+                    success: function(response) {
+                        if (response && !response.error && response.data && response.data.dataSourceId) {
+                            var ds = response.data;
+                            var label = ds.displayName ? ds.displayName + ' (' + ds.dataSourceId + ')' : ds.dataSourceId;
+                            jQuery('#conv_feed_ds_select').html('<option value="' + ds.dataSourceId + '" selected>' + label + '</option>').show();
+                            jQuery('#conv_feed_ds_id').val(ds.dataSourceId);
+                            jQuery('#conv_feed_ds_create_wrap').hide();
+                            jQuery('#conv_feed_ds_select_wrap').show();
+                            validateStep('step1');
+                        } else {
+                            alert(response.message || '<?php echo esc_js(__("Failed to create DataSource.", "enhanced-e-commerce-for-woocommerce-store")); ?>');
+                        }
+                        btnEl.prop('disabled', false).text('<?php echo esc_js(__("Create", "enhanced-e-commerce-for-woocommerce-store")); ?>');
+                    },
+                    error: function() {
+                        alert('<?php echo esc_js(__("Network error.", "enhanced-e-commerce-for-woocommerce-store")); ?>');
+                        btnEl.prop('disabled', false).text('<?php echo esc_js(__("Create", "enhanced-e-commerce-for-woocommerce-store")); ?>');
+                    }
+                });
+            });
+        }
 
         // Step 2: Attributes
         jQuery(document).on('change', '.additinal_attr, .additional_attr_value, .remove_additional_attr', function() {

@@ -650,6 +650,12 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                 success: function(response) {
                     if (response == "0" || response == "1") {
                         convMarkClean('gasettings');
+                        // Update sidebar dot based on whether measurement_id is set
+                        if (selected_vals["measurement_id"] && selected_vals["measurement_id"] !== "") {
+                            convSetTabConnected('gasettings');
+                        } else {
+                            convSetTabDisconnected('gasettings');
+                        }
                         jQuery("#conv_save_success_txt").html("Congratulations, you have successfully saved your GA4 configurations!");
                         jQuery("#conv_save_success_modal").addClass("conv-modal--show");
                         conv_change_loadingbar("hide");

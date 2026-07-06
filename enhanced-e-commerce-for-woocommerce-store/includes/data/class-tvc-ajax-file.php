@@ -66,6 +66,10 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('wp_ajax_get_demographic_ga4_reports', array($this, 'get_demographic_ga4_reports'));
       add_action('wp_ajax_conv_create_ga4_custom_dimension', array($this, 'conv_create_ga4_custom_dimension'));
       add_action('wp_ajax_convaio_get_notification_banner', array($this, 'convaio_get_notification_banner'));
+      // GMC DataSource hooks
+      add_action('wp_ajax_ee_get_datasources', [$this, 'ee_get_datasources']);
+      add_action('wp_ajax_ee_save_feed_datasource', [$this, 'ee_save_feed_datasource']);
+      add_action('wp_ajax_ee_create_datasource', [$this, 'ee_create_datasource']);
     }
 
     // Save data in ee_options
@@ -605,6 +609,14 @@ if (!class_exists('TVC_Ajax_File')) :
           update_option("ee_prod_mapped_attrs", serialize($mappedAttrs));
         }
 
+        // Inject feed_language as content_language into attributes
+        if (isset($_POST['feed_language']) && $_POST['feed_language'] !== '') {
+          if (!isset($mappedAttrs)) {
+            $mappedAttrs = array();
+          }
+          $mappedAttrs['content_language'] = sanitize_text_field(wp_unslash($_POST['feed_language']));
+        }
+
         $channel_id = array();
         if (isset($_POST['google_merchant_center']) && $_POST['google_merchant_center'] == 1) {
           $channel_id['google_merchant_center'] = sanitize_text_field(wp_unslash($_POST['google_merchant_center']));
@@ -705,7 +717,8 @@ if (!class_exists('TVC_Ajax_File')) :
             'IncLowestPriceProductVar' => isset($_POST['IncLowestPriceProductVar']) ? intval($_POST['IncLowestPriceProductVar']) : 0,
             "filters" => wp_json_encode($filters),
             'categories' => wp_json_encode($mappedCatsDB),
-            'attributes' => wp_json_encode($mappedAttrs)
+            'attributes' => wp_json_encode($mappedAttrs),
+            'gmc_datasource_id' => isset($_POST['gmc_datasource_id']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['gmc_datasource_id']))) : null
           );
 
           if (isset($_POST['is_mapping_update']) && $_POST['is_mapping_update'] != 1) {
@@ -737,7 +750,8 @@ if (!class_exists('TVC_Ajax_File')) :
             'IncLowestPriceProductVar' => isset($_POST['IncLowestPriceProductVar']) ? intval($_POST['IncLowestPriceProductVar']) : 0,
             "filters" => wp_json_encode($filters),
             'categories' => wp_json_encode($mappedCatsDB),
-            'attributes' => wp_json_encode($mappedAttrs)
+            'attributes' => wp_json_encode($mappedAttrs),
+            'gmc_datasource_id' => isset($_POST['gmc_datasource_id']) ? esc_sql(sanitize_text_field(wp_unslash($_POST['gmc_datasource_id']))) : null
           );
           $TVC_Admin_DB_Helper->tvc_add_row("ee_product_feed", $profile_data, array("%s", "%s", "%s", "%d", "%s", "%s", "%s", "%s", "%s", "%s", "%s"));
           $result = $TVC_Admin_DB_Helper->tvc_get_last_row("ee_product_feed", array("id"));
@@ -783,7 +797,8 @@ if (!class_exists('TVC_Ajax_File')) :
           'IncLowestPriceProductVar',
           'categories',
           'attributes',
-          'filters'
+          'filters',
+          'gmc_datasource_id'
         );
         $result = $TVC_Admin_DB_Helper->tvc_get_results_in_array("ee_product_feed", $where, $filed);
         echo wp_json_encode($result);
@@ -2906,7 +2921,251 @@ if (!class_exists('TVC_Ajax_File')) :
       }
       return '';
     }
+
+  /**
+   * Fetch GMC DataSources from middleware.
+   * Hook: wp_ajax_ee_get_datasources
+   */
+  public function ee_get_datasources()
+  {
+    if (isset($_POST['conv_onboarding_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['conv_onboarding_nonce'])), 'conv_onboarding_nonce')) {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $merchantId = sanitize_text_field($TVC_Admin_Helper->get_merchantId());
+      $accountId = sanitize_text_field($TVC_Admin_Helper->get_main_merchantId());
+      $country_code = isset($_POST['country_code']) ? strtoupper(sanitize_text_field(wp_unslash($_POST['country_code']))) : '';
+      $language_code = isset($_POST['language_code']) ? strtolower(sanitize_text_field(wp_unslash($_POST['language_code']))) : '';
+
+      $data = array(
+        'merchant_id' => $merchantId,
+        'account_id'  => $accountId,
+      );
+
+      $customObj = new CustomApi();
+      $result = $customObj->getDataSources($data);
+      $datasources = array();
+
+      if (!is_wp_error($result)) {
+        $response_data = ($result instanceof WP_REST_Response) ? $result->get_data() : $result;
+
+        $ds_list = array();
+        if (is_object($response_data) && isset($response_data->dataSources)) {
+          $ds_list = is_array($response_data->dataSources) ? $response_data->dataSources : (array) $response_data->dataSources;
+        } elseif (is_object($response_data) && isset($response_data->data)) {
+          $data_obj = $response_data->data;
+          if (is_object($data_obj) && isset($data_obj->dataSources)) {
+            $ds_list = is_array($data_obj->dataSources) ? $data_obj->dataSources : (array) $data_obj->dataSources;
+          } elseif (is_array($data_obj)) {
+            $ds_list = $data_obj;
+          }
+        } elseif (is_array($response_data)) {
+          $ds_list = $response_data;
+        }
+
+        foreach ($ds_list as $ds) {
+          $ds = (object) $ds;
+          $ds_feed_label = '';
+          $ds_language = '';
+          $ds_countries = array();
+
+          if (isset($ds->primaryProductDataSource)) {
+            $pds = (object) $ds->primaryProductDataSource;
+            if (isset($pds->feedLabel)) {
+              $ds_feed_label = strtoupper($pds->feedLabel);
+            }
+            if (isset($pds->contentLanguage)) {
+              $ds_language = strtolower($pds->contentLanguage);
+            }
+            if (isset($pds->countries) && is_array($pds->countries)) {
+              $ds_countries = array_map('strtoupper', $pds->countries);
+            }
+          }
+          if (empty($ds_feed_label) && isset($ds->feedLabel)) {
+            $ds_feed_label = strtoupper($ds->feedLabel);
+          }
+          if (empty($ds_language) && isset($ds->contentLanguage)) {
+            $ds_language = strtolower($ds->contentLanguage);
+          }
+
+          $country_match = empty($country_code) || $ds_feed_label === $country_code || in_array($country_code, $ds_countries);
+          $language_match = empty($language_code) || $ds_language === $language_code;
+
+          if ($country_match && $language_match) {
+            $datasources[] = array(
+              'dataSourceId' => isset($ds->dataSourceId) ? $ds->dataSourceId : '',
+              'displayName'  => isset($ds->displayName) ? $ds->displayName : (isset($ds->name) ? $ds->name : ''),
+              'feedLabel'    => $ds_feed_label,
+              'language'     => $ds_language,
+              'countries'    => $ds_countries,
+            );
+          }
+        }
+        echo wp_json_encode(array('error' => false, 'data' => $datasources));
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => $result->get_error_message()));
+      }
+    } else {
+      echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+    }
+    exit;
   }
+
+  /**
+   * Save/Link a DataSource ID to a feed.
+   * Hook: wp_ajax_ee_save_feed_datasource
+   */
+  public function ee_save_feed_datasource()
+  {
+    if (isset($_POST['conv_onboarding_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['conv_onboarding_nonce'])), 'conv_onboarding_nonce')) {
+      $feed_id = isset($_POST['feed_id']) ? absint($_POST['feed_id']) : 0;
+      $datasource_id = isset($_POST['datasource_id']) ? sanitize_text_field(wp_unslash($_POST['datasource_id'])) : '';
+
+      if ($feed_id <= 0 || $datasource_id === '') {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Feed ID and DataSource ID are required.', 'enhanced-e-commerce-for-woocommerce-store')));
+        exit;
+      }
+
+      $TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
+      $TVC_Admin_DB_Helper->tvc_update_row(
+        'ee_product_feed',
+        array('gmc_datasource_id' => esc_sql($datasource_id)),
+        array('id' => $feed_id)
+      );
+
+      // Inject language_code as content_language into feed attributes
+      $language_code = isset($_POST['language_code']) ? sanitize_text_field(wp_unslash($_POST['language_code'])) : '';
+      if (!empty($language_code)) {
+        global $wpdb;
+        $feed_table_cl = $wpdb->prefix . 'ee_product_feed';
+        $feed_row_cl = $wpdb->get_row($wpdb->prepare(
+          "SELECT attributes FROM {$feed_table_cl} WHERE id = %d", $feed_id
+        ), ARRAY_A);
+        $attrs_cl = array();
+        if (!empty($feed_row_cl['attributes'])) {
+          $attrs_cl = json_decode($feed_row_cl['attributes'], true);
+          if (!is_array($attrs_cl)) $attrs_cl = array();
+        }
+        $attrs_cl['content_language'] = $language_code;
+        $wpdb->update(
+          $feed_table_cl,
+          array('attributes' => wp_json_encode($attrs_cl)),
+          array('id' => $feed_id),
+          array('%s'),
+          array('%d')
+        );
+        // Also update the global option
+        $mappedAttrs = maybe_unserialize(get_option('ee_prod_mapped_attrs'));
+        if (is_array($mappedAttrs)) {
+          $mappedAttrs['content_language'] = $language_code;
+          update_option('ee_prod_mapped_attrs', serialize($mappedAttrs));
+        }
+      }
+
+      // Sync full feed data + datasource_id to MW
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+
+      global $wpdb;
+      $feed_table = $wpdb->prefix . 'ee_product_feed';
+      $feed_row = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM {$feed_table} WHERE id = %d", $feed_id
+      ), ARRAY_A);
+
+      if (!empty($feed_row)) {
+        $feed_data_api = array(
+          'store_id'          => isset($google_detail['setting']->store_id) ? $google_detail['setting']->store_id : '',
+          'subscription_id'   => isset($google_detail['setting']->id) ? $google_detail['setting']->id : $TVC_Admin_Helper->get_subscriptionId(),
+          'store_feed_id'     => $feed_id,
+          'map_categories'    => isset($feed_row['categories']) ? $feed_row['categories'] : '',
+          'map_attributes'    => isset($feed_row['attributes']) ? $feed_row['attributes'] : '',
+          'filter'            => isset($feed_row['filters']) ? $feed_row['filters'] : '',
+          'include'           => isset($feed_row['include_product']) ? $feed_row['include_product'] : '',
+          'exclude'           => isset($feed_row['exclude_product']) ? $feed_row['exclude_product'] : '',
+          'channel_ids'       => isset($feed_row['channel_ids']) ? $feed_row['channel_ids'] : '',
+          'interval'          => isset($feed_row['auto_sync_interval']) ? $feed_row['auto_sync_interval'] : '',
+          'tiktok_catalog_id' => isset($feed_row['tiktok_catalog_id']) ? $feed_row['tiktok_catalog_id'] : '',
+          'datasource_id'     => $datasource_id,
+        );
+        $customObj = new CustomApi();
+        $customObj->ee_create_product_feed($feed_data_api);
+      }
+
+      echo wp_json_encode(array('error' => false, 'message' => esc_html__('DataSource linked successfully.', 'enhanced-e-commerce-for-woocommerce-store')));
+    } else {
+      echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+    }
+    exit;
+  }
+
+  /**
+   * Create a new GMC DataSource via middleware.
+   * Hook: wp_ajax_ee_create_datasource
+   */
+  public function ee_create_datasource()
+  {
+    if (isset($_POST['conv_onboarding_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['conv_onboarding_nonce'])), 'conv_onboarding_nonce')) {
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $google_detail = $TVC_Admin_Helper->get_ee_options_data();
+      $accountId = sanitize_text_field($TVC_Admin_Helper->get_main_merchantId());
+      $subscription_id = isset($google_detail['setting']->id) ? sanitize_text_field($google_detail['setting']->id) : '';
+      $store_id = isset($google_detail['setting']->store_id) ? sanitize_text_field($google_detail['setting']->store_id) : '';
+      $display_name = isset($_POST['display_name']) ? sanitize_text_field(wp_unslash($_POST['display_name'])) : '';
+      $country_code = isset($_POST['country_code']) ? sanitize_text_field(wp_unslash($_POST['country_code'])) : '';
+      $language_code = isset($_POST['language_code']) ? sanitize_text_field(wp_unslash($_POST['language_code'])) : '';
+
+      if (empty($display_name) || empty($country_code) || empty($language_code)) {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Display Name, Country and Language are required.', 'enhanced-e-commerce-for-woocommerce-store')));
+        exit;
+      }
+
+      $data = array(
+        'account_id'       => $accountId,
+        'subscription_id'  => $subscription_id,
+        'store_id'         => $store_id,
+        'display_name'     => $display_name,
+        'feed_label'       => $country_code,
+        'content_language'  => $language_code,
+        'countries'        => array($country_code),
+      );
+
+      $customObj = new CustomApi();
+      $result = $customObj->createDataSource($data);
+
+      if (!is_wp_error($result)) {
+        $response_data = ($result instanceof WP_REST_Response) ? $result->get_data() : $result;
+        $ds = (object) $response_data;
+
+        $new_ds_id = '';
+        if (isset($ds->data) && is_object($ds->data)) {
+          $new_ds_id = isset($ds->data->dataSourceId) ? $ds->data->dataSourceId : '';
+        } elseif (isset($ds->dataSourceId)) {
+          $new_ds_id = $ds->dataSourceId;
+        }
+
+        $new_display_name = '';
+        if (isset($ds->data) && is_object($ds->data) && isset($ds->data->displayName)) {
+          $new_display_name = $ds->data->displayName;
+        } elseif (isset($ds->displayName)) {
+          $new_display_name = $ds->displayName;
+        }
+
+        echo wp_json_encode(array(
+          'error' => false,
+          'data'  => array(
+            'dataSourceId' => $new_ds_id,
+            'displayName'  => $new_display_name,
+          ),
+        ));
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => $result->get_error_message()));
+      }
+    } else {
+      echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+    }
+    exit;
+  }
+
+  }
+
   function enhancad_get_plugin_image($relative_path, $alt = 'Image', $class = '', $style = '', $id = '')
   {
     $image_url = esc_url(ENHANCAD_PLUGIN_URL . $relative_path);
@@ -2918,6 +3177,6 @@ if (!class_exists('TVC_Ajax_File')) :
     // Return the escaped <img> tag
     return '<' . 'img src="' . $image_url . '"' . $alt_attr . $class_attr . $style_attr . $id_attr . '>';
   }
-// End of TVC_Ajax_File_Class
+
 endif;
 $tvcajax_file_class = new TVC_Ajax_File();

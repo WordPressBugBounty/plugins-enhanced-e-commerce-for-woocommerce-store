@@ -16,7 +16,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.18
+ * Version:           7.2.19
  * Author:            Conversios
  * Author URI:        https://conversios.io
  * License:           GPLv3
@@ -122,7 +122,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.2.18');
+define('PLUGIN_TVC_VERSION', '7.2.19');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 
@@ -200,7 +200,7 @@ function tvc_upgrade_function($upgrader_object, $options)
 function my_plugin_update_db()
 {
     $current_version = get_option('ee_conv_plugin_version');
-    $new_version = '7.2.7'; // Update this whenever you change the DB schema
+    $new_version = '7.2.8'; // Update this whenever you change the DB schema
 
     if ($current_version !== $new_version) {
         global $wpdb;
@@ -220,6 +220,7 @@ function my_plugin_update_db()
             'IncProductVar' => "VARCHAR(20) DEFAULT 1",
             'IncDefProductVar' => "VARCHAR(20) DEFAULT 0",
             'IncLowestPriceProductVar' => "VARCHAR(20) DEFAULT 0",
+            'gmc_datasource_id' => "VARCHAR(25) DEFAULT NULL",
         ];
 
         foreach ($columns as $column_name => $column_definition) {

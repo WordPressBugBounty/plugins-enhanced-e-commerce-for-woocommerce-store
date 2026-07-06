@@ -866,11 +866,90 @@ class CustomApi
       return $e->getMessage();
     }
   }
+
+  /**
+   * Fetch GMC DataSources from middleware.
+   */
+  public function getDataSources($data)
+  {
+    try {
+      $subscription_id = $this->get_subscriptionId();
+      if (isset($subscription_id) && !empty($data)) {
+        $url = $this->apiDomain . '/gmc/get-data-sources';
+        $data['subscription_id'] = $subscription_id;
+        $data['store_id'] = $this->conv_get_store_id();
+        $header = array(
+          "Authorization" => "Bearer " . $this->token,
+          "Content-Type"  => "application/json"
+        );
+        $args = array(
+          'headers' => $header,
+          'method'  => 'POST',
+          'body'    => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+      $return = new \stdClass();
+      $return->error = true;
+      $return->conv_param_error = 'Required parameters are missing.';
+      $return->status = 400;
+      return $return;
+    } catch (Exception $e) {
+      $err = new \stdClass(); $err->error = true; $err->errors = $e->getMessage(); $err->status = 500; return $err;
+    }
+  }
+
+  /**
+   * Create a new GMC DataSource via middleware.
+   */
+  public function createDataSource($data)
+  {
+    try {
+      $subscription_id = $this->get_subscriptionId();
+      if (isset($subscription_id) && !empty($data)) {
+        $url = $this->apiDomain . '/gmc/create-data-sources';
+        $data['subscription_id'] = $subscription_id;
+        $data['store_id'] = $this->conv_get_store_id();
+        $header = array(
+          "Authorization" => "Bearer " . $this->token,
+          "Content-Type"  => "application/json"
+        );
+        $args = array(
+          'headers' => $header,
+          'method'  => 'POST',
+          'body'    => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+      $return = new \stdClass();
+      $return->error = true;
+      $return->conv_param_error = 'Required parameters are missing.';
+      $return->status = 400;
+      return $return;
+    } catch (Exception $e) {
+      $err = new \stdClass(); $err->error = true; $err->errors = $e->getMessage(); $err->status = 500; return $err;
+    }
+  }
+
   public function ee_create_product_feed($data)
   {
     try {
       $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id) && $data != "") {
+        // Inject datasource_id from the feed's DB record if not already set
+        if (!empty($data['store_feed_id']) && empty($data['datasource_id'])) {
+          global $wpdb;
+          $feed_table = $wpdb->prefix . 'ee_product_feed';
+          $ds_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT gmc_datasource_id FROM {$feed_table} WHERE id = %d",
+            intval($data['store_feed_id'])
+          ));
+          if (!empty($ds_id)) {
+            $data['datasource_id'] = sanitize_text_field($ds_id);
+          }
+        }
         $url = $this->apiDomain . '/products/feed';
         $header = array(
           "Authorization: Bearer " . $this->token,
@@ -908,6 +987,26 @@ class CustomApi
       }
       $postData['store_id'] = $this->conv_get_store_id();
       $postData['subscription_id'] = $this->get_subscriptionId();
+
+      // Inject datasource_id + account_id for Merchant API
+      $entry_datasource_id = '';
+      if (!empty($postData['store_feed_id'])) {
+        global $wpdb;
+        $feed_table = $wpdb->prefix . 'ee_product_feed';
+        $entry_datasource_id = (string) $wpdb->get_var($wpdb->prepare(
+          "SELECT gmc_datasource_id FROM {$feed_table} WHERE id = %d",
+          intval($postData['store_feed_id'])
+        ));
+      }
+      $postData['datasource_id'] = $entry_datasource_id;
+      if (!empty($postData['entries']) && is_array($postData['entries'])) {
+        foreach ($postData['entries'] as &$entry) {
+          $entry['account_id'] = isset($entry['merchant_id']) ? $entry['merchant_id'] : '';
+          $entry['datasource_id'] = $entry_datasource_id;
+        }
+        unset($entry);
+      }
+
       if ($postData['store_id'] == '' || $postData['subscription_id'] == '' || $postData['store_feed_id'] == '') {
         $return = new \stdClass();
         $return->error = true;
