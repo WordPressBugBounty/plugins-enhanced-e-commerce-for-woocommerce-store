@@ -8,8 +8,8 @@ Author: Conversios
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 7.2.19
-Version: 7.2.19
+Stable tag: 7.2.20
+Version: 7.2.20
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

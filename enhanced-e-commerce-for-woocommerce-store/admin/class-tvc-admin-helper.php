@@ -482,7 +482,7 @@ class TVC_Admin_Helper
     if (!empty($this->connect_url)) {
       return $this->connect_url;
     } else {
-      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_dev/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_dev/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . admin_url() . "&amp;timezone=" . $this->get_time_zone();
+      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . admin_url() . "&amp;timezone=" . $this->get_time_zone();
       return $this->connect_url;
     }
   }
@@ -493,7 +493,7 @@ class TVC_Admin_Helper
     if ($confirm_url == "") {
       $confirm_url = admin_url();
     }
-    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_dev/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_dev/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
+    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
     return $this->connect_url;
   }
 
@@ -504,7 +504,7 @@ class TVC_Admin_Helper
     if ($confirm_url == "") {
       $confirm_url = admin_url();
     }
-    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_dev/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_dev/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
+    $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;timezone=" . $this->get_time_zone();
     return $this->connect_url;
   }
 
@@ -520,7 +520,7 @@ class TVC_Admin_Helper
         $confirm_url = admin_url();
       }
 
-      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_dev/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_dev/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone();
+      $this->connect_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;store_id=" . $store_id . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone();
       return $this->connect_url;
     }
   }
@@ -1465,7 +1465,7 @@ class TVC_Admin_Helper
   public function get_custom_connect_url_superfeed($confirm_url = "", $subpage = "")
   {
     $feedType = "superfeed";
-    $connect_sf_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_dev/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_dev/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone() . "&amp;feedType=" . $feedType;
+    $connect_sf_url = "https://" . TVC_AUTH_CONNECT_URL . "/config_prod/ga_rdr_gmc.php?return_url=" . TVC_AUTH_CONNECT_URL . "/config_prod/ads-analytics-form.php?domain=" . $this->get_connect_actual_link() . "&amp;country=" . $this->get_woo_country() . "&amp;user_currency=" . $this->get_woo_currency() . "&amp;subscription_id=" . $this->get_subscriptionId() . "&amp;confirm_url=" . $confirm_url . "&amp;subpage=" . $subpage . "&amp;timezone=" . $this->get_time_zone() . "&amp;feedType=" . $feedType;
     return $connect_sf_url;
   }
 
