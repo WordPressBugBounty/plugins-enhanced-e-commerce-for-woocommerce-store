@@ -120,7 +120,7 @@ if ($subscriptionId != "") {
 
     <form id="mmcsetings_form" class="convpixsetting-inner-box mt-4">
         <div id="analytics_box_UA" class="py-1">
-            <div class="row" style="width: 80%;">
+            <div class="row">
                 <div class="col-6">
                     <label class="text-dark fw-bold-500">
                         <?php esc_html_e("Select Microsoft Merchant Center Store", "enhanced-e-commerce-for-woocommerce-store"); ?>

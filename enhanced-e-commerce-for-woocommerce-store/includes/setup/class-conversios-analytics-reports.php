@@ -258,14 +258,14 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                     <div class="modal-body px-4 pt-4">
                         <div id="ga4ErrorMessage" class="alert alert-danger d-none" role="alert"></div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px; justify-content: center;" class="alert alert-info">
-                            <strong><?php esc_html_e("Successfully logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
+                            <strong><?php esc_html_e("Logged in with:", "enhanced-e-commerce-for-woocommerce-store"); ?></strong>
                             <span style="margin-left: 6px;"><?php echo !empty($g_mail) ? esc_attr($g_mail) : '-'; ?></span>
                             <span class="conv-link-blue ps-0 ms-2 tvc_google_signinbtn">
                                 <?php esc_html_e("Change", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </span>
                         </div>
                         <div id="configurationMessage"
-                            class="alert alert-danger d-none p-1 small mx-1 mb-4"
+                            class="alert alert-info d-none p-1 small mx-1 mb-4 text-center"
                             role="alert">
                             <?php esc_html_e("To view reports, please configure the following and save.", "enhanced-e-commerce-for-woocommerce-store"); ?>
                         </div>

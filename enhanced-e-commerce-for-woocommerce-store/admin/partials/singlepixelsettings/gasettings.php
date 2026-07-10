@@ -307,8 +307,8 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                         getAlertMessageAll(
                             'info',
                             'Error',
-                            message = 'There are no Google Analytics accounts associated with this email.',
-                            icon = 'info',
+                            message = 'No GA4 account was found for this email address. Please create one in Google Analytics, then refresh this page and try again.',
+                            icon = 'error',
                             buttonText = 'Ok',
                             buttonColor = '#FCCB1E',
                             iconImageSrc = '<?php echo wp_kses(
@@ -331,7 +331,7 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                         'info',
                         'Error',
                         message = errors,
-                        icon = 'info',
+                        icon = 'error',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
                         iconImageSrc = '<?php echo wp_kses(
@@ -351,8 +351,8 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                     getAlertMessageAll(
                         'info',
                         'Error',
-                        message = 'There are no Google Analytics accounts associated with this email.',
-                        icon = 'info',
+                        message = 'No GA4 account was found for this email address. Please create one in Google Analytics, then refresh this page and try again.',
+                        icon = 'error',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
                         iconImageSrc = '<?php echo wp_kses(
@@ -415,8 +415,8 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                             getAlertMessageAll(
                                 'info',
                                 'Error',
-                                message = 'There are no Google Analytics 4 Properties associated with this analytics account.',
-                                icon = 'info',
+                                message = 'No GA4 account was found for this email address. Please create one in Google Analytics, then refresh this page and try again.',
+                                icon = 'error',
                                 buttonText = 'Ok',
                                 buttonColor = '#FCCB1E',
                                 iconImageSrc = '<?php echo wp_kses(
@@ -441,7 +441,7 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                         'info',
                         'Error',
                         message = errors,
-                        icon = 'info',
+                        icon = 'error',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
                         iconImageSrc = '<?php echo wp_kses(
@@ -463,21 +463,21 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                     getAlertMessageAll(
                         'info',
                         'Error',
-                        message = 'There are no Google Analytics Properties associated with this email.',
-                        icon = 'info',
-                        buttonText = 'Ok',
-                        buttonColor = '#FCCB1E',
-                        iconImageSrc = '<?php echo wp_kses(
-                                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
-                                            array(
-                                                'img' => array(
-                                                    'src' => true,
-                                                    'alt' => true,
-                                                    'class' => true,
-                                                    'style' => true,
-                                                ),
-                                            )
-                                        ); ?>'
+                        'No GA4 account was found for this email address. Please create one in Google Analytics, then refresh this page and try again.',
+                        'error',
+                        'Ok',
+                        '#FCCB1E',
+                        '<?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                            array(
+                                'img' => array(
+                                    'src'   => true,
+                                    'alt'   => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>'
                     );
                 }
                 conv_change_loadingbar("hide");

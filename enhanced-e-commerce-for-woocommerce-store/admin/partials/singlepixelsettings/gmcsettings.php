@@ -482,6 +482,24 @@ if ($subscriptionId != "") {
     var get_sub = "<?php echo isset($_GET['subscription_id']) && $_GET['subscription_id'] !== '' ? esc_html(sanitize_text_field(wp_unslash($_GET['subscription_id']))) : '' ?>";
     var gmc_id = "<?php echo esc_html($google_merchant_center_id) ?>";
 
+     function getAlertMessageAll(type = 'Success', title = 'Success', message = '', icon = 'success', buttonText =
+        'Done!', buttonColor = '#1967D2', iconImageTag = '') {
+
+        Swal.fire({
+            type: type,
+            icon: icon,
+            title: title,
+            confirmButtonText: buttonText,
+            confirmButtonColor: buttonColor,
+            text: message,
+        })
+        let swalContainer = Swal.getContainer();
+        jQuery(swalContainer).find('.swal2-icon-show').removeClass('swal2-' + icon).removeClass('swal2-icon').addClass(
+            'justify-content-center')
+        jQuery('.swal2-icon-show').html(iconImageTag)
+
+    }
+    
     /**
      * Get Google Merchant Center List
      */
@@ -568,9 +586,25 @@ if ($subscriptionId != "") {
 
                 } else {
                     var error_msg = response.errors;
-                    //add_message("error", "There are no Google merchant center accounts associated with email.");
-                    // console.log("error",
-                    //     "There are no Google merchant center  accounts associated with email.");
+                    getAlertMessageAll(
+                        'info',
+                        'Error',
+                        'No Google Merchant Center account was found.\r\n\r\nThis may happen if your connected Google account session has expired.\r\nPlease reconnect your Google account by completing the Google authentication process again.',
+                        'error',
+                        'Ok',
+                        '#FCCB1E',
+                        '<?php echo wp_kses(
+                            enhancad_get_plugin_image('/admin/images/logos/conv_error_logo.png', '', '', ''),
+                            array(
+                                'img' => array(
+                                    'src'   => true,
+                                    'alt'   => true,
+                                    'class' => true,
+                                    'style' => true,
+                                ),
+                            )
+                        ); ?>'
+                    );
                 }
                 jQuery('#google_merchant_center_id').select2();
                 setTimeout(function() {}, 2000);

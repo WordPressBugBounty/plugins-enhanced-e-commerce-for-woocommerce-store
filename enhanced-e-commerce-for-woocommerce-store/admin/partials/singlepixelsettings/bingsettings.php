@@ -1631,7 +1631,7 @@ require_once "ms-signin.php";
                         'info',
                         'Error',
                         message = 'No bing ads account found associated with this email, create new account',
-                        icon = 'info',
+                        icon = 'error',
                         buttonText = 'Ok',
                         buttonColor = '#FCCB1E',
                         iconImageSrc =
