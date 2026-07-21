@@ -1,60 +1,46 @@
-=== Conversios: Google Analytics (GA4), Google Ads, Conversion and Analytics Tracking for Multi-Channels ===
-
+=== Conversios – GA4, Google Ads & Meta Conversion Tracking with Product Feed for WooCommerce ===
 Contributors: Tatvic, Conversios
 Plugin Name: Conversios: Google Analytics (GA4), Google Ads, Conversion and Analytics Tracking for Multi-Channels
 Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/
 Tags: Google Analytics, Google Ads, Facebook Pixel, Conversion Tracking, Woocommerce
 Author: Conversios
 Requires at least: 4.6
-Tested up to: 7.0
+Tested up to: 7.0.2
 Requires PHP: 7.4
-Stable tag: 7.2.21
-Version: 7.2.21
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Stable tag: 7.2.22
+Version: 7.2.22
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Track GA4 Analytics, Google Ads, Microsoft Ads, & Conversion with server-side tracking (CAPI) & product feed to improve ROAS, reports for WooCommerce.
 
-==  Description ==
+GA4, Google Ads & Meta Pixel conversion tracking plus product feed sync for WooCommerce. Server-side tracking (CAPI) and reports in one plugin.
 
-*Improve conversion data accuracy and ad performance with unified tracking, product feeds, server-side tracking, and reporting for WooCommerce.*
+== Description ==
 
-WooCommerce All-in-One Conversios Tracking Plugin helps store owners track accurate conversions across **Google Analytics 4 (GA4)**, **Google Ads**, **Microsoft Ads**, **Meta (Facebook)**, **TikTok**, and **Snapchat**, manage multiple product feeds, and view reports in one place using a single plugin solution.
+Conversios is an all-in-one conversion tracking and product feed plugin for WooCommerce. It tracks purchases and the full shopping journey in **Google Analytics 4 (GA4)**, **Google Ads**, **Microsoft Ads**, **Meta (Facebook & Instagram)**, **TikTok**, and **Snapchat**, and syncs your product feed to **4 channels** — Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok Catalog — from a single dashboard.
 
-Track **Add to Cart**, **Checkout**, and **Purchase** events across supported advertising platforms. The plugin includes **Conversion API (CAPI)** support for Meta, TikTok, and Snapchat, along with pixel integrations for **12+ marketing and analytics tools**. **Google Ads Dynamic Remarketing** is supported to show personalized product ads across the Google Display Network.
+Instead of running separate plugins for pixels, Conversion API (CAPI) events, product feeds, and reporting, Conversios replaces them with one no-code setup that takes about **15 minutes**. It tracks **15+ GA4 ecommerce and engagement events**, includes **free TikTok Pixel purchase conversion tracking**, is **trusted by 60,000+ stores**, and is fully compatible with WooCommerce **HPOS (High-Performance Order Storage)**.
 
-Sync WooCommerce products in real time to **Google Merchant Center**, **Microsoft Merchant Center**, **Meta Catalog**, and **TikTok Catalog** to keep product data up to date and improve Shopping feed approval and visibility.
+**Universal Commerce Protocol (UCP)** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme) makes your WooCommerce products discoverable and purchasable inside **Google Gemini** shopping experiences, synced through Google Merchant Center with server-side purchase tracking. (Requires an approved Google Merchant Center account.)
 
-**Universal Commerce Protocol (UCP)** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme) enables WooCommerce products to be discovered and purchased within **Google Gemini** shopping experiences. Conversios syncs products through Google Merchant Center and tracks purchases using server-side tracking to ensure accurate reporting in GA4 and connected ad platforms. (Requires approved Google Merchant Center account.)
+**Order Recovery Engine** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme) recovers untracked conversions in GA4, Google Ads, and Meta to close the gap between WooCommerce orders and ad platform reports.
 
-**Order Recovery Engine** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme) helps recover untracked conversions in Google Analytics, Google Ads, and Meta to reduce reporting gaps between WooCommerce and advertising platforms.
-
-Replace multiple plugins for pixels, server-side tracking, product feeds, and reporting with **one unified WooCommerce solution** to reduce costs, simplify setup, and manage marketing performance more efficiently. The plugin is **lightweight, performance-optimized**, and fully compatible with **WooCommerce HPOS (High-Performance Order Storage)**.
-
-**Trusted by 60,000+ stores** to improve attribution accuracy, reduce GA4 vs WooCommerce reporting gaps, and scale campaigns with more reliable data.
-
-In a published WooCommerce case study, a global paint brand improved conversion tracking after implementing Conversios all-in-one plugin. Within weeks, they reported a **90% increase in Meta Ads conversions** and a **50% uplift in Google Ads conversions**, along with reduced GA4 vs WooCommerce reporting gaps. See the case study:
+In a published WooCommerce case study, a global paint brand reported a **90% increase in Meta Ads conversions** and a **50% uplift in Google Ads conversions** after implementing Conversios, along with a smaller GA4 vs WooCommerce reporting gap. Read it here:
 [Global paint brand sees 90% lift in Meta Ads with Conversios](https://www.conversios.io/case-studies/global-paint-brand-sees-90-lift-in-meta-ads-with-conversios-sst/?&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
 
-== Walkthrough Video ==
+= Walkthrough Video =
 
 Watch the full Conversios setup walkthrough covering GA4 tracking, Google Ads conversions, Meta Pixel + CAPI, Microsoft Ads UET, and product feed syncing.
 
-[youtube https://www.youtube.com/watch?v=pRt5JxNfH_Y&t]
+https://www.youtube.com/embed/pRt5JxNfH_Y
 
-== What Problem We Solve ==
+= Why is my WooCommerce data inconsistent across GA4 and ad platforms? =
 
-WooCommerce store owners often rely on **multiple plugins** to manage Google Analytics 4 (GA4) tracking, Google Ads conversions, Meta CAPI events, product feeds, and reporting. This increases setup complexity, costs, and ongoing management effort.
+Most WooCommerce stores lose conversion data to browser restrictions, ad blockers, and fragmented tracking set up across multiple plugins. The result: GA4, Google Ads, and Meta each report different revenue than WooCommerce, and product feeds for Google, Meta, Microsoft, and TikTok fall out of date and get disapproved.
 
-Sales and conversion data frequently becomes **inconsistent** between WooCommerce and advertising platforms due to **browser restrictions, ad blockers, and fragmented tracking setups**. Product feeds for Google, Meta, Microsoft, and TikTok require regular updates to avoid disapprovals and performance issues.
+Conversios fixes this by unifying pixel tracking, server-side tracking, product feed sync, and reporting in one plugin. You manage everything from a single dashboard — no developer required — and validate platform numbers against real WooCommerce orders.
 
-Marketing reports and insights are spread across **multiple dashboards**, making it difficult to identify gaps and optimize campaigns confidently.
-
-This plugin unifies conversion tracking, server-side tracking, product feeds, and reporting in **one no-code WooCommerce solution**.
-
-Store owners can manage everything from a **single dashboard without developer support**, saving time, reducing costs, and making marketing performance easier to measure and optimize.
-
-== Customer Feedback ==
+= Customer Feedback =
 
 "Outstanding support. Setup was quick and issues were resolved efficiently."
 [@sajava](https://wordpress.org/support/topic/great-plugin-and-excellent-support-326/)
@@ -62,163 +48,302 @@ Store owners can manage everything from a **single dashboard without developer s
 "Essential for e-commerce at scale; helped us move to managed first-party tracking and keep revenue reporting in sync across platforms and POS."
 [@boomstudio](https://wordpress.org/support/topic/highly-recommended-plugin-excellent-support-essential-for-e-commerce/)
 
-== Features We Provide ==
+= GA4 Tracking for WooCommerce (Free) =
 
-**Pixel & Conversion Tracking**
+Conversios connects Google Analytics 4 to WooCommerce and tracks 15+ ecommerce and engagement events automatically — purchase, refund, add to cart, checkout steps, product views, plus scroll depth, form submissions, sign-ups, logins, and file downloads. No code, no Google Tag Manager expertise needed (though you can use your own GTM container if you prefer).
 
-* **Google Analytics 4 (GA4)** integration to track ecommerce and lead events
-* **Google Ads** remarketing tag for audience building **(Free)**
-* **Google Ads** purchase conversion tracking with **Enhanced Conversions** support [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
-* **Google Ads Dynamic Remarketing** to show personalized product ads [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
-* **Meta (Facebook & Instagram) Pixel** for ad tracking and conversion optimization
-* **TikTok Pixel** and **TikTok Conversions API** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
-* **Snapchat Pixel** and **Snapchat Conversions API** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
-* **Pinterest Tag** to measure ad performance and user interactions
-* **LinkedIn Insight Tag** for conversion tracking and audience insights
-* **Microsoft UET** (Universal Event Tracking) for Microsoft Ads reporting and remarketing
-* **Microsoft Ads** purchase conversion tracking **(Free)**
-* **X (Twitter) Pixel** for website tracking and audience creation
-* **Facebook Conversions API (Meta CAPI)**, **TikTok Conversions API**, and **Snapchat Conversions API** support [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+= Google Ads & Microsoft Ads Conversion Tracking =
 
-**Server-Side Tracking [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)**
+* **Google Ads remarketing tag** to build audiences [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **Google Ads purchase conversion tracking** with **Enhanced Conversions** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **Google Ads Dynamic Remarketing** for personalized product ads [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **Microsoft UET** (Universal Event Tracking) for Microsoft Ads reporting and remarketing **(Free)**
+* **Microsoft Ads purchase conversion tracking** — included **(Free)**, rare in this category
 
-* Improves accuracy on **Safari and iOS** and on **ad-blocked traffic**
-* Supports GA4 server events, Google Ads enhanced conversions, **Meta Conversions API (CAPI)**, and **Snapchat CAPI**
-* **Order Recovery Engine** to recover untracked conversions in GA4, Google Ads, and Meta
+= Meta Pixel, TikTok, CAPI & More Pixels =
 
-**Product Feed Management**
+* **Meta (Facebook & Instagram) Pixel** for ad tracking and conversion optimization **(Free)**
+* **Meta Conversions API (CAPI)** — server-side events that survive iOS restrictions and ad blockers [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **TikTok Pixel** with automated setup, ecommerce events, and purchase conversion tracking **(Free)**
+* **TikTok Conversions API (CAPI)** for server-side event accuracy [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **Snapchat Pixel** for ad tracking and audience building **(Free)**
+* **Snapchat Conversions API (CAPI)** for server-side event accuracy [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)(https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **Pinterest Tag**, **LinkedIn Insight Tag**, **X (Twitter) Pixel** **(Free)**
 
-* Sync WooCommerce products to **Google Merchant Center** for Shopping ads
-* Automatic product feed sync with **Microsoft Merchant Center** (Bing Shopping)
-* Product catalog sync to **Meta (Facebook & Instagram Shops)**
-* Product feed sync to **TikTok Catalog** for ecommerce ads
-* **Real-time updates** for product price, availability, and variants
-* **Universal Commerce Protocol (UCP)** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme): Enable WooCommerce products to be discovered and purchased within **Google Gemini** shopping experiences, with server-side tracking for accurate GA4 and ad platform reporting (Requires approved Google Merchant Center account)
+In total, Conversios offers **12+ pixel and marketing tool integrations** in one plugin.
 
-**Reporting & Insights**
+= Server-Side Tracking (Pro) =
 
-Most WooCommerce store owners need to check conversions in multiple places like GA4, Google Ads, Meta Ads, and WooCommerce separately, which makes reporting fragmented and time-consuming. Conversios centralizes key reports inside WordPress so you can validate tracking accuracy and monitor performance faster.
+Server-side tracking sends conversion events from your server instead of the visitor's browser, so purchases are still recorded when browser tracking is blocked. Conversios server-side tracking improves accuracy on **Safari and iOS** and on **ad-blocked traffic**, and supports GA4 server events, Google Ads Enhanced Conversions, Meta CAPI, TikTok CAPI, and Snapchat CAPI. The **Order Recovery Engine** then recovers conversions that were still missed.
+[See Pro plans](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
 
-View and analyze your data using platform-specific reports, including:
+= WooCommerce Product Feed for Google Shopping and More (Free) =
 
-- **GA4 basic reporting** for events and conversions **(Free)**
-- **GA4 Ecommerce Funnel reporting** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
-- **Google Ads conversion reporting** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
-- **Meta Ads conversion reporting** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
-- **White-label PDF reports** for clients and stakeholders [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+A product feed is the structured product data (title, price, availability, images) that shopping channels need to show your products. Conversios syncs your WooCommerce catalog in real time to:
 
-These reports help validate tracking accuracy, compare platform data with WooCommerce orders, and identify optimization opportunities more confidently.
+* **Google Merchant Center** for Google Shopping ads
+* **Microsoft Merchant Center** (Bing Shopping)
+* **Meta Catalog** (Facebook & Instagram Shops)
+* **TikTok Catalog** for ecommerce ads
 
-**Heatmap and Session Recording Integrations**
+Real-time updates for price, availability, and variants reduce feed disapprovals and keep listings accurate — no separate feed plugin needed.
+
+= Reports & Insights Inside WordPress =
+
+Stop checking GA4, Google Ads, Meta, and WooCommerce separately. Conversios centralizes key reports inside your WordPress admin:
+
+* **GA4 general reports** for events and conversions **(Free)**
+* **GA4 Ecommerce Funnel reporting** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **Google Ads conversion reporting** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **Meta Ads conversion reporting** [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+* **White-label PDF reports** for clients and stakeholders [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
+
+= Heatmap and Session Recording Integrations (Free) =
 
 * **Microsoft Clarity** for session recordings and heatmaps
 * **Hotjar** for session replays, heatmaps, and feedback polls
 * **Crazy Egg** for heatmaps and scrollmaps
 
-Have a look at the full feature list over [here](https://www.conversios.io/docs/woocommerce/all-in-one-plugin/features/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
+Full feature list: [Conversios features](https://www.conversios.io/docs/woocommerce/all-in-one-plugin/features/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme)
 
-== Supported Payment Methods ==
+= Supported Payment Methods =
 
-Purchase conversions work with common WooCommerce payment gateways, including:
+Purchase conversions work with common WooCommerce payment gateways, including **Stripe**, **PayPal**, **WooCommerce Payments**, **Authorize.Net**, and **Razorpay**.
 
-- **Stripe**
-- **PayPal**
-- **WooCommerce Payments**
-- **Authorize.Net**
-- **Razorpay**
+**Important:** Purchase tracking works when the payment flow redirects customers to the **WooCommerce Order Received / Thank You page**. Any gateway that returns users to this page after successful payment will be tracked correctly. Server-side tracking [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme) can help recover some offsite gateway cases.
 
-**Important:** Purchase tracking works when the payment flow redirects customers to the **WooCommerce Order Received / Thank You page**.
-
-Any payment gateway that returns users to this page after successful payment will be tracked correctly. Server-side tracking in [(Pro)](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme) can help recover some offsite gateway cases.
-
-== Supported WooCommerce Events ==
+= Supported WooCommerce Events =
 
 Conversios tracks the complete WooCommerce shopping journey using standard GA4 ecommerce and engagement events.
 
 **Store and product browsing**
-- page_view (page visit)
-- view_item_list (category or product list view)
-- select_item (product click)
-- view_item (product detail page)
+– page_view (page visit)
+– view_item_list (category or product list view)
+– select_item (product click)
+– view_item (product detail page)
 
 **Cart actions**
-- add_to_cart (add product to cart)
-- remove_from_cart (remove product from cart)
-- view_cart (cart page view)
+– add_to_cart (add product to cart)
+– remove_from_cart (remove product from cart)
+– view_cart (cart page view)
 
 **Checkout steps**
-- begin_checkout (checkout started)
-- add_shipping_info (shipping method selected)
-- add_payment_info (payment method selected)
+– begin_checkout (checkout started)
+– add_shipping_info (shipping method selected)
+– add_payment_info (payment method selected)
 
 **Orders and purchase**
-- purchase (order completed)
-- refund (order refunded)
+– purchase (order completed)
+– refund (order refunded)
 
 **Other GA4 engagement events**
-- scroll (scroll depth tracking)
-- form_submit (form submissions via Contact Form 7, Ninja Forms, Formidable Forms, WPForms, Gravity Forms)
-- signup (user sign-up)
-- login (user login)
-- email_click (email link clicks)
-- phone_click (phone number clicks)
-- address_click (address or map clicks)
-- file_download (file download tracking)
-- article_load (content or article load events)
+– scroll (scroll depth tracking)
+– form_submit (Contact Form 7, Ninja Forms, Formidable Forms, WPForms, Gravity Forms)
+– signup (user sign-up)
+– login (user login)
+– email_click, phone_click, address_click
+– file_download (file download tracking)
+– article_load (content or article load events)
 
-Add to Cart works out of the box for standard WooCommerce themes. Stores using drawer carts, AJAX carts, or custom flows may require customization. Get help with us at [info@conversios.io](mailto:info@conversios.io).
+Add to Cart works out of the box for standard WooCommerce themes. Stores using drawer carts, AJAX carts, or custom flows may require customization — contact info@conversios.io.
 
-== Consent Mode v2 Support ==
+= Consent Mode v2 Support (Free) =
 
-Conversios supports **Basic and Advanced Google Consent Mode v2**, along with **Microsoft Consent Mode**, to enable compliant tracking while preserving data quality under **GDPR** and **CCPA**.
+Google Consent Mode v2 lets you keep measuring conversions in a privacy-compliant way by adjusting tracking based on visitor consent. Conversios supports **Basic and Advanced Google Consent Mode v2** plus **Microsoft Consent Mode** for GDPR and CCPA compliance.
 
-**Conversios does not provide a consent banner.** It sends or blocks tracking based on your existing Consent Management Platform (CMP) settings. Compatible CMPs include CookieYes, GDPR Cookie Compliance, Real Cookie Banner, and Cookiebot.
+**Conversios does not provide a consent banner.** It sends or blocks tracking based on your existing Consent Management Platform (CMP). Compatible CMPs include CookieYes, GDPR Cookie Compliance, Real Cookie Banner, and Cookiebot. For Consent Mode setup help, email info@conversios.io — configuration is handled by the Conversios team.
 
-If you want to implement Consent Mode for your store, reach out to [info@conversios.io](mailto:info@conversios.io); configuration and setup will be fully handled by the Conversios team.
+= Best Fit for Which Stores =
 
-== Best Fit for Which Stores ==
-
-* **WooCommerce DTC brands** and stores running paid ads that need more consistent purchase conversion reporting in GA4 and advertising platforms
-* WooCommerce stores selling **physical or digital products** where purchase and checkout data is critical for ROAS and campaign optimization
-* WooCommerce stores using **multiple ad platforms** and looking to track conversions and manage pixels from one place
+* **WooCommerce DTC brands** running paid ads that need consistent purchase conversion reporting in GA4 and ad platforms
+* Stores selling **physical or digital products** where purchase and checkout data drives ROAS decisions
+* Stores using **multiple ad platforms** that want pixels, feeds, and conversions managed in one place
 * Stores that want to **validate GA4 and ad platform conversions** against WooCommerce orders
-* Merchants who prefer a **no-code setup** for conversion tracking, product feeds, and reporting without developer dependency
+* **Agencies** managing client stores (white-label reports and priority support in Pro)
+* Merchants who prefer a **no-code setup** without developer dependency
 
-== Setup in Minutes & Faster Time to Value ==
+= Setup in Minutes =
 
-Get started in about **15 minutes** with a simple **no-code setup**. Conversios combines multi-platform conversion tracking, product feeds, and reporting in one plugin, so you do not need to install or manage multiple plugins.
+Get started in about **15 minutes** with a no-code setup wizard. One plugin replaces separate tools for tracking, feeds, and reporting.
 
-== Support ==
+= Support =
 
-Need help with setup, event validation, custom cart/checkout, payment gateways, or Consent Mode? Email [info@conversios.io](mailto:info@conversios.io) or chat with us on [WhatsApp](https://wa.me/917284854854).
+Need help with setup, event validation, custom cart/checkout, payment gateways, or Consent Mode? Email info@conversios.io or chat on [WhatsApp](https://wa.me/917284854854).
 
-View step-by-step setup guides:
-[Setup Documentation](https://www.conversios.io/docs-category/wpaio/)
+Step-by-step guides: [Setup Documentation](https://www.conversios.io/docs-category/wpaio/)
 
-You can also use our free tool to quickly check if tracking is working on your site and get an overall website tracking score:
+Check whether tracking is working on your site with our free tool:
 **[Website Tracking Checker Tool](https://www.conversios.io/website-tracking-checker-tool/)**
 
-Pro users get **priority support** with faster responses and **dedicated onboarding assistance**. Most tickets are resolved within **24 hours**. Reach us at [info@conversios.io](mailto:info@conversios.io) or on [WhatsApp](https://wa.me/917284854854).
+Pro users get **priority support** and **dedicated onboarding assistance**; most tickets are resolved within **24 hours**.
 
-== Privacy Policy ==
+= Privacy Policy =
 
-You can view our detailed privacy policy [here](https://www.conversios.io/privacy-policy/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
+View our detailed privacy policy [here](https://www.conversios.io/privacy-policy/?utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
 
-== Compatibility ==
+= Compatibility =
 
-Conversios is compatible with the following major plugins:
+Conversios is compatible with the following major plugins and setups:
 
-* Perfect Brands for WooCommerce (for Product Feed)
-* YITH WooCommerce Brands (for Product Feed)
-* WooCommerce Brands (for Product Feed)
+* Perfect Brands for WooCommerce, YITH WooCommerce Brands, WooCommerce Brands (for Product Feed)
 * YITH Multi-Currency Switcher for WooCommerce
 * YITH Custom Thank You Page for WooCommerce
 * Multi-currency plugins like WOOCS, CURCY, and WBW Currency Switcher
-* Consent Management Platforms (CMPs) like CookieYes, GDPR Cookie Compliance, Real Cookie Banner, and Cookiebot (for Consent Mode v2)
-* Lead generation plugins like Contact Form 7, Ninja Forms, Formidable Forms, WPForms, and Gravity Forms
+* CMPs like CookieYes, GDPR Cookie Compliance, Real Cookie Banner, and Cookiebot (for Consent Mode v2)
+* Lead generation plugins: Contact Form 7, Ninja Forms, Formidable Forms, WPForms, Gravity Forms
 * WooCommerce High-Performance Order Storage (HPOS)
 * WordPress Multisite
 * WPML and Polylang for multilingual stores
+
+== Installation ==
+
+1. Upload the Conversios plugin folder to the `/wp-content/plugins/` directory.
+2. Activate the plugin from the "Plugins" menu in WordPress.
+3. Set up Pixel & Analytics Integrations (WordPress Admin → Conversios → Pixel Integrations):
+    * **Google Analytics 4 (GA4):** Add your GA4 Measurement ID to enable WooCommerce event tracking.
+    * **Google Ads (Pro):** Enable the remarketing tag and add your Conversion ID and Conversion Label for purchase conversions. Enhanced conversions are optional.
+    * **Microsoft Ads:** Add your Microsoft UET Tag and configure the Purchase conversion goal/ID.
+    * **TikTok:** Connect your TikTok account and the pixel is set up automatically — ecommerce events and purchase conversions start tracking without manual configuration (Free).
+4. Set up other integrations if needed: **Meta (Facebook) Pixel**, **Snapchat Pixel**, **Pinterest Tag**, **LinkedIn Insight Tag**, **X (Twitter) Pixel**, **Microsoft Clarity**, **Hotjar**, **Crazy Egg**.
+5. Sync your product feeds: connect **Google Merchant Center**, **Microsoft Merchant Center**, **Meta Catalog**, and **TikTok Catalog**.
+6. After setup, click **Finish Setup** in the onboarding wizard.
+7. View reports inside the plugin (Conversios → Analytics Reports): General Reports (GA4, Free), eCommerce Reports (GA4, Pro), Google Ads Reports (Pro), Meta (Facebook) Reports (Pro).
+8. Explore detailed setup guides:
+    * [Google Analytics 4 Setup](https://www.conversios.io/docs-category/woocommerce/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme)
+    * [Google Ads Conversions (Pro)](https://www.conversios.io/docs-category/gads/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme)
+    * [Microsoft Ads Setup](https://www.conversios.io/docs/set-up-microsoft-advertising-with-conversios-plugin/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme)
+9. For common troubleshooting, visit our [FAQ section](https://www.conversios.io/docs-category/woocommerce/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme).
+10. Need help? Email info@conversios.io.
+
+== Frequently Asked Questions ==
+
+= Is Conversios free? =
+
+Yes. The free plugin includes GA4 ecommerce tracking (15+ events), Microsoft Ads purchase conversion tracking, Meta Pixel, TikTok Pixel with purchase conversions, Pinterest/LinkedIn/X pixels, product feed sync to 4 channels, GA4 general reports, and Consent Mode v2. Pro adds Google Ads tracking (remarketing, purchase conversions, Dynamic Remarketing), server-side tracking (CAPI), advanced reports, and more — see [pricing](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
+
+= How do I set up GA4 tracking for WooCommerce? =
+
+Install Conversios, add your GA4 Measurement ID in the setup wizard, and the plugin automatically tracks 15+ ecommerce events including purchase, add to cart, and checkout — no code required. Step-by-step guide: [GA4 setup](https://www.conversios.io/docs/how-to-integrate-google-analytics-4-with-conversios-plugin/?utm_source=wpfaqs&utm_medium=ga4&utm_campaign=pluginreadme).
+
+= How do I set up Google Ads conversion tracking for WooCommerce? =
+
+Google Ads tracking in Conversios — remarketing tag, purchase conversions, and Enhanced Conversions — is available in [Pro](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme). Add your Conversion ID and Conversion Label in Conversios → Pixel Integrations and events fire automatically. Setup guide: [Google Ads Conversions](https://www.conversios.io/docs-category/gads/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme).
+
+= How do I fix a revenue mismatch between GA4 and WooCommerce? =
+
+Revenue gaps are usually caused by ad blockers, iOS/Safari restrictions, consent-blocked tracking, or purchases that never reach the thank-you page. Conversios reduces the gap with accurate client-side events (Free) and server-side tracking plus the Order Recovery Engine (Pro), and its in-dashboard reports let you compare platform data against WooCommerce orders.
+
+= How do I create a Google Shopping product feed for WooCommerce? =
+
+Connect Google Merchant Center in Conversios and your WooCommerce catalog syncs automatically, with real-time updates for price, availability, and variants — included free. The same feed manager also syncs to Microsoft Merchant Center, Meta Catalog, and TikTok Catalog.
+
+= What is the Meta Conversion API (CAPI) and do I need it? =
+
+The Conversion API sends purchase and event data from your server directly to Meta, so conversions are still recorded when browser tracking is blocked by iOS or ad blockers. If you run Meta ads and see under-reported conversions, CAPI typically improves attribution. Meta CAPI is available in Conversios Pro; the Meta Pixel is free.
+
+= Does Conversios support Google Analytics 4 (GA4)? =
+
+Yes. Conversios integrates with Google Analytics 4 and automatically tracks **15+ ecommerce events** like purchases, cart views, checkouts, and sign-ups. Guide: [GA4 setup](https://www.conversios.io/docs/how-to-integrate-google-analytics-4-with-conversios-plugin/?utm_source=wpfaqs&utm_medium=ga4&utm_campaign=pluginreadme).
+
+= Can I use Conversios without writing code? =
+
+Yes. The plugin includes a **no-code setup wizard** to connect GA4, Google Ads, Microsoft Ads, Meta Pixel, TikTok Pixel, and other pixels in about 15 minutes.
+
+= Does Conversios support server-side tracking? =
+
+Yes, in the Pro version. Server-side tracking sends events from your server so conversions lost to iOS restrictions and ad blockers are recovered, improving attribution accuracy across GA4, Google Ads, Meta, TikTok, and Snapchat.
+
+= Is Google Ads remarketing included in Free? =
+
+No. The Google Ads remarketing tag, purchase conversion tracking, and Dynamic Remarketing are available in [Pro](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme). The free plugin includes Microsoft Ads purchase conversions, TikTok Pixel purchase conversions, Meta Pixel, and GA4 ecommerce tracking.
+
+= Does Conversios support Google Ads Dynamic Remarketing? =
+
+Yes, in the Pro version. The plugin sends the product identifiers and page types required to show personalized product ads on the Google Display Network. A connected Google Merchant Center feed is recommended.
+
+= Is Microsoft Ads purchase conversion tracking included in Free? =
+
+Yes. Microsoft Ads UET purchase conversions are included free.
+
+= Does Conversios track TikTok conversions for WooCommerce? =
+
+Yes. The free plugin sets up your TikTok Pixel automatically and tracks WooCommerce ecommerce events including purchase conversions, so orders are attributed to your TikTok Ads campaigns. TikTok Conversions API (CAPI) server-side tracking is available in Pro, and TikTok Catalog product feed sync is included free.
+
+= Why are events not firing in GA4 or Meta Events Manager? =
+
+Verify your IDs and labels first, then confirm events in GA4 DebugView or Meta Test Events. If you use caching or security plugins, whitelist Conversios scripts. Ensure orders reach the WooCommerce thank-you page and that consent is granted when using a CMP.
+
+= What should I do if conversions are not showing in Google Ads or Meta? =
+
+Confirm the Conversion ID and Label (Google Ads) or Pixel ID (Meta). Check for caching or script blockers and whitelist Conversios. Validate events in GA4 DebugView, Meta Test Events, and Microsoft UET Tag Helper.
+
+= Can I use my own Google Tag Manager (GTM) container? =
+
+Yes. You can use your own GTM container or the pre-configured options provided by Conversios.
+
+= Is Conversios compatible with Consent Mode v2? =
+
+Yes. Conversios supports Google Consent Mode v2 and works with popular CMPs to respect user choices under GDPR and CCPA. Note that Conversios does not include a consent banner — pair it with a CMP like CookieYes or Cookiebot.
+
+= Will the plugin slow down my site? =
+
+No. Conversios is performance-optimized and uses a lightweight implementation designed to minimize impact on load time.
+
+= Does Conversios work with High-Performance Order Storage (HPOS)? =
+
+Yes. Conversios is fully compatible with WooCommerce HPOS.
+
+= Can I sync product feeds to Google, Microsoft, Meta, or TikTok catalogs? =
+
+Yes. You can sync WooCommerce products to Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok Catalog — all included free, with real-time updates.
+
+= Where can I view reports inside the plugin? =
+
+Go to Conversios → Analytics Reports. Tabs include General Reports (GA4, Free), Ecommerce Reports (GA4, Pro), Google Ads Reports (Pro), and Meta (Facebook) Reports (Pro).
+
+= Can I track logged-in users and guest users differently? =
+
+Yes. Conversios tracks both. Pro supports advanced mappings such as user ID and enhanced conversions where applicable and compliant.
+
+= Does Conversios track purchases from third-party payment gateways? =
+
+Yes, as long as the gateway returns customers to the WooCommerce thank-you page. Server-side tracking in Pro can help recover some offsite gateway cases.
+
+= What is Universal Commerce Protocol (UCP)? =
+
+Universal Commerce Protocol (UCP) allows WooCommerce products to be discovered and purchased within Google Gemini shopping experiences. Conversios enables this by syncing your catalog with Google Merchant Center and tracking Gemini-originated purchases via server-side tracking, so conversions report accurately in GA4 and connected ad platforms.
+
+= Is Universal Commerce Protocol (UCP) included in the free plugin? =
+
+No. UCP is available as part of the Conversios [Server-Side Tracking (SST) Pro plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
+
+= Do I need Google Merchant Center for UCP? =
+
+Yes. An approved Google Merchant Center account is required, as product data is synced through Merchant Center for Google Gemini shopping experiences.
+
+= What is Order Recovery Engine? =
+
+Order Recovery Engine is a Pro feature that recovers untracked conversions in Google Analytics, Google Ads, and Meta, closing reporting gaps between WooCommerce backend data and ad platform reports.
+
+= Can I customize which events are tracked? =
+
+Yes. You can enable or disable GA4, Ads, and Meta events in settings. Pro adds advanced controls and custom mappings.
+
+= Will server-side tracking work on Safari and iOS browsers? =
+
+Yes. Server-side tracking maintains measurement on Safari, iOS, and ad-blocked browsers by sending server events.
+
+= How can I ensure data privacy and comply with GDPR using Conversios? =
+
+Conversios integrates with popular CMPs such as CookieYes, GDPR Cookie Compliance, Real Cookie Banner, and Cookiebot, and supports Consent Mode v2 to manage data collection based on consent.
+
+= What happens if my website has a caching plugin enabled? =
+
+Whitelist Conversios scripts and exclude key endpoints from caching to ensure events are sent correctly.
+
+= Where can I report a bug or request a new feature? =
+
+Open a support thread on WordPress.org or email info@conversios.io.
 
 == Screenshots ==
 
@@ -229,118 +354,17 @@ Conversios is compatible with the following major plugins:
 5. Audience insights screen showing device, country, city, and daily traffic trends.
 6. Product Feed screen showing channel connections for Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok Catalog.
 
-== Installation ==
-
-1. Upload the Conversios plugin folder to the `/wp-content/plugins/` directory.
-
-2. Activate the plugin from the "Plugins" menu in WordPress.
-
-3. Set up Pixel & Analytics Integrations (WordPress Admin → Conversios → Pixel Integrations):
-   - **Google Analytics 4 (GA4):** Add your GA4 Measurement ID to enable WooCommerce event tracking.
-   - **Google Ads:** Enable the remarketing tag (Free). For purchase conversions (Pro), add your Conversion ID and Conversion Label. You can also enable enhanced conversions (optional).
-   - **Microsoft Ads:** Add your Microsoft UET Tag and configure the Purchase conversion goal/ID.
-
-4. Set up other integrations if needed:
-   - **Meta (Facebook) Pixel**, **TikTok Pixel**, **Snapchat Pixel**, **Pinterest Tag**, **LinkedIn Insight Tag**, **X (Twitter) Pixel**, **Microsoft Clarity**, **Hotjar**, **Crazy Egg**
-
-5. Sync your product feeds:
-   - Connect **Google Merchant Center**, **Microsoft Merchant Center**, **Meta Catalog**, and **TikTok Catalog**.
-
-6. After setup, click **Finish Setup** in the onboarding wizard.
-
-7. View reports inside the plugin (Conversios → Analytics Reports):
-   - **General Reports (GA4)** (Free)
-   - **eCommerce Reports (GA4)** (Pro)
-   - **Google Ads Reports** (Pro)
-   - **Meta (Facebook) Reports** (Pro)
-
-8. Explore detailed setup guides:
-   - [Google Analytics 4 Setup](https://www.conversios.io/docs-category/woocommerce/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme)
-   - [Google Ads Conversions (Pro)](https://www.conversios.io/docs-category/gads/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme)
-   - [Microsoft Ads Setup](https://www.conversios.io/docs/set-up-microsoft-advertising-with-conversios-plugin/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme)
-
-9. For common troubleshooting, visit our [FAQ section](https://www.conversios.io/docs-category/woocommerce/?utm_source=wpaioreadme&utm_medium=docs&utm_campaign=aioreadme).
-
-10. Need help? Email [info@conversios.io](mailto:info@conversios.io).
-
-== Frequently Asked Questions ==
-
-= Does Conversios support Google Analytics 4 (GA4)? =
-Yes. Conversios integrates with Google Analytics 4 and automatically tracks **15+ eCommerce events** like purchases, cart views, checkouts and sign-ups. Follow our step-by-step setup guide here: [GA4 setup](https://www.conversios.io/docs/how-to-integrate-google-analytics-4-with-conversios-plugin/?utm_source=wpfaqs&utm_medium=ga4&utm_campaign=pluginreadme).
-
-= Can I use Conversios without writing code? =
-Yes. The plugin includes a **no-code setup wizard** to connect GA4, Google Ads, Microsoft Ads, Meta Pixel and other pixels in minutes.
-
-= Does Conversios support server-side tracking? =
-Yes. Server-side tracking is available in the Pro version. It helps recover conversions lost to iOS restrictions and ad blockers and improves attribution accuracy.
-
-= Is Google Ads remarketing included in Free? =
-Yes. The Google Ads remarketing tag is available in the free plan to build audiences. Google Ads purchase conversion tracking is available in Pro.
-
-= Does Conversios support Google Ads Dynamic Remarketing? =
-Yes. Dynamic remarketing is available in the Pro version. The plugin sends product identifiers and page types required to show personalized product ads on the Google Display Network. A connected Google Merchant Center feed is recommended.
-
-= Is Microsoft Ads purchase conversion tracking included in Free? =
-Yes. Microsoft Ads UET purchase conversions are supported in the free plan.
-
-= Why are events not firing in GA4 or Meta Events Manager? =
-Verify your IDs and labels first. Use GA4 DebugView or Meta Test Events to confirm events. If you use caching or security plugins, whitelist Conversios scripts. Ensure orders reach the WooCommerce thank-you page and that consent is granted when using a CMP.
-
-= What should I do if conversions are not showing in Google Ads or Meta? =
-Confirm the Conversion ID and Label (Google Ads) or Pixel ID (Meta). Check for caching or script blockers and whitelist Conversios. Validate events in GA4 DebugView, Meta Test Events and Microsoft UET Tag Helper.
-
-= Can I use my own Google Tag Manager (GTM) container? =
-Yes. You can use your own GTM container or the pre-configured options provided by Conversios.
-
-= Is Conversios compatible with Consent Mode v2? =
-Yes. Conversios supports Google Consent Mode v2 and works with popular CMPs to respect user choices under GDPR and CCPA.
-
-= Will the plugin slow down my site? =
-No. Conversios is performance-optimized and uses a lightweight implementation designed to minimize impact on load time.
-
-= Does Conversios work with High-Performance Order Storage (HPOS)? =
-Yes. Conversios is fully compatible with WooCommerce HPOS.
-
-= Can I sync product feeds to Google, Microsoft or Meta catalogs? =
-Yes. You can sync products to Google Merchant Center, Microsoft Merchant Center and Meta Catalog. TikTok Catalog is also supported.
-
-= Where can I view reports inside the plugin? =
-Go to Conversios → Analytics Reports. Tabs include General Reports (GA4, Free), Ecommerce Reports (GA4, Pro), Google Ads Reports (Pro) and Facebook (Meta) Reports (Pro).
-
-= Can I track logged-in users and guest users differently? =
-Yes. Conversios tracks both. Pro supports advanced mappings such as user ID and enhanced conversions where applicable and compliant.
-
-= Does Conversios track purchases from third-party payment gateways? =
-Yes, as long as the gateway returns to the WooCommerce thank-you page. Server-side tracking in Pro can help recover some offsite gateway cases.
-
-= What is Universal Commerce Protocol (UCP)? =
-Universal Commerce Protocol allows WooCommerce products to be discovered and purchased within Google Gemini. Conversios enables this by syncing your product catalog with Google Merchant Center and tracking purchases originating from Google Gemini using server-side tracking, so conversions are accurately reported in GA4 and supported ad platforms.
-
-= Is Universal Commerce Protocol (UCP) included in the free plugin? =
-No. Universal Commerce Protocol (UCP) is available only as part of the Conversios [Server-Side Tracking (SST) Pro plan](https://www.conversios.io/pricing/?plugin_name=aio&utm_source=wpaioreadme&utm_medium=profeature&utm_campaign=wpaioreadme).
-
-= Do I need Google Merchant Center for UCP? =
-Yes. An approved Google Merchant Center account is required, as product data is synced through Merchant Center for Google Gemini shopping experiences.
-
-= What is Order Recovery Engine? =
-Order Recovery Engine is a Pro feature that recovers untracked conversions in Google Analytics, Google Ads, and Meta. It helps close reporting gaps between WooCommerce backend data and advertising platform reports.
-
-= Can I customize which events are tracked? =
-Yes. You can enable or disable GA4, Ads and Meta events in settings. Pro adds advanced controls and custom mappings.
-
-= Will server-side tracking work on Safari and iOS browsers? =
-Yes. Server-side tracking helps maintain measurement on Safari, iOS and ad-blocked browsers by sending server events.
-
-= How can I ensure data privacy and comply with GDPR using Conversios? =
-Conversios integrates with popular CMPs such as CookieYes, GDPR Cookie Compliance, Real Cookie Banner and Cookiebot, and supports Consent Mode v2 to manage data collection based on consent.
-
-= What happens if my website has a caching plugin enabled? =
-Whitelist Conversios scripts and exclude key endpoints from caching to ensure events are sent correctly.
-
-= Where can I report a bug or request a new feature? =
-Open a support thread on WordPress.org or email [info@conversios.io](mailto:info@conversios.io).
-
 == Changelog ==
+
+= 7.2.22 =
+July 21, 2026
+
+* New: TikTok Pixel automated setup (Free) – connect your TikTok Pixel automatically, no manual code or Events Manager configuration needed.
+* New: TikTok ecommerce event tracking (Free) – view content, add to cart, checkout, and more sent automatically from WooCommerce.
+* New: TikTok purchase conversion tracking (Free) – attribute WooCommerce orders to your TikTok Ads campaigns.
+* Improvement: TikTok Catalog product feed sync – improved product data syncing for TikTok ecommerce ads.
+* Improvement: Plan scope update – the Google Ads remarketing tag is now part of the Pro plan. See the pricing page for current plan details.
+
 = Conversios 7.2.20 =
 July 10, 2026
 

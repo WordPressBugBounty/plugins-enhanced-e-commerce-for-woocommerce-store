@@ -39,7 +39,12 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('auto_feed_wise_product_sync_process_scheduler_ee', [$this, 'ee_call_auto_feed_wise_product_sync_process']);
       add_action('wp_ajax_get_tiktok_business_account', [$this, 'get_tiktok_business_account']);
       add_action('wp_ajax_get_tiktok_user_catalogs', [$this, 'get_tiktok_user_catalogs']);
+      add_action('wp_ajax_get_tiktok_ads_account_list', [$this, 'get_tiktok_ads_account_list']);
+      add_action('wp_ajax_get_tiktok_pixel_list', [$this, 'get_tiktok_pixel_list']);
+      add_action('wp_ajax_create_tiktok_pixel', [$this, 'create_tiktok_pixel']);
+      add_action('wp_ajax_create_tiktok_business_manager_account', [$this, 'create_tiktok_business_manager_account']);
       add_action('wp_ajax_ee_getCatalogId', [$this, 'ee_getCatalogId']);
+      add_action('wp_ajax_conv_create_tiktok_catalog', [$this, 'conv_create_tiktok_catalog']);
       add_action('wp_ajax_conv_create_microsoft_ads_conversion', [$this, 'conv_create_microsoft_ads_conversion']);
       add_action('wp_ajax_conv_save_microsoft_ads_conversion', [$this, 'savemicrosoftadsconversions']);
       add_action('wp_ajax_get_fb_catalog_data', array($this, 'get_fb_catalog_data'));
@@ -97,7 +102,12 @@ if (!class_exists('TVC_Ajax_File')) :
                 $value = sanitize_text_field($value);
               });
               $posted_arr_temp = $arr;
-              $ee_options[$key_name] = $posted_arr_temp;
+              // Merge nested settings (e.g. tiktok_setting) so pixel save does not wipe feed keys.
+              if ($key_name === 'tiktok_setting' && isset($ee_options[$key_name]) && is_array($ee_options[$key_name])) {
+                $ee_options[$key_name] = array_merge($ee_options[$key_name], $posted_arr_temp);
+              } else {
+                $ee_options[$key_name] = $posted_arr_temp;
+              }
             }
           } else {
             $ee_options[$key_name] = sanitize_text_field($conv_options_data);
@@ -2062,9 +2072,9 @@ if (!class_exists('TVC_Ajax_File')) :
           $caller = 'get_tiktok_business_account';
           $result = $customObj->get_tiktok_business_account($caller, $customer_subscription_id);
           $tikTokData = [];
-          if (isset($result->status) && $result->status === 200 && is_array($result->data) && $result->data != '') {
+          if (isset($result->status) && $result->status === 200 && isset($result->data) && is_array($result->data)) {
             foreach ($result->data as $value) {
-              if ($value->bc_info->status === 'ENABLE') {
+              if (isset($value->bc_info) && $value->bc_info->status === 'ENABLE') {
                 $tikTokData[$value->bc_info->bc_id] = $value->bc_info->name;
               }
             }
@@ -2130,6 +2140,319 @@ if (!class_exists('TVC_Ajax_File')) :
       exit;
     }
 
+    /**
+     * AJAX handler: create a TikTok catalog via CustomApi::createCatalogs().
+     *
+     * Expects POST params: customer_subscription_id, business_id, catalog_name,
+     * region_code, currency, conversios_onboarding_nonce.
+     */
+    function conv_create_tiktok_catalog()
+    {
+      $nonce = filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+        $business_id     = isset($_POST['business_id']) ? sanitize_text_field(wp_unslash($_POST['business_id'])) : '';
+        $catalog_name    = isset($_POST['catalog_name']) ? sanitize_text_field(wp_unslash($_POST['catalog_name'])) : '';
+        $region_code     = isset($_POST['region_code']) ? sanitize_text_field(wp_unslash($_POST['region_code'])) : '';
+        $currency        = isset($_POST['currency']) ? sanitize_text_field(wp_unslash($_POST['currency'])) : '';
+
+        if ($subscription_id !== '' && $business_id !== '' && $catalog_name !== '' && $region_code !== '' && $currency !== '') {
+          $postData = array(
+            'customer_subscription_id' => $subscription_id,
+            'business_id'              => $business_id,
+            'catalog_name'             => $catalog_name,
+            'region_code'              => $region_code,
+            'currency'                 => $currency,
+          );
+
+          $customObj = new CustomApi();
+          $result    = $customObj->createCatalogs($postData);
+
+          if (isset($result->status) && $result->status === 200) {
+            $response_data = isset($result->data) ? $result->data : null;
+            echo wp_json_encode(array('error' => false, 'data' => $response_data));
+          } else {
+            $error_msg = esc_html__('Failed to create TikTok Catalog.', 'enhanced-e-commerce-for-woocommerce-store');
+            if (isset($result->message) && $result->message !== '') {
+              $error_msg = sanitize_text_field($result->message);
+            } elseif (isset($result->conv_param_error) && $result->conv_param_error !== '') {
+              $error_msg = sanitize_text_field($result->conv_param_error);
+            }
+            echo wp_json_encode(array('error' => true, 'message' => $error_msg));
+          }
+        } else {
+          echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Required parameters are missing.', 'enhanced-e-commerce-for-woocommerce-store')));
+        }
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+      }
+      exit;
+    }
+
+    function get_tiktok_ads_account_list()
+    {
+      $nonce = filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+        $bc_id = isset($_POST['bc_id']) ? sanitize_text_field(wp_unslash($_POST['bc_id'])) : '';
+
+        if ($subscription_id !== '' && $bc_id !== '') {
+          $postData = array(
+            'customer_subscription_id' => $subscription_id,
+            'bc_id' => $bc_id,
+          );
+          $customObj = new CustomApi();
+          $caller = 'get_tiktok_ads_account_list';
+          $result = $customObj->get_tiktok_ads_account_list($caller, $postData);
+
+          if (isset($result->status) && $result->status === 200 && isset($result->data)) {
+            echo wp_json_encode(array('error' => false, 'data' => $this->normalize_tiktok_ads_account_list($result->data)));
+          } else {
+            echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Ads Account list not found', 'enhanced-e-commerce-for-woocommerce-store')));
+          }
+        } else {
+          echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Required parameters are missing.', 'enhanced-e-commerce-for-woocommerce-store')));
+        }
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+      }
+      exit;
+    }
+
+    function get_tiktok_pixel_list()
+    {
+      $nonce = filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+        $advertiser_id = isset($_POST['advertiser_id']) ? sanitize_text_field(wp_unslash($_POST['advertiser_id'])) : '';
+
+        if ($subscription_id !== '' && $advertiser_id !== '') {
+          $postData = array(
+            'customer_subscription_id' => $subscription_id,
+            'advertiser_id' => $advertiser_id,
+          );
+          $customObj = new CustomApi();
+          $caller = 'get_tiktok_pixel_list';
+          $result = $customObj->get_tiktok_pixel_list($caller, $postData);
+
+          if (isset($result->status) && $result->status === 200 && isset($result->data)) {
+            echo wp_json_encode(array('error' => false, 'data' => $this->normalize_tiktok_pixel_list($result->data)));
+          } else {
+            echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Pixel list not found', 'enhanced-e-commerce-for-woocommerce-store')));
+          }
+        } else {
+          echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Required parameters are missing.', 'enhanced-e-commerce-for-woocommerce-store')));
+        }
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+      }
+      exit;
+    }
+
+    function create_tiktok_pixel()
+    {
+      $nonce = filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+        $advertiser_id = isset($_POST['advertiser_id']) ? sanitize_text_field(wp_unslash($_POST['advertiser_id'])) : '';
+        $pixel_name = isset($_POST['pixel_name']) ? sanitize_text_field(wp_unslash($_POST['pixel_name'])) : '';
+
+        if ($subscription_id !== '' && $advertiser_id !== '') {
+          $postData = array(
+            'customer_subscription_id' => $subscription_id,
+            'advertiser_id' => $advertiser_id,
+          );
+          if ($pixel_name !== '') {
+            $postData['pixel_name'] = $pixel_name;
+          }
+          $customObj = new CustomApi();
+          $caller = 'create_tiktok_pixel';
+          $result = $customObj->create_tiktok_pixel($caller, $postData);
+          $this->echo_tiktok_create_response($result);
+        } else {
+          echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Required parameters are missing.', 'enhanced-e-commerce-for-woocommerce-store')));
+        }
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+      }
+      exit;
+    }
+
+    function create_tiktok_business_manager_account()
+    {
+      $nonce = filter_input(INPUT_POST, 'conversios_onboarding_nonce', FILTER_UNSAFE_RAW);
+
+      if ($nonce && wp_verify_nonce($nonce, 'conversios_onboarding_nonce')) {
+        $subscription_id = isset($_POST['customer_subscription_id']) ? sanitize_text_field(wp_unslash($_POST['customer_subscription_id'])) : '';
+        $business_name = isset($_POST['business_name']) ? sanitize_text_field(wp_unslash($_POST['business_name'])) : '';
+        $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+        $currency = isset($_POST['currency']) ? sanitize_text_field(wp_unslash($_POST['currency'])) : '';
+
+        if ($subscription_id !== '' && $business_name !== '' && $email !== '' && $currency !== '') {
+          $postData = array(
+            'customer_subscription_id' => $subscription_id,
+            'business_name' => $business_name,
+            'email' => $email,
+            'currency' => $currency,
+          );
+          $optional_fields = array('advertiser_name', 'industry', 'timezone', 'pixel_name');
+          foreach ($optional_fields as $field) {
+            if (isset($_POST[$field]) && sanitize_text_field(wp_unslash($_POST[$field])) !== '') {
+              $postData[$field] = sanitize_text_field(wp_unslash($_POST[$field]));
+            }
+          }
+          $customObj = new CustomApi();
+          $caller = 'create_tiktok_business_manager_account';
+          $result = $customObj->create_tiktok_business_manager_account($caller, $postData);
+          $this->echo_tiktok_create_response($result);
+        } else {
+          echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Required parameters are missing.', 'enhanced-e-commerce-for-woocommerce-store')));
+        }
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Admin security nonce is not verified.', 'enhanced-e-commerce-for-woocommerce-store')));
+      }
+      exit;
+    }
+
+    private function normalize_tiktok_ads_account_list($items)
+    {
+      $normalized = array();
+      if (is_object($items)) {
+        $items = (array) $items;
+      }
+      if (!is_array($items)) {
+        return $normalized;
+      }
+      foreach ($items as $key => $value) {
+        $account_id = '';
+        $account_name = '';
+        if (is_object($value) || is_array($value)) {
+          $row = is_object($value) ? (array) $value : $value;
+          // Nested TikTok shapes: advertiser / asset_info wrappers
+          if (isset($row['advertiser']) && (is_object($row['advertiser']) || is_array($row['advertiser']))) {
+            $nested = is_object($row['advertiser']) ? (array) $row['advertiser'] : $row['advertiser'];
+            $row = array_merge($row, $nested);
+          }
+          if (isset($row['asset_info']) && (is_object($row['asset_info']) || is_array($row['asset_info']))) {
+            $nested = is_object($row['asset_info']) ? (array) $row['asset_info'] : $row['asset_info'];
+            $row = array_merge($row, $nested);
+          }
+          // MW may pass TikTok bc/asset/get fields (asset_id / asset_name) or advertiser_* aliases
+          $account_id = isset($row['advertiser_id']) ? $row['advertiser_id'] : (isset($row['asset_id']) ? $row['asset_id'] : (isset($row['ads_account_id']) ? $row['ads_account_id'] : (isset($row['id']) ? $row['id'] : '')));
+          $account_name = isset($row['advertiser_name']) ? $row['advertiser_name'] : (isset($row['asset_name']) ? $row['asset_name'] : (isset($row['name']) ? $row['name'] : $account_id));
+        } elseif (is_string($key) && (is_string($value) || is_numeric($value))) {
+          $account_id = $key;
+          $account_name = $value;
+        } elseif (is_numeric($key) && is_string($value)) {
+          $account_id = $value;
+          $account_name = $value;
+        }
+        if ($account_id !== '') {
+          $normalized[sanitize_text_field($account_id)] = sanitize_text_field($account_name !== '' ? $account_name : $account_id);
+        }
+      }
+      return $normalized;
+    }
+
+    private function normalize_tiktok_pixel_list($items)
+    {
+      $normalized = array();
+      if (is_object($items)) {
+        $items = (array) $items;
+      }
+      if (!is_array($items)) {
+        return $normalized;
+      }
+      foreach ($items as $key => $value) {
+        $pixel_id = '';
+        $pixel_name = '';
+        if (is_object($value)) {
+          $pixel_id = isset($value->pixel_id) ? $value->pixel_id : (isset($value->pixel_code) ? $value->pixel_code : '');
+          $pixel_name = isset($value->name) ? $value->name : (isset($value->pixel_name) ? $value->pixel_name : $pixel_id);
+        } elseif (is_array($value)) {
+          $pixel_id = isset($value['pixel_id']) ? $value['pixel_id'] : (isset($value['pixel_code']) ? $value['pixel_code'] : '');
+          $pixel_name = isset($value['name']) ? $value['name'] : (isset($value['pixel_name']) ? $value['pixel_name'] : $pixel_id);
+        } elseif (is_string($key) && (is_string($value) || is_numeric($value))) {
+          $pixel_id = $key;
+          $pixel_name = $value;
+        } elseif (is_numeric($key) && is_string($value)) {
+          $pixel_id = $value;
+          $pixel_name = $value;
+        }
+        if ($pixel_id !== '') {
+          $normalized[sanitize_text_field($pixel_id)] = sanitize_text_field($pixel_name !== '' ? $pixel_name : $pixel_id);
+        }
+      }
+      return $normalized;
+    }
+
+    private function echo_tiktok_create_response($result)
+    {
+      if (isset($result->status) && $result->status === 200) {
+        $response = array('error' => false, 'data' => isset($result->data) ? $result->data : null);
+        if (isset($result->data) && (is_object($result->data) || is_array($result->data))) {
+          $data = is_array($result->data) ? $result->data : (array) $result->data;
+
+          // Flat createPixel shape: { pixel_id, pixel_name, base_code }
+          if (!empty($data['pixel_id'])) {
+            $response['pixel_id'] = sanitize_text_field($data['pixel_id']);
+          } elseif (!empty($data['pixel_code'])) {
+            $response['pixel_id'] = sanitize_text_field($data['pixel_code']);
+          }
+          if (!empty($data['bc_id'])) {
+            $response['bc_id'] = sanitize_text_field($data['bc_id']);
+          }
+          if (!empty($data['business_id'])) {
+            $response['business_id'] = sanitize_text_field($data['business_id']);
+          }
+          if (!empty($data['advertiser_id'])) {
+            $response['advertiser_id'] = sanitize_text_field($data['advertiser_id']);
+          }
+          if (!empty($data['ads_account_id'])) {
+            $response['ads_account_id'] = sanitize_text_field($data['ads_account_id']);
+          }
+
+          // Nested createBusinessManagerAccount shape from MW v2 TiktokAuthService:
+          // { business_manager: { bc_id, bc_name }, ads_account: { advertiser_id, advertiser_name }, pixel: { pixel_id, ... } }
+          $business_manager = isset($data['business_manager']) ? $data['business_manager'] : null;
+          if (is_object($business_manager)) {
+            $business_manager = (array) $business_manager;
+          }
+          if (is_array($business_manager) && !empty($business_manager['bc_id'])) {
+            $response['bc_id'] = sanitize_text_field($business_manager['bc_id']);
+          }
+
+          $ads_account = isset($data['ads_account']) ? $data['ads_account'] : null;
+          if (is_object($ads_account)) {
+            $ads_account = (array) $ads_account;
+          }
+          if (is_array($ads_account) && !empty($ads_account['advertiser_id'])) {
+            $response['advertiser_id'] = sanitize_text_field($ads_account['advertiser_id']);
+          }
+
+          $pixel = isset($data['pixel']) ? $data['pixel'] : null;
+          if (is_object($pixel)) {
+            $pixel = (array) $pixel;
+          }
+          if (is_array($pixel)) {
+            if (!empty($pixel['pixel_id'])) {
+              $response['pixel_id'] = sanitize_text_field($pixel['pixel_id']);
+            } elseif (!empty($pixel['base_code'])) {
+              $response['pixel_id'] = sanitize_text_field($pixel['base_code']);
+            }
+          }
+        }
+        echo wp_json_encode($response);
+      } elseif (isset($result->error) && $result->error === true) {
+        echo wp_json_encode(array('error' => true, 'message' => isset($result->conv_param_error) ? $result->conv_param_error : esc_html__('Error: Request failed', 'enhanced-e-commerce-for-woocommerce-store')));
+      } else {
+        echo wp_json_encode(array('error' => true, 'message' => esc_html__('Error: Request failed', 'enhanced-e-commerce-for-woocommerce-store'), 'data' => $result));
+      }
+    }
 
     public function conv_save_tiktokmiddleware($post)
     {

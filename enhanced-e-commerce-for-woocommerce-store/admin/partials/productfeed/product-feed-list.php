@@ -106,6 +106,92 @@ $googleConnect_url = '';
 $getCountris = $wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . "includes/setup/json/countries.json");
 
 $contData = json_decode($getCountris);
+
+$conv_tiktok_countries = array(
+    array('name' => 'Argentina', 'code' => 'AR'),
+    array('name' => 'Australia', 'code' => 'AU'),
+    array('name' => 'Austria', 'code' => 'AT'),
+    array('name' => 'Azerbaijan', 'code' => 'AZ'),
+    array('name' => 'Bahrain', 'code' => 'BH'),
+    array('name' => 'Bangladesh', 'code' => 'BD'),
+    array('name' => 'Belarus', 'code' => 'BY'),
+    array('name' => 'Belgium', 'code' => 'BE'),
+    array('name' => 'Bolivia', 'code' => 'BO'),
+    array('name' => 'Brazil', 'code' => 'BR'),
+    array('name' => 'Bulgaria', 'code' => 'BG'),
+    array('name' => 'Cambodia', 'code' => 'KH'),
+    array('name' => 'Canada', 'code' => 'CA'),
+    array('name' => 'Chile', 'code' => 'CL'),
+    array('name' => 'Colombia', 'code' => 'CO'),
+    array('name' => 'Costa Rica', 'code' => 'CR'),
+    array('name' => 'Croatia', 'code' => 'HR'),
+    array('name' => 'Cyprus', 'code' => 'CY'),
+    array('name' => 'Czechia', 'code' => 'CZ'),
+    array('name' => 'Denmark', 'code' => 'DK'),
+    array('name' => 'Dominican Republic', 'code' => 'DO'),
+    array('name' => 'Ecuador', 'code' => 'EC'),
+    array('name' => 'Egypt', 'code' => 'EG'),
+    array('name' => 'Estonia', 'code' => 'EE'),
+    array('name' => 'Finland', 'code' => 'FI'),
+    array('name' => 'France', 'code' => 'FR'),
+    array('name' => 'Germany', 'code' => 'DE'),
+    array('name' => 'Greece', 'code' => 'GR'),
+    array('name' => 'Guatemala', 'code' => 'GT'),
+    array('name' => 'Hungary', 'code' => 'HU'),
+    array('name' => 'Indonesia', 'code' => 'ID'),
+    array('name' => 'Iraq', 'code' => 'IQ'),
+    array('name' => 'Ireland', 'code' => 'IE'),
+    array('name' => 'Israel', 'code' => 'IL'),
+    array('name' => 'Italy', 'code' => 'IT'),
+    array('name' => 'Japan', 'code' => 'JP'),
+    array('name' => 'Jordan', 'code' => 'JO'),
+    array('name' => 'Kazakhstan', 'code' => 'KZ'),
+    array('name' => 'Kenya', 'code' => 'KE'),
+    array('name' => 'Korea', 'code' => 'KR'),
+    array('name' => 'Kuwait', 'code' => 'KW'),
+    array('name' => 'Latvia', 'code' => 'LV'),
+    array('name' => 'Lithuania', 'code' => 'LT'),
+    array('name' => 'Malaysia', 'code' => 'MY'),
+    array('name' => 'Mexico', 'code' => 'MX'),
+    array('name' => 'Moldova', 'code' => 'MD'),
+    array('name' => 'Morocco', 'code' => 'MA'),
+    array('name' => 'Netherlands', 'code' => 'NL'),
+    array('name' => 'New Zealand', 'code' => 'NZ'),
+    array('name' => 'Nigeria', 'code' => 'NG'),
+    array('name' => 'Norway', 'code' => 'NO'),
+    array('name' => 'Oman', 'code' => 'OM'),
+    array('name' => 'Pakistan', 'code' => 'PK'),
+    array('name' => 'Panama', 'code' => 'PA'),
+    array('name' => 'Paraguay', 'code' => 'PY'),
+    array('name' => 'Peru', 'code' => 'PE'),
+    array('name' => 'Philippines', 'code' => 'PH'),
+    array('name' => 'Poland', 'code' => 'PL'),
+    array('name' => 'Portugal', 'code' => 'PT'),
+    array('name' => 'Puerto Rico', 'code' => 'PR'),
+    array('name' => 'Qatar', 'code' => 'QA'),
+    array('name' => 'Romania', 'code' => 'RO'),
+    array('name' => 'Russia', 'code' => 'RU'),
+    array('name' => 'Saudi Arabia', 'code' => 'SA'),
+    array('name' => 'Serbia', 'code' => 'RS'),
+    array('name' => 'Singapore', 'code' => 'SG'),
+    array('name' => 'Slovakia', 'code' => 'SK'),
+    array('name' => 'Slovenia', 'code' => 'SI'),
+    array('name' => 'South Africa', 'code' => 'ZA'),
+    array('name' => 'Spain', 'code' => 'ES'),
+    array('name' => 'Sri Lanka', 'code' => 'LK'),
+    array('name' => 'Sweden', 'code' => 'SE'),
+    array('name' => 'Switzerland', 'code' => 'CH'),
+    array('name' => 'Taiwan', 'code' => 'TW'),
+    array('name' => 'Thailand', 'code' => 'TH'),
+    array('name' => 'Turkey', 'code' => 'TR'),
+    array('name' => 'Ukraine', 'code' => 'UA'),
+    array('name' => 'United Arab Emirates', 'code' => 'AE'),
+    array('name' => 'United Kingdom', 'code' => 'GB'),
+    array('name' => 'United States', 'code' => 'US'),
+    array('name' => 'Uruguay', 'code' => 'UY'),
+    array('name' => 'Vietnam', 'code' => 'VN'),
+);
+
 $data = unserialize(get_option('ee_options'));
 $g_mail = get_option('ee_customer_gmail');
 $ms_mail = get_option('ee_customer_msmail');
@@ -1159,8 +1245,14 @@ if ($edit_id > 0) {
                                     <select class="select2 form-select form-select-sm mb-3" aria-label="form-select-sm example" style="width: 100%" name="target_country" id="target_country">
                                         <option value=""><?php esc_html_e("Select Country", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
                                         <?php
-                                        foreach ($contData as $key => $value) {
-                                            echo '<option value="' . esc_attr($value->code) . '">' . esc_html($value->name) . '</option>';
+                                        if ($subpage === 'tiktok') {
+                                            foreach ($conv_tiktok_countries as $ttk_country) {
+                                                echo '<option value="' . esc_attr($ttk_country['code']) . '">' . esc_html($ttk_country['name']) . '</option>';
+                                            }
+                                        } else {
+                                            foreach ($contData as $key => $value) {
+                                                echo '<option value="' . esc_attr($value->code) . '">' . esc_html($value->name) . '</option>';
+                                            }
                                         }
                                         ?>
                                     </select>
@@ -1169,6 +1261,27 @@ if ($edit_id > 0) {
                                     </div>
                                 </td>
                             </tr>
+                            <?php if ($subpage === 'tiktok') : ?>
+                            <!-- TikTok Catalog (TikTok only) -->
+                            <tr id="conv_tiktok_catalog_row">
+                                <th class="text-start align-middle font-weight-400 text-color"><?php esc_html_e("TikTok Catalog", "enhanced-e-commerce-for-woocommerce-store"); ?><span class="text-danger">*</span></th>
+                                <td class="text-start">
+                                    <div id="conv_tiktok_catalog_select_wrap">
+                                        <p id="conv_tiktok_catalog_placeholder" class="text-muted mb-2" style="font-size: 13px; padding: 6px 12px; border: 1px solid #ced4da; border-radius: 4px; background: #f8f9fa;"><?php esc_html_e("Select a country first", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
+                                        <select class="form-select form-select-sm mb-2" style="width: 100%; display: none;" id="conv_tiktok_catalog_select" name="conv_tiktok_catalog_id">
+                                            <option value=""><?php esc_html_e("-- Select Catalog --", "enhanced-e-commerce-for-woocommerce-store"); ?></option>
+                                        </select>
+                                        <div id="conv_tiktok_catalog_loading" style="display:none;"><span class="spinner-border spinner-border-sm"></span> <?php esc_html_e("Fetching catalogs...", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                    </div>
+                                    <div id="conv_tiktok_catalog_create_wrap" style="display: none;">
+                                        <p class="text-warning mb-2" style="font-size: 13px;"><span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">info</span> <?php esc_html_e("No TikTok Catalog found for this country.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
+                                        <button type="button" class="btn btn-sm" id="conv_tiktok_catalog_create_btn" style="background-color: #009222; color: #fff;"><?php esc_html_e("Create TikTok Catalog", "enhanced-e-commerce-for-woocommerce-store"); ?></button>
+                                        <div id="conv_tiktok_catalog_creating" style="display:none; margin-top: 5px;"><span class="spinner-border spinner-border-sm"></span> <?php esc_html_e("Creating catalog...", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                    </div>
+                                    <input type="hidden" id="conv_tiktok_catalog_id_hidden" name="conv_tiktok_catalog_id_hidden" value="">
+                                </td>
+                            </tr>
+                            <?php endif; ?>
                             <?php if ($subpage === 'gmc') : ?>
                             <!-- Feed Language (GMC only) -->
                             <tr id="conv_feed_language_row">
@@ -2409,7 +2522,13 @@ $str = json_decode($str);
             jQuery('#tiktok_id').empty();
             jQuery('.tiktok_catalog_id').empty()
             if (target_country !== "" && tiktok_business_account !== "") {
-                getCatalogId(target_country);
+                if (typeof subpage !== "undefined" && subpage === 'tiktok' && jQuery('#conv_tiktok_catalog_row').length > 0) {
+                    convTiktokFetchCatalogs(target_country);
+                } else {
+                    getCatalogId(target_country);
+                }
+            } else if (typeof subpage !== "undefined" && subpage === 'tiktok' && jQuery('#conv_tiktok_catalog_row').length > 0) {
+                convTiktokResetCatalogUI();
             }
         });
         /****************Get tiktok catalog id on target country change end ***************************************/
@@ -2487,7 +2606,7 @@ $str = json_decode($str);
             fb_catalog_id: jQuery('input[name="fb_id"]').val() === undefined ? '' : '2',
             tiktok_id: jQuery('input[name="tiktok_id"]').val() === undefined ? '' : '3',
             microsoft_merchant_center: jQuery('input[name="mmc_id"]').val() === undefined ? '' : '4',
-            tiktok_catalog_id: jQuery('#tiktok_id').val(),
+            tiktok_catalog_id: (typeof subpage !== "undefined" && subpage === 'tiktok' && jQuery('#conv_tiktok_catalog_select').length > 0 && jQuery('#conv_tiktok_catalog_select').val() !== '') ? jQuery('#conv_tiktok_catalog_select').val() : jQuery('#tiktok_id').val(),
             autoSync: jQuery('input#autoSync').is(':checked') ? '1' : '0',
             autoSyncIntvl: '25',
             edit: edit,
@@ -2641,7 +2760,10 @@ $str = json_decode($str);
                         if (val === '3') {
                             jQuery('#tiktok_id').prop("checked", true);
                             jQuery('#tiktok_id').val(response[0].tiktok_catalog_id);
-                            jQuery('.tiktok_catalog_id').html(response[0].tiktok_catalog_id)
+                            jQuery('.tiktok_catalog_id').html(response[0].tiktok_catalog_id);
+                            if (typeof subpage !== "undefined" && subpage === 'tiktok' && jQuery('#conv_tiktok_catalog_row').length > 0 && response[0].target_country) {
+                                convTiktokFetchCatalogs(response[0].target_country, response[0].tiktok_catalog_id);
+                            }
                         }
                         if (val == '2') {
                             jQuery('#fb_id').prop("checked", true);
@@ -2916,6 +3038,190 @@ $str = json_decode($str);
         });
     }
     /*************************************Get saved catalog id by country code End ****************************************************/
+    /*************************************TikTok Catalog Selection & Creation Start ************************************************/
+    <?php if ($subpage === 'tiktok') : ?>
+    var convTiktokCountryCurrencyMap = {
+        'AR':'ARS','AU':'AUD','AT':'EUR','AZ':'AZN','BH':'BHD','BD':'BDT','BY':'BYN',
+        'BE':'EUR','BO':'BOB','BR':'BRL','BG':'BGN','KH':'KHR','CA':'CAD','CL':'CLP',
+        'CO':'COP','CR':'CRC','HR':'EUR','CY':'EUR','CZ':'CZK','DK':'DKK','DO':'DOP',
+        'EC':'USD','EG':'EGP','EE':'EUR','FI':'EUR','FR':'EUR','DE':'EUR','GR':'EUR',
+        'GT':'GTQ','HU':'HUF','ID':'IDR','IQ':'IQD','IE':'EUR','IL':'ILS','IT':'EUR',
+        'JP':'JPY','JO':'JOD','KZ':'KZT','KE':'KES','KR':'KRW','KW':'KWD','LV':'EUR',
+        'LT':'EUR','MY':'MYR','MX':'MXN','MD':'MDL','MA':'MAD','NL':'EUR','NZ':'NZD',
+        'NG':'NGN','NO':'NOK','OM':'OMR','PK':'PKR','PA':'PAB','PY':'PYG','PE':'PEN',
+        'PH':'PHP','PL':'PLN','PT':'EUR','PR':'USD','QA':'QAR','RO':'RON','RU':'RUB',
+        'SA':'SAR','RS':'RSD','SG':'SGD','SK':'EUR','SI':'EUR','ZA':'ZAR','ES':'EUR',
+        'LK':'LKR','SE':'SEK','CH':'CHF','TW':'TWD','TH':'THB','TR':'TRY','UA':'UAH',
+        'AE':'AED','GB':'GBP','US':'USD','UY':'UYU','VN':'VND'
+    };
+
+    function convTiktokResetCatalogUI() {
+        jQuery('#conv_tiktok_catalog_select').val('').hide();
+        jQuery('#conv_tiktok_catalog_select').find('option:not(:first)').remove();
+        jQuery('#conv_tiktok_catalog_placeholder').text("<?php echo esc_js(__('Select a country first', 'enhanced-e-commerce-for-woocommerce-store')); ?>").show();
+        jQuery('#conv_tiktok_catalog_loading').hide();
+        jQuery('#conv_tiktok_catalog_create_wrap').hide();
+        jQuery('#conv_tiktok_catalog_creating').hide();
+        jQuery('#conv_tiktok_catalog_id_hidden').val('');
+        jQuery('#tiktok_id').val('');
+        validateStep('step1');
+    }
+
+    function convTiktokFetchCatalogs(countryCode, autoSelectCatalogId) {
+        var convOnboardingNonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
+        var customerSubId = "<?php echo esc_js($subscriptionId); ?>";
+        var businessId = "<?php echo esc_js($tiktok_business_account); ?>";
+
+        jQuery('#conv_tiktok_catalog_select').hide();
+        jQuery('#conv_tiktok_catalog_select').find('option:not(:first)').remove();
+        jQuery('#conv_tiktok_catalog_placeholder').hide();
+        jQuery('#conv_tiktok_catalog_create_wrap').hide();
+        jQuery('#conv_tiktok_catalog_creating').hide();
+        jQuery('#conv_tiktok_catalog_loading').show();
+        jQuery('#conv_tiktok_catalog_id_hidden').val('');
+        jQuery('#tiktok_id').val('');
+
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: {
+                action: "get_tiktok_user_catalogs",
+                customer_subscription_id: customerSubId,
+                business_id: businessId,
+                conversios_onboarding_nonce: convOnboardingNonce
+            },
+            success: function(response) {
+                jQuery('#conv_tiktok_catalog_loading').hide();
+
+                if (response.error === false && response.data && response.data[countryCode]) {
+                    var catalogs = response.data[countryCode];
+                    var hasItems = false;
+
+                    jQuery.each(catalogs, function(catalogId, catalogName) {
+                        jQuery('#conv_tiktok_catalog_select').append(
+                            jQuery('<option></option>').val(catalogId).text(catalogName + ' (' + catalogId + ')')
+                        );
+                        hasItems = true;
+                    });
+
+                    if (hasItems) {
+                        jQuery('#conv_tiktok_catalog_select').show();
+                        jQuery('#conv_tiktok_catalog_create_wrap').hide();
+                        jQuery('.tiktok_catalog_message').hide();
+
+                        if (typeof autoSelectCatalogId !== 'undefined' && autoSelectCatalogId) {
+                            jQuery('#conv_tiktok_catalog_select').val(autoSelectCatalogId);
+                        }
+
+                        var selectedVal = jQuery('#conv_tiktok_catalog_select').val();
+                        if (selectedVal && selectedVal !== '') {
+                            jQuery('#conv_tiktok_catalog_id_hidden').val(selectedVal);
+                            jQuery('#tiktok_id').val(selectedVal);
+                        }
+
+                        try {
+                            if (jQuery.fn.select2 && !jQuery('#conv_tiktok_catalog_select').data('select2')) {
+                                jQuery('#conv_tiktok_catalog_select').select2({
+                                    dropdownParent: jQuery("#feedForm"),
+                                    width: '100%'
+                                });
+                            }
+                        } catch(e) {}
+                    } else {
+                        convTiktokShowCreateUI();
+                    }
+                } else {
+                    convTiktokShowCreateUI();
+                }
+                validateStep('step1');
+            },
+            error: function() {
+                jQuery('#conv_tiktok_catalog_loading').hide();
+                convTiktokShowCreateUI();
+                validateStep('step1');
+            }
+        });
+    }
+
+    function convTiktokShowCreateUI() {
+        jQuery('#conv_tiktok_catalog_select').hide();
+        jQuery('#conv_tiktok_catalog_placeholder').hide();
+        jQuery('#conv_tiktok_catalog_create_wrap').show();
+        jQuery('.tiktok_catalog_message').hide();
+        jQuery('#tiktok_id').val('Create New');
+    }
+
+    jQuery(document).on('change', '#conv_tiktok_catalog_select', function() {
+        var selectedVal = jQuery(this).val();
+        jQuery('#conv_tiktok_catalog_id_hidden').val(selectedVal);
+        jQuery('#tiktok_id').val(selectedVal || '');
+        validateStep('step1');
+    });
+
+    jQuery(document).on('click', '#conv_tiktok_catalog_create_btn', function() {
+        var countryCode = jQuery('#target_country').find(":selected").val();
+        if (!countryCode || countryCode === '') {
+            alert("<?php echo esc_js(__('Please select a country first.', 'enhanced-e-commerce-for-woocommerce-store')); ?>");
+            return;
+        }
+
+        var convOnboardingNonce = "<?php echo esc_js(wp_create_nonce('conversios_onboarding_nonce')); ?>";
+        var customerSubId = "<?php echo esc_js($subscriptionId); ?>";
+        var businessId = "<?php echo esc_js($tiktok_business_account); ?>";
+        var siteName = "<?php echo esc_js(get_bloginfo('name')); ?>";
+        var catalogName = siteName ? siteName + ' - Product Catalog' : 'TikTok Feed';
+        var currency = convTiktokCountryCurrencyMap[countryCode] || '<?php echo esc_js(get_option("woocommerce_currency", "USD")); ?>';
+
+        jQuery('#conv_tiktok_catalog_create_btn').prop('disabled', true);
+        jQuery('#conv_tiktok_catalog_creating').show();
+
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: tvc_ajax_url,
+            data: {
+                action: "conv_create_tiktok_catalog",
+                customer_subscription_id: customerSubId,
+                business_id: businessId,
+                catalog_name: catalogName,
+                region_code: countryCode,
+                currency: currency,
+                conversios_onboarding_nonce: convOnboardingNonce
+            },
+            success: function(response) {
+                jQuery('#conv_tiktok_catalog_create_btn').prop('disabled', false);
+                jQuery('#conv_tiktok_catalog_creating').hide();
+
+                if (response.error === false) {
+                    var newCatalogId = '';
+                    if (response.data && response.data.catalog_id) {
+                        newCatalogId = response.data.catalog_id;
+                    }
+
+                    jQuery('#conv_tiktok_catalog_create_wrap').hide();
+
+                    var successMsg = jQuery('<div class="alert alert-success alert-dismissible fade show" role="alert" style="font-size:13px; margin-top:5px;"></div>');
+                    successMsg.text("<?php echo esc_js(__('TikTok Catalog created successfully!', 'enhanced-e-commerce-for-woocommerce-store')); ?>");
+                    successMsg.append('<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="font-size:10px;"></button>');
+                    jQuery('#conv_tiktok_catalog_select_wrap').append(successMsg);
+                    setTimeout(function() { successMsg.alert('close'); }, 5000);
+
+                    convTiktokFetchCatalogs(countryCode, newCatalogId);
+                } else {
+                    var errMsg = response.message || "<?php echo esc_js(__('Failed to create TikTok Catalog. Please try again.', 'enhanced-e-commerce-for-woocommerce-store')); ?>";
+                    alert(errMsg);
+                }
+            },
+            error: function() {
+                jQuery('#conv_tiktok_catalog_create_btn').prop('disabled', false);
+                jQuery('#conv_tiktok_catalog_creating').hide();
+                alert("<?php echo esc_js(__('Network error. Please check your connection and try again.', 'enhanced-e-commerce-for-woocommerce-store')); ?>");
+            }
+        });
+    });
+    <?php endif; ?>
+    /*************************************TikTok Catalog Selection & Creation End **************************************************/
 </script>
 <script>
     /*********************************** Pmax Campaign related code start *************************************************************/
@@ -3232,6 +3538,14 @@ $str = json_decode($str);
                 if (isValid && jQuery('#conv_feed_ds_row').length > 0) {
                     var dsVal = jQuery('#conv_feed_ds_id').val();
                     if (!dsVal || dsVal === '') {
+                        isValid = false;
+                    }
+                }
+
+                // TikTok feeds require a catalog selection
+                if (isValid && jQuery('#conv_tiktok_catalog_row').length > 0) {
+                    var catVal = jQuery('#conv_tiktok_catalog_select').val();
+                    if (!catVal || catVal === '') {
                         isValid = false;
                     }
                 }

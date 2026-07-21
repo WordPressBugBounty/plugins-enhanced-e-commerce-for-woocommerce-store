@@ -334,6 +334,10 @@ function convSaveActivePanel() {
         if (typeof window.convSaveMicrosoftAds === 'function') {
             window.convSaveMicrosoftAds();
         }
+    } else if (activeTab === 'tiktoksettings') {
+        if (typeof window.convSaveTikTok === 'function') {
+            window.convSaveTikTok();
+        }
     } else {
         // Simple pixel tabs — directly call AJAX save
         convSaveSimplePixel();

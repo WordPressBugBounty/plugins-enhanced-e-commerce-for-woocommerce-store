@@ -329,7 +329,7 @@ if ($subscriptionId != "") {
 
         // Client side pixel id validations
         jQuery(document).on("input",
-            "#fb_pixel_id, #twitter_ads_pixel_id, #pinterest_ads_pixel_id, #snapchat_ads_pixel_id, #tiKtok_ads_pixel_id, #hotjar_pixel_id, #crazyegg_pixel_id",
+            "#fb_pixel_id, #twitter_ads_pixel_id, #pinterest_ads_pixel_id, #snapchat_ads_pixel_id, #hotjar_pixel_id, #crazyegg_pixel_id",
             function() {
                 var ele_id = this.id;
                 var ele_val = jQuery(this).val();
@@ -339,7 +339,6 @@ if ($subscriptionId != "") {
                     twitter_ads_pixel_id: new RegExp(/^[a-z0-9]{5,7}$/m),
                     pinterest_ads_pixel_id: new RegExp(/^\d{13}$/m),
                     snapchat_ads_pixel_id: new RegExp(/^[a-z0-9\-]*$/m),
-                    tiKtok_ads_pixel_id: new RegExp(/^[A-Z0-9]{20,20}$/m),
                     hotjar_pixel_id: new RegExp(/^[0-9]{7,7}$/m),
                     crazyegg_pixel_id: new RegExp(/^[0-9]{8,8}$/m),
                     msclarity_pixel_id: new RegExp(/^[a-z0-9]{10,10}$/m),

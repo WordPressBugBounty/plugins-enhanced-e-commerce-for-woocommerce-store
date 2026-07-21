@@ -467,7 +467,7 @@ if (isset($googleDetail->tiktok_setting->tiktok_business_id) === TRUE && $google
         });
 
         <?php if ((isset($_GET['subscription_id']) === TRUE && sanitize_text_field(wp_unslash($_GET['subscription_id']))) || (isset($_GET['tiktok_mail']) === TRUE && !empty($_GET['tiktok_mail']))) { ?>
-            <?php if (isset($ee_options['tiktok_setting']['tiktok_mail']) && ($_GET['tiktok_mail'] !== $ee_options['tiktok_setting']['tiktok_mail'])) { ?>
+            <?php if (isset($ee_options['tiktok_setting']['tiktok_mail']) && isset($_GET['tiktok_mail']) && ($_GET['tiktok_mail'] !== $ee_options['tiktok_setting']['tiktok_mail'])) { ?>
                 saveTiktokUser();
             <?php } ?>
             list_tiktok_business_account();

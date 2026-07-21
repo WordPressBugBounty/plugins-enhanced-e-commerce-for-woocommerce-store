@@ -1117,6 +1117,132 @@ class CustomApi
     }
   }
 
+  public function get_tiktok_ads_account_list($caller, $postData)
+  {
+    try {
+      if ($postData != "") {
+        $url = $this->apiDomain . '/tiktok/getAdsAccountList';
+        $header = array(
+          "Authorization: Bearer " . $this->token,
+          "Content-Type" => "application/json"
+        );
+        $postData['caller'] = sanitize_text_field($caller);
+        if ($postData['customer_subscription_id'] == '' || $postData['bc_id'] == '') {
+          $return = new \stdClass();
+          $return->error = true;
+          $return->conv_param_error = 'Required parameters are missing.';
+          $return->conv_data = $postData;
+          $return->status = 400;
+          return $return;
+        }
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function get_tiktok_pixel_list($caller, $postData)
+  {
+    try {
+      if ($postData != "") {
+        $url = $this->apiDomain . '/tiktok/getPixelList';
+        $header = array(
+          "Authorization: Bearer " . $this->token,
+          "Content-Type" => "application/json"
+        );
+        $postData['caller'] = sanitize_text_field($caller);
+        if ($postData['customer_subscription_id'] == '' || $postData['advertiser_id'] == '') {
+          $return = new \stdClass();
+          $return->error = true;
+          $return->conv_param_error = 'Required parameters are missing.';
+          $return->conv_data = $postData;
+          $return->status = 400;
+          return $return;
+        }
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function create_tiktok_pixel($caller, $postData)
+  {
+    try {
+      if ($postData != "") {
+        $url = $this->apiDomain . '/tiktok/createPixel';
+        $header = array(
+          "Authorization: Bearer " . $this->token,
+          "Content-Type" => "application/json"
+        );
+        $postData['caller'] = sanitize_text_field($caller);
+        $advertiser_id = isset($postData['advertiser_id']) ? $postData['advertiser_id'] : '';
+        if ($postData['customer_subscription_id'] == '' || $advertiser_id == '') {
+          $return = new \stdClass();
+          $return->error = true;
+          $return->conv_param_error = 'Required parameters are missing.';
+          $return->conv_data = $postData;
+          $return->status = 400;
+          return $return;
+        }
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function create_tiktok_business_manager_account($caller, $postData)
+  {
+    //echo "<pre>"; print_r($postData); echo "</pre>";  die();
+    try {
+      if ($postData != "") {
+        $url = $this->apiDomain . '/tiktok/createBusinessManagerAccount';
+        $header = array(
+          "Authorization: Bearer " . $this->token,
+          "Content-Type" => "application/json"
+        );
+        $postData['caller'] = sanitize_text_field($caller);
+        if ($postData['customer_subscription_id'] == '' || $postData['business_name'] == '' || $postData['email'] == '' || $postData['currency'] == '') {
+          $return = new \stdClass();
+          $return->error = true;
+          $return->conv_param_error = 'Required parameters are missing.';
+          $return->conv_data = $postData;
+          $return->status = 400;
+          return $return;
+        }
+        $args = array(
+          'headers' => $header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        return $result;
+      }
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
   public function store_business_center($caller, $postData)
   {
     $postData['store_id'] = $this->conv_get_store_id();
