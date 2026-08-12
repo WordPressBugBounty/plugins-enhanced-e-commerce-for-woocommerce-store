@@ -4,11 +4,11 @@ Plugin Name: Conversios: Google Analytics (GA4), Google Ads, Conversion and Anal
 Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/
 Tags: Google Analytics, Google Ads, Facebook Pixel, Conversion Tracking, Woocommerce
 Author: Conversios
-Requires at least: 4.6
-Tested up to: 7.0.2
+Requires at least: 6.0
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 7.2.22
-Version: 7.2.22
+Stable tag: 7.2.23
+Version: 7.2.23
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -356,7 +356,13 @@ Open a support thread on WordPress.org or email info@conversios.io.
 
 == Changelog ==
 
-= 7.2.22 =
+= Conversios 7.2.23 =
+August 07, 2026
+
+* Optimization and security enhancements.
+
+
+= Conversios 7.2.22 =
 July 21, 2026
 
 * New: TikTok Pixel automated setup (Free) – connect your TikTok Pixel automatically, no manual code or Events Manager configuration needed.

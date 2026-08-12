@@ -18,21 +18,31 @@ if ( ! class_exists( 'TVC_Ajax_Calls' ) ) :
 	class TVC_Ajax_Calls {
 		public function __construct() { }
 
+		/**
+		 * Verify nonce and manage_options for admin AJAX.
+		 *
+		 * @param string $nonce                 Request nonce.
+		 * @param string $registered_nonce_name Registered nonce action.
+		 * @return bool
+		 */
 		protected function safe_ajax_call( $nonce, $registered_nonce_name ) {
-			// check the nonce
-			if ( wp_verify_nonce( $nonce, $registered_nonce_name ) && is_admin()) {
-				//die( 'You are not allowed to do this!' );
-				return true;
-			}else {
+			if ( ! current_user_can( 'manage_options' ) ) {
 				return false;
 			}
-			// only return results when the user is an admin with manage options
-			// if ( is_admin() ) {
-			// 	return true;
-			// } else {
-			// 	return false;
-			// }
+			if ( wp_verify_nonce( $nonce, $registered_nonce_name ) ) {
+				return true;
+			}
+			return false;
+		}
+
+		/**
+		 * Require manage_options for privileged admin AJAX handlers.
+		 *
+		 * @return bool True when the current user may proceed.
+		 */
+		protected function conv_require_manage_options() {
+			return current_user_can( 'manage_options' );
 		}
 	}
-	// end of TVC_Ajax_Calls class
+	// End TVC_Ajax_Calls class.
 endif;

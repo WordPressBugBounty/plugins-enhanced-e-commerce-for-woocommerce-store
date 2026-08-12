@@ -427,10 +427,11 @@ if (!class_exists('TVCProductSyncHelper')) {
 								'merchant_id' => sanitize_text_field($accountId),
 								'account_id' => sanitize_text_field($merchantId),
 								'subscription_id' => sanitize_text_field($subscriptionId),
+								'store_feed_id' => '1',
 								'entries' => $p_map_attribute['items']
 							];
 							$this->TVC_Admin_Helper->plugin_log("Before product sync API Call for " . count($p_map_attribute['items']) . " products", 'product_sync');
-							$response = $CustomApi->products_sync($data);
+							$response = $CustomApi->feed_wise_products_sync($data, 'call_by-includes/setup/class-tvc-product-sync-helper.php-auto-batch');
 							$endTime = new DateTime();
 							$diff = $endTime->diff($startTime);
 							$this->TVC_Admin_Helper->plugin_log("Products sync API duration time " . $diff->i . " minutes" . $diff->s . " seconds", 'product_sync');

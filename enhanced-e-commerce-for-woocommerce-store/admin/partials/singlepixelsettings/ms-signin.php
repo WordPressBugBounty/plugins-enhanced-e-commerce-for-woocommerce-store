@@ -121,11 +121,20 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                     $confirm_url = urlencode(string: "admin.php?page=conversios-google-analytics&subpage=bingsettings");
                     $ms_redirect_uri = TVC_API_CALL_URL_TEMP . '/auth/microsoft/callback';
                     $state = ['confirm_url' => admin_url() . $confirm_url, 'subscription_id' => $subscriptionId, 'ms_redirect_uri' => $ms_redirect_uri];
-                    $microsoft_auth_url = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=892127ea-3496-4e25-8909-12705e629eae&response_type=code&redirect_uri=$ms_redirect_uri&response_mode=query&tenant=d6545bb5-03a2-461a-880a-14ce7ce63143&scope=openid email profile offline_access https://ads.microsoft.com/msads.manage User.Read&state=" . urlencode(wp_json_encode($state));
+                    $microsoft_client_id = (isset($customApiObj) && is_object($customApiObj))
+                        ? $customApiObj->fetch_oauth_client_id('microsoft')
+                        : '';
+                    $microsoft_auth_url = '';
+                    if ($microsoft_client_id !== '') {
+                        $microsoft_auth_url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=' . rawurlencode($microsoft_client_id) . '&response_type=code&redirect_uri=' . rawurlencode($ms_redirect_uri) . '&response_mode=query&tenant=d6545bb5-03a2-461a-880a-14ce7ce63143&scope=' . rawurlencode('openid email profile offline_access https://ads.microsoft.com/msads.manage User.Read') . '&state=' . rawurlencode(wp_json_encode($state));
+                    }
 
 
                     ?>
                     <?php if (!isset($tvc_data['microsoft_mail']) || $tvc_data['microsoft_mail'] == "" || $subscriptionId == "") { ?>
+                        <?php if ($microsoft_client_id === '') { ?>
+                        <p class="text-muted mb-0"><?php esc_html_e('Microsoft sign-in is temporarily unavailable. Please try again later.', 'enhanced-e-commerce-for-woocommerce-store'); ?></p>
+                        <?php } else { ?>
                         <div class="microsoft_connect_url microsoft-btn d-flex align-items-center" onclick='window.open("<?php echo esc_js(esc_url($microsoft_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'>
                             <?php if (isset($ee_options['microsoft_ads_manager_id']) || isset($_GET['subscription_id'])) { ?>
                                 <span>Login with Microsoft</span>
@@ -146,9 +155,11 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                                 <div class="btn-text"><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
                             <?php } ?>
                         </div>
+                        <?php } ?>
                     <?php } else { ?>
                         <?php if ($is_refresh_token_expire == true) { ?>
                             <p class="alert alert-primary"><?php esc_html_e("It seems the token to access your Microsoft accounts is expired. Sign in again to continue.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>
+                            <?php if ($microsoft_client_id !== '') { ?>
                             <div class="microsoft_connect_url microsoft-btn d-flex align-items-center" onclick='window.open("<?php echo esc_js(esc_url($microsoft_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'>
                                 <div class="microsoft-icon-wrapper">
                                     <?php echo wp_kses(
@@ -165,7 +176,11 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                                 </div>
                                 <div class="btn-text"><b><?php esc_html_e("Sign in with Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></b></div>
                             </div>
+                            <?php } else { ?>
+                            <p class="text-muted mb-0"><?php esc_html_e('Microsoft re-authorization is temporarily unavailable. Please try again later.', 'enhanced-e-commerce-for-woocommerce-store'); ?></p>
+                            <?php } ?>
                         <?php } else { ?>
+                            <?php if ($microsoft_client_id !== '') { ?>
                             <div class="microsoft_connect_url microsoft-btn d-flex align-items-center" onclick='window.open("<?php echo esc_js(esc_url($microsoft_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'>
                                 <div class="microsoft-icon-wrapper">
                                     <?php echo wp_kses(
@@ -182,6 +197,9 @@ $sub_page = (isset($_GET['subpage'])) ? sanitize_text_field(wp_unslash(filter_in
                                 </div>
                                 <div class="btn-text"><?php esc_html_e("Reauthorize Microsoft", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
                             </div>
+                            <?php } else { ?>
+                            <p class="text-muted mb-0"><?php esc_html_e('Microsoft re-authorization is temporarily unavailable. Please try again later.', 'enhanced-e-commerce-for-woocommerce-store'); ?></p>
+                            <?php } ?>
                         <?php } ?>
                     <?php } ?>
                     <p class="p-0 pe-2 pt-2"><?php esc_html_e("Make sure you sign in with the Microsoft email account that has all privileges to access  Microsoft Advertising account that you want to configure for your store.", "enhanced-e-commerce-for-woocommerce-store"); ?></p>

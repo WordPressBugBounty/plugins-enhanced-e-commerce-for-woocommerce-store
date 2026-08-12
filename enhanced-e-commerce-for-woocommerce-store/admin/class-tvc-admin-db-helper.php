@@ -11,7 +11,18 @@ if (! class_exists('TVC_Admin_DB_Helper')) {
 		}
 		public function includes()
 		{
-			//require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );    
+			//require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		}
+
+		/**
+		 * Sanitize a SQL column identifier from a where-clause fragment.
+		 *
+		 * @param string $column Raw column name, optionally backtick-wrapped.
+		 * @return string Escaped column name without backticks.
+		 */
+		private function conv_sanitize_column($column)
+		{
+			return esc_sql(trim($column, " \t\n\r\0\x0B`"));
 		}
 
 		public function tvc_row_count($table, $field_name = "*")
@@ -62,49 +73,56 @@ if (! class_exists('TVC_Admin_DB_Helper')) {
 		public function tvc_check_row($table, $key, $value)
 		{
 			global $wpdb;
-			if ($table == "" ||  $value == "" || $key == "") {
+			if ($table == "" || $value == "" || $key == "") {
 				return;
-			} else {
-				$tablename = esc_sql($wpdb->prefix . $table);
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				return $wpdb->get_var( $wpdb->prepare("select count(*) from `$tablename` where {$key}=%s", $value) );
 			}
+			$tablename = esc_sql($wpdb->prefix . $table);
+			$column    = $this->conv_sanitize_column($key);
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			return $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM `$tablename` WHERE `$column` = %s", $value));
 		}
 
 		public function tvc_get_results_in_array($table, $where, $fields, $concat = false, $operator = "")
 		{
 			global $wpdb;
-			if ($table == "" ||  $where == "" || $fields == "") {
+			if ($table == "" || $where == "" || $fields == "") {
 				return;
-			} else {
-				$where = explode("=", $where);
-				$key = $where[0];
-				$val = trim($where[1]);
-				$tablename = esc_sql($wpdb->prefix . $table);
-				if ($operator == "IN") {
-					if ($concat == true) {
-						$fields = implode(',\'_\',', $fields);
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						return $wpdb->get_col( $wpdb->prepare("select CONCAT(%s) as p_c_id from `$tablename` where {$key} IN {$val}", $fields) );
-					} else {
-						$fields = esc_sql(implode('`,`', $fields));
-						// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter
-						$sql = $wpdb->prepare("select `$fields` from `$tablename` where {$key} IN {$val}");
-						// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-						return $wpdb->get_results($sql, ARRAY_A);
-					}
-				} else { // when $operator is '='
-					if ($concat == true) {
-						$fields = implode(',\'_\',', $fields);
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						return $wpdb->get_col( $wpdb->prepare("select CONCAT(%s) as p_c_id from `$tablename` where {$key}=%s", $fields, $val) );
-					} else {
-						$fields = esc_sql(implode('`,`', $fields));
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						return $wpdb->get_results( $wpdb->prepare("select `$fields` from `$tablename` where {$key} = %s", $val), ARRAY_A );
-					}
-				}
 			}
+			$where_parts = explode('=', $where, 2);
+			$column      = $this->conv_sanitize_column($where_parts[0]);
+			$val         = isset($where_parts[1]) ? trim($where_parts[1]) : '';
+			$tablename   = esc_sql($wpdb->prefix . $table);
+
+			if ($operator === 'IN') {
+				$val       = trim($val, " \t\n\r\0\x0B()");
+				$in_values = array_filter(array_map('trim', explode(',', $val)), 'strlen');
+				if (empty($in_values)) {
+					return array();
+				}
+				$placeholders = implode(', ', array_fill(0, count($in_values), '%s'));
+				if ($concat === true) {
+					$concat_fields = implode(',\'_\',', $fields);
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPlaceholder
+					$sql = $wpdb->prepare("SELECT CONCAT($concat_fields) AS p_c_id FROM `$tablename` WHERE `$column` IN ($placeholders)", ...$in_values);
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Query built via $wpdb->prepare(); table/column names sanitized via esc_sql().
+					return $wpdb->get_col($sql);
+				}
+				$field_list = esc_sql(implode('`,`', $fields));
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPlaceholder
+				$sql = $wpdb->prepare("SELECT `$field_list` FROM `$tablename` WHERE `$column` IN ($placeholders)", ...$in_values);
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				return $wpdb->get_results($sql, ARRAY_A);
+			}
+
+			if ($concat === true) {
+				$concat_fields = implode(',\'_\',', $fields);
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				return $wpdb->get_col($wpdb->prepare("SELECT CONCAT($concat_fields) AS p_c_id FROM `$tablename` WHERE `$column` = %s", $val));
+			}
+
+			$field_list = esc_sql(implode('`,`', $fields));
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			return $wpdb->get_results($wpdb->prepare("SELECT `$field_list` FROM `$tablename` WHERE `$column` = %s", $val), ARRAY_A);
 		}
 		public function tvc_get_results($table)
 		{

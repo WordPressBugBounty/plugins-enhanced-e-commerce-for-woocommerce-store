@@ -163,13 +163,20 @@ class TVC_Admin_Helper
 
     // Add gmc_datasource_id column to ee_product_feed if it doesn't exist
     try {
-      $feed_table = $wpdb->prefix . "ee_product_feed";
+      $feed_table = $wpdb->prefix . 'ee_product_feed';
       $feed_table_query = $wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($feed_table));
       if ($wpdb->get_var($feed_table_query) === $feed_table) {
-        $feed_table = esc_sql($feed_table);
-        $ds_col_query = $wpdb->prepare('SHOW COLUMNS FROM ' . $feed_table . ' LIKE %s', $wpdb->esc_like('gmc_datasource_id'));
-        if ($wpdb->get_var($ds_col_query) != esc_sql('gmc_datasource_id')) {
-          $wpdb->query("ALTER TABLE $feed_table ADD `gmc_datasource_id` VARCHAR(25) DEFAULT NULL");
+        $ds_col_exists = (int) $wpdb->get_var(
+          $wpdb->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = %s AND table_name = %s AND column_name = %s',
+            DB_NAME,
+            $feed_table,
+            'gmc_datasource_id'
+          )
+        );
+        if ($ds_col_exists === 0) {
+          // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin table name from $wpdb->prefix only.
+          $wpdb->query('ALTER TABLE `' . esc_sql($feed_table) . '` ADD `gmc_datasource_id` VARCHAR(25) DEFAULT NULL');
         }
       }
     } catch (Exception $e) {

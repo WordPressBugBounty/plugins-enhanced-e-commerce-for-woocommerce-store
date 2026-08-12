@@ -5,6 +5,9 @@
  * @package Enhanced_Ecommerce_Google_Analytics
  * @since   7.6.3
  */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 if (!defined('WPINC')) {
     die;
@@ -89,6 +92,9 @@ if (!class_exists('Conv_Purchase_Tracking_Settings')) {
             $master_enabled = 1; // Master toggle removed based on USR request
 
             $nonce = wp_create_nonce('conversios_nonce');
+            $conv_ore_currency_symbol = function_exists( 'get_woocommerce_currency_symbol' )
+                ? html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' )
+                : '$';
             $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . 'admin.php?page=conversios-purchase-tracking', "ptsettings");
             ?>
             <style>
@@ -561,7 +567,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                                 </div>
                                 <div class="conv_ore_stat_tile" style="background: linear-gradient(135deg, #fef3c7, #fef9c3); border: 2px solid #f59e0b; box-shadow: 0 0 12px rgba(245,158,11,0.25);">
 
-                                    <div class="conv_ore_stat_label" style="color:#b45309">Missed<br>Revenue</div><div class="conv_ore_stat_value" id="stat_recovered_revenue" style="color: #92400e;"><?php echo html_entity_decode(get_woocommerce_currency_symbol()); ?>0</div>
+                                    <div class="conv_ore_stat_label" style="color:#b45309">Missed<br>Revenue</div><div class="conv_ore_stat_value" id="stat_recovered_revenue" style="color: #92400e;"><?php echo esc_html( $conv_ore_currency_symbol ); ?>0</div>
                                 </div>
                             </div>
 
@@ -613,7 +619,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                 <div class="conv_ore_modal">
                     <div class="conv_ore_modal_header">
                         <div class="conv_ore_modal_close"><span class="dashicons dashicons-no-alt"></span></div>
-                        <img src="<?php echo ENHANCAD_PLUGIN_URL; ?>/admin/images/logos/conv_ganalytics_logo.png" style="width: 28px;" alt="">
+                        <img src="<?php echo esc_url( ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_ganalytics_logo.png' ); ?>" style="width: 28px;" alt="">
                         <h3>Google Analytics Settings</h3>
                     </div>
                     <div class="conv_ore_modal_body">
@@ -666,7 +672,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                 <div class="conv_ore_modal">
                     <div class="conv_ore_modal_header">
                         <div class="conv_ore_modal_close"><span class="dashicons dashicons-no-alt"></span></div>
-                        <img src="<?php echo ENHANCAD_PLUGIN_URL; ?>/admin/images/logos/conv_gads_logo.png" style="width: 48px; margin-bottom: 12px;" alt="">
+                        <img src="<?php echo esc_url( ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_gads_logo.png' ); ?>" style="width: 48px; margin-bottom: 12px;" alt="">
                         <h3>Google Ads Settings</h3>
                     </div>
                     <div class="conv_ore_modal_body">
@@ -713,7 +719,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                 <div class="conv_ore_modal">
                     <div class="conv_ore_modal_header">
                         <div class="conv_ore_modal_close"><span class="dashicons dashicons-no-alt"></span></div>
-                        <img src="<?php echo ENHANCAD_PLUGIN_URL; ?>/admin/images/logos/conv_meta_logo.png" style="width: 48px; margin-bottom: 12px;" alt="">
+                        <img src="<?php echo esc_url( ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_meta_logo.png' ); ?>" style="width: 48px; margin-bottom: 12px;" alt="">
                         <h3>Meta Settings</h3>
                     </div>
                     <div class="conv_ore_modal_body">
@@ -743,8 +749,8 @@ When major tracking parameters are destroyed natively by the user's browser, the
             jQuery(document).ready(function() {
                 const nonce = '<?php echo esc_js($nonce); ?>';
                 const ajaxUrl = '<?php echo esc_url_raw(admin_url("admin-ajax.php")); ?>';
-                const onboardingNonce = '<?php echo wp_create_nonce("conversios_onboarding_nonce"); ?>';
-                const pixSavNonce = '<?php echo wp_create_nonce("pix_sav_nonce_val"); ?>';
+                const onboardingNonce = '<?php echo esc_js( wp_create_nonce( 'conversios_onboarding_nonce' ) ); ?>';
+                const pixSavNonce = '<?php echo esc_js( wp_create_nonce( 'pix_sav_nonce_val' ) ); ?>';
                 const tvc_data = <?php echo wp_json_encode($tvc_data); ?>;
                 const subId = '<?php echo esc_js($subscriptionId); ?>';
                 const ga4SecretsCache = {}; // Cache for MP secrets to avoid 429s
@@ -768,7 +774,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                     }
                     jQuery.post(ajaxUrl, {
                         action: 'conv_check_gads_tracking_setting',
-                        TVCNonce: '<?php echo wp_create_nonce("con_get_conversion_list-nonce"); ?>',
+                        TVCNonce: '<?php echo esc_js( wp_create_nonce( 'con_get_conversion_list-nonce' ) ); ?>',
                         gads_id: accId
                     }, function(response) {
                         try {
@@ -1020,7 +1026,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                         global: false,
                         data: {
                             action: 'conv_fetch_ga4_mp_secrets',
-                            nonce: '<?php echo wp_create_nonce("ga4_mp_secrets_nonce"); ?>',
+                            nonce: '<?php echo esc_js( wp_create_nonce( 'ga4_mp_secrets_nonce' ) ); ?>',
                             measurement_id: propId,
                             ga4_property_id: numericPropId,
                             account_id: accId
@@ -1120,7 +1126,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                         global: false,
                         data: {
                             action: 'conv_create_ga4_mp_secret',
-                            nonce: '<?php echo wp_create_nonce("ga4_mp_secrets_nonce"); ?>',
+                            nonce: '<?php echo esc_js( wp_create_nonce( 'ga4_mp_secrets_nonce' ) ); ?>',
                             measurement_id: propId,
                             ga4_property_id: numericPropId,
                             account_id: accId
@@ -1256,7 +1262,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                         gads_id: accId, 
                         conversionCategory: 'PURCHASE',
                         type: 'UPLOAD_CLICKS',
-                        TVCNonce: '<?php echo wp_create_nonce("con_get_conversion_list-nonce"); ?>'
+                        TVCNonce: '<?php echo esc_js( wp_create_nonce( 'con_get_conversion_list-nonce' ) ); ?>'
                     }, function(res) {
                         if (typeof res === "string") { try { res = JSON.parse(res); } catch(e) {} }
                         if (res && res !== 0 && Object.keys(res).length > 0) {
@@ -1309,7 +1315,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                         conversionCategory: 'PURCHASE',
                         type: 'UPLOAD_CLICKS',
                         conversionName: 'ORE Purchase API',
-                        TVCNonce: '<?php echo wp_create_nonce("con_get_conversion_list-nonce"); ?>'
+                        TVCNonce: '<?php echo esc_js( wp_create_nonce( 'con_get_conversion_list-nonce' ) ); ?>'
                     }, function(response) {
                         try { if (typeof response === 'string') response = JSON.parse(response); } catch(e) {}
                         if (response.status == "200" && response.data) {
@@ -1441,7 +1447,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                     jQuery('#stat_total').text(d.total || 0);
                     jQuery('#stat_client').text(d.client || 0);
                     jQuery('#stat_server').text(d.server || 0);
-                    jQuery('#stat_recovered_revenue').html('<?php echo html_entity_decode(get_woocommerce_currency_symbol()); ?>' + (d.recovered_revenue || '0.00'));
+                    jQuery('#stat_recovered_revenue').html('<?php echo esc_js( $conv_ore_currency_symbol ); ?>' + (d.recovered_revenue || '0.00'));
                     if (jQuery('#stat_synced').length) jQuery('#stat_synced').text(d.synced || 0);
 
                     if (d.breakdown) {
@@ -1464,7 +1470,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                     var missedRev   = parseFloat(d.recovered_revenue) || 0;
                     var banner      = jQuery('#conv_ore_missed_banner');
                     if (missedCount > 0 && missedRev > 0) {
-                        var cs = '<?php echo html_entity_decode(get_woocommerce_currency_symbol()); ?>';
+                        var cs = '<?php echo esc_js( $conv_ore_currency_symbol ); ?>';
                         jQuery('#conv_ore_missed_title').text(
                             'You earned ' + cs + missedRev.toFixed(2) + ' that your ads platforms can\u2019t see.'
                         );
@@ -1507,7 +1513,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                 });
 
                 // --- Order Details DataTable (Server-Side Processing) ---
-                const currSymbol = '<?php echo html_entity_decode(get_woocommerce_currency_symbol()); ?>';
+                const currSymbol = '<?php echo esc_js( $conv_ore_currency_symbol ); ?>';
                 let oreDataTable = null;
 
                 function metaCell(val) {
@@ -1585,7 +1591,24 @@ When major tracking parameters are destroyed natively by the user's browser, the
                 if(jQuery.fn.daterangepicker) {
                     var defaultStart = moment().subtract(29, 'days');
                     var defaultEnd = moment();
-                    jQuery('#conv_ore_report_daterange').daterangepicker({ startDate: defaultStart, endDate: defaultEnd, maxDate: defaultEnd, opens: 'left' }, function(start, end) {
+                    jQuery('#conv_ore_report_daterange').daterangepicker({
+                        startDate: defaultStart,
+                        endDate: defaultEnd,
+                        maxDate: defaultEnd,
+                        opens: 'left',
+                        alwaysShowCalendars: true,
+                        ranges: {
+                            'Today': [moment(), moment()],
+                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                            'This Month': [moment().startOf('month'), moment().endOf('month')],
+                            'Last Month': [
+                                moment().subtract(1, 'month').startOf('month'),
+                                moment().subtract(1, 'month').endOf('month')
+                            ]
+                        }
+                    }, function(start, end) {
                         jQuery('#conv_ore_report_daterange .daterange-text').text(start.format('MMM D') + ' - ' + end.format('MMM D, YYYY'));
                         initOreDataTable();
                     });

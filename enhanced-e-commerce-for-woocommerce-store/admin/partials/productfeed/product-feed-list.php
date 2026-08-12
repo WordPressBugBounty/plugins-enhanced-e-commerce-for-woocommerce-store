@@ -1139,7 +1139,7 @@ if ($edit_id > 0) {
                                             ? esc_attr__('GMC DataSource not linked. Click the feed to link a DataSource.', 'enhanced-e-commerce-for-woocommerce-store')
                                             : '';
                                     ?>
-                                        <div class="badgebox failed" <?php if ($conv_failed_tooltip) : ?>data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $conv_failed_tooltip; ?>"<?php else : ?>data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus"<?php endif; ?>>
+                                        <div class="badgebox failed" <?php if ($conv_failed_tooltip) : ?>data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo esc_attr( $conv_failed_tooltip ); ?>"<?php else : ?>data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Left popover" data-bs-trigger="hover focus"<?php endif; ?>>
                                             <?php echo esc_html__('Failed', 'enhanced-e-commerce-for-woocommerce-store'); ?>
                                         </div>
                                         <?php if ($conv_ds_missing) : ?>

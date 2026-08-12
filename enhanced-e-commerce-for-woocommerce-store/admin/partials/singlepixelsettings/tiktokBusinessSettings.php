@@ -66,9 +66,25 @@ $contData = json_decode($getCountris);
     /**************Tiktok Auth start ********************************************************/
     $confirm_url = "admin.php?page=conversios-google-shopping-feed&subpage=tiktok";
     $state = ['confirm_url' => admin_url() . $confirm_url, 'subscription_id' => $subscriptionId];
-    $tiktok_auth_url = "https://ads.tiktok.com/marketing_api/auth?app_id=7233778425326993409&redirect_uri=https://connect.conversios.io/laravelapi/public/auth/tiktok/callback&rid=q6uerfg9osn&state=" . urlencode(wp_json_encode($state));
+    $conv_tiktok_oauth_api = new CustomApi();
+    $tiktok_app_id = $conv_tiktok_oauth_api->fetch_oauth_client_id('tiktok');
+    $tiktok_auth_url = '';
+    if ($tiktok_app_id !== '') {
+        $tiktok_auth_url = 'https://ads.tiktok.com/marketing_api/auth?app_id=' . rawurlencode($tiktok_app_id) . '&redirect_uri=https://connect.conversios.io/laravelapi/public/auth/tiktok/callback&rid=q6uerfg9osn&state=' . rawurlencode(wp_json_encode($state));
+    }
 
-    if ($tiktok_mail === '' && $tiktok_user_id === '') { ?>
+    if ($tiktok_mail !== '' || $tiktok_user_id !== '') { ?>
+        <h5 class="fw-normal mb-1">
+            <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
+        </h5>
+        <?php echo esc_html($tiktok_mail) . ', <b>User Id: </b>' . esc_html($tiktok_user_id) . ' '; ?>
+        <?php if ($tiktok_app_id !== '') { ?>
+        <a onclick='window.open("<?php echo esc_js(esc_url($tiktok_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
+            href="#">Change</a>
+        <?php } ?>
+    <?php } elseif ($tiktok_app_id === '') { ?>
+        <p class="text-muted mb-0"><?php esc_html_e('TikTok sign-in is temporarily unavailable. Please try again later.', 'enhanced-e-commerce-for-woocommerce-store'); ?></p>
+    <?php } elseif ($tiktok_mail === '' && $tiktok_user_id === '') { ?>
         <a onclick='window.open("<?php echo esc_js(esc_url($tiktok_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
             href="#">
             <button class="btn btn-outline-dark" id="facebookLogin"><img style="width:19px"
@@ -79,13 +95,6 @@ $contData = json_decode($getCountris);
             <?php esc_html_e("Please login to the Email account linked to your TikTok Business account so that we can get you business accounts and catalogs and use Chrome for best experience.", "enhanced-e-commerce-for-woocommerce-store"); ?>
         </p>
 
-    <?php } else { ?>
-        <h5 class="fw-normal mb-1">
-            <?php esc_html_e("Successfully signed in with account:", "enhanced-e-commerce-for-woocommerce-store"); ?>
-        </h5>
-        <?php echo esc_html($tiktok_mail) . ', <b>User Id: </b>' . esc_html($tiktok_user_id) . ' '; ?>
-        <a onclick='window.open("<?php echo esc_js(esc_url($tiktok_auth_url)); ?>","MyWindow","width=800,height=700,left=300, top=150"); return false;'
-            href="#">Change</a>
     <?php }
     /**************Tiktok Auth end **********************************************************/
     ?>

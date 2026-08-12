@@ -75,11 +75,213 @@ if (!class_exists('TVC_Ajax_File')) :
       add_action('wp_ajax_ee_get_datasources', [$this, 'ee_get_datasources']);
       add_action('wp_ajax_ee_save_feed_datasource', [$this, 'ee_save_feed_datasource']);
       add_action('wp_ajax_ee_create_datasource', [$this, 'ee_create_datasource']);
+      add_action('admin_init', array($this, 'conv_admin_ajax_capability_gate'), 1);
+    }
+
+    /**
+     * Privileged wp_ajax actions registered by this class (excludes cron hooks).
+     *
+     * @return string[]
+     */
+    private function conv_get_privileged_ajax_actions() {
+      return array(
+        'tvc_call_domain_claim',
+        'tvc_call_site_verified',
+        'conv_get_microsoft_ads_conversion',
+        'tvc_call_add_survey',
+        'conv_save_pixel_data',
+        'save_feed_data',
+        'get_feed_data_by_id',
+        'ee_duplicate_feed_data_by_id',
+        'ee_get_product_details_for_table',
+        'ee_delete_feed_data_by_id',
+        'ee_delete_feed_gmc',
+        'ee_get_product_status',
+        'ee_feed_wise_product_sync_batch_wise',
+        'get_tiktok_business_account',
+        'get_tiktok_user_catalogs',
+        'get_tiktok_ads_account_list',
+        'get_tiktok_pixel_list',
+        'create_tiktok_pixel',
+        'create_tiktok_business_manager_account',
+        'ee_getCatalogId',
+        'conv_create_tiktok_catalog',
+        'conv_create_microsoft_ads_conversion',
+        'conv_save_microsoft_ads_conversion',
+        'get_fb_catalog_data',
+        'get_analytics_account_list',
+        'get_analytics_web_properties',
+        'list_google_merchant_account',
+        'list_microsoft_merchant_account',
+        'list_microsoft_catalog_account',
+        'create_google_merchant_center_account',
+        'create_microsoft_merchant_center_account',
+        'save_merchant_data',
+        'list_microsoft_ads_account',
+        'list_microsoft_ads_subaccount',
+        'list_microsoft_ads_get_UET_tag',
+        'create_microsoft_ads_UET_tag',
+        'conv_create_bing_account',
+        'set_email_configurationGA4',
+        'get_ga4_general_grid_reports',
+        'get_ga4_page_report',
+        'get_general_donut_reports',
+        'get_realtime_report',
+        'get_general_audience_report',
+        'get_daily_visitors_report',
+        'get_demographic_ga4_reports',
+        'conv_create_ga4_custom_dimension',
+        'convaio_get_notification_banner',
+        'ee_get_datasources',
+        'ee_save_feed_datasource',
+        'ee_create_datasource',
+      );
+    }
+
+    /**
+     * Reject privileged admin AJAX when the user lacks manage_options.
+     */
+    public function conv_admin_ajax_capability_gate() {
+      if (!wp_doing_ajax()) {
+        return;
+      }
+      $action = isset($_REQUEST['action']) ? sanitize_key(wp_unslash($_REQUEST['action'])) : '';
+      if ($action === '' || !in_array($action, $this->conv_get_privileged_ajax_actions(), true)) {
+        return;
+      }
+      if (!current_user_can('manage_options')) {
+        wp_send_json_error(
+          array(
+            'message' => esc_html__('Unauthorized.', 'enhanced-e-commerce-for-woocommerce-store'),
+          ),
+          403
+        );
+      }
+    }
+
+    /**
+     * Allowlisted ee_options keys for conv_save_data_eeoption().
+     *
+     * @return string[]
+     */
+    private function conv_get_eeoptions_allowlist() {
+      return array(
+        'subscription_id',
+        'pluginpolicy_status',
+        'tracking_option',
+        'ua_analytic_account_id',
+        'property_id',
+        'measurement_id',
+        'ga4_analytic_account_id',
+        'ga4_api_secret',
+        'gm_id',
+        'ga_id',
+        'google_ads_id',
+        'google_merchant_id',
+        'google_merchant_center_id',
+        'conv_track_author',
+        'conv_track_signin',
+        'conv_track_signup',
+        'conv_track_page_scroll',
+        'conv_track_file_download',
+        'conv_onboarding_done_step',
+        'microsoft_ads_manager_id',
+        'microsoft_ads_subaccount_id',
+        'microsoft_ads_pixel_id',
+        'microsoft_merchant_center_id',
+        'microsoft_ads_conversions',
+        'ms_catalog_id',
+        'msclarity_pixel_id',
+        'fb_pixel_id',
+        'fb_conversion_api_token',
+        'facebook_setting',
+        'tiktok_setting',
+        'gtm_settings',
+        'tiKtok_ads_pixel_id',
+        'snapchat_ads_pixel_id',
+        'pinterest_ads_pixel_id',
+        'twitter_ads_pixel_id',
+        'twitter_ads_form_submit_event_id',
+        'twitter_ads_add_to_cart_event_id',
+        'twitter_ads_checkout_initiated_event_id',
+        'twitter_ads_payment_info_event_id',
+        'twitter_ads_purchase_event_id',
+        'twitter_ads_email_click_event_id',
+        'twitter_ads_phone_click_event_id',
+        'twitter_ads_address_click_event_id',
+        'hotjar_pixel_id',
+        'crazyegg_pixel_id',
+        'linkedin_insight_id',
+        'net_revenue_setting',
+        'tvc_product_list_data_collection_method',
+        'tvc_product_detail_data_collection_method',
+        'tvc_checkout_data_collection_method',
+        'tvc_thankyou_data_collection_method',
+        'tvc_product_detail_addtocart_selector',
+        'tvc_product_detail_addtocart_selector_type',
+        'tvc_product_detail_addtocart_selector_val',
+        'tvc_checkout_step_2_selector',
+        'tvc_checkout_step_2_selector_type',
+        'tvc_checkout_step_2_selector_val',
+        'tvc_checkout_step_3_selector',
+        'tvc_checkout_step_3_selector_type',
+        'tvc_checkout_step_3_selector_val',
+        'sch_email_toggle_check',
+        'sch_custom_email',
+        'sch_email_frequency',
+        'ecom_reports_ga_currency',
+        'ecom_reports_gads_currency',
+        'last_fetched_prompt_date',
+        'ga_GMC',
+        'merchant_id',
+        'conv_selected_events',
+      );
+    }
+
+    /**
+     * Whether a POST key is permitted for ee_options saves.
+     *
+     * @param string $key           Option key from POST.
+     * @param array  $allowed_keys  Explicit allowlist.
+     * @return bool
+     */
+    private function conv_is_allowed_eeoptions_key($key, $allowed_keys) {
+      if (! is_string($key) || $key === '') {
+        return false;
+      }
+      if (in_array($key, $allowed_keys, true)) {
+        return (bool) preg_match('/^[a-zA-Z0-9_]+$/', $key);
+      }
+      $sanitized_key = sanitize_key($key);
+      if ($sanitized_key === '') {
+        return false;
+      }
+      $patterns = array(
+        '/^fb_pixel_id_\d+$/',
+        '/^fb_conversion_api_token_\d+$/',
+      );
+      foreach ($patterns as $pattern) {
+        if (preg_match($pattern, $sanitized_key)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     // Save data in ee_options
     public function conv_save_data_eeoption($data)
     {
+      if (empty($data['conv_options_data']) || !is_array($data['conv_options_data'])) {
+        return;
+      }
+      $allowed_keys = $this->conv_get_eeoptions_allowlist();
+      $filtered_data = array();
+      foreach ($data['conv_options_data'] as $key => $conv_options_data) {
+        if ($this->conv_is_allowed_eeoptions_key($key, $allowed_keys)) {
+          $filtered_data[ $key ] = $conv_options_data;
+        }
+      }
+      $data['conv_options_data'] = $filtered_data;
       $ee_options = unserialize(get_option('ee_options'));
       foreach ($data['conv_options_data'] as $key => $conv_options_data) {
         if ($key == "conv_selected_events") {
@@ -195,6 +397,9 @@ if (!class_exists('TVC_Ajax_File')) :
     // All new functions for new UIUX
     public function conv_save_pixel_data()
     {
+      if (!current_user_can('manage_options')) {
+        wp_die(-1, 403);
+      }
       if (
         isset($_POST['pix_sav_nonce']) &&
         wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['pix_sav_nonce'])), 'pix_sav_nonce_val')

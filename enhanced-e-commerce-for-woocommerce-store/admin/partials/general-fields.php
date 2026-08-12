@@ -12,6 +12,11 @@ $version = PLUGIN_TVC_VERSION;
 
 $ee_options = $TVC_Admin_Helper->get_ee_options_settings();
 
+if (!isset($ee_options['pluginpolicy_status']) || '1' !== (string) $ee_options['pluginpolicy_status']) {
+    $ee_options['pluginpolicy_status'] = '1';
+    $TVC_Admin_Helper->save_ee_options_settings($ee_options);
+}
+
 $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
 if (!is_array($ee_additional_data)) {
     $ee_additional_data = array();
@@ -226,6 +231,21 @@ foreach ($connection_status as $key => $status) {
     </div>
 </div>
 
+<div class="conv-plugin-policy-footer conv-mt-4 conv-p-3 conv-border conv-rounded conv-bg-white d-flex justify-content-center">
+    <label class="d-flex align-items-center justify-content-center gap-2 mb-0 conv-fs-14 text-center">
+        <input type="checkbox" checked readonly onclick="return false;" />
+        <span>
+            <?php
+            esc_html_e('By using this plugin, you agree to the Conversios', 'enhanced-e-commerce-for-woocommerce-store');
+            echo ' ';
+            ?>
+            <a href="<?php echo esc_url('https://www.conversios.io/privacy-policy/'); ?>" target="_blank" rel="noopener noreferrer">
+                <?php esc_html_e('Privacy Policy', 'enhanced-e-commerce-for-woocommerce-store'); ?>
+            </a>.
+        </span>
+    </label>
+</div>
+
 <!-- Custom HTML Success Save Modal (Bootstrap Free overlay dialog) -->
 <div class="conv-modal" id="conv_save_success_modal">
     <div class="conv-modal__backdrop" onclick="jQuery('#conv_save_success_modal').removeClass('conv-modal--show')"></div>
@@ -334,12 +354,11 @@ function convSaveActivePanel() {
         if (typeof window.convSaveMicrosoftAds === 'function') {
             window.convSaveMicrosoftAds();
         }
-    } else if (activeTab === 'tiktoksettings') {
-        if (typeof window.convSaveTikTok === 'function') {
-            window.convSaveTikTok();
-        }
+    } else if (activeTab === 'tiktoksettings' && typeof window.convSaveTikTok === 'function') {
+        // Pro TikTok Business (Events API) save when defined; Free uses simple pixel save below.
+        window.convSaveTikTok();
     } else {
-        // Simple pixel tabs — directly call AJAX save
+        // Simple pixel tabs — directly call AJAX save (TikTok Free, FB, Snapchat, etc.)
         convSaveSimplePixel();
     }
 }
@@ -353,7 +372,7 @@ function convSaveSimplePixel() {
     globalSaveBtn.find('span').length ? globalSaveBtn.find('span').text('Saving...') : globalSaveBtn.text('Saving...');
 
     let selected_vals = {
-        subscription_id: "<?php echo esc_js($tvc_data['subscription_id']) ?>"
+        subscription_id: "<?php echo esc_js($subscriptionId); ?>"
     };
 
     jQuery('.conv-tab-panel--active form input, .conv-tab-panel--active form textarea').each(function() {
@@ -369,7 +388,7 @@ function convSaveSimplePixel() {
         url: "<?php echo esc_url(admin_url('admin-ajax.php')); ?>",
         data: {
             action: "conv_save_pixel_data",
-            pix_sav_nonce: "<?php echo wp_create_nonce('pix_sav_nonce_val'); ?>",
+            pix_sav_nonce: "<?php echo esc_js( wp_create_nonce( 'pix_sav_nonce_val' ) ); ?>",
             conv_options_data: selected_vals,
             conv_options_type: ["eeoptions"],
         },
@@ -465,21 +484,21 @@ jQuery(document).ready(function() {
         trigger: 'click'
     });
 
-    // Tab init priority: 1) ?subpage= URL param  2) #hash  3) default gasettings
+    // Tab init priority: 1) #hash (current tab)  2) ?subpage= URL param  3) default gasettings
     (function() {
         var validTabs = <?php echo json_encode(array_keys($pixel_settings_arr)); ?>;
 
-        // 1. Check ?subpage= query param first (highest priority — explicit navigation)
-        var urlSubpage = new URLSearchParams(window.location.search).get('subpage');
-        if (urlSubpage && validTabs.indexOf(urlSubpage) !== -1) {
-            convSwitchTab(urlSubpage, true);
-            return;
-        }
-
-        // 2. Check URL hash (set by in-page tab clicks)
+        // 1. Check URL hash first (set by in-page tab clicks; wins over stale OAuth subpage param)
         var hashTab = window.location.hash.substring(1);
         if (hashTab && validTabs.indexOf(hashTab) !== -1) {
             convSwitchTab(hashTab, true);
+            return;
+        }
+
+        // 2. Check ?subpage= query param (explicit navigation, e.g. OAuth return to Bing)
+        var urlSubpage = new URLSearchParams(window.location.search).get('subpage');
+        if (urlSubpage && validTabs.indexOf(urlSubpage) !== -1) {
+            convSwitchTab(urlSubpage, true);
             return;
         }
 
@@ -532,7 +551,7 @@ jQuery(document).ready(function() {
             url: tvc_ajax_url,
             data: {
                 action: "conv_save_pixel_data",
-                pix_sav_nonce: "<?php echo wp_create_nonce('pix_sav_nonce_val'); ?>",
+                pix_sav_nonce: "<?php echo esc_js( wp_create_nonce( 'pix_sav_nonce_val' ) ); ?>",
                 conv_options_data: selected_vals,
                 conv_options_type: ["eeoptions"],
             },

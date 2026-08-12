@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 $is_sel_disable = 'disabled';
 $cust_g_email =  (isset($tvc_data['g_mail']) && esc_attr($subscriptionId)) ? esc_attr($tvc_data['g_mail']) : "";
 
@@ -274,7 +277,7 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
 <script>
     // get list of google analytics account
     function list_analytics_account(tvc_data, selelement, currele, page = 1) {
-        var conversios_onboarding_nonce = "<?php echo wp_create_nonce('conversios_onboarding_nonce'); ?>";
+        var conversios_onboarding_nonce = "<?php echo esc_js( wp_create_nonce( 'conversios_onboarding_nonce' ) ); ?>";
         jQuery("#ga4_analytic_account_id").find('option').remove();
         jQuery("#ga4_property_id").find('option').remove();
         jQuery.ajax({
@@ -379,7 +382,7 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
     // get list properties dropdown options
     function list_analytics_web_properties(type, tvc_data, account_id, thisselid) {
         jQuery("#ga4_property_id").prop("disabled", true);
-        var conversios_onboarding_nonce = "<?php echo wp_create_nonce('conversios_onboarding_nonce'); ?>";
+        var conversios_onboarding_nonce = "<?php echo esc_js( wp_create_nonce( 'conversios_onboarding_nonce' ) ); ?>";
         jQuery.ajax({
             type: "POST",
             dataType: "json",
@@ -608,7 +611,7 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
             selected_vals["property_id"] = "";
             selected_vals["ga4_analytic_account_id"] = "";
             selected_vals["measurement_id"] = "";
-            selected_vals["subscription_id"] = "<?php echo $tvc_data['subscription_id'] ?>";
+            selected_vals["subscription_id"] = "<?php echo esc_js( $tvc_data['subscription_id'] ?? '' ); ?>";
             // Always write measurement_id from whichever tab is currently active
             if (jQuery('#ga4_manual_row').is(':visible')) {
                 // Manual tab: read directly from the text input
@@ -638,7 +641,7 @@ $connect_url = $TVC_Admin_Helper->get_custom_connect_url_subpage(admin_url() . '
                 url: tvc_ajax_url,
                 data: {
                     action: "conv_save_pixel_data",
-                    pix_sav_nonce: "<?php echo wp_create_nonce('pix_sav_nonce_val'); ?>",
+                    pix_sav_nonce: "<?php echo esc_js( wp_create_nonce( 'pix_sav_nonce_val' ) ); ?>",
                     conv_options_data: selected_vals,
                     conv_options_type: ["eeoptions", "eeapidata", "middleware"],
                     conv_tvc_data: tvc_data,

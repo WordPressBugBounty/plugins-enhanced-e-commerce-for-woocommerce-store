@@ -1133,7 +1133,6 @@
   text-transform: capitalize;
 }
 .dash-ga4 .lcontrol {
-  font-family: "Roboto";
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -1557,7 +1556,6 @@
   box-shadow: none;
 }
 .popupmodal .popup-form .form-box .icontrol option {
-  font-family: "Roboto";
   font-size: 15px;
   font-style: normal;
   font-weight: 400;

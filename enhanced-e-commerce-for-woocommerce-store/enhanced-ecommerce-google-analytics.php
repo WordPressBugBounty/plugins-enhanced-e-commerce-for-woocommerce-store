@@ -16,11 +16,11 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.22
+ * Version:           7.2.23
  * Author:            Conversios
  * Author URI:        https://conversios.io
- * License:           GPLv3
- * License URI:       http://www.gnu.org/licenses/gpl-3.0.html
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       enhanced-e-commerce-for-woocommerce-store
  * Domain Path:       /languages
  * WC requires at least: 3.5.0
@@ -105,13 +105,6 @@ function deactivate_enhanced_ecommerce_google_analytics()
 {
     require_once plugin_dir_path(__FILE__) . 'includes/class-enhanced-ecommerce-google-analytics-deactivator.php';
     Enhanced_Ecommerce_Google_Analytics_Deactivator::deactivate();
-    if (is_plugin_active_for_network('woocommerce/woocommerce.php') || in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-        wp_clear_scheduled_hook('tvc_add_cron_interval_for_product_sync');
-        as_unschedule_all_actions('ee_auto_product_sync_check');
-        as_unschedule_all_actions('auto_feed_wise_product_sync_process_scheduler_ee');
-        as_unschedule_all_actions('init_feed_wise_product_sync_process_scheduler_ee');
-        wp_clear_scheduled_hook('conversios_daily_ore_sync');
-    }
 }
 register_activation_hook(__FILE__, 'activate_enhanced_ecommerce_google_analytics');
 register_deactivation_hook(__FILE__, 'deactivate_enhanced_ecommerce_google_analytics');
@@ -122,7 +115,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.2.22');
+define('PLUGIN_TVC_VERSION', '7.2.23');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 
@@ -196,48 +189,9 @@ function tvc_upgrade_function($upgrader_object, $options)
         }
     }
 }
-// On Plugin update
-function my_plugin_update_db()
-{
-    $current_version = get_option('ee_conv_plugin_version');
-    $new_version = '7.2.8'; // Update this whenever you change the DB schema
-
-    if ($current_version !== $new_version) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'ee_product_feed';
-
-        // Check if table exists before proceeding
-        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name)) !== $table_name) {
-            return;
-        }
-
-        // Fix for "Row size too large" on legacy COMPACT tables
-        $wpdb->query("ALTER TABLE `$table_name` ROW_FORMAT=DYNAMIC");
-
-        // Column name => column definition
-        $columns = [
-            'ms_status' => "TEXT DEFAULT NULL",
-            'IncProductVar' => "VARCHAR(20) DEFAULT 1",
-            'IncDefProductVar' => "VARCHAR(20) DEFAULT 0",
-            'IncLowestPriceProductVar' => "VARCHAR(20) DEFAULT 0",
-            'gmc_datasource_id' => "VARCHAR(25) DEFAULT NULL",
-        ];
-
-        foreach ($columns as $column_name => $column_definition) {
-            $exists = $wpdb->get_results(
-                $wpdb->prepare("SHOW COLUMNS FROM `$table_name` LIKE %s", $column_name)
-            );
-
-            if (empty($exists)) {
-                $wpdb->query("ALTER TABLE `$table_name` ADD `$column_name` $column_definition");
-            }
-        }
-
-        // Finally update the version
-        update_option('ee_conv_plugin_version', $new_version);
-    }
-}
-add_action('plugins_loaded', 'my_plugin_update_db');
+// DB migrations — Conv_DB_Migrator (replaces my_plugin_update_db).
+require_once plugin_dir_path( __FILE__ ) . 'includes/setup/class-conv-db-migrator.php';
+Conv_DB_Migrator::init();
 
 //add_action('action_scheduler_init', 'conv_clear_ut_cron', 1);
 add_action('admin_init', 'conv_clear_ut_cron', 1);

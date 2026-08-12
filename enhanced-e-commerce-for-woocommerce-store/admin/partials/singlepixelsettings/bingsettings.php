@@ -21,7 +21,8 @@ $microsoft_ads_subaccount_id = isset($ee_options["microsoft_ads_subaccount_id"])
 $microsoft_ads_pixel_id = isset($ee_options["microsoft_ads_pixel_id"]) ? $ee_options["microsoft_ads_pixel_id"] : "";
 
 $is_sel_disable = "disabled";
-$ms_email = $tvc_data["microsoft_mail"];
+$ms_email = isset($tvc_data["microsoft_mail"]) ? $tvc_data["microsoft_mail"] : "";
+$conv_ms_user_logged_in = ! empty($ms_email) && ! empty($subscriptionId);
 
 $store_country = get_option("woocommerce_default_country");
 $store_country = explode(":", $store_country);
@@ -329,6 +330,7 @@ require_once "ms-signin.php";
 </div>
 <?php endif; ?>
 
+<?php if ($conv_ms_user_logged_in) : ?>
 <!-- Accordion start -->
 <div class="accordion accordion-flush microsoft_ads_conversion_acc disabledsection" id="accordionFlushExample">
 
@@ -461,6 +463,7 @@ require_once "ms-signin.php";
     </div>
 </div>
 <!-- Accordion End -->
+<?php endif; ?>
 <!--Modal -->
 <div class="modal fade" id="conv_create_new_bing" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">

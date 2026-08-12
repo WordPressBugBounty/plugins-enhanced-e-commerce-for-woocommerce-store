@@ -110,6 +110,74 @@ class CustomApi
     }
   }
 
+  /**
+   * Fetch OAuth client/app ID for a provider from Middleware.
+   *
+   * Parity with Pro: POST /oauth-config/client-id with { channel }.
+   *
+   * @param string $provider Provider slug, e.g. microsoft or tiktok.
+   * @return string Sanitized client ID, or empty string on failure.
+   */
+  public function fetch_oauth_client_id($provider)
+  {
+    try {
+      $channel = sanitize_key($provider);
+      $data_keys = array(
+        'tiktok'    => 'CONV_TIKTOK_APP_ID',
+        'microsoft' => 'CONV_MS_CLIENT_ID',
+      );
+
+      if ($channel === '' || ! isset($data_keys[$channel])) {
+        return '';
+      }
+
+      $cache_key = 'conv_oauth_cid_' . $channel;
+      $cached_id = get_transient($cache_key);
+      if (is_string($cached_id) && $cached_id !== '') {
+        return $cached_id;
+      }
+
+      $url = $this->apiDomain . '/oauth-config/client-id';
+      $args = array(
+        'timeout' => 30,
+        'headers' => array(
+          'Authorization' => 'Bearer ' . $this->token,
+          'Content-Type'  => 'application/json',
+        ),
+        'method'  => 'POST',
+        'body'    => wp_json_encode(array('channel' => $channel)),
+      );
+      $request = wp_remote_post(esc_url_raw($url), $args);
+      if (is_wp_error($request)) {
+        return '';
+      }
+      $status_code = (int) wp_remote_retrieve_response_code($request);
+      if ($status_code < 200 || $status_code >= 300) {
+        return '';
+      }
+      $response = json_decode(wp_remote_retrieve_body($request));
+      if (empty($response) || ! empty($response->error) || empty($response->data)) {
+        return '';
+      }
+
+      $data_key  = $data_keys[$channel];
+      $data      = $response->data;
+      $client_id = '';
+      if (is_object($data) && isset($data->{$data_key})) {
+        $client_id = sanitize_text_field($data->{$data_key});
+      } elseif (is_array($data) && isset($data[$data_key])) {
+        $client_id = sanitize_text_field($data[$data_key]);
+      }
+
+      if ($client_id !== '') {
+        set_transient($cache_key, $client_id, 12 * HOUR_IN_SECONDS);
+      }
+      return $client_id;
+    } catch (Exception $e) {
+      return '';
+    }
+  }
+
   public function update_app_status($caller, $status = 1)
   {
     try {
@@ -493,7 +561,10 @@ class CustomApi
       }
       $postData['store_id'] = $this->conv_get_store_id();
       $postData['subscription_id'] = $this->get_subscriptionId();
-      $url = $this->apiDomain . "/products/batch";
+      if (empty($postData['store_feed_id'])) {
+        $postData['store_feed_id'] = '1';
+      }
+      $url = $this->apiDomain . "/products/batch-all";
       if ($postData['store_id'] == '' || $postData['subscription_id'] == '' || $postData['store_feed_id'] == '') {
         $return = new \stdClass();
         $return->error = true;
@@ -544,7 +615,8 @@ class CustomApi
           $postData[$key] = sanitize_text_field($value);
         }
       }
-      $url = $this->apiDomain . "/products/list";
+      $postData['store_id'] = $this->conv_get_store_id();
+      $url = $this->apiDomain . "/products/feed-list";
       $postData["maxResults"] = 50;
       $args = array(
         'timeout' => 300,
@@ -828,7 +900,7 @@ class CustomApi
     try {
       $subscription_id = $this->get_subscriptionId();
       if (isset($subscription_id) && $data != "") {
-        $url = $this->apiDomain . '/products/batch';
+        $url = $this->apiDomain . '/products/batch-all';
         $header = array(
           "Authorization: Bearer " . $this->token,
           "Content-Type" => "application/json"

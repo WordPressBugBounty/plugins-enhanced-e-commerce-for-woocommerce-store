@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 $is_sel_disable = 'disabled';
 ?>
 <div class="conv-card p-4 rounded conv-shadow-sm">

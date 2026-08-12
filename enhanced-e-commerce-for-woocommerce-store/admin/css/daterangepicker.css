@@ -69,3 +69,165 @@
 @media (min-width:730px){.daterangepicker .ranges{width:auto; max-width: 690px;}
  .daterangepicker .drp-calendar.left{clear:none !important;}
 }
+
+/* Custom flex layout (daterangepicker.js template) — required on pages that load only this CSS (e.g. ORE). */
+.daterangepicker.flexdaterange {
+  width: auto;
+  max-width: 690px;
+  min-width: 560px;
+}
+.daterangepicker.flexdaterange .drp-calendar {
+  display: block;
+}
+.daterangepicker.flexdaterange:not(.show-ranges) .daterangepicker-left {
+  display: none;
+}
+.daterangepicker.flexdaterange:not(.show-ranges) .daterangepicker-right {
+  padding-left: 24px;
+}
+.daterangepickerflex {
+  display: flex;
+}
+.daterangepicker-left {
+  box-shadow: 1px 0 9px rgba(0, 0, 0, 0.08);
+  flex: 0 0 150px;
+  max-width: 150px;
+}
+.daterangepicker-right {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px 24px;
+  flex: 1;
+  min-width: 0;
+}
+.daterangepicker.flexdaterange .drp-calendar {
+  padding: 0 11px;
+  flex: 0 0 50%;
+  max-width: 50%;
+  position: relative;
+}
+.daterangepicker.flexdaterange .drp-buttons {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 0 24px;
+}
+.daterangepicker.flexdaterange .drp-calendar.left {
+  padding-left: 0;
+}
+.daterangepicker.flexdaterange .drp-calendar.right {
+  padding-right: 0;
+}
+.daterangepicker.flexdaterange .drp-calendar.left:before {
+  content: "";
+  position: absolute;
+  top: 55px;
+  right: -5px;
+  height: 76%;
+  width: 1px;
+  background-color: #e9e9e9;
+}
+.daterangepicker .calendar-table .next,
+.daterangepicker .calendar-table .prev {
+  vertical-align: top;
+}
+.daterangepicker .calendar-table .next:hover,
+.daterangepicker .calendar-table .prev:hover {
+  background-color: inherit;
+}
+.daterangepicker .calendar-table .next span,
+.daterangepicker .calendar-table .prev span {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid #e9e9e9;
+  position: relative;
+}
+.daterangepicker .calendar-table .next span:before,
+.daterangepicker .calendar-table .prev span:before {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 11px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  left: 50%;
+  top: 50%;
+  margin-left: -3px;
+  margin-top: -5px;
+}
+.daterangepicker .calendar-table .next span:before {
+  background-image: url(../images/next.png);
+}
+.daterangepicker .calendar-table .prev span:before {
+  background-image: url(../images/prev.png);
+}
+.daterangepicker th.month {
+  padding-bottom: 16px;
+  min-height: 24px;
+  line-height: 26px;
+}
+.daterangepicker .calendar-table .next span:hover,
+.daterangepicker .calendar-table .prev span:hover {
+  background-color: #e9e9e9;
+}
+.drpbtmbuttonflex {
+  display: flex;
+  align-items: flex-end;
+}
+.drpbtmbuttonflex-left,
+.drpbtmbuttonflex-right {
+  max-width: 50%;
+  flex: 1;
+}
+.drpbtmbuttonflex-right {
+  display: flex;
+  justify-content: flex-end;
+}
+.btmslectdatetitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e1e1e;
+  margin-bottom: 9px;
+}
+.daterangepicker .applyBtn {
+  min-width: 90px;
+  background-color: #002bfc;
+  color: #ffffff;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 6px;
+}
+.daterangepicker .applyBtn:hover {
+  background-color: #1e1e1e;
+}
+.daterangepicker .drp-buttons .btn.cancelBtn {
+  color: #002bfc;
+  background-color: transparent;
+  padding: 5px 0;
+}
+.daterangepicker .drp-buttons .btn.cancelBtn:hover {
+  color: #1e1e1e;
+}
+.daterangepicker.show-calendar .ranges {
+  height: 100%;
+}
+.daterangepicker .ranges ul {
+  position: relative;
+  height: 100%;
+}
+.daterangepicker .ranges li.cstmrang-li {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-right: 4px solid #002bfc;
+  background-color: #f1f6fa;
+  color: #002bfc;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+}
+.daterangepicker .ranges li.cstmrang-li.active {
+  background-color: #002bfc;
+  color: #ffffff;
+}

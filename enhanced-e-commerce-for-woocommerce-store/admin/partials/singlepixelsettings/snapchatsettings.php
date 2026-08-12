@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 $is_sel_disable = 'disabled';
 $blurContentClass = '';
 $availProHtml = '';

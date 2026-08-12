@@ -53,14 +53,15 @@ class Conversios_Ore_Cron
         $conv_ore_since    = gmdate('Y-m-d H:i:s', strtotime('-24 hours'));
         $conv_ore_currency = function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '';
 
-        $conv_ore_hpos_table = $wpdb->prefix . 'wc_orders';
+        $conv_ore_hpos_table = esc_sql( $wpdb->prefix . 'wc_orders' );
         $conv_ore_use_hpos   = $wpdb->get_var(
-            $wpdb->prepare('SHOW TABLES LIKE %s', $conv_ore_hpos_table)
-        ) === $conv_ore_hpos_table;
+            $wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'wc_orders' ))
+        ) === $wpdb->prefix . 'wc_orders';
 
         if ($conv_ore_use_hpos) {
-            $conv_ore_meta_table = $wpdb->prefix . 'wc_orders_meta';
+            $conv_ore_meta_table = esc_sql( $wpdb->prefix . 'wc_orders_meta' );
 
+            // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- HPOS table names from $wpdb->prefix only.
             $conv_ore_tracked_row = $wpdb->get_row($wpdb->prepare(
                 "SELECT COUNT(o.id) AS cnt, COALESCE(SUM(o.total_amount), 0) AS rev
                    FROM {$conv_ore_hpos_table} o
@@ -71,6 +72,7 @@ class Conversios_Ore_Cron
                 $conv_ore_since
             ));
 
+            // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- HPOS table names from $wpdb->prefix only.
             $conv_ore_untracked_row = $wpdb->get_row($wpdb->prepare(
                 "SELECT COUNT(o.id) AS cnt, COALESCE(SUM(o.total_amount), 0) AS rev
                    FROM {$conv_ore_hpos_table} o

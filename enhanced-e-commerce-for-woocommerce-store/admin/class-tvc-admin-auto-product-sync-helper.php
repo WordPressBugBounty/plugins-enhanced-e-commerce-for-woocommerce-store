@@ -717,10 +717,11 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
                 'merchant_id' => sanitize_text_field($accountId),
                 'account_id' => sanitize_text_field($merchantId),
                 'subscription_id' => sanitize_text_field($subscriptionId),
+                'store_feed_id' => '1',
                 'entries' => $p_map_attribute['items']
               ];
               $this->TVC_Admin_Helper->plugin_log("Auto - before product sync API Call for " . count($p_map_attribute['items']) . " products", 'product_sync');
-              $response = $this->customApiObj->products_sync($data);
+              $response = $this->customApiObj->feed_wise_products_sync($data, 'call_by-admin/class-tvc-admin-auto-product-sync-helper.php');
               $sync_status = 0;
               if ($response->error == false) {
                 $sync_status = 1;

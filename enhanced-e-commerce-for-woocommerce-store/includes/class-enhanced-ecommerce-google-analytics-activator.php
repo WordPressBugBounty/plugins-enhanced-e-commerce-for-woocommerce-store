@@ -45,7 +45,7 @@ class Enhanced_Ecommerce_Google_Analytics_Activator
         $apiDomain = TVC_API_CALL_URL_TEMP . '/api/v2';
 
         $header = array(
-            "Authorization: Bearer 'MTIzNA=='",
+            "Authorization: Bearer MTIzNA==",
             "Content-Type" => "application/json"
         );
 

@@ -145,9 +145,9 @@
 /* Material Icons End*/
 
 /* Global styles and WP style override */
-input[type="checkbox"] {
+/* input[type="checkbox"] {
   transition: none !important;
-}
+} */
 
 input[type="checkbox"]:focus,
 input[type="color"]:focus,
@@ -220,9 +220,9 @@ a {
   text-decoration: none;
 }
 
-input[type="checkbox"]:checked::before {
+/* input[type="checkbox"]:checked::before {
   content: none !important;
-}
+} */
 
 .convfixedcontainermid {
   max-width: 680px;
@@ -1001,7 +1001,6 @@ progress[value]::-webkit-progress-value {
   color: #fff;
   font-size: 14px;
   letter-spacing: 0.2px;
-  font-family: "Roboto";
 }
 
 .google-btn:hover {
@@ -1265,10 +1264,10 @@ progress[value]::-webkit-progress-value {
   width: 18px;
 }
 
-input[type="radio"],
+/* input[type="radio"],
 input[type="checkbox"] {
   margin: 0;
-}
+} */
 
 .select2-container--default .select2-selection--single.selectError {
   border: 1px solid #f43e56;

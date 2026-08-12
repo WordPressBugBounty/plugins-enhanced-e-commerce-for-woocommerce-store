@@ -1,9 +1,10 @@
 <?php
-$blurContentClass = isset($plan_id) && $plan_id == 11 ? 'convdisabledbox' : '';
-$availProHtml =  isset($plan_id) && $plan_id == 11 ? '<div class="mt-1 mb-2"><span class="conv-link-blue fw-bold-500 upgradetopro_badge" data-bs-toggle="modal" data-bs-target="#upgradetopromodal">
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-' . esc_html__("Available In Pro", "enhanced-e-commerce-for-woocommerce-store") . '
-</span></div>' : '';
+$blurContentClass = '';
+$availProHtml = '';
 
 $is_sel_disable = 'disabled';
 
@@ -241,7 +242,7 @@ for ($i = 1; $i <= $max; $i++) {
             jQuery.post(ajaxurl, {
                 action: 'conv_delete_fb_pixel_data',
                 card_id: cardId,
-                _wpnonce: '<?php echo wp_create_nonce("delete_fb_pixel"); ?>'
+                _wpnonce: '<?php echo esc_js( wp_create_nonce( 'delete_fb_pixel' ) ); ?>'
             }, function(response) {
                 button.prop('disabled', false).removeClass('conv-btn-connect-disabled');
                 if (response.success) {

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 $blurContentClass = '';
 $is_sel_disable = 'disabled';
 $upgrade_link = 'https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=tiktok_card&utm_campaign=pixel_setting';
