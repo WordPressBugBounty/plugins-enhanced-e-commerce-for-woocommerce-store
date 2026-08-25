@@ -101,9 +101,7 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
       $tablename = $wpdb->prefix . "ee_product_feed";
       $query = $wpdb->prepare('SHOW TABLES LIKE %s', '%' . $wpdb->esc_like($tablename) . '%');
       if ($wpdb->get_var($query) === $tablename) {
-        
-        // Fix for "Row size too large" on legacy COMPACT tables
-        $wpdb->query("ALTER TABLE `{$tablename}` ROW_FORMAT=DYNAMIC");
+        // ROW_FORMAT=DYNAMIC: handled once by Conv_DB_Migrator (includes/setup/class-conv-db-migrator.php).
 
         $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}ee_product_feed LIKE %s", '%' . $wpdb->esc_like('is_default') . '%');
         $result = $wpdb->get_var($query);
@@ -263,27 +261,6 @@ if (! class_exists('TVC_Admin_Auto_Product_sync_Helper')) {
         }
       }
 
-      /********Create Pmax Camapign table in DB ******************/
-      $tablename = $wpdb->prefix . "ee_pmax_campaign";
-      $query = $wpdb->prepare('SHOW TABLES LIKE %s', '%' . $wpdb->esc_like($tablename) . '%');
-      if ($wpdb->get_var($query) === $tablename) {
-      } else {
-        $sql_create = "CREATE TABLE `$tablename` (  `id` int(11) NOT NULL AUTO_INCREMENT,
-                                                      `campaign_name` varchar(200) NOT NULL,
-                                                      `daily_budget` varchar(200) NOT NULL,
-                                                      `target_country_campaign` varchar(200) NOT NULL, 
-                                                      `target_roas` varchar(200) NULL, 
-                                                      `start_date` date NOT NULL,
-                                                      `end_date` date NOT NULL,
-                                                      `status` varchar(50) NOT NULL,
-                                                      `feed_id` varchar(100) NOT NULL,
-                                                      `request_id` varchar(100) NULL,                                                   
-                                                      `created_date` datetime NULL,
-                                                      `updated_date` datetime NULL,                                                                                                          
-                                                      PRIMARY KEY (`id`) );";
-        if (maybe_create_table($tablename, $sql_create)) {
-        }
-      }
     }
     public function get_product_category($product_id)
     {

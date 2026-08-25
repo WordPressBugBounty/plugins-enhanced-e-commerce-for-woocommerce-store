@@ -22,6 +22,25 @@ class CustomApi
     $this->mcamerchantId = sanitize_text_field($merchantInfo['merchantId']);
   }
 
+  /**
+   * Internal HTTP transport for Middleware requests.
+   *
+   * Thin wrapper around wp_remote_post; preserves per-call URL escaping via $url_mode.
+   *
+   * @param string $url      Request URL (may already be escaped when $url_mode is 'none').
+   * @param array  $args     Arguments passed to wp_remote_post().
+   * @param string $url_mode One of 'none', 'raw', or 'url'. Default 'raw' (esc_url_raw).
+   * @return array|WP_Error  wp_remote_post response.
+   */
+  private function middleware_request( $url, $args = array(), $url_mode = 'raw' ) {
+    if ( 'raw' === $url_mode ) {
+      $url = esc_url_raw( $url );
+    } elseif ( 'url' === $url_mode ) {
+      $url = esc_url( $url );
+    }
+    return wp_remote_post( $url, $args );
+  }
+
   public function get_subscriptionId()
   {
     $TVC_Admin_Helper = new TVC_Admin_Helper();
@@ -47,7 +66,7 @@ class CustomApi
       if (!empty($args)) {
         // Send remote request
         $args['timeout'] = "1000";
-        $request = wp_remote_post($url, $args);
+        $request = $this->middleware_request( $url, $args, 'none' );
 
         // Retrieve information
         $response_code = wp_remote_retrieve_response_code($request);
@@ -88,7 +107,7 @@ class CustomApi
         'body'    => wp_json_encode($postData)
       );
 
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       $return = new \stdClass();
 
       if (!is_wp_error($request)) {
@@ -147,7 +166,7 @@ class CustomApi
         'method'  => 'POST',
         'body'    => wp_json_encode(array('channel' => $channel)),
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       if (is_wp_error($request)) {
         return '';
       }
@@ -243,7 +262,7 @@ class CustomApi
           'method' => 'POST',
           'body' => wp_json_encode($postData)
         );
-        wp_remote_post(esc_url_raw($url), $args);
+        $this->middleware_request( $url, $args, 'raw' );
       }
     } catch (Exception $e) {
       return $e->getMessage();
@@ -401,7 +420,7 @@ class CustomApi
         'method' => 'POST',
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
@@ -466,7 +485,7 @@ class CustomApi
       );
 
       // $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
       $result = json_decode(wp_remote_retrieve_body($request));
@@ -528,7 +547,7 @@ class CustomApi
       );
 
       // $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
       $result = json_decode(wp_remote_retrieve_body($request));
@@ -581,7 +600,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($postData)
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -626,7 +645,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($postData)
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -744,7 +763,7 @@ class CustomApi
         'method' => 'POST',
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
@@ -803,7 +822,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
@@ -1096,7 +1115,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($postData)
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       //echo '<pre>'.$callby; print_r(json_decode(wp_remote_retrieve_body($request))); echo '</pre>'; // 
 
@@ -1597,7 +1616,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1653,7 +1672,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1707,7 +1726,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1759,7 +1778,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1811,7 +1830,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1861,7 +1880,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1913,7 +1932,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -1957,7 +1976,7 @@ class CustomApi
         'method' => 'POST',
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url_raw($curl_url), $args);
+      $request = $this->middleware_request( $curl_url, $args, 'raw' );
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
       $response = json_decode(wp_remote_retrieve_body($request));
@@ -1999,7 +2018,7 @@ class CustomApi
       );
 
       // Send remote request
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
@@ -2056,7 +2075,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2108,7 +2127,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2303,7 +2322,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       $args['timeout'] = "1000";
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2316,7 +2335,7 @@ class CustomApi
         $content = "Create your first Google Ads performance max campaign using the plugin and get $500 as free credits.";
         $status = "1";
         $created_merchant_id = $response_body->account->id;
-        $link = "admin.php?page=conversios-pmax";
+        $link = "admin.php?page=conversios-google-shopping-feed";
         $TVC_Admin_Helper->tvc_add_admin_notice("created_merchant_account", $content, $status, $link_title, $link, $created_merchant_id, "", "7", "created_merchant_account");
         return $response_body;
       } else {
@@ -2365,7 +2384,7 @@ class CustomApi
         'body' => wp_json_encode($data)
       );
       $args['timeout'] = "1000";
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2381,7 +2400,7 @@ class CustomApi
         $content = "";
         $status = "1";
         $created_merchant_id = isset($response_body->data->merchantId) ? $response_body->data->merchantId : null;
-        $link = "admin.php?page=conversios-pmax&campaign=microsoft";
+        $link = "admin.php?page=conversios-google-shopping-feed&tab=feed_list";
         $TVC_Admin_Helper->tvc_add_admin_notice("created_merchant_account", $content, $status, $link_title, $link, $created_merchant_id, "", "7", "created_merchant_account");
         return $response_body;
       } else {
@@ -2481,7 +2500,7 @@ class CustomApi
       );
 
       // Send remote request
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
       $response_message = wp_remote_retrieve_response_message($request);
@@ -2530,7 +2549,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2582,7 +2601,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2635,7 +2654,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2688,7 +2707,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       // Retrieve information
       $response_code = wp_remote_retrieve_response_code($request);
@@ -2760,7 +2779,7 @@ class CustomApi
         ),
         'body' => wp_json_encode($data)
       );
-      $request = wp_remote_post(esc_url($url), $args);
+      $request = $this->middleware_request( $url, $args, 'url' );
 
       //echo '<pre>'; print_r($data); echo '</pre>';
 
@@ -2913,7 +2932,7 @@ class CustomApi
         "timeout" => 1000,
         'body' => $postData
       );
-      $request = wp_remote_post(esc_url_raw($url), $args);
+      $request = $this->middleware_request( $url, $args, 'raw' );
       $updatetokenResponse = json_decode(wp_remote_retrieve_body($request));
 
       if (
@@ -3008,7 +3027,7 @@ class CustomApi
           "timeout" => 1000,
           'body' => $postData
         );
-        $request = wp_remote_post(esc_url_raw($url), $args);
+        $request = $this->middleware_request( $url, $args, 'raw' );
         $detailResponse = json_decode(wp_remote_retrieve_body($request));
         $eeapidata = array("setting" => $detailResponse->data);
         update_option("ee_api_data", serialize($eeapidata));

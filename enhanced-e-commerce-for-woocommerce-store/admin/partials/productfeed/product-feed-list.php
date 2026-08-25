@@ -35,7 +35,6 @@ if(!empty($feed_data))
 $count_feed = count($feed_data);
 $subscriptionId = $TVC_Admin_Helper->get_subscriptionId();
 $site_url = "admin.php?page=conversios-google-shopping-feed";
-$site_url_pmax = "admin.php?page=conversios-pmax";
 $customApiObj = new CustomApi();
 $google_detail = unserialize(get_option("ee_api_data"));
 $googleDetail = $google_detail['setting'];
@@ -97,7 +96,6 @@ $google_ads_id = '';
 $currency_symbol = '';
 if (isset($ee_options['google_ads_id']) === TRUE && $ee_options['google_ads_id'] !== '') {
     $google_ads_id = esc_html($ee_options['google_ads_id']);
-    //$PMax_Helper = new Conversios_PMax_Helper();
 }
 
 $googleConnect_url = '';

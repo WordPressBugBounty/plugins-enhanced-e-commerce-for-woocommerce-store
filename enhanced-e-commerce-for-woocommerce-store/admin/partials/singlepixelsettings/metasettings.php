@@ -109,9 +109,9 @@ if ($subscriptionId != "") {
                 <span class="conv-link-blue ps-2 facebookLogin" id="facebookLogin">
                     <a onclick="window.open('<?php echo esc_url($facebook_auth_url); ?>','MyWindow','width=800,height=700,left=300, top=150'); return false;" href="#">
                         <?php if (isset($ee_options['facebook_setting']['fb_business_id']) || isset($_GET['subscription_id'])) {
-                            echo 'Change';
+                            esc_html_e( 'Change', 'enhanced-e-commerce-for-woocommerce-store' );
                         } else {
-                            echo '<button class="btn conv-blue-bg text-white"><img style="width:24px" src="' . esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/fb_channel_logo.png') . '" /> &nbsp;Sign In with Facebook</button>';
+                            echo '<button class="btn conv-blue-bg text-white"><img style="width:24px" src="' . esc_url(ENHANCAD_PLUGIN_URL . '/admin/images/logos/fb_channel_logo.png') . '" /> &nbsp;' . esc_html__( 'Sign In with Facebook', 'enhanced-e-commerce-for-woocommerce-store' ) . '</button>';
                         } ?>
                     </a>
                 </span>

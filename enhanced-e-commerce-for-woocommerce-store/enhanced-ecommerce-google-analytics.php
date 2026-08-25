@@ -16,7 +16,7 @@
  * Plugin Name:       Conversios.io - All-in-one Google Analytics, Pixels and Product Feed Manager for WooCommerce
  * Plugin URI:        https://www.conversios.io/
  * Description:       Track ecommerce events and conversions for GA4 and for the ad channels like Google Ads, Facebook, Tiktok, Snapchat and more. Automate end to end server side tracking. Create quality feeds for google shopping, tiktok, facebook and more. Leverage data driven decision making by enhanced ecommerce reporting and AI powered insights to increase sales.
- * Version:           7.2.23
+ * Version:           7.2.24
  * Author:            Conversios
  * Author URI:        https://conversios.io
  * License:           GPL-2.0-or-later
@@ -115,7 +115,7 @@ if (is_EeAioPro_active()) {
 }
 
 
-define('PLUGIN_TVC_VERSION', '7.2.23');
+define('PLUGIN_TVC_VERSION', '7.2.24');
 $fullName = plugin_basename(__FILE__);
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php', '', $fullName);
 
@@ -169,10 +169,6 @@ if (!defined('CONV_IS_WC')) {
     } else {
         define('CONV_IS_WC', 0);
     }
-}
-
-if (!defined('CONV_LOG')) {
-    define('CONV_LOG', ENHANCAD_PLUGIN_DIR . 'logs/');
 }
 
 add_action('upgrader_process_complete', 'tvc_upgrade_function', 10, 2);

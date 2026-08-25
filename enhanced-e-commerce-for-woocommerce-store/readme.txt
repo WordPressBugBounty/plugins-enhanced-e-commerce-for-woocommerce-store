@@ -7,8 +7,8 @@ Author: Conversios
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 7.2.23
-Version: 7.2.23
+Stable tag: 7.2.24
+Version: 7.2.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -355,12 +355,6 @@ Open a support thread on WordPress.org or email info@conversios.io.
 6. Product Feed screen showing channel connections for Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok Catalog.
 
 == Changelog ==
-
-= Conversios 7.2.23 =
-August 07, 2026
-
-* Optimization and security enhancements.
-
 
 = Conversios 7.2.22 =
 July 21, 2026

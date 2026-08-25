@@ -98,7 +98,6 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper
         $this->is_current_tab_in(array('sync_product_page', 'gaa_config_page'))
         || $screen->id === CONV_SCREEN_ID . "conversios-google-analytics"
         || $screen->id === CONV_SCREEN_ID . "conversios-google-shopping-feed"
-        || $screen->id === CONV_SCREEN_ID . "conversios-pmax"
       ) {
         wp_register_style('plugin-steps', esc_url(ENHANCAD_PLUGIN_URL . '/includes/setup/plugins/jquery-steps/jquery.steps.css'));
         wp_enqueue_style('plugin-steps');
@@ -160,7 +159,6 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper
         $this->is_current_tab_in(array('sync_product_page', 'gaa_config_page', 'gmcsettings'))
         || $screen->id == CONV_SCREEN_ID . "conversios-google-analytics"
         || $screen->id == CONV_SCREEN_ID . "conversios-google-shopping-feed"
-        || $screen->id == CONV_SCREEN_ID . "conversios-pmax"
       ) {
         wp_register_script('plugin-step-js', esc_url(ENHANCAD_PLUGIN_URL . '/includes/setup/plugins/jquery-steps/jquery.steps.js'));
         wp_enqueue_script('plugin-step-js');

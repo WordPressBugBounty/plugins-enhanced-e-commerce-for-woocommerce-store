@@ -349,16 +349,16 @@ $filters    = json_decode($result[0]['filters'], true);
                                 $convfeedchnames[] = "Google Merchant Center";
 
                         ?>
-                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/google_channel_logo.png'); ?>" title="<?php echo "GMC Id - " . esc_attr($google_merchant_center_id) ?>" />
+                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/google_channel_logo.png'); ?>" title="<?php echo esc_attr( sprintf( /* translators: %s: Google Merchant Center ID */ __( 'GMC Id - %s', 'enhanced-e-commerce-for-woocommerce-store' ), $google_merchant_center_id ) ); ?>" />
                             <?php } else if ($val === '2') {
                                 $convfeedchnames[] = "Meta Catalog"; ?>
-                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['fb_status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/fb_channel_logo.png'); ?>" title="<?php echo "Facebook Business Account - " . esc_attr($facebook_business_account) ?>" />
+                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['fb_status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/fb_channel_logo.png'); ?>" title="<?php echo esc_attr( sprintf( /* translators: %s: Facebook business account ID */ __( 'Facebook Business Account - %s', 'enhanced-e-commerce-for-woocommerce-store' ), $facebook_business_account ) ); ?>" />
                             <?php } else if ($val === '3') {
                                 $convfeedchnames[] = "Tiktok Catalog"; ?>
-                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['tiktok_status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/tiktok_channel_logo.png'); ?>" title="<?php echo "Tiktok Business Account - " . esc_attr($tiktok_business_account) ?>" />
+                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['tiktok_status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/tiktok_channel_logo.png'); ?>" title="<?php echo esc_attr( sprintf( /* translators: %s: TikTok business account ID */ __( 'Tiktok Business Account - %s', 'enhanced-e-commerce-for-woocommerce-store' ), $tiktok_business_account ) ); ?>" />
                             <?php } else if ($val === '4') {
                                 $convfeedchnames[] = "Microsoft Merchant Center"; ?>
-                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['ms_status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms_channel_logo.svg'); ?>" title="<?php echo "MMC Id - " . esc_attr($microsoft_merchant_center_id) ?>" />
+                                <img class="<?php echo esc_attr(strtolower(str_replace(' ', '', $result[0]['ms_status']))) ?>-status" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/logos/ms_channel_logo.svg'); ?>" title="<?php echo esc_attr( sprintf( /* translators: %s: Microsoft Merchant Center ID */ __( 'MMC Id - %s', 'enhanced-e-commerce-for-woocommerce-store' ), $microsoft_merchant_center_id ) ); ?>" />
                         <?php }
                         }
                         ?>

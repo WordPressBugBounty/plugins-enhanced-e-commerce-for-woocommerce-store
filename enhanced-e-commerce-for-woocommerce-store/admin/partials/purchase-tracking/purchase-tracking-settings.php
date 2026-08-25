@@ -537,23 +537,23 @@ if (!class_exists('Conv_Purchase_Tracking_Settings')) {
                     <!-- Stats Card -->
                     <div class="conv_ore_set_card conv_ore_set_glass">
                         <div class="conv_ore_set_card_header">
-                            <h3><span class="dashicons dashicons-chart-area" style="color:var(--conv-ore-accent)"></span> Performance Summary</h3>
+                            <h3><span class="dashicons dashicons-chart-area" style="color:var(--conv-ore-accent)"></span> <?php esc_html_e( 'Performance Summary', 'enhanced-e-commerce-for-woocommerce-store' ); ?></h3>
                             <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
                                 <button id="btn_ore_manual_sync" class="button button-small d-none" style="border-radius: 8px; font-weight: 700; color: #64748b; background: #fff;">
-                                    <span class="dashicons dashicons-update" style="font-size: 14px; width: 14px; height: 14px; line-height: 14px; margin-top: 4px;"></span> Sync Now
+                                    <span class="dashicons dashicons-update" style="font-size: 14px; width: 14px; height: 14px; line-height: 14px; margin-top: 4px;"></span> <?php esc_html_e( 'Sync Now', 'enhanced-e-commerce-for-woocommerce-store' ); ?>
                                 </button>
                                 <div id="conv_ore_report_daterange" class="button button-small" style="border-radius: 8px; border-color: #cbd5e1;">
-                                    <span class="dashicons dashicons-calendar-alt"></span> <span class="daterange-text">Syncing Stats...</span>
+                                    <span class="dashicons dashicons-calendar-alt"></span> <span class="daterange-text"><?php esc_html_e( 'Syncing Stats...', 'enhanced-e-commerce-for-woocommerce-store' ); ?></span>
                                 </div>
                             </div>
                         </div>
                         <div class="conv_ore_set_card_body">
                             <div class="conv_ore_stats_grid">
-                                <div class="conv_ore_stat_tile"><div class="conv_ore_stat_label">Total<br>Orders</div><div class="conv_ore_stat_value" id="stat_total">0</div></div>
-                                <div class="conv_ore_stat_tile"><div class="conv_ore_stat_label" style="color:#22c55e">Already<br>Tracked</div><div class="conv_ore_stat_value" id="stat_client">0</div></div>
+                                <div class="conv_ore_stat_tile"><div class="conv_ore_stat_label"><?php echo esc_html__( 'Total', 'enhanced-e-commerce-for-woocommerce-store' ); ?><br><?php echo esc_html__( 'Orders', 'enhanced-e-commerce-for-woocommerce-store' ); ?></div><div class="conv_ore_stat_value" id="stat_total">0</div></div>
+                                <div class="conv_ore_stat_tile"><div class="conv_ore_stat_label" style="color:#22c55e"><?php echo esc_html__( 'Already', 'enhanced-e-commerce-for-woocommerce-store' ); ?><br><?php echo esc_html__( 'Tracked', 'enhanced-e-commerce-for-woocommerce-store' ); ?></div><div class="conv_ore_stat_value" id="stat_client">0</div></div>
                                 <div class="conv_ore_stat_tile">
                                     <div class="conv_ore_stat_label" style="color:#ef4444; display:flex; align-items:center; gap:5px;">
-                                        <span>Missed<br>Conversions</span>
+                                        <span><?php echo esc_html__( 'Missed', 'enhanced-e-commerce-for-woocommerce-store' ); ?><br><?php echo esc_html__( 'Conversions', 'enhanced-e-commerce-for-woocommerce-store' ); ?></span>
                                         <div class="conv_ore_stat_tooltip" style="position:relative; display:inline-block; cursor:pointer;" title="Why might some metrics not match 'Total Orders'?
 
 Due to strict browser privacy features (Apple iOS 14.5+ ATT), aggressive adblockers (Brave, uBlock), or users opting out of cookies, some orders entirely block the generation of necessary click trackers (like _fbp, user_agent, and gclid).
@@ -567,7 +567,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                                 </div>
                                 <div class="conv_ore_stat_tile" style="background: linear-gradient(135deg, #fef3c7, #fef9c3); border: 2px solid #f59e0b; box-shadow: 0 0 12px rgba(245,158,11,0.25);">
 
-                                    <div class="conv_ore_stat_label" style="color:#b45309">Missed<br>Revenue</div><div class="conv_ore_stat_value" id="stat_recovered_revenue" style="color: #92400e;"><?php echo esc_html( $conv_ore_currency_symbol ); ?>0</div>
+                                    <div class="conv_ore_stat_label" style="color:#b45309"><?php echo esc_html__( 'Missed', 'enhanced-e-commerce-for-woocommerce-store' ); ?><br><?php echo esc_html__( 'Revenue', 'enhanced-e-commerce-for-woocommerce-store' ); ?></div><div class="conv_ore_stat_value" id="stat_recovered_revenue" style="color: #92400e;"><?php echo esc_html( $conv_ore_currency_symbol ); ?>0</div>
                                 </div>
                             </div>
 
@@ -589,17 +589,17 @@ When major tracking parameters are destroyed natively by the user's browser, the
                             <!-- Order Details Table (DataTables SSP) -->
                             <div class="conv_ore_details_section">
                                 <div class="conv_ore_details_header">
-                                    <h4><span class="dashicons dashicons-editor-table" style="color:var(--conv-ore-accent); font-size: 18px; width: 18px; height: 18px;"></span> Order Details</h4>
+                                    <h4><span class="dashicons dashicons-editor-table" style="color:var(--conv-ore-accent); font-size: 18px; width: 18px; height: 18px;"></span> <?php esc_html_e( 'Order Details', 'enhanced-e-commerce-for-woocommerce-store' ); ?></h4>
                                 </div>
                                 <div id="conv_ore_dt_wrapper" class="conv_ore_details_wrap">
                                     <table id="conv_ore_datatable" class="table conv_bordershadow rounded row-border table-borderless w-100">
                                         <thead class="table-primary">
                                             <tr>
-                                                <th class="text-start text-truncate">Order #</th>
-                                                <th>Date</th>
-                                                <th>Total</th>
-                                                <th>Tracking</th>
-                                                <th class="text-truncate">Synced Channels</th>
+                                                <th class="text-start text-truncate"><?php esc_html_e( 'Order #', 'enhanced-e-commerce-for-woocommerce-store' ); ?></th>
+                                                <th><?php esc_html_e( 'Date', 'enhanced-e-commerce-for-woocommerce-store' ); ?></th>
+                                                <th><?php esc_html_e( 'Total', 'enhanced-e-commerce-for-woocommerce-store' ); ?></th>
+                                                <th><?php esc_html_e( 'Tracking', 'enhanced-e-commerce-for-woocommerce-store' ); ?></th>
+                                                <th class="text-truncate"><?php esc_html_e( 'Synced Channels', 'enhanced-e-commerce-for-woocommerce-store' ); ?></th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -1555,16 +1555,16 @@ When major tracking parameters are destroyed natively by the user's browser, the
                             }
                         },
                         columns: [
-                            { data: 'number', title: 'Order #', className: 'text-start text-truncate', render: function(d, t, r) { return '<a href="'+r.edit_url+'" class="conv_ore_order_link" target="_blank">#'+d+'</a>'; } },
-                            { data: 'date', title: 'Date', render: function(d) { return '<span style="white-space:nowrap">'+d+'</span>'; } },
-                            { data: 'total', title: 'Total', render: function(d) { return currSymbol + parseFloat(d).toFixed(2); } },
-                            { data: 'conv_order_tracked', title: 'Tracking', orderable: false, render: function(d, t, r) {
-                                if (d === 'pixel' || r._tracked) return '<span class="conv_ore_badge_pixel">Pixel</span>';
-                                if (d === 'api') return '<span class="conv_ore_badge_api">Server</span>';
-                                if (d === 'skipped') return '<span class="conv_ore_badge_skipped" title="Missing required tracking data (cookies blocked)">Skipped</span>';
-                                return '<span class="conv_ore_badge_none">Pending</span>';
+                            { data: 'number', title: '<?php echo esc_js( __( 'Order #', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>', className: 'text-start text-truncate', render: function(d, t, r) { return '<a href="'+r.edit_url+'" class="conv_ore_order_link" target="_blank">#'+d+'</a>'; } },
+                            { data: 'date', title: '<?php echo esc_js( __( 'Date', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>', render: function(d) { return '<span style="white-space:nowrap">'+d+'</span>'; } },
+                            { data: 'total', title: '<?php echo esc_js( __( 'Total', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>', render: function(d) { return currSymbol + parseFloat(d).toFixed(2); } },
+                            { data: 'conv_order_tracked', title: '<?php echo esc_js( __( 'Tracking', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>', orderable: false, render: function(d, t, r) {
+                                if (d === 'pixel' || r._tracked) return '<span class="conv_ore_badge_pixel"><?php echo esc_js( __( 'Pixel', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?></span>';
+                                if (d === 'api') return '<span class="conv_ore_badge_api"><?php echo esc_js( __( 'Server', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?></span>';
+                                if (d === 'skipped') return '<span class="conv_ore_badge_skipped" title="<?php echo esc_attr__( 'Missing required tracking data (cookies blocked)', 'enhanced-e-commerce-for-woocommerce-store' ); ?>"><?php echo esc_js( __( 'Skipped', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?></span>';
+                                return '<span class="conv_ore_badge_none"><?php echo esc_js( __( 'Pending', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?></span>';
                             }},
-                            { data: '_ore_synced_channels', title: 'Synced Channels', orderable: false, render: function(d) { return metaCell(d); } }
+                            { data: '_ore_synced_channels', title: '<?php echo esc_js( __( 'Synced Channels', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>', orderable: false, render: function(d) { return metaCell(d); } }
                         ],
                         dom: '<"d-flex justify-content-between align-items-center bg-white"lf>rtip',
                         lengthMenu: [
@@ -1574,10 +1574,10 @@ When major tracking parameters are destroyed natively by the user's browser, the
                         searching: true,
                         paging: true,
                         language: {
-                            emptyTable: 'No orders found in the selected range.',
-                            processing: '<span class="dashicons dashicons-update spin"></span> Loading orders...',
-                            info: 'Showing _START_ to _END_ of _TOTAL_ orders',
-                            lengthMenu: 'Show _MENU_ orders'
+                            emptyTable: '<?php echo esc_js( __( 'No orders found in the selected range.', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>',
+                            processing: '<span class="dashicons dashicons-update spin"></span> <?php echo esc_js( __( 'Loading orders...', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>',
+                            info: '<?php echo esc_js( __( 'Showing _START_ to _END_ of _TOTAL_ orders', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>',
+                            lengthMenu: '<?php echo esc_js( __( 'Show _MENU_ orders', 'enhanced-e-commerce-for-woocommerce-store' ) ); ?>'
                         },
                         initComplete: function() {
                             jQuery('.dataTables_length select[name="conv_ore_datatable_length"]').attr('id', 'conv_ore_ordertabel_limit');

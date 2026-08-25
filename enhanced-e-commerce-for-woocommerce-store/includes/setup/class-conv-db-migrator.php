@@ -51,8 +51,7 @@ class Conv_DB_Migrator {
 			return;
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( "ALTER TABLE `$table_name` ROW_FORMAT=DYNAMIC" );
+		self::maybe_set_row_format_dynamic( $table_name );
 
 		$columns = array(
 			'ms_status'                => 'TEXT DEFAULT NULL',
@@ -77,5 +76,31 @@ class Conv_DB_Migrator {
 
 		update_option( self::OPTION_KEY, self::TARGET_VERSION );
 		update_option( 'ee_conv_plugin_version', self::TARGET_VERSION );
+	}
+
+	/**
+	 * Set InnoDB ROW_FORMAT=DYNAMIC only when the table is not already dynamic.
+	 *
+	 * Legacy COMPACT tables can hit "Row size too large" on ee_product_feed; skip when already fixed.
+	 *
+	 * @param string $table_name Fully qualified table name (with prefix).
+	 */
+	private static function maybe_set_row_format_dynamic( $table_name ) {
+		global $wpdb;
+
+		$row_format = $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT ROW_FORMAT FROM information_schema.TABLES WHERE table_schema = %s AND table_name = %s',
+				DB_NAME,
+				$table_name
+			)
+		);
+
+		if ( 'DYNAMIC' === strtoupper( (string) $row_format ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "ALTER TABLE `$table_name` ROW_FORMAT=DYNAMIC" );
 	}
 }
