@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) {
 
 class CustomApi
 {
+  private const DEFAULT_MERCHANT_ID = '256922349';
+
   private $apiDomain;
   private $token;
   protected $TVC_Admin_Helper;
@@ -17,9 +19,7 @@ class CustomApi
   {
     $this->apiDomain = TVC_API_CALL_URL;
     $this->token = 'MTIzNA==';
-    $wp_filesystem = TVC_Admin_Helper::get_filesystem();
-    $merchantInfo = json_decode($wp_filesystem->get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/merchant-info.json'), true);
-    $this->mcamerchantId = sanitize_text_field($merchantInfo['merchantId']);
+    $this->mcamerchantId = self::DEFAULT_MERCHANT_ID;
   }
 
   /**
