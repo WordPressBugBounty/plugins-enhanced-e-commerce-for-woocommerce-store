@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $is_sel_disable = 'disabled';
 $blurContentClass = '';
 $availProHtml = '';
-$upgrade_link = 'https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=snapchat_card&utm_campaign=pixel_setting';
+$upgrade_link = 'https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=snapchat_card&utm_campaign=pixel_setting';
 ?>
 <div class="conv-card p-4 rounded conv-shadow-sm">
     <!-- Header -->

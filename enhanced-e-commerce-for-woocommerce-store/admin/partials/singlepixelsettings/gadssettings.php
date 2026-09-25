@@ -1,7 +1,7 @@
 <?php
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
-$upgrade_link = 'https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=gads_card&utm_campaign=pixel_setting';
+$upgrade_link = 'https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=gads_card&utm_campaign=pixel_setting';
 ?>
 
 <!-- Google Merchant Center Card (only if WooCommerce is active) -->

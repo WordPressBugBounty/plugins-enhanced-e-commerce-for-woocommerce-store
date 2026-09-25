@@ -346,7 +346,7 @@ if (class_exists('Conversios_Admin') === FALSE) {
           <div class="card-body" style="padding: 2rem;">
             <h5 class="card-title" style="font-size: 1.5rem; margin-bottom: 1rem;"><?php esc_html_e( 'Feature Coming Soon', 'enhanced-e-commerce-for-woocommerce-store' ); ?></h5>
             <p class="card-text" style="font-size: 1rem; margin-bottom: 1.5rem;"><?php esc_html_e( 'We\'re working hard to bring this feature to you. Stay tuned!', 'enhanced-e-commerce-for-woocommerce-store' ); ?></p>
-            <a target="_blank" href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list" class="btn btn-primary"><?php esc_html_e( 'Learn More', 'enhanced-e-commerce-for-woocommerce-store' ); ?></a>
+            <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=use_your_own_gtm&utm_campaign=pixel_list" class="btn btn-primary"><?php esc_html_e( 'Learn More', 'enhanced-e-commerce-for-woocommerce-store' ); ?></a>
           </div>
         </div>
         <?php echo wp_kses(

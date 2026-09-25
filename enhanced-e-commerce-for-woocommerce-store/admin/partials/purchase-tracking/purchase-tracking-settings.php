@@ -583,7 +583,7 @@ When major tracking parameters are destroyed natively by the user's browser, the
                                         <p id="conv_ore_missed_desc" style="margin: 0; color: #b91c1c; font-size: 13px;"></p>
                                     </div>
                                 </div>
-                                <a href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=orepage&utm_campaign=upgrade'); ?>" target="_blank" class="button" style="background: #16a34a; border-color: #15803d; color: #fff; font-weight: 700; text-shadow: none; font-size: 14px; padding: 4px 16px; height: 38px; line-height: 28px; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3); transition: all 0.2s; white-space: nowrap;">Unlock Order Recovery Engine Now &rarr;</a>
+                                <a href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=orepage&utm_campaign=upgrade'); ?>" target="_blank" class="button" style="background: #16a34a; border-color: #15803d; color: #fff; font-weight: 700; text-shadow: none; font-size: 14px; padding: 4px 16px; height: 38px; line-height: 28px; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3); transition: all 0.2s; white-space: nowrap;">Unlock Order Recovery Engine Now &rarr;</a>
                             </div>
 
                             <!-- Order Details Table (DataTables SSP) -->

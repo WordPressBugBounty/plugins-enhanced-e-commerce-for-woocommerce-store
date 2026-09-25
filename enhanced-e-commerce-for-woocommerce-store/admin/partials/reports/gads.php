@@ -46,7 +46,7 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
     </div>
 
     <!-- Right: CTA -->
-    <a href="https://www.conversios.io/woocommerce-plan-pricing/?plugin_name=aio&utm_source=woo_aiofree_plugin&utm_medium=gads_report_banner&utm_campaign=upgrade"
+    <a href="https://www.conversios.io/pricing/?plugin_name=aio&utm_source=woo_aiofree_plugin&utm_medium=gads_report_banner&utm_campaign=upgrade"
        target="_blank"
         style="
             display: flex; align-items: center; align-self: center; gap: 7px;

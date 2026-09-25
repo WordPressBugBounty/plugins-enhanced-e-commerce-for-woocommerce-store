@@ -364,7 +364,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
 
             <!-- Size Message -->
             <div class="alert alert-success text-center text-underline text-success">
-                <a href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=modal_setlogo&utm_campaign=upgrade" target="_blank">
+                <a href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=modal_setlogo&utm_campaign=upgrade" target="_blank">
                     <?php esc_html_e("Upgrade to Premium to set your logo in report PDF", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </a>
             </div>
@@ -428,7 +428,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                     </p>
                     
                     <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin:10px 0 20px 0;font-size:13px;color:#92400e;text-align:left;">
-                        <strong><?php esc_html_e("🔒 PRO FEATURE: ", "enhanced-e-commerce-for-woocommerce-store"); ?></strong> <?php esc_html_e("Customizing Smart Email schedules and alternate sender addresses is available in the Pro version. Upgrade to configure daily, weekly, or monthly automated reports exactly how you want.", "enhanced-e-commerce-for-woocommerce-store"); ?> <br><a href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=smart_emails_modal&utm_campaign=upgrade" target="_blank" style="color:#0284c7;font-weight:bold;margin-top:6px;display:inline-block;"><?php esc_html_e("Upgrade to Pro →", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
+                        <strong><?php esc_html_e("🔒 PRO FEATURE: ", "enhanced-e-commerce-for-woocommerce-store"); ?></strong> <?php esc_html_e("Customizing Smart Email schedules and alternate sender addresses is available in the Pro version. Upgrade to configure daily, weekly, or monthly automated reports exactly how you want.", "enhanced-e-commerce-for-woocommerce-store"); ?> <br><a href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=smart_emails_modal&utm_campaign=upgrade" target="_blank" style="color:#0284c7;font-weight:bold;margin-top:6px;display:inline-block;"><?php esc_html_e("Upgrade to Pro →", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                     </div>
 
                     <?php
@@ -519,7 +519,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
                     <?php esc_html_e("Close", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </a>
                 <a id="upgradetopro_modal_link" class="btn conv-yellow-bg m-auto w-100 mx-2 me-4 p-2"
-                    href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=modal_popup&utm_campaign=upgrade"
+                    href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=modal_popup&utm_campaign=upgrade"
                     target="_blank">
                     <?php esc_html_e("Upgrade Now", "enhanced-e-commerce-for-woocommerce-store"); ?>
                 </a>
@@ -573,7 +573,7 @@ if (isset($_GET['subscription_id']) && isset($_GET['g_mail'])) {
           </div>
           <!-- Buttons -->
           <div style="display:flex;gap:10px;">
-            <a href="https://www.conversios.io/woocommerce-plan-pricing/?plugin_name=aio&utm_source=woo_aiofree_plugin&utm_medium=reports_nudge_modal&utm_campaign=upgrade_cta" target="_blank" class="btn" style="flex:1;background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;font-weight:600;font-size:14px;border-radius:10px;padding:12px;">
+            <a href="https://www.conversios.io/pricing/?plugin_name=aio&utm_source=woo_aiofree_plugin&utm_medium=reports_nudge_modal&utm_campaign=upgrade_cta" target="_blank" class="btn" style="flex:1;background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;font-weight:600;font-size:14px;border-radius:10px;padding:12px;">
               <?php esc_html_e("Upgrade to Pro", "enhanced-e-commerce-for-woocommerce-store"); ?>
             </a>
             <button type="button" class="btn" data-bs-dismiss="modal" style="flex:1;background:#f1f5f9;color:#334155;font-weight:600;font-size:14px;border-radius:10px;padding:12px;border:1px solid #e2e8f0;">

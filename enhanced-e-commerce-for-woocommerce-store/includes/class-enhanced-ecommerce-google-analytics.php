@@ -310,10 +310,18 @@ class Enhanced_Ecommerce_Google_Analytics
       esc_html__('Documentation', 'enhanced-e-commerce-for-woocommerce-store')
     );
 
-    // Upgrade link.
+    // Upgrade link — must use www; apex conversios.io redirect drops query params (UTMs).
+    $conv_upgrade_url = add_query_arg(
+      array(
+        'utm_source'   => 'woo_aiofree_plugin',
+        'utm_medium'   => 'plugin_listing_upgrade',
+        'utm_campaign' => 'upgrade',
+      ),
+      'https://www.conversios.io/pricing/'
+    );
     $links[] = sprintf(
       '<a href="%s" target="_blank" rel="noopener"><strong>%s</strong></a>',
-      esc_url('https://conversios.io/woocommerce-plan-pricings/?utm_source=EE+Plugin+User+Interface&utm_medium=Plugins+Listing+Page+Upgrade+to+Premium&utm_campaign=Upsell+at+Conversios'),
+      esc_url($conv_upgrade_url),
       esc_html__('Upgrade to Premium', 'enhanced-e-commerce-for-woocommerce-store')
     );
 

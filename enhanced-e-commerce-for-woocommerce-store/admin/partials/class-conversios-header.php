@@ -274,7 +274,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 
 													$openinnew = false;
 													if ($key == "conversios-pricings") {
-														$menu_url = "https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro";
+														$menu_url = "https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=adminmenu&utm_campaign=freetopro";
 														$openinnew = true;
 													}
 													$is_parent_menu = "";
@@ -321,7 +321,7 @@ if (class_exists('Conversios_Header') === FALSE) {
 										</ul>
 										<div class="d-flex align-items-center gap-2">
 
-											<a target="_blank" class="fs-12 fw-400 px-3 py-1 fw-bold btn-newgreen text-white rounded-pill text-center me-2" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
+											<a target="_blank" class="fs-12 fw-400 px-3 py-1 fw-bold btn-newgreen text-white rounded-pill text-center me-2" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=topbarlink&utm_campaign=upgrade&plugin_name=aio'); ?>">
 												<?php esc_html_e("Get Premium", "enhanced-e-commerce-for-woocommerce-store"); ?>
 											</a>
 											<div class="dropdown">
@@ -436,7 +436,7 @@ if (class_exists('Conversios_Header') === FALSE) {
                         </div>
                         <div style="display: flex; gap: 12px; align-items: center; flex-shrink: 0;">
                             <a href="<?php echo esc_url(admin_url('admin.php?page=conversios-purchase-tracking')); ?>" style="color: #a16207; font-size: 13px; font-weight: 600; text-decoration: underline; white-space: nowrap;">View Lost Data</a>
-                            <a href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=oretopbanner&utm_campaign=upgrade&plugin_name=aio'); ?>" target="_blank" class="button button-small" style="background: #eab308; border-color: #ca8a04; color: #fff; font-size: 13px; font-weight: 600; text-shadow: none; box-shadow: 0 1px 2px rgba(202, 138, 4, 0.2); white-space: nowrap;">Recover Revenue &rarr;</a>
+                            <a href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=oretopbanner&utm_campaign=upgrade&plugin_name=aio'); ?>" target="_blank" class="button button-small" style="background: #eab308; border-color: #ca8a04; color: #fff; font-size: 13px; font-weight: 600; text-shadow: none; box-shadow: 0 1px 2px rgba(202, 138, 4, 0.2); white-space: nowrap;">Recover Revenue &rarr;</a>
                         </div>
                     </div>
                     <?php 

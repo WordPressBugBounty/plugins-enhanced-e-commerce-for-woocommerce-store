@@ -592,7 +592,7 @@ if ($edit_id > 0) {
     <?php if (isset($_GET['subpage']) && $_GET['subpage'] == 'gmc') { ?>
         <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
             <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
-            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_gmc&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_gmc&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
         </div>
         <?php if ($google_merchant_center_id != "" && $g_mail != "") { ?>
             <div class="gmcdetails" style="padding: 12px 16px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.10); border: 1px solid #e5e7eb; margin-top: 8px;">
@@ -661,7 +661,7 @@ if ($edit_id > 0) {
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'microsoft') { ?>
         <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
             <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
-            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_microsoft&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_microsoft&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
         </div>
         <?php if ($microsoft_catalog_id != "" && $ms_mail != "") { ?>
             <div class="mmcdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
@@ -730,7 +730,7 @@ if ($edit_id > 0) {
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'tiktok') { ?>
         <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
             <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
-            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_tiktok&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_tiktok&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
         </div>
         <?php if ($tiktok_email != "" && $tiktok_business_account != "") { ?>
             <div class="tiktokdetails" style="padding: 8px 11px;background-color: #f0f0f1;">
@@ -799,7 +799,7 @@ if ($edit_id > 0) {
     <?php } else if (isset($_GET['subpage']) && $_GET['subpage'] == 'meta') { ?>
         <div style="margin: 8px 0; padding: 10px 16px; background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #991b1b;">
             <span style="display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-warning" style="font-size: 18px; width: 18px; height: 18px; color: #dc2626; flex-shrink: 0;"></span><span>Free plan supports up to <b>100 products</b>.<br>Upgrade to <b>Pro</b> for <b>unlimited products</b>, multi-country feeds, and variation-level syncing.</span></span>
-            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_meta&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
+            <a target="_blank" href="<?php echo esc_url('https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedtab_meta&utm_campaign=ProFeedUpsell'); ?>" style="background: #dc2626; color: #fff; padding: 4px 14px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; white-space: nowrap;">Upgrade to Pro &rarr;</a>
         </div>
         <?php if ($fb_mail != "" && $fb_catalog_id != "") { ?>
             <div class="metadetails" style="padding: 8px 11px;background-color: #f0f0f1;">
@@ -1333,7 +1333,7 @@ if ($edit_id > 0) {
                                 <td class="text-start">
                                     <input type="text" class="form-control-sm" readonly name="autoSyncIntvl" id="autoSyncIntvl" size="3" value="25">
                                     <span class="ms-2"><?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?></span>
-                                    <a target="_blank" href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup&plugin_name=aio" class="ms-2">
+                                    <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=innersetting_pfm&utm_campaign=feedpopup&plugin_name=aio" class="ms-2">
                                         <b><?php esc_html_e("Upgrade To Pro for Daily Sync", "enhanced-e-commerce-for-woocommerce-store"); ?></b>
                                     </a>
                                 </td>

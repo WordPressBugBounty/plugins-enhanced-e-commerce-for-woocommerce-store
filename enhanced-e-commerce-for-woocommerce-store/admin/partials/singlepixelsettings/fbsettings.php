@@ -9,7 +9,7 @@ $availProHtml = '';
 $is_sel_disable = 'disabled';
 
 $isgtm_auto = isset($ee_options['gtm_settings']['is_gtm_automatic_process']) && $ee_options['gtm_settings']['is_gtm_automatic_process'] == 'true' ? true : false;
-$upgrade_link = 'https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=fb_card&utm_campaign=pixel_setting';
+$upgrade_link = 'https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=fb_card&utm_campaign=pixel_setting';
 $ee_options = maybe_unserialize(get_option('ee_options')); // Replace with actual option key
 
 $saved_pixels = [];

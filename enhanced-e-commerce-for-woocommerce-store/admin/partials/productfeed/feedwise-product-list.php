@@ -720,7 +720,7 @@ $filters    = json_decode($result[0]['filters'], true);
                 <div style="font-size:12px; color:#475569; line-height:1.5; flex:1;">
                     Get the benefit of unlimited product sync &amp; daily refresh with <strong>Conversios Pro</strong>.
                 </div>
-                <a href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedwise_sync_nudge&utm_campaign=ProSyncNudge" target="_blank"
+                <a href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=feedwise_sync_nudge&utm_campaign=ProSyncNudge" target="_blank"
                    style="display:inline-block; background:#f59e0b; color:#1a1a1a; font-size:13px; font-weight:700; padding:10px 18px; border-radius:8px; text-decoration:none; white-space:nowrap; flex-shrink:0; box-shadow:0 2px 8px rgba(245,158,11,0.35);">
                     Upgrade to Pro &rarr;
                 </a>
@@ -861,7 +861,7 @@ $filters    = json_decode($result[0]['filters'], true);
                                 <?php esc_html_e("Days", "enhanced-e-commerce-for-woocommerce-store"); ?>
                             </label>
                             <span>
-                                <a target="_blank" href="https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=productlist&utm_campaign=Pricing"><b>
+                                <a target="_blank" href="https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=productlist&utm_campaign=Pricing"><b>
                                         <?php esc_html_e("Upgrade To Pro", "enhanced-e-commerce-for-woocommerce-store"); ?></b></a>
                             </span>
                         </div>

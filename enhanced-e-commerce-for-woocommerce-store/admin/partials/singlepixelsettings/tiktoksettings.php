@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $blurContentClass = '';
 $is_sel_disable = 'disabled';
-$upgrade_link = 'https://www.conversios.io/woocommerce-plan-pricing/?utm_source=woo_aiofree_plugin&utm_medium=tiktok_card&utm_campaign=pixel_setting';
+$upgrade_link = 'https://www.conversios.io/pricing/?utm_source=woo_aiofree_plugin&utm_medium=tiktok_card&utm_campaign=pixel_setting';
 ?>
 <div class="conv-card p-4 rounded conv-shadow-sm">
     <!-- Header -->
