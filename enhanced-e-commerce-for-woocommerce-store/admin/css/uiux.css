@@ -3224,3 +3224,51 @@ ul.conv-green-checklis.fb-kapi li .text-success {
     font-size: 18px;
     font-weight: 500;
 }
+
+/* WhatsApp FAB — high specificity so wp-admin link :focus does not force a square ring */
+body.wp-admin a.conv-whatsapp-support-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50% !important;
+  overflow: hidden;
+  background-color: #25d366;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 28px 28px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.wp-admin a.conv-whatsapp-support-fab:hover {
+  transform: scale(1.1);
+  background-color: #1ebe57;
+  box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.4), 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+
+body.wp-admin a.conv-whatsapp-support-fab:focus {
+  outline: none !important;
+  border-radius: 50% !important;
+}
+
+body.wp-admin a.conv-whatsapp-support-fab:focus:not(:focus-visible) {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+body.wp-admin a.conv-whatsapp-support-fab:focus-visible {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #0d8050, 0 8px 22px rgba(37, 211, 102, 0.45) !important;
+}
+
+body.wp-admin a.conv-whatsapp-support-fab:active {
+  transform: scale(0.94);
+  border-radius: 50% !important;
+  background-color: #1aa952;
+  outline: none !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22) !important;
+}

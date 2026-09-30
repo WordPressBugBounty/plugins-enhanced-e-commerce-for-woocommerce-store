@@ -7,8 +7,8 @@ Author: Conversios
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 7.2.26
-Version: 7.2.26
+Stable tag: 7.2.27
+Version: 7.2.27
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -355,6 +355,11 @@ Open a support thread on WordPress.org or email info@conversios.io.
 6. Product Feed screen showing channel connections for Google Merchant Center, Microsoft Merchant Center, Meta Catalog, and TikTok Catalog.
 
 == Changelog ==
+
+= Conversios 7.2.27 =
+September 30, 2026
+
+* Added WhatsApp Support
 
 = Conversios 7.2.22 =
 July 21, 2026

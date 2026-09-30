@@ -72,11 +72,52 @@ if (!class_exists('Conversios_Footer')) {
                 </div>
             </div>
 
-
-
-
+            <?php $this->render_whatsapp_support_fab(); ?>
 
         <?php
+        }
+
+        /**
+         * Fixed WhatsApp support link (Conversios admin screens only).
+         */
+        protected function render_whatsapp_support_fab()
+        {
+            $whatsapp_url = $this->get_whatsapp_support_url();
+            $icon_url     = ENHANCAD_PLUGIN_URL . '/admin/images/logos/conv_whatsapp_support.svg';
+            ?>
+            <a
+                href="<?php echo esc_url($whatsapp_url); ?>"
+                class="conv-whatsapp-support-fab"
+                style="<?php echo esc_attr('background-image: url(' . $icon_url . ');'); ?>"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="<?php esc_attr_e('Chat on WhatsApp', 'enhanced-e-commerce-for-woocommerce-store'); ?>"
+                aria-label="<?php esc_attr_e('Chat on WhatsApp', 'enhanced-e-commerce-for-woocommerce-store'); ?>"
+            ><span class="screen-reader-text"><?php esc_html_e('Chat on WhatsApp', 'enhanced-e-commerce-for-woocommerce-store'); ?></span></a>
+            <?php
+        }
+
+        /**
+         * wa.me deep link with prefilled support message.
+         *
+         * @return string Escaped-ready URL (pass through esc_url on output).
+         */
+        protected function get_whatsapp_support_url()
+        {
+            $phone = '917284854854';
+            $text  = __('Hi, I need help with Conversios Enhanced Ecommerce All-in-One plugin', 'enhanced-e-commerce-for-woocommerce-store');
+            $url   = add_query_arg(
+                'text',
+                $text,
+                'https://wa.me/' . $phone
+            );
+
+            /**
+             * Filters the WhatsApp support URL for the admin FAB.
+             *
+             * @param string $url Full wa.me URL including text query arg.
+             */
+            return apply_filters('conv_whatsapp_support_url', $url);
         }
 
         public function before_end_footer_add_script()
